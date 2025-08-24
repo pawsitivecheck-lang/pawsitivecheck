@@ -119,6 +119,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
         search as string
       );
       
+      // If searching and we have few results, supplement with Open Pet Food Facts
+      if (search && typeof search === 'string' && search.trim().length >= 2 && products.length < 10) {
+        try {
+          const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(search.trim())}&page_size=10&json=1`, {
+            headers: {
+              'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (data.products && data.products.length > 0) {
+              // Convert Open Pet Food Facts products to our format
+              const openFoodFactsProducts = await Promise.all(
+                data.products.slice(0, 5).map(async (product: any) => {
+                  // Check if product already exists in our database
+                  let existingProduct = null;
+                  if (product.code) {
+                    existingProduct = await storage.getProductByBarcode(product.code);
+                  }
+                  
+                  if (existingProduct) {
+                    return existingProduct; // Return existing product instead of creating duplicate
+                  }
+                  
+                  // Calculate cosmic score based on available data quality
+                  let cosmicScore = 60;
+                  if (product.ingredients_text) cosmicScore += 15;
+                  if (product.nutriments && Object.keys(product.nutriments).length > 5) cosmicScore += 10;
+                  if (product.labels_tags && product.labels_tags.length > 0) cosmicScore += 10;
+                  if (product.image_url) cosmicScore += 5;
+                  
+                  // Determine category
+                  let category = 'pet-food';
+                  const categories = product.categories_tags || [];
+                  if (categories.some((cat: string) => cat.includes('treat') || cat.includes('snack'))) {
+                    category = 'pet-treats';
+                  } else if (categories.some((cat: string) => cat.includes('toy'))) {
+                    category = 'pet-toys';
+                  }
+                  
+                  // Check for suspicious ingredients
+                  const suspiciousIngredients = [];
+                  const ingredients = product.ingredients_text?.toLowerCase() || '';
+                  if (ingredients.includes('by-product')) suspiciousIngredients.push('by-product meal');
+                  if (ingredients.includes('corn syrup')) suspiciousIngredients.push('corn syrup');
+                  if (ingredients.includes('artificial')) suspiciousIngredients.push('artificial additives');
+                  
+                  const productData = {
+                    name: product.product_name || product.generic_name || `Pet Product ${product.code || 'Unknown'}`,
+                    brand: product.brands || "Unknown Brand",
+                    category,
+                    description: product.ingredients_text ? 
+                      `Pet food from Open Pet Food Facts with detailed ingredient analysis` : 
+                      `Pet product from Open Pet Food Facts database`,
+                    ingredients: product.ingredients_text || "Ingredients not specified",
+                    imageUrl: product.image_url || null,
+                    barcode: product.code || `opff-${Math.random().toString(36).substring(7)}`,
+                    cosmicScore: Math.min(cosmicScore, 95),
+                    cosmicClarity: suspiciousIngredients.length === 0 ? 'blessed' : 
+                                  suspiciousIngredients.length <= 2 ? 'neutral' : 'questionable',
+                    transparencyLevel: product.ingredients_text ? 'excellent' : 'good',
+                    isBlacklisted: false,
+                    suspiciousIngredients,
+                    lastAnalyzed: new Date(),
+                  };
+                  
+                  // Add to our database for future searches
+                  try {
+                    return await storage.createProduct(productData);
+                  } catch (error) {
+                    // Return the product data even if we can't save it
+                    return { id: Math.random(), ...productData };
+                  }
+                })
+              );
+              
+              // Add Open Pet Food Facts products to results (avoid duplicates)
+              const existingBarcodes = new Set(products.map(p => p.barcode));
+              const newProducts = openFoodFactsProducts.filter(p => 
+                p && !existingBarcodes.has(p.barcode)
+              );
+              
+              products = [...products, ...newProducts];
+            }
+          }
+        } catch (error) {
+          console.error('Open Pet Food Facts search error:', error);
+          // Continue with local results only
+        }
+      }
+      
       // Auto-populate database with sample products if empty
       if (products.length === 0 && !search) {
         const sampleProducts = [
