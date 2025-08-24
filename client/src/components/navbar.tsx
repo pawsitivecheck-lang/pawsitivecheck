@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Search, Shield, Users, Camera } from "lucide-react";
+import { Menu, X, Crown, Search, Shield, Users, Camera, Heart } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 
 export default function Navbar() {
@@ -14,6 +14,7 @@ export default function Navbar() {
     { name: 'Mystical Scanner', href: '/scan', icon: Camera },
     { name: 'Cosmic Database', href: '/database', icon: Search },
     { name: 'Cosmic Warnings', href: '/recalls', icon: Shield },
+    { name: 'Vet Locator', href: '/vets', icon: Heart },
     { name: 'Resistance Hub', href: '/community', icon: Users },
   ];
 

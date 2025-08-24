@@ -56,6 +56,7 @@ export default function Landing() {
               <a href="#scanner" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-scan">Scanner</a>
               <a href="#database" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-database">Products</a>
               <a href="#recalls" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-recalls">Safety</a>
+              <a href="#vets" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-vets">Vets</a>
               <a href="#community" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-community">Reviews</a>
             </div>
             
@@ -118,6 +119,14 @@ export default function Landing() {
                 data-testid="mobile-nav-recalls"
               >
                 ⚠️ Safety Alerts
+              </a>
+              <a 
+                href="#vets" 
+                className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-nav-vets"
+              >
+                💚 Find Vets
               </a>
               <a 
                 href="#community" 

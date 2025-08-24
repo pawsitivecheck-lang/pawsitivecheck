@@ -11,6 +11,7 @@ import ProductScanner from "@/pages/product-scanner";
 import ProductDatabase from "@/pages/product-database";
 import Recalls from "@/pages/recalls";
 import Community from "@/pages/community";
+import VetFinder from "@/pages/vet-finder";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Profile from "@/pages/profile";
 import PrivacyPolicy from "@/pages/privacy-policy";
@@ -35,6 +36,7 @@ function Router() {
           <Route path="/database" component={ProductDatabase} />
           <Route path="/recalls" component={Recalls} />
           <Route path="/community" component={Community} />
+          <Route path="/vets" component={VetFinder} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/profile" component={Profile} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />

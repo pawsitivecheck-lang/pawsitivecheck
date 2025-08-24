@@ -425,6 +425,190 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Veterinary search endpoint
+  app.post('/api/vets/search', async (req, res) => {
+    try {
+      const { query, location } = req.body;
+      
+      // Construct search query
+      let searchQuery = query || 'veterinarian';
+      if (location) {
+        // Use coordinates to search for local vets
+        searchQuery += ` near ${location.lat},${location.lng}`;
+      }
+      
+      // In production, this would integrate with:
+      // - Google Places API
+      // - Yelp Fusion API
+      // - Foursquare Places API
+      // - Or custom web scraping with Perplexity/web search
+      
+      // Mock implementation with realistic vet data
+      const mockPractices = [
+        {
+          id: 'vet001',
+          name: 'Companion Animal Hospital',
+          address: '123 Main Street',
+          city: 'Anytown',
+          state: 'CA',
+          zipCode: '90210',
+          phone: '(555) 123-4567',
+          website: 'https://companionvet.com',
+          rating: 4.8,
+          reviewCount: 245,
+          services: [
+            'General Wellness Exams',
+            'Vaccinations',
+            'Surgery',
+            'Dental Care',
+            'Emergency Services'
+          ],
+          hours: {
+            'Monday': '8:00 AM - 6:00 PM',
+            'Tuesday': '8:00 AM - 6:00 PM',
+            'Wednesday': '8:00 AM - 6:00 PM',
+            'Thursday': '8:00 AM - 6:00 PM',
+            'Friday': '8:00 AM - 6:00 PM',
+            'Saturday': '9:00 AM - 4:00 PM',
+            'Sunday': 'Closed'
+          },
+          specialties: ['Small Animal Care', 'Preventive Medicine'],
+          emergencyServices: true,
+          distance: 0.8
+        },
+        {
+          id: 'vet002',
+          name: 'City Pet Clinic',
+          address: '456 Oak Avenue',
+          city: 'Anytown',
+          state: 'CA',
+          zipCode: '90210',
+          phone: '(555) 987-6543',
+          website: 'https://citypetclinic.com',
+          rating: 4.6,
+          reviewCount: 189,
+          services: [
+            'Routine Check-ups',
+            'Spay/Neuter',
+            'Microchipping',
+            'Grooming',
+            'Behavioral Consultation'
+          ],
+          hours: {
+            'Monday': '7:30 AM - 7:00 PM',
+            'Tuesday': '7:30 AM - 7:00 PM',
+            'Wednesday': '7:30 AM - 7:00 PM',
+            'Thursday': '7:30 AM - 7:00 PM',
+            'Friday': '7:30 AM - 7:00 PM',
+            'Saturday': '8:00 AM - 5:00 PM',
+            'Sunday': '10:00 AM - 3:00 PM'
+          },
+          specialties: ['Behavioral Medicine', 'Dermatology'],
+          emergencyServices: false,
+          distance: 1.2
+        },
+        {
+          id: 'vet003',
+          name: 'Advanced Animal Care Center',
+          address: '789 Elm Street',
+          city: 'Anytown',
+          state: 'CA',
+          zipCode: '90210',
+          phone: '(555) 456-7890',
+          website: 'https://advancedanimalcare.com',
+          rating: 4.9,
+          reviewCount: 312,
+          services: [
+            'Advanced Diagnostics',
+            'Orthopedic Surgery',
+            'Oncology',
+            'Cardiology',
+            'Critical Care'
+          ],
+          hours: {
+            'Monday': '7:00 AM - 8:00 PM',
+            'Tuesday': '7:00 AM - 8:00 PM',
+            'Wednesday': '7:00 AM - 8:00 PM',
+            'Thursday': '7:00 AM - 8:00 PM',
+            'Friday': '7:00 AM - 8:00 PM',
+            'Saturday': '8:00 AM - 6:00 PM',
+            'Sunday': '9:00 AM - 5:00 PM'
+          },
+          specialties: ['Surgery', 'Internal Medicine', 'Oncology'],
+          emergencyServices: true,
+          distance: 2.1
+        },
+        {
+          id: 'vet004',
+          name: 'Neighborhood Vet Services',
+          address: '321 Pine Road',
+          city: 'Anytown',
+          state: 'CA',
+          zipCode: '90210',
+          phone: '(555) 234-5678',
+          rating: 4.4,
+          reviewCount: 156,
+          services: [
+            'Wellness Exams',
+            'Vaccinations',
+            'Parasite Prevention',
+            'Senior Pet Care',
+            'Nutritional Counseling'
+          ],
+          hours: {
+            'Monday': '8:00 AM - 5:00 PM',
+            'Tuesday': '8:00 AM - 5:00 PM',
+            'Wednesday': 'Closed',
+            'Thursday': '8:00 AM - 5:00 PM',
+            'Friday': '8:00 AM - 5:00 PM',
+            'Saturday': '9:00 AM - 2:00 PM',
+            'Sunday': 'Closed'
+          },
+          specialties: ['Geriatric Care', 'Wellness Programs'],
+          emergencyServices: false,
+          distance: 1.7
+        }
+      ];
+      
+      // Filter practices based on search terms
+      let filteredPractices = mockPractices;
+      
+      if (query && query !== 'veterinarian') {
+        const searchTerms = query.toLowerCase();
+        filteredPractices = mockPractices.filter(practice => 
+          practice.name.toLowerCase().includes(searchTerms) ||
+          practice.services.some(service => 
+            service.toLowerCase().includes(searchTerms)
+          ) ||
+          practice.specialties.some(specialty => 
+            specialty.toLowerCase().includes(searchTerms)
+          ) ||
+          practice.city.toLowerCase().includes(searchTerms) ||
+          practice.state.toLowerCase().includes(searchTerms)
+        );
+      }
+      
+      // Sort by distance if location provided
+      if (location) {
+        filteredPractices.sort((a, b) => (a.distance || 999) - (b.distance || 999));
+      }
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      res.json({
+        practices: filteredPractices,
+        total: filteredPractices.length,
+        searchQuery,
+        location: location || null
+      });
+      
+    } catch (error) {
+      console.error("Error in vet search:", error);
+      res.status(500).json({ message: "Failed to search for veterinarians" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
