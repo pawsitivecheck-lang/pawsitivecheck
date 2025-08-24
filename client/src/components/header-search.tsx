@@ -64,7 +64,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     }
   }, []);
 
-  // Debounced search as user types
+  // Debounced search as user types - faster for autofill
   const debouncedSearch = useCallback((query: string) => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -77,7 +77,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         setSearchResults([]);
         setShowResults(query.length > 0); // Show recent searches for short queries
       }
-    }, 300);
+    }, 150); // Faster response for better autofill UX
   }, [searchMutation]);
 
   // Handle input changes with real-time search
@@ -206,31 +206,76 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     localStorage.setItem('pawsitivecheck-recent-searches', JSON.stringify(recent));
   };
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!showResults) return;
+  // Get the best autofill suggestion
+  const getAutofillSuggestion = useCallback(() => {
+    if (!searchQuery || searchQuery.length < 2) return '';
+    
+    // Try to find a product name that starts with the search query
+    const suggestion = searchResults.find(product => 
+      product.name.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+    
+    if (suggestion) {
+      return suggestion.name;
+    }
+    
+    // Try to find a recent search that starts with the query
+    const recentSuggestion = recentSearches.find(search => 
+      search.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+    
+    return recentSuggestion || '';
+  }, [searchQuery, searchResults, recentSearches]);
 
+  // Handle keyboard navigation and autofill
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     const allOptions = [...(searchQuery.length < 2 ? recentSearches : []), ...searchResults.map(p => p.name)];
     
     switch (e.key) {
+      case 'Tab':
+        e.preventDefault();
+        if (showResults) {
+          // Tab completion - autofill with the best suggestion
+          const suggestion = getAutofillSuggestion();
+          if (suggestion && suggestion !== searchQuery) {
+            setSearchQuery(suggestion);
+            debouncedSearch(suggestion);
+            setSelectedIndex(0); // Select first result after autofill
+          } else if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
+            // If no suggestion, use selected item
+            const selectedOption = allOptions[selectedIndex];
+            setSearchQuery(selectedOption);
+            debouncedSearch(selectedOption);
+          }
+        }
+        break;
       case 'ArrowDown':
         e.preventDefault();
-        setSelectedIndex(prev => (prev + 1) % allOptions.length);
+        if (!showResults && searchQuery.length > 0) {
+          setShowResults(true);
+        }
+        setSelectedIndex(prev => (prev + 1) % Math.max(allOptions.length, 1));
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setSelectedIndex(prev => prev <= 0 ? allOptions.length - 1 : prev - 1);
+        if (!showResults && searchQuery.length > 0) {
+          setShowResults(true);
+        }
+        setSelectedIndex(prev => prev <= 0 ? Math.max(allOptions.length - 1, 0) : prev - 1);
         break;
       case 'Enter':
         e.preventDefault();
-        if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
+        if (showResults && selectedIndex >= 0 && selectedIndex < allOptions.length) {
           if (selectedIndex < recentSearches.length && searchQuery.length < 2) {
             // Recent search selected
-            setSearchQuery(recentSearches[selectedIndex]);
-            debouncedSearch(recentSearches[selectedIndex]);
+            const selectedSearch = recentSearches[selectedIndex];
+            setSearchQuery(selectedSearch);
+            saveRecentSearch(selectedSearch);
+            setLocation(`/database?search=${encodeURIComponent(selectedSearch)}`);
+            clearSearch();
           } else {
             // Product selected
-            const productIndex = searchQuery.length < 2 ? selectedIndex : selectedIndex - recentSearches.length;
+            const productIndex = searchQuery.length < 2 ? selectedIndex : selectedIndex - (searchQuery.length < 2 ? recentSearches.length : 0);
             if (searchResults[productIndex]) {
               selectProduct(searchResults[productIndex]);
             }
@@ -240,8 +285,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         }
         break;
       case 'Escape':
-        setShowResults(false);
-        inputRef.current?.blur();
+        if (showResults) {
+          setShowResults(false);
+          setSelectedIndex(-1);
+        } else {
+          inputRef.current?.blur();
+        }
         break;
     }
   };
@@ -283,7 +332,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products or scan..."
+              placeholder="Search products or scan... (Press Tab to autofill)"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -384,6 +433,16 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length < 2 && recentSearches.length > 0)) && (
           <div className="absolute top-12 left-0 right-0 bg-cosmic-800/95 backdrop-blur-md border border-cosmic-600 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
+            
+            {/* Autofill Hint */}
+            {searchQuery.length >= 2 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
+              <div className="p-2 border-b border-cosmic-600/30">
+                <div className="flex items-center gap-2 text-xs text-cosmic-400">
+                  <kbd className="px-1.5 py-0.5 text-[10px] bg-cosmic-700/50 border border-cosmic-600 rounded">Tab</kbd>
+                  <span>to autofill: "{getAutofillSuggestion()}"</span>
+                </div>
+              </div>
+            )}
             
             {/* Recent Searches (shown when query is short) */}
             {searchQuery.length < 2 && recentSearches.length > 0 && (
