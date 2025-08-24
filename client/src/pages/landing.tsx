@@ -158,88 +158,149 @@ export default function Landing() {
       <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8" id="hero">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-mystical text-5xl md:text-7xl font-bold text-starlight-500 mb-6 animate-float" data-testid="text-welcome-title">
-              Welcome, Fellow Seeker
-            </h2>
-            <div className="max-w-4xl mx-auto cosmic-card p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <MascotCard 
-                  name="Aleister"
-                  role="Mystical Analysis Expert"
-                  icon={<WandSparkles className="text-5xl text-starlight-500" />}
-                  bgGradient="from-mystical-purple to-cosmic-600"
-                />
-                <MascotCard 
-                  name="Severus"
-                  role="Guardian of Truth"
-                  icon={<ShieldHalf className="text-5xl text-starlight-500" />}
-                  bgGradient="from-midnight-600 to-cosmic-700"
-                />
+            <div className="mb-8">
+              <h2 className="font-mystical text-6xl md:text-8xl font-bold text-starlight-500 mb-4 animate-float" data-testid="text-welcome-title">
+                ✨ Welcome, Fellow Seeker! ✨
+              </h2>
+              <div className="text-xl md:text-2xl text-cosmic-200 mb-6 animate-bounce">
+                <span className="inline-block">🐾</span> 
+                <span className="text-mystical-purple font-mystical">The cosmic cats have been expecting you...</span>
+                <span className="inline-block">🌟</span>
+              </div>
+            </div>
+            
+            <div className="max-w-4xl mx-auto cosmic-card p-8 border-2 border-starlight-500/30 shadow-2xl">
+              <div className="mb-6">
+                <h3 className="font-mystical text-2xl text-starlight-400 mb-4">🎭 Meet Your Mystical Guides 🎭</h3>
+                <p className="text-cosmic-300 text-lg">These enchanted feline guardians will guide you through the magical realm of pet product safety!</p>
               </div>
               
-              <div className="mt-8 p-6 bg-cosmic-900/50 rounded-xl border-l-4 border-starlight-500">
-                <p className="font-mystical text-lg leading-relaxed text-cosmic-100" data-testid="text-welcome-message">
-                  "Greetings, truth-seeker. We are <span className="text-starlight-400">Aleister and Severus</span>, 
-                  mystical guardians of the <span className="text-mystical-purple">Audit Syndicate</span>. 
-                  Through cosmic divination and ancient wisdom, we pierce the veil of corporate deception 
-                  to reveal the true nature of pet products. Join us in this sacred mission of 
-                  <span className="text-starlight-400">transparency and protection</span>."
+              <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
+                <div className="group hover:scale-105 transition-transform duration-300">
+                  <MascotCard 
+                    name="🔮 Aleister 🔮"
+                    role="✨ Master of Mystical Analysis ✨"
+                    icon={<WandSparkles className="text-5xl text-starlight-500 animate-pulse" />}
+                    bgGradient="from-mystical-purple to-cosmic-600"
+                  />
+                  <div className="mt-4 p-3 bg-mystical-purple/10 rounded-lg border border-mystical-purple/30">
+                    <p className="text-sm text-mystical-purple italic">"Meow! I see through corporate lies with my cosmic third eye! 👁️✨"</p>
+                  </div>
+                </div>
+                
+                <div className="group hover:scale-105 transition-transform duration-300">
+                  <MascotCard 
+                    name="🛡️ Severus 🛡️"
+                    role="⚔️ Protector of Truth & Justice ⚔️"
+                    icon={<ShieldHalf className="text-5xl text-starlight-500 animate-pulse" />}
+                    bgGradient="from-midnight-600 to-cosmic-700"
+                  />
+                  <div className="mt-4 p-3 bg-midnight-600/10 rounded-lg border border-midnight-600/30">
+                    <p className="text-sm text-midnight-400 italic">"Purr-fection through vigilance! I guard against dangerous ingredients! 🐾⚔️"</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8 p-6 bg-gradient-to-r from-cosmic-900/60 via-mystical-purple/10 to-cosmic-900/60 rounded-xl border-2 border-starlight-500/40 shadow-inner">
+                <div className="flex items-center justify-center mb-4">
+                  <span className="text-2xl animate-bounce mr-2">🌟</span>
+                  <h4 className="font-mystical text-xl text-starlight-400">Their Mystical Message</h4>
+                  <span className="text-2xl animate-bounce ml-2">🌟</span>
+                </div>
+                <p className="font-mystical text-lg leading-relaxed text-cosmic-100 text-center" data-testid="text-welcome-message">
+                  "<span className="text-starlight-400 text-xl">Greetings, dear human!</span> 🙋‍♀️ We are <span className="text-mystical-purple font-bold">Aleister</span> 🔮 and <span className="text-midnight-400 font-bold">Severus</span> 🛡️, 
+                  your mystical feline guardians from the legendary <span className="text-starlight-400 font-bold">Audit Syndicate</span>! ✨<br/><br/>
+                  Through <span className="text-mystical-purple">cosmic divination</span> 🌙 and <span className="text-starlight-400">ancient wisdom</span> 📚, 
+                  we'll help you pierce the veil of corporate deception and discover the <span className="text-mystical-green font-bold">TRUE ESSENCE</span> 💎 
+                  of every pet product! Join our <span className="text-starlight-400">purr-fectly magical mission</span> of transparency and protection! 🐾💖"
                 </p>
+              </div>
+              
+              <div className="mt-6 flex justify-center space-x-4">
+                <div className="animate-bounce" style={{animationDelay: '0s'}}>🐱</div>
+                <div className="animate-bounce" style={{animationDelay: '0.1s'}}>✨</div>
+                <div className="animate-bounce" style={{animationDelay: '0.2s'}}>🔮</div>
+                <div className="animate-bounce" style={{animationDelay: '0.3s'}}>🛡️</div>
+                <div className="animate-bounce" style={{animationDelay: '0.4s'}}>🌟</div>
+                <div className="animate-bounce" style={{animationDelay: '0.5s'}}>🐾</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Actions */}
+      {/* Magical Actions */}
       <section className="py-16 px-4 sm:px-6 lg:px-8" id="scanner">
         <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4">🎪 Choose Your Magical Adventure! 🎪</h2>
+            <p className="text-cosmic-300 text-lg">Pick your preferred method to unveil the cosmic truth! ✨</p>
+          </div>
+          
           <div className="grid md:grid-cols-2 gap-8">
             {/* Mystical Scanner */}
-            <Card className="cosmic-card group" data-testid="card-scanner">
+            <Card className="cosmic-card group hover:shadow-2xl hover:shadow-mystical-green/20 border-2 border-mystical-green/30 transition-all duration-300" data-testid="card-scanner">
               <CardContent className="p-8 text-center">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-mystical-green to-starlight-500 rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 transition-transform">
-                  <Eye className="text-3xl text-cosmic-900" />
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-mystical-green to-starlight-500 rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
+                  <Eye className="text-3xl text-cosmic-900 animate-pulse" />
                 </div>
-                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-scanner-title">Mystical Scanner</h3>
-                <p className="text-cosmic-200 mb-6" data-testid="text-scanner-description">Unleash the power of cosmic divination to analyze any pet product's true essence</p>
+                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-scanner-title">📱 Aleister's Mystical Scanner 🔮</h3>
+                <div className="bg-mystical-green/10 rounded-lg p-4 mb-4 border border-mystical-green/30">
+                  <p className="text-mystical-green italic text-sm mb-2">"Meow! Point your magic rectangle at any product!" - Aleister ✨</p>
+                </div>
+                <p className="text-cosmic-200 mb-6" data-testid="text-scanner-description">🌟 Unleash the power of cosmic divination to analyze any pet product's true essence through camera magic!</p>
                 <Button 
                   onClick={() => window.location.href = '/api/login'}
-                  className="mystical-button"
+                  className="mystical-button group-hover:scale-105 transition-transform"
                   data-testid="button-scan-product"
                 >
                   <Camera className="mr-2 h-4 w-4" />
-                  Scan Product
+                  🎯 Start Scanning Magic!
                 </Button>
+                <div className="mt-4 flex justify-center space-x-2">
+                  <span className="text-xs text-cosmic-400">📷 Camera • 📊 Barcode • 🖼️ Photo</span>
+                </div>
               </CardContent>
             </Card>
             
             {/* Advanced Search Portal */}
-            <Card className="cosmic-card group" data-testid="card-search">
+            <Card className="cosmic-card group hover:shadow-2xl hover:shadow-mystical-purple/20 border-2 border-mystical-purple/30 transition-all duration-300" data-testid="card-search">
               <CardContent className="p-8 text-center">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-midnight-600 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 transition-transform">
-                  <Search className="text-3xl text-starlight-500" />
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-midnight-600 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 group-hover:-rotate-12 transition-all duration-300">
+                  <Search className="text-3xl text-starlight-500 animate-pulse" />
                 </div>
-                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-search-title">Ingredient Oracle</h3>
-                <p className="text-cosmic-200 mb-6" data-testid="text-search-description">Peer through the cosmic veil to uncover suspicious ingredients and hidden truths</p>
+                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-search-title">🔍 Severus's Ingredient Oracle 🛡️</h3>
+                <div className="bg-midnight-600/10 rounded-lg p-4 mb-4 border border-midnight-600/30">
+                  <p className="text-midnight-400 italic text-sm mb-2">"Purr! I'll sniff out suspicious ingredients!" - Severus ⚔️</p>
+                </div>
+                <p className="text-cosmic-200 mb-6" data-testid="text-search-description">🌙 Peer through the cosmic veil to uncover suspicious ingredients and hidden truths in our mystical database!</p>
                 <div className="relative mb-4">
                   <Input 
                     type="text" 
-                    placeholder="Search the mystical database..." 
-                    className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-6 py-3 pl-12 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500"
+                    placeholder="✨ Search the mystical database... 🔮" 
+                    className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-6 py-3 pl-12 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500 group-hover:glow"
                     data-testid="input-search"
                   />
-                  <WandSparkles className="absolute left-4 top-1/2 transform -translate-y-1/2 text-starlight-500 h-4 w-4" />
+                  <WandSparkles className="absolute left-4 top-1/2 transform -translate-y-1/2 text-starlight-500 h-4 w-4 animate-spin" />
                 </div>
                 <Button 
                   onClick={() => window.location.href = '/api/login'}
-                  className="bg-gradient-to-r from-mystical-purple to-midnight-600 text-starlight-400 hover:from-mystical-purple hover:to-midnight-500"
+                  className="bg-gradient-to-r from-mystical-purple to-midnight-600 text-starlight-400 hover:from-mystical-purple hover:to-midnight-500 group-hover:scale-105 transition-transform"
                   data-testid="button-divine-truth"
                 >
-                  Divine Truth
+                  🌟 Reveal Divine Truth!
                 </Button>
+                <div className="mt-4 flex justify-center space-x-2">
+                  <span className="text-xs text-cosmic-400">🏷️ Brand • 📋 Ingredients • ⚠️ Safety</span>
+                </div>
               </CardContent>
             </Card>
+          </div>
+          
+          <div className="text-center mt-12">
+            <div className="bg-starlight-500/10 rounded-full px-6 py-3 border border-starlight-500/30">
+              <p className="text-starlight-400 font-mystical">💫 Both tools work together to give you the complete cosmic picture! 💫</p>
+            </div>
           </div>
         </div>
       </section>
