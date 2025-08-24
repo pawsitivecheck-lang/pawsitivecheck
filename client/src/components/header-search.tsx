@@ -340,7 +340,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               onBlur={(e) => {
                 // Delay hiding results to allow clicks
                 setTimeout(() => {
-                  if (!document.activeElement || !e.currentTarget.contains(document.activeElement)) {
+                  const activeElement = document.activeElement;
+                  const currentTarget = e.currentTarget;
+                  if (!activeElement || !currentTarget || !currentTarget.contains(activeElement)) {
                     setShowResults(false);
                   }
                 }, 200);
