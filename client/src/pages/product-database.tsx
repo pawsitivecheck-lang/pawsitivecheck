@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Plus } from "lucide-react";
-import { Link } from "wouter";
+import { Search, Filter, Plus, X } from "lucide-react";
+import { Link, useLocation } from "wouter";
 
 export default function ProductDatabase() {
   const { user } = useAuth();
+  const [location, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Initialize search term from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    if (searchParam) {
+      setSearchTerm(searchParam);
+    }
+  }, [location]);
   const [filterClarity, setFilterClarity] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [filterBrand, setFilterBrand] = useState("all");
@@ -79,6 +89,12 @@ export default function ProductDatabase() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(0); // Reset to first page on new search
+    // Update URL to reflect search
+    if (searchTerm.trim()) {
+      setLocation(`/database?search=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      setLocation('/database');
+    }
   };
 
   const clearAllFilters = () => {
@@ -109,6 +125,47 @@ export default function ProductDatabase() {
               Search the mystical archives of pet product knowledge
             </p>
           </div>
+
+          {/* Current Search Display */}
+          {searchTerm && (
+            <div className="mb-8">
+              <Card className="cosmic-card" data-testid="card-search-results">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Search className="h-5 w-5 text-starlight-400" />
+                      <div>
+                        <p className="text-cosmic-200 text-sm">Search Results for:</p>
+                        <p className="text-starlight-400 font-medium text-lg" data-testid="text-search-term">
+                          "{searchTerm}"
+                        </p>
+                      </div>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-starlight-500/20 text-starlight-300 border-starlight-500/30"
+                        data-testid="badge-results-count"
+                      >
+                        {filteredProducts?.length || 0} results
+                      </Badge>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setSearchTerm("");
+                        setLocation('/database');
+                      }}
+                      className="text-cosmic-400 hover:text-cosmic-200"
+                      data-testid="button-clear-search"
+                    >
+                      <X className="h-4 w-4" />
+                      Clear Search
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Search and Filters */}
           <Card className="cosmic-card mb-8" data-testid="card-search-filters">
