@@ -20,10 +20,10 @@ export default function ThemeToggle() {
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme);
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
+    document.documentElement.classList.toggle('dark', newIsDark);
+    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
   };
 
   return (
@@ -31,13 +31,14 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       variant="ghost"
       size="sm"
-      className="text-cosmic-300 hover:text-starlight-400 hover:bg-cosmic-800/50"
+      className="text-cosmic-300 hover:text-starlight-400 hover:bg-cosmic-800/50 dark:text-cosmic-300 dark:hover:text-starlight-400 dark:hover:bg-cosmic-800/50 
+                 light:text-slate-600 light:hover:text-slate-800 light:hover:bg-slate-200/50"
       data-testid="button-theme-toggle"
     >
       {isDark ? (
-        <Sun className="h-4 w-4" />
+        <Sun className="h-4 w-4" title="Switch to light mode" />
       ) : (
-        <Moon className="h-4 w-4" />
+        <Moon className="h-4 w-4" title="Switch to dark mode" />
       )}
     </Button>
   );

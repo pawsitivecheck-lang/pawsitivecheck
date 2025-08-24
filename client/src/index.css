@@ -10,7 +10,7 @@
   --card-foreground: hsl(222.2, 84%, 4.9%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222.2, 84%, 4.9%);
-  --primary: hsl(221.2, 83.2%, 53.3%);
+  --primary: hsl(258, 90%, 66%);
   --primary-foreground: hsl(210, 40%, 98%);
   --secondary: hsl(210, 40%, 96%);
   --secondary-foreground: hsl(222.2, 84%, 4.9%);
@@ -22,7 +22,7 @@
   --destructive-foreground: hsl(210, 40%, 98%);
   --border: hsl(214.3, 31.8%, 91.4%);
   --input: hsl(214.3, 31.8%, 91.4%);
-  --ring: hsl(221.2, 83.2%, 53.3%);
+  --ring: hsl(258, 90%, 66%);
   --chart-1: hsl(12, 76%, 61%);
   --chart-2: hsl(173, 58%, 39%);
   --chart-3: hsl(197, 37%, 24%);
@@ -30,31 +30,31 @@
   --chart-5: hsl(27, 87%, 67%);
   --radius: 0.5rem;
   
-  /* Cosmic color palette */
-  --cosmic-900: hsl(252, 83%, 5%);
-  --cosmic-800: hsl(253, 67%, 10%);
-  --cosmic-700: hsl(253, 46%, 18%);
-  --cosmic-600: hsl(252, 36%, 29%);
-  --cosmic-500: hsl(252, 40%, 45%);
-  --cosmic-400: hsl(252, 45%, 60%);
-  --cosmic-300: hsl(252, 52%, 76%);
-  --cosmic-200: hsl(252, 64%, 88%);
-  --cosmic-100: hsl(252, 100%, 96%);
+  /* Light mode cosmic color palette */
+  --cosmic-900: hsl(258, 20%, 15%);
+  --cosmic-800: hsl(258, 25%, 25%);
+  --cosmic-700: hsl(258, 20%, 35%);
+  --cosmic-600: hsl(258, 15%, 45%);
+  --cosmic-500: hsl(258, 15%, 55%);
+  --cosmic-400: hsl(258, 20%, 65%);
+  --cosmic-300: hsl(258, 25%, 75%);
+  --cosmic-200: hsl(258, 30%, 85%);
+  --cosmic-100: hsl(258, 35%, 95%);
   
-  --midnight-900: hsl(223, 47%, 9%);
-  --midnight-800: hsl(223, 47%, 18%);
-  --midnight-700: hsl(223, 36%, 28%);
-  --midnight-600: hsl(223, 36%, 38%);
-  --midnight-500: hsl(223, 40%, 48%);
+  --midnight-900: hsl(223, 20%, 20%);
+  --midnight-800: hsl(223, 25%, 30%);
+  --midnight-700: hsl(223, 20%, 40%);
+  --midnight-600: hsl(223, 15%, 50%);
+  --midnight-500: hsl(223, 15%, 60%);
   
-  --starlight-500: hsl(51, 100%, 50%);
-  --starlight-400: hsl(51, 100%, 60%);
-  --starlight-300: hsl(51, 100%, 70%);
-  --starlight-200: hsl(51, 100%, 80%);
+  --starlight-500: hsl(45, 100%, 45%);
+  --starlight-400: hsl(45, 100%, 40%);
+  --starlight-300: hsl(45, 100%, 35%);
+  --starlight-200: hsl(45, 100%, 30%);
   
-  --mystical-green: hsl(159, 78%, 42%);
-  --mystical-red: hsl(0, 84%, 60%);
-  --mystical-purple: hsl(258, 90%, 66%);
+  --mystical-green: hsl(159, 70%, 35%);
+  --mystical-red: hsl(0, 75%, 55%);
+  --mystical-purple: hsl(258, 80%, 55%);
   
   --font-mystical: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-cosmic: 'Inter', system-ui, -apple-system, sans-serif;
@@ -109,14 +109,16 @@
     @apply border-border;
   }
   
+  /* Light mode body (default) */
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, var(--cosmic-800) 0%, var(--midnight-900) 50%, var(--cosmic-700) 100%);
+    background: linear-gradient(135deg, hsl(258, 35%, 97%) 0%, hsl(45, 50%, 95%) 50%, hsl(258, 30%, 96%) 100%);
     background-attachment: fixed;
     font-family: var(--font-cosmic);
     min-height: 100vh;
   }
   
+  /* Light mode starfield overlay */
   body::before {
     content: '';
     position: fixed;
@@ -125,17 +127,23 @@
     width: 100%;
     height: 100%;
     background-image: 
-      radial-gradient(2px 2px at 20px 30px, var(--starlight-500), transparent),
-      radial-gradient(2px 2px at 40px 70px, var(--mystical-purple), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.8), transparent),
-      radial-gradient(1px 1px at 130px 80px, var(--starlight-500), transparent),
-      radial-gradient(2px 2px at 160px 30px, var(--mystical-purple), transparent);
+      radial-gradient(2px 2px at 20px 30px, hsl(45, 100%, 50%), transparent),
+      radial-gradient(1px 1px at 40px 70px, hsl(258, 80%, 60%), transparent),
+      radial-gradient(1px 1px at 90px 40px, hsl(200, 100%, 70%), transparent),
+      radial-gradient(1px 1px at 130px 80px, hsl(45, 100%, 55%), transparent),
+      radial-gradient(1px 1px at 160px 30px, hsl(258, 70%, 65%), transparent);
     background-repeat: repeat;
     background-size: 200px 100px;
     z-index: -1;
-    opacity: 0.4;
+    opacity: 0.15;
   }
   
+  /* Dark mode body */
+  .dark body {
+    background: linear-gradient(135deg, var(--cosmic-800) 0%, var(--midnight-900) 50%, var(--cosmic-700) 100%);
+  }
+  
+  /* Dark mode starfield overlay */
   .dark body::before {
     opacity: 0.2;
     background-image: 
@@ -156,7 +164,19 @@
     font-family: var(--font-cosmic);
   }
   
-  /* Enhanced dark mode utilities */
+  /* Light mode cosmic-card utilities (already defined above) */
+  .cosmic-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid hsl(258, 30%, 85%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .cosmic-card:hover {
+    border-color: hsl(258, 40%, 75%);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark mode cosmic-card utilities */
   .dark .cosmic-card {
     @apply bg-card border-border backdrop-blur-sm;
     border: 1px solid hsl(253, 36%, 25%);
@@ -182,7 +202,25 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
   
-  /* Enhanced input visibility in dark mode */
+  /* Light mode input styling */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+    background-color: hsl(0, 0%, 98%);
+    border: 1px solid hsl(258, 20%, 85%);
+    color: hsl(258, 20%, 15%);
+  }
+  
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  textarea:focus {
+    border-color: hsl(258, 80%, 55%);
+    box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+  }
+  
+  /* Dark mode input visibility */
   .dark input[type="text"],
   .dark input[type="email"],
   .dark input[type="password"],
@@ -200,7 +238,24 @@
     box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
   }
   
-  /* Enhanced text contrast */
+  /* Light mode text colors */
+  .text-cosmic-400 {
+    color: hsl(258, 20%, 65%);
+  }
+  
+  .text-cosmic-300 {
+    color: hsl(258, 25%, 55%);
+  }
+  
+  .text-cosmic-200 {
+    color: hsl(258, 30%, 45%);
+  }
+  
+  .text-cosmic-100 {
+    color: hsl(258, 35%, 25%);
+  }
+  
+  /* Dark mode text contrast */
   .dark .text-cosmic-400 {
     color: hsl(252, 50%, 75%);
   }
@@ -213,14 +268,32 @@
     color: hsl(252, 70%, 88%);
   }
   
-  /* Enhanced navigation in dark mode */
+  .dark .text-cosmic-100 {
+    color: hsl(252, 100%, 96%);
+  }
+  
+  /* Light mode navigation */
+  nav {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(258, 20%, 90%);
+  }
+  
+  /* Dark mode navigation */
   .dark nav {
     background: rgba(13, 9, 48, 0.95);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid hsl(253, 36%, 25%);
   }
   
-  /* Enhanced badge contrast */
+  /* Light mode badge styling */
+  .badge {
+    background-color: hsl(258, 20%, 92%);
+    color: hsl(258, 30%, 25%);
+    border: 1px solid hsl(258, 20%, 80%);
+  }
+  
+  /* Dark mode badge contrast */
   .dark .badge {
     background-color: hsl(253, 46%, 20%);
     color: hsl(252, 100%, 96%);
@@ -259,23 +332,44 @@
   to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
 }
 
-/* Custom component styles */
+/* Light mode component styles (default) */
 .cosmic-card {
-  @apply bg-black/40 backdrop-blur-sm rounded-2xl border border-purple-400/20 hover:border-purple-400/40 transition-all;
+  @apply bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-200/40 hover:border-purple-300/60 transition-all shadow-lg;
 }
 
 .mystical-button {
-  @apply bg-gradient-to-r from-yellow-500 to-purple-500 text-black font-semibold px-6 py-3 rounded-full hover:from-yellow-400 hover:to-purple-400 transition-all;
+  @apply bg-gradient-to-r from-yellow-500 to-purple-600 text-white font-semibold px-6 py-3 rounded-full hover:from-yellow-400 hover:to-purple-500 transition-all shadow-md;
 }
 
 .cosmic-text {
-  @apply text-gray-100;
+  @apply text-gray-800;
 }
 
 .starlight-text {
-  @apply text-yellow-500;
+  @apply text-yellow-600;
 }
 
 .mystical-text {
+  @apply text-purple-600;
+}
+
+/* Dark mode component styles */
+.dark .cosmic-card {
+  @apply bg-black/40 border-purple-400/20 hover:border-purple-400/40 shadow-xl;
+}
+
+.dark .mystical-button {
+  @apply bg-gradient-to-r from-yellow-500 to-purple-500 text-black hover:from-yellow-400 hover:to-purple-400;
+}
+
+.dark .cosmic-text {
+  @apply text-gray-100;
+}
+
+.dark .starlight-text {
+  @apply text-yellow-500;
+}
+
+.dark .mystical-text {
   @apply text-purple-400;
 }
