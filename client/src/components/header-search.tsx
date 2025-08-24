@@ -347,7 +347,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-10 pr-16 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500 h-10"
+              className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-10 pr-20 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -357,12 +357,24 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={clearSearch}
                 variant="ghost"
                 size="sm"
-                className="absolute right-12 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-cosmic-400 hover:text-cosmic-200"
+                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-cosmic-400 hover:text-cosmic-200"
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
               </Button>
             )}
+            
+            {/* Search Button */}
+            <Button
+              type="submit"
+              variant="ghost"
+              size="sm"
+              className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-starlight-500 hover:text-starlight-400 hover:bg-starlight-500/10 rounded-full"
+              disabled={!searchQuery.trim() || isLoading}
+              data-testid="button-header-search"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
             
             {/* Scanner Menu Button */}
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
