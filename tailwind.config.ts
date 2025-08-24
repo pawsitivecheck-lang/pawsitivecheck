@@ -84,8 +84,8 @@ export default {
       fontFamily: {
         mystical: ["var(--font-mystical)"],
         cosmic: ["var(--font-cosmic)"],
-        sans: ["var(--font-cosmic)"],
-        serif: ["var(--font-mystical)"],
+        sans: ["var(--font-cosmic)", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+        serif: ["ui-serif", "Georgia", "Cambria", "Times New Roman", "Times", "serif"],
       },
       keyframes: {
         "accordion-down": {
