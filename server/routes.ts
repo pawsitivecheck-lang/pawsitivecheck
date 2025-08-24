@@ -461,8 +461,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let source = 'mock';
         let message = 'Product discovered through cosmic internet divination';
         
-        // Try real UPC Database API if available
-        if (process.env.UPC_DATABASE_API_KEY) {
+        // Try Open Pet Food Facts API first (pet-specific database)
+        try {
+          const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/product/${query}.json`, {
+            headers: {
+              'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (data.status === 1 && data.product) {
+              const product = data.product;
+              
+              // Calculate cosmic score based on available data quality
+              let cosmicScore = 60;
+              if (product.ingredients_text) cosmicScore += 15;
+              if (product.nutriments && Object.keys(product.nutriments).length > 5) cosmicScore += 10;
+              if (product.labels_tags && product.labels_tags.length > 0) cosmicScore += 10;
+              if (product.image_url) cosmicScore += 5;
+              
+              // Determine category
+              let category = 'pet-food';
+              const categories = product.categories_tags || [];
+              if (categories.some((cat: string) => cat.includes('treat') || cat.includes('snack'))) {
+                category = 'pet-treats';
+              } else if (categories.some((cat: string) => cat.includes('toy'))) {
+                category = 'pet-toys';
+              } else if (categories.some((cat: string) => cat.includes('accessory'))) {
+                category = 'pet-accessories';
+              }
+              
+              // Check for suspicious ingredients
+              const suspiciousIngredients = [];
+              const ingredients = product.ingredients_text?.toLowerCase() || '';
+              if (ingredients.includes('by-product')) suspiciousIngredients.push('by-product meal');
+              if (ingredients.includes('corn syrup')) suspiciousIngredients.push('corn syrup');
+              if (ingredients.includes('artificial')) suspiciousIngredients.push('artificial additives');
+              
+              productData = {
+                name: product.product_name || product.generic_name || `Pet Product ${query}`,
+                brand: product.brands || "Unknown Brand",
+                category,
+                description: product.ingredients_text ? 
+                  `Pet food with detailed ingredient analysis from Open Pet Food Facts` : 
+                  `Pet product from Open Pet Food Facts database`,
+                ingredients: product.ingredients_text || "Ingredients not specified",
+                imageUrl: product.image_url || null,
+                barcode: query,
+                cosmicScore: Math.min(cosmicScore, 95),
+                cosmicClarity: suspiciousIngredients.length === 0 ? 'blessed' : 
+                              suspiciousIngredients.length <= 2 ? 'neutral' : 'questionable',
+                transparencyLevel: product.ingredients_text ? 'excellent' : 'good',
+                isBlacklisted: false,
+                suspiciousIngredients,
+                lastAnalyzed: new Date(),
+              };
+              source = 'open-pet-food-facts';
+              message = 'Pet product found in cosmic Open Pet Food Facts database';
+            }
+          }
+        } catch (error) {
+          console.error('Open Pet Food Facts API error:', error);
+          // Continue to try other sources
+        }
+        
+        // Try UPC Database API as fallback
+        if (!productData && process.env.UPC_DATABASE_API_KEY) {
           try {
             const response = await fetch(`https://api.upcdatabase.org/product/${query}`, {
               headers: {
