@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Crown, Search, Shield, Users, Camera, Heart } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
+import ThemeToggle from "@/components/theme-toggle";
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -58,6 +59,9 @@ export default function Navbar() {
           
           {/* User Menu */}
           <div className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+            
             {/* Admin Badge */}
             {user?.isAdmin && (
               <Link href="/admin">

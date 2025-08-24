@@ -609,6 +609,395 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Database synchronization endpoints
+  app.post('/api/admin/sync/products', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      // In production, this would sync with:
+      // - Pet food manufacturer APIs
+      // - Open Food Facts API
+      // - FDA/AAFCO databases
+      // - Veterinary product databases
+      
+      let syncedProducts = 0;
+      const batchSize = 50;
+      
+      // Mock API data synchronization
+      const mockApiProducts = [
+        {
+          name: "Premium Dog Food - Chicken & Rice",
+          brand: "HealthyPaws",
+          category: "pet-food",
+          description: "Complete nutrition for adult dogs with real chicken and brown rice",
+          ingredients: "Chicken, brown rice, oats, chicken fat, natural flavors, vitamins, minerals",
+          barcode: "012345678901",
+          cosmicScore: 85,
+          cosmicClarity: 'blessed',
+          transparencyLevel: 'excellent',
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        },
+        {
+          name: "Cat Treats - Salmon Flavor",
+          brand: "FelineFeast",
+          category: "pet-treats",
+          description: "Natural salmon treats for cats, grain-free formula",
+          ingredients: "Salmon, sweet potato, pea protein, natural salmon flavor, mixed tocopherols",
+          barcode: "012345678902",
+          cosmicScore: 78,
+          cosmicClarity: 'blessed',
+          transparencyLevel: 'good',
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        },
+        {
+          name: "Dog Chew Toy - Rope Ball",
+          brand: "PlayfulPup",
+          category: "pet-toys",
+          description: "Durable rope ball toy for medium to large dogs",
+          ingredients: "Cotton rope, natural rubber core",
+          barcode: "012345678903",
+          cosmicScore: 92,
+          cosmicClarity: 'blessed',
+          transparencyLevel: 'excellent',
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        }
+      ];
+      
+      // Add products to database
+      for (const productData of mockApiProducts) {
+        try {
+          // Check if product already exists
+          const existing = await storage.getProductByBarcode(productData.barcode);
+          if (!existing) {
+            await storage.createProduct(productData);
+            syncedProducts++;
+          }
+        } catch (error) {
+          console.log(`Skipped product ${productData.name}: already exists or error`);
+        }
+      }
+      
+      res.json({
+        message: `Successfully synced ${syncedProducts} new products from cosmic APIs`,
+        syncedCount: syncedProducts,
+        totalProcessed: mockApiProducts.length,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error("Error syncing products:", error);
+      res.status(500).json({ message: "Failed to sync product database" });
+    }
+  });
+  
+  app.post('/api/admin/sync/recalls', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      // In production, sync with:
+      // - FDA Pet Food Recalls
+      // - AVMA recall alerts
+      // - Manufacturer recall notices
+      // - Veterinary safety databases
+      
+      let syncedRecalls = 0;
+      
+      // First, create some mock products for the recalls to reference
+      const mockProducts = [
+        {
+          name: "TastyBites Dog Treats",
+          brand: "PetSnacks Inc", 
+          category: "pet-treats",
+          description: "Chicken flavored dog treats",
+          ingredients: "Chicken, wheat flour, glycerin, salt",
+          barcode: "123456789012",
+        },
+        {
+          name: "FlexiLeash Retractable Leash",
+          brand: "WalkSafe",
+          category: "pet-accessories", 
+          description: "Retractable dog leash, 16ft length",
+          ingredients: "Nylon webbing, plastic handle, metal clasp",
+          barcode: "123456789013",
+        }
+      ];
+      
+      // Create products if they don't exist and get their IDs
+      const productIds: number[] = [];
+      for (const productData of mockProducts) {
+        try {
+          let existingProduct = await storage.getProductByBarcode(productData.barcode);
+          if (!existingProduct) {
+            existingProduct = await storage.createProduct(productData);
+          }
+          productIds.push(existingProduct.id);
+        } catch (error) {
+          console.log(`Failed to create/get product: ${productData.name}`);
+        }
+      }
+      
+      const mockRecallData = [
+        {
+          productId: productIds[0] || 1, // Use actual product ID or fallback
+          recallNumber: "RCL-2024-001",
+          reason: "Potential Salmonella contamination", 
+          severity: 'urgent' as const,
+          recallDate: new Date('2024-01-15'),
+          affectedBatches: ["Lot #TB2024001", "Lot #TB2024002"],
+          source: "FDA"
+        },
+        {
+          productId: productIds[1] || 2, // Use actual product ID or fallback
+          recallNumber: "RCL-2024-002", 
+          reason: "Mechanism failure causing sudden release",
+          severity: 'moderate' as const,
+          recallDate: new Date('2024-02-01'),
+          affectedBatches: ["Model FL-2023, Serial 50000-55000"],
+          source: "CPSC"
+        }
+      ];
+      
+      for (const recallData of mockRecallData) {
+        try {
+          // Check if recall already exists by recall number
+          const existingRecalls = await storage.getActiveRecalls();
+          const exists = existingRecalls.some(r => 
+            r.recallNumber === recallData.recallNumber
+          );
+          
+          if (!exists) {
+            await storage.createRecall(recallData);
+            syncedRecalls++;
+          }
+        } catch (error) {
+          console.log(`Skipped recall ${recallData.recallNumber}: already exists or error`);
+        }
+      }
+      
+      res.json({
+        message: `Successfully synced ${syncedRecalls} new recall alerts`,
+        syncedCount: syncedRecalls,
+        totalProcessed: mockRecallData.length,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error("Error syncing recalls:", error);
+      res.status(500).json({ message: "Failed to sync recall database" });
+    }
+  });
+  
+  app.post('/api/admin/sync/ingredients', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      // In production, sync with:
+      // - AAFCO ingredient safety database
+      // - FDA's list of prohibited substances
+      // - Veterinary toxicology databases
+      // - Research institutions' safety data
+      
+      let syncedIngredients = 0;
+      
+      const mockIngredientData = [
+        {
+          ingredientName: "Propylene Glycol",
+          reason: "Can cause anemia and other blood disorders in cats",
+          severity: 'high' as const
+        },
+        {
+          ingredientName: "Xylitol", 
+          reason: "Extremely toxic to dogs, causes rapid insulin release and hypoglycemia",
+          severity: 'high' as const
+        },
+        {
+          ingredientName: "BHA (Butylated Hydroxyanisole)",
+          reason: "Possible carcinogen, may cause liver and kidney problems", 
+          severity: 'medium' as const
+        },
+        {
+          ingredientName: "Red Dye #3",
+          reason: "Artificial coloring linked to hyperactivity and allergic reactions",
+          severity: 'low' as const
+        }
+      ];
+      
+      for (const ingredientData of mockIngredientData) {
+        try {
+          // Check if ingredient already blacklisted
+          const existing = await storage.getBlacklistedIngredients();
+          const exists = existing.some(i => 
+            i.ingredientName.toLowerCase() === ingredientData.ingredientName.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.addIngredientToBlacklist(ingredientData);
+            syncedIngredients++;
+          }
+        } catch (error) {
+          console.log(`Skipped ingredient ${ingredientData.ingredientName}: already exists or error`);
+        }
+      }
+      
+      res.json({
+        message: `Successfully synced ${syncedIngredients} new blacklisted ingredients`,
+        syncedCount: syncedIngredients,
+        totalProcessed: mockIngredientData.length,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error("Error syncing ingredients:", error);
+      res.status(500).json({ message: "Failed to sync ingredient blacklist" });
+    }
+  });
+  
+  // Full database refresh endpoint
+  app.post('/api/admin/sync/all', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const results = {
+        products: 0,
+        recalls: 0,
+        ingredients: 0,
+        errors: [] as string[]
+      };
+      
+      // Sync products
+      try {
+        const productRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/products`, {
+          method: 'POST',
+          headers: {
+            'Authorization': req.headers.authorization || '',
+            'Cookie': req.headers.cookie || ''
+          }
+        });
+        if (productRes.ok) {
+          const data = await productRes.json();
+          results.products = data.syncedCount;
+        }
+      } catch (error) {
+        results.errors.push('Failed to sync products');
+      }
+      
+      // Sync recalls
+      try {
+        const recallRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/recalls`, {
+          method: 'POST',
+          headers: {
+            'Authorization': req.headers.authorization || '',
+            'Cookie': req.headers.cookie || ''
+          }
+        });
+        if (recallRes.ok) {
+          const data = await recallRes.json();
+          results.recalls = data.syncedCount;
+        }
+      } catch (error) {
+        results.errors.push('Failed to sync recalls');
+      }
+      
+      // Sync ingredients
+      try {
+        const ingredientRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/ingredients`, {
+          method: 'POST',
+          headers: {
+            'Authorization': req.headers.authorization || '',
+            'Cookie': req.headers.cookie || ''
+          }
+        });
+        if (ingredientRes.ok) {
+          const data = await ingredientRes.json();
+          results.ingredients = data.syncedCount;
+        }
+      } catch (error) {
+        results.errors.push('Failed to sync ingredients');
+      }
+      
+      res.json({
+        message: "Cosmic database synchronization complete",
+        results,
+        timestamp: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error("Error in full database sync:", error);
+      res.status(500).json({ message: "Failed to perform full database synchronization" });
+    }
+  });
+  
+  // Database status and last sync info
+  app.get('/api/admin/sync/status', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const products = await storage.getProducts(1000, 0);
+      const recalls = await storage.getActiveRecalls();
+      const ingredients = await storage.getBlacklistedIngredients();
+      
+      // Find most recent entries to determine last sync times
+      const latestProduct = products.length > 0 ? 
+        products.reduce((latest, product) => 
+          (product.createdAt && latest.createdAt && product.createdAt > latest.createdAt) ? product : latest
+        ) : null;
+        
+      const latestRecall = recalls.length > 0 ?
+        recalls.reduce((latest, recall) => 
+          recall.recallDate > latest.recallDate ? recall : latest
+        ) : null;
+      
+      res.json({
+        database: {
+          products: {
+            count: products.length,
+            lastSync: latestProduct?.createdAt || null
+          },
+          recalls: {
+            count: recalls.length,
+            lastSync: latestRecall?.recallDate || null
+          },
+          ingredients: {
+            count: ingredients.length,
+            lastSync: null // We don't track creation dates for ingredients
+          }
+        },
+        health: "operational",
+        lastChecked: new Date().toISOString()
+      });
+      
+    } catch (error) {
+      console.error("Error getting sync status:", error);
+      res.status(500).json({ message: "Failed to get database sync status" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

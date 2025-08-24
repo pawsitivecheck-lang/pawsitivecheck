@@ -6,6 +6,7 @@ import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
+import ThemeToggle from "@/components/theme-toggle";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Search, Shield, Users, Crown, Camera, WandSparkles, ShieldHalf, TriangleAlert, ChartLine, Ban, Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -64,6 +65,9 @@ export default function Landing() {
             <HeaderSearch />
             
             <div className="flex items-center space-x-4">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+              
               {/* Mobile menu button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

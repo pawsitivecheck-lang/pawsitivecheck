@@ -63,23 +63,45 @@
 .dark {
   --background: hsl(252, 83%, 5%);
   --foreground: hsl(252, 100%, 96%);
-  --card: hsl(253, 67%, 10%);
+  --card: hsl(253, 67%, 12%);
   --card-foreground: hsl(252, 100%, 96%);
-  --popover: hsl(252, 83%, 5%);
+  --popover: hsl(252, 83%, 8%);
   --popover-foreground: hsl(252, 100%, 96%);
-  --primary: hsl(258, 90%, 66%);
+  --primary: hsl(258, 90%, 70%);
   --primary-foreground: hsl(252, 83%, 5%);
-  --secondary: hsl(253, 46%, 18%);
+  --secondary: hsl(253, 46%, 22%);
   --secondary-foreground: hsl(252, 100%, 96%);
-  --muted: hsl(253, 46%, 18%);
-  --muted-foreground: hsl(252, 36%, 60%);
-  --accent: hsl(253, 46%, 18%);
+  --muted: hsl(253, 46%, 20%);
+  --muted-foreground: hsl(252, 40%, 70%);
+  --accent: hsl(253, 46%, 20%);
   --accent-foreground: hsl(252, 100%, 96%);
-  --destructive: hsl(0, 84%, 60%);
+  --destructive: hsl(0, 84%, 65%);
   --destructive-foreground: hsl(252, 100%, 96%);
-  --border: hsl(253, 46%, 18%);
-  --input: hsl(253, 46%, 18%);
-  --ring: hsl(258, 90%, 66%);
+  --border: hsl(253, 36%, 25%);
+  --input: hsl(253, 40%, 15%);
+  --ring: hsl(258, 90%, 70%);
+  
+  /* Enhanced cosmic colors for dark mode */
+  --cosmic-900: hsl(252, 90%, 3%);
+  --cosmic-800: hsl(253, 70%, 8%);
+  --cosmic-700: hsl(253, 50%, 15%);
+  --cosmic-600: hsl(252, 40%, 25%);
+  --cosmic-500: hsl(252, 45%, 40%);
+  --cosmic-400: hsl(252, 50%, 65%);
+  --cosmic-300: hsl(252, 60%, 78%);
+  --cosmic-200: hsl(252, 70%, 85%);
+  --cosmic-100: hsl(252, 100%, 96%);
+  
+  /* Enhanced starlight colors for better contrast */
+  --starlight-500: hsl(51, 100%, 65%);
+  --starlight-400: hsl(51, 100%, 70%);
+  --starlight-300: hsl(51, 100%, 75%);
+  --starlight-200: hsl(51, 100%, 85%);
+  
+  /* Enhanced mystical colors */
+  --mystical-green: hsl(159, 85%, 50%);
+  --mystical-red: hsl(0, 90%, 68%);
+  --mystical-purple: hsl(258, 95%, 72%);
 }
 
 @layer base {
@@ -105,13 +127,23 @@
     background-image: 
       radial-gradient(2px 2px at 20px 30px, var(--starlight-500), transparent),
       radial-gradient(2px 2px at 40px 70px, var(--mystical-purple), transparent),
-      radial-gradient(1px 1px at 90px 40px, #ffffff, transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.8), transparent),
       radial-gradient(1px 1px at 130px 80px, var(--starlight-500), transparent),
       radial-gradient(2px 2px at 160px 30px, var(--mystical-purple), transparent);
     background-repeat: repeat;
     background-size: 200px 100px;
     z-index: -1;
-    opacity: 0.3;
+    opacity: 0.4;
+  }
+  
+  .dark body::before {
+    opacity: 0.2;
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, var(--starlight-500), transparent),
+      radial-gradient(2px 2px at 40px 70px, var(--mystical-purple), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.6), transparent),
+      radial-gradient(1px 1px at 130px 80px, var(--starlight-500), transparent),
+      radial-gradient(2px 2px at 160px 30px, var(--mystical-purple), transparent);
   }
 }
 
@@ -122,6 +154,77 @@
   
   .font-cosmic {
     font-family: var(--font-cosmic);
+  }
+  
+  /* Enhanced dark mode utilities */
+  .dark .cosmic-card {
+    @apply bg-card border-border backdrop-blur-sm;
+    border: 1px solid hsl(253, 36%, 25%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .dark .cosmic-card:hover {
+    border-color: hsl(253, 36%, 30%);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Enhanced button contrast in dark mode */
+  .dark .mystical-button {
+    background: linear-gradient(135deg, var(--mystical-purple), var(--starlight-500));
+    color: hsl(252, 83%, 5%);
+    font-weight: 600;
+    text-shadow: none;
+  }
+  
+  .dark .mystical-button:hover {
+    background: linear-gradient(135deg, hsl(258, 95%, 75%), hsl(51, 100%, 70%));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Enhanced input visibility in dark mode */
+  .dark input[type="text"],
+  .dark input[type="email"],
+  .dark input[type="password"],
+  .dark textarea {
+    background-color: hsl(253, 40%, 12%);
+    border: 1px solid hsl(253, 36%, 30%);
+    color: hsl(252, 100%, 96%);
+  }
+  
+  .dark input[type="text"]:focus,
+  .dark input[type="email"]:focus,
+  .dark input[type="password"]:focus,
+  .dark textarea:focus {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
+  }
+  
+  /* Enhanced text contrast */
+  .dark .text-cosmic-400 {
+    color: hsl(252, 50%, 75%);
+  }
+  
+  .dark .text-cosmic-300 {
+    color: hsl(252, 60%, 82%);
+  }
+  
+  .dark .text-cosmic-200 {
+    color: hsl(252, 70%, 88%);
+  }
+  
+  /* Enhanced navigation in dark mode */
+  .dark nav {
+    background: rgba(13, 9, 48, 0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(253, 36%, 25%);
+  }
+  
+  /* Enhanced badge contrast */
+  .dark .badge {
+    background-color: hsl(253, 46%, 20%);
+    color: hsl(252, 100%, 96%);
+    border: 1px solid hsl(253, 36%, 25%);
   }
   
   .cosmic-gradient {

@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
-import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, TrendingUp } from "lucide-react";
+import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, TrendingUp, Database } from "lucide-react";
+import DatabaseSync from "@/components/database-sync";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -367,6 +368,15 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
+          
+          {/* Database Synchronization Section */}
+          <div className="space-y-6 mt-12">
+            <h2 className="text-2xl font-mystical text-starlight-400 flex items-center gap-2">
+              <Database className="h-6 w-6" />
+              Cosmic Database Management
+            </h2>
+            <DatabaseSync />
+          </div>
 
           {/* Mascot Wisdom */}
           <div className="mt-12">
