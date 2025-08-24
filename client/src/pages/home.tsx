@@ -39,7 +39,9 @@ export default function Home() {
                   <span className="text-4xl animate-bounce" style={{animationDelay: '0.6s'}}>✨</span>
                   <span className="text-4xl animate-bounce" style={{animationDelay: '0.8s'}}>🐾</span>
                 </div>
-                <h1 className="font-mystical text-5xl md:text-7xl font-bold text-starlight-500 mb-4 animate-float" data-testid="text-welcome-user">
+                <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-mystical-purple via-starlight-500 to-mystical-green bg-clip-text text-transparent mb-4 animate-bounce text-center" 
+                    style={{fontFamily: 'Comic Sans MS, Marker Felt, cursive, fantasy'}}
+                    data-testid="text-welcome-user">
                   🌟 Welcome back, {user?.firstName || 'Truth Seeker'}! 🌟
                 </h1>
               </div>
