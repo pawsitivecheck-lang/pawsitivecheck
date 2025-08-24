@@ -5,19 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Camera, Search, Shield, BarChart3, History, Crown } from "lucide-react";
+import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 
 export default function Home() {
   const { user } = useAuth();
 
-  const { data: recentScans } = useQuery({
+  const { data: recentScans } = useQuery<ScanHistory[]>({
     queryKey: ['/api/scans'],
   });
 
-  const { data: recentRecalls } = useQuery({
+  const { data: recentRecalls } = useQuery<ProductRecall[]>({
     queryKey: ['/api/recalls'],
   });
 
-  const { data: userReviews } = useQuery({
+  const { data: userReviews } = useQuery<ProductReview[]>({
     queryKey: ['/api/user/reviews'],
   });
 

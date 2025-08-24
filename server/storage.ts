@@ -106,7 +106,7 @@ export class DatabaseStorage implements IStorage {
           ilike(products.brand, `%${search}%`),
           ilike(products.ingredients, `%${search}%`)
         )
-      );
+      ) as typeof query;
     }
     
     return await query
@@ -192,7 +192,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(productReviews)
       .where(and(eq(productReviews.id, id), eq(productReviews.userId, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Recall operations
@@ -245,7 +245,7 @@ export class DatabaseStorage implements IStorage {
       .update(ingredientBlacklist)
       .set({ isActive: false, updatedAt: new Date() })
       .where(eq(ingredientBlacklist.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Scan history operations

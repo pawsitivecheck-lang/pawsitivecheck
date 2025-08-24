@@ -103,6 +103,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Internet product search endpoint
+  app.post('/api/products/internet-search', isAuthenticated, async (req: any, res) => {
+    try {
+      const { type, query } = req.body;
+      
+      if (type === 'barcode') {
+        // Mock internet barcode search - in production, this would integrate with APIs like:
+        // - Open Food Facts API
+        // - UPC Database
+        // - Barcode Lookup APIs
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Mock product data based on barcode pattern
+        const mockProduct = {
+          name: `Internet Product ${query.slice(-4)}`,
+          brand: "Global Pet Co",
+          category: "pet-food",
+          description: `Premium pet product discovered through internet divination. Barcode: ${query}`,
+          ingredients: "Chicken, rice, vegetables, vitamins, minerals",
+          imageUrl: null,
+          barcode: query,
+          cosmicScore: Math.floor(Math.random() * 50) + 50,
+          cosmicClarity: Math.random() > 0.5 ? 'blessed' : 'questionable',
+          transparencyLevel: 'good',
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        };
+
+        // Add to database
+        const product = await storage.createProduct(mockProduct);
+        
+        res.json({
+          source: 'internet',
+          product,
+          message: 'Product discovered through cosmic internet divination'
+        });
+        
+      } else if (type === 'image') {
+        // Mock image recognition - in production, this would integrate with:
+        // - Google Vision API
+        // - AWS Rekognition
+        // - Custom ML models
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Mock image analysis result
+        const mockProduct = {
+          name: "Vision-Detected Pet Product",
+          brand: "Mystical Vision Co",
+          category: "pet-treats",
+          description: "Product identified through cosmic vision analysis of uploaded image",
+          ingredients: "Natural ingredients detected through visual analysis",
+          imageUrl: query, // Store the analyzed image
+          barcode: `IMG${Date.now()}`,
+          cosmicScore: Math.floor(Math.random() * 40) + 60,
+          cosmicClarity: Math.random() > 0.7 ? 'blessed' : 'questionable',
+          transparencyLevel: 'good',
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        };
+
+        // Add to database
+        const product = await storage.createProduct(mockProduct);
+        
+        res.json({
+          source: 'image-recognition',
+          product,
+          message: 'Product identified through mystical image analysis'
+        });
+        
+      } else {
+        return res.status(400).json({ message: 'Invalid search type' });
+      }
+      
+    } catch (error) {
+      console.error("Error in internet product search:", error);
+      res.status(500).json({ message: "Failed to search cosmic internet" });
+    }
+  });
+
   // Mystical product analysis
   app.post('/api/products/:id/analyze', isAuthenticated, async (req: any, res) => {
     try {

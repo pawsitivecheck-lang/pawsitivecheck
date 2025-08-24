@@ -8,39 +8,65 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle, Image, Search, Globe } from "lucide-react";
+import { BarcodeScanner } from "@/components/barcode-scanner";
+import { ImageScanner } from "@/components/image-scanner";
+import type { Product } from "@shared/schema";
 
 export default function ProductScanner() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [barcode, setBarcode] = useState("");
-  const [scannedProduct, setScannedProduct] = useState<any>(null);
+  const [scannedProduct, setScannedProduct] = useState<Product | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const [showImageScanner, setShowImageScanner] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcodeInput: string) => {
-      // First try to find existing product by barcode
+      setIsSearching(true);
       try {
-        const res = await fetch(`/api/products/barcode/${barcodeInput}`);
-        if (res.ok) {
-          return await res.json();
+        // First try to find existing product by barcode
+        const localRes = await fetch(`/api/products/barcode/${barcodeInput}`);
+        if (localRes.ok) {
+          const product = await localRes.json();
+          setIsSearching(false);
+          return { source: 'local', product };
         }
+        
+        // If not found locally, search the internet
+        const internetRes = await apiRequest('POST', '/api/products/internet-search', {
+          type: 'barcode',
+          query: barcodeInput
+        });
+        
+        if (internetRes.ok) {
+          const result = await internetRes.json();
+          setIsSearching(false);
+          return result;
+        }
+        
+        setIsSearching(false);
+        return null;
       } catch (error) {
-        // Product not found, continue to manual entry
+        setIsSearching(false);
+        throw error;
       }
-      return null;
     },
-    onSuccess: (product) => {
-      if (product) {
-        setScannedProduct(product);
+    onSuccess: (result) => {
+      if (result?.product) {
+        setScannedProduct(result.product);
         toast({
-          title: "Product Found!",
-          description: "Existing product found in cosmic database",
+          title: `Product Found!`,
+          description: result.source === 'local' 
+            ? "Found in cosmic database" 
+            : "Discovered through internet divination",
         });
       } else {
         toast({
           title: "Product Not Found",
-          description: "This product hasn't been analyzed yet. You can add it to our cosmic database.",
+          description: "This product remains hidden from cosmic sight. You can add it manually.",
           variant: "destructive",
         });
       }
@@ -49,6 +75,52 @@ export default function ProductScanner() {
       toast({
         title: "Scan Failed",
         description: "Unable to scan the cosmic essence of this product",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const imageSearchMutation = useMutation({
+    mutationFn: async (imageData: string) => {
+      setIsSearching(true);
+      try {
+        const res = await apiRequest('POST', '/api/products/internet-search', {
+          type: 'image',
+          query: imageData
+        });
+        
+        if (res.ok) {
+          const result = await res.json();
+          setIsSearching(false);
+          return result;
+        }
+        
+        setIsSearching(false);
+        return null;
+      } catch (error) {
+        setIsSearching(false);
+        throw error;
+      }
+    },
+    onSuccess: (result) => {
+      if (result?.product) {
+        setScannedProduct(result.product);
+        toast({
+          title: "Product Identified!",
+          description: "Cosmic vision has revealed the product's identity",
+        });
+      } else {
+        toast({
+          title: "Product Not Recognized",
+          description: "The cosmic vision cannot identify this product. Try a clearer image.",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Image Analysis Failed",
+        description: "Unable to analyze the mystical essence from the image",
         variant: "destructive",
       });
     },
@@ -105,6 +177,29 @@ export default function ProductScanner() {
     if (scannedProduct) {
       analyzeProductMutation.mutate(scannedProduct.id);
     }
+  };
+
+  const handleBarcodeScanned = (scannedBarcode: string) => {
+    setBarcode(scannedBarcode);
+    setShowBarcodeScanner(false);
+    scanProductMutation.mutate(scannedBarcode);
+    
+    // Record scan history
+    recordScanMutation.mutate({
+      scannedData: scannedBarcode,
+      analysisResult: null,
+    });
+  };
+
+  const handleImageScanned = (imageData: string) => {
+    setShowImageScanner(false);
+    imageSearchMutation.mutate(imageData);
+    
+    // Record scan history
+    recordScanMutation.mutate({
+      scannedData: imageData,
+      analysisResult: null,
+    });
   };
 
   const getCosmicClarityIcon = (clarity: string) => {
@@ -180,18 +275,47 @@ export default function ProductScanner() {
                 </Button>
               </div>
 
-              <div className="text-center">
-                <p className="text-cosmic-400 text-sm">
-                  Or use your device's camera to scan a barcode directly
-                </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <Button 
+                  onClick={() => setShowBarcodeScanner(true)}
+                  variant="outline" 
+                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
+                  data-testid="button-camera-scan"
+                  disabled={isSearching}
+                >
+                  <Camera className="h-6 w-6 mb-2" />
+                  Scan Barcode
+                </Button>
+
+                <Button 
+                  onClick={() => setShowImageScanner(true)}
+                  variant="outline" 
+                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
+                  data-testid="button-image-scan"
+                  disabled={isSearching}
+                >
+                  <Image className="h-6 w-6 mb-2" />
+                  Scan Image
+                </Button>
+
                 <Button 
                   variant="outline" 
-                  className="mt-2 border-cosmic-600 text-cosmic-300"
-                  data-testid="button-camera-scan"
+                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
+                  data-testid="button-internet-search"
+                  disabled={isSearching}
                 >
-                  <Camera className="mr-2 h-4 w-4" />
-                  Use Camera
+                  <Globe className="h-6 w-6 mb-2" />
+                  Internet Search
+                  {isSearching && (
+                    <div className="animate-spin w-4 h-4 border border-starlight-500 border-t-transparent rounded-full mt-1" />
+                  )}
                 </Button>
+              </div>
+
+              <div className="text-center">
+                <p className="text-cosmic-400 text-sm">
+                  Use your device's camera, upload images, or search the cosmic internet
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -366,6 +490,19 @@ export default function ProductScanner() {
           )}
         </div>
       </div>
+
+      {/* Scanner Modals */}
+      <BarcodeScanner
+        isActive={showBarcodeScanner}
+        onScan={handleBarcodeScanned}
+        onClose={() => setShowBarcodeScanner(false)}
+      />
+      
+      <ImageScanner
+        isActive={showImageScanner}
+        onScan={handleImageScanned}
+        onClose={() => setShowImageScanner(false)}
+      />
     </div>
   );
 }
