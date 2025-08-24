@@ -3,7 +3,6 @@ import Navbar from "@/components/navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import RecallAlert from "@/components/recall-alert";
 import { useQuery } from "@tanstack/react-query";
 import { Shield, TriangleAlert, AlertCircle, Calendar, Package } from "lucide-react";
 
@@ -13,6 +12,9 @@ export default function Recalls() {
   const { data: recalls, isLoading } = useQuery({
     queryKey: ['/api/recalls'],
   });
+
+  // Type guard to ensure recalls is an array
+  const recallsArray = Array.isArray(recalls) ? recalls : [];
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -71,19 +73,19 @@ export default function Recalls() {
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-mystical-red mb-2" data-testid="text-urgent-count">
-                    {recalls?.filter((r: any) => r.severity === 'urgent').length || 0}
+                    {recallsArray.filter((r: any) => r.severity === 'urgent').length}
                   </div>
                   <p className="text-cosmic-300">Urgent Warnings</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-yellow-500 mb-2" data-testid="text-moderate-count">
-                    {recalls?.filter((r: any) => r.severity === 'moderate').length || 0}
+                    {recallsArray.filter((r: any) => r.severity === 'moderate').length}
                   </div>
                   <p className="text-cosmic-300">Moderate Alerts</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-mystical-green mb-2" data-testid="text-low-count">
-                    {recalls?.filter((r: any) => r.severity === 'low').length || 0}
+                    {recallsArray.filter((r: any) => r.severity === 'low').length}
                   </div>
                   <p className="text-cosmic-300">Minor Cautions</p>
                 </div>
@@ -130,9 +132,9 @@ export default function Recalls() {
                 </Card>
               ))}
             </div>
-          ) : recalls?.length > 0 ? (
+          ) : recallsArray.length > 0 ? (
             <div className="space-y-6">
-              {recalls.map((recall: any) => (
+              {recallsArray.map((recall: any) => (
                 <Card key={recall.id} className={`cosmic-card border-l-4 ${
                   recall.severity === 'urgent' ? 'border-mystical-red' :
                   recall.severity === 'moderate' ? 'border-yellow-500' :
@@ -227,7 +229,7 @@ export default function Recalls() {
           )}
 
           {/* Admin Actions */}
-          {user?.isAdmin && recalls?.length > 0 && (
+          {user?.isAdmin && recallsArray.length > 0 && (
             <div className="mt-12">
               <Card className="cosmic-card border-starlight-500/50" data-testid="card-admin-actions">
                 <CardHeader>
