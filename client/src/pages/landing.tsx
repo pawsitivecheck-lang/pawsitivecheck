@@ -6,9 +6,12 @@ import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
 import { useQuery } from "@tanstack/react-query";
-import { Eye, Search, Shield, Users, Crown, Camera, WandSparkles, ShieldHalf, TriangleAlert, ChartLine, Ban } from "lucide-react";
+import { Eye, Search, Shield, Users, Crown, Camera, WandSparkles, ShieldHalf, TriangleAlert, ChartLine, Ban, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Landing() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const { data: featuredProducts } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
@@ -49,23 +52,85 @@ export default function Landing() {
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#scanner" className="hover:text-starlight-400 transition-colors" data-testid="nav-scan">Scan Product</a>
-              <a href="#database" className="hover:text-starlight-400 transition-colors" data-testid="nav-database">Database</a>
-              <a href="#recalls" className="hover:text-starlight-400 transition-colors" data-testid="nav-recalls">Recalls</a>
-              <a href="#community" className="hover:text-starlight-400 transition-colors" data-testid="nav-community">Community</a>
+              <a href="#scanner" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-scan">Product Scanner</a>
+              <a href="#database" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-database">Browse Products</a>
+              <a href="#recalls" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-recalls">Safety Alerts</a>
+              <a href="#community" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-community">Reviews</a>
             </div>
             
             <div className="flex items-center space-x-4">
+              {/* Mobile menu button */}
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-cosmic-800 transition-colors"
+                data-testid="button-mobile-menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-5 w-5 text-starlight-500" />
+                ) : (
+                  <Menu className="h-5 w-5 text-starlight-500" />
+                )}
+              </button>
+              
               <Button 
                 onClick={() => window.location.href = '/api/login'}
-                className="bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900 hover:from-starlight-400 hover:to-mystical-purple"
+                className="hidden sm:inline-flex bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900 hover:from-starlight-400 hover:to-mystical-purple font-medium"
                 data-testid="button-login"
               >
-                Join the Resistance
+                Get Started Free
               </Button>
             </div>
           </div>
         </div>
+        
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-cosmic-900/95 backdrop-blur-md border-b border-starlight-500/20">
+            <div className="px-4 py-4 space-y-4">
+              <a 
+                href="#scanner" 
+                className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-nav-scan"
+              >
+                📱 Product Scanner
+              </a>
+              <a 
+                href="#database" 
+                className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-nav-database"
+              >
+                📚 Browse Products
+              </a>
+              <a 
+                href="#recalls" 
+                className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-nav-recalls"
+              >
+                ⚠️ Safety Alerts
+              </a>
+              <a 
+                href="#community" 
+                className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+                data-testid="mobile-nav-community"
+              >
+                💬 Reviews
+              </a>
+              <div className="pt-4 border-t border-cosmic-700">
+                <Button 
+                  onClick={() => window.location.href = '/api/login'}
+                  className="w-full bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900 hover:from-starlight-400 hover:to-mystical-purple font-medium"
+                  data-testid="mobile-button-login"
+                >
+                  Get Started Free
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Welcome Hero */}
