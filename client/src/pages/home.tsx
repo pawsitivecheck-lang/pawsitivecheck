@@ -29,100 +29,86 @@ export default function Home() {
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Whimsical Welcome Section */}
+          {/* Modern Welcome Section */}
           <div className="mb-12">
-            <div className="cosmic-card p-8 text-center border-2 border-starlight-500/40 shadow-2xl">
-              <div className="mb-6">
-                <div className="flex justify-center items-center space-x-4 mb-4">
-                  <span className="text-4xl animate-bounce" style={{animationDelay: '0s'}}>🐾</span>
-                  <span className="text-4xl animate-bounce" style={{animationDelay: '0.2s'}}>✨</span>
-                  <span className="text-4xl animate-bounce" style={{animationDelay: '0.4s'}}>🔮</span>
-                  <span className="text-4xl animate-bounce" style={{animationDelay: '0.6s'}}>✨</span>
-                  <span className="text-4xl animate-bounce" style={{animationDelay: '0.8s'}}>🐾</span>
-                </div>
-                <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-mystical-purple via-starlight-500 to-mystical-green bg-clip-text text-transparent mb-4 animate-bounce text-center" 
-                    style={{fontFamily: 'Comic Sans MS, Marker Felt, cursive, fantasy'}}
+            <div className="cosmic-card p-12 text-center border border-starlight-500/30">
+              <div className="mb-8">
+                <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-mystical-purple via-starlight-500 to-mystical-green bg-clip-text text-transparent mb-6 text-center tracking-tight" 
                     data-testid="text-welcome-user">
-                  🌟 Welcome back, {user?.firstName || 'Truth Seeker'}! 🌟
+                  Welcome back, {user?.firstName || 'Truth Seeker'}
                 </h1>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6 items-center mb-6">
-                <div className="bg-mystical-purple/10 rounded-lg p-4 border border-mystical-purple/30">
-                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-mystical-purple to-cosmic-600 rounded-full flex items-center justify-center mb-3 animate-glow">
-                    <WandSparkles className="text-2xl text-starlight-500" />
-                  </div>
-                  <p className="text-mystical-purple font-mystical italic">"Purr-fect! You're back for more cosmic revelations!" - Aleister 🔮</p>
-                </div>
-                <div className="bg-midnight-600/10 rounded-lg p-4 border border-midnight-600/30">
-                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-midnight-600 to-cosmic-700 rounded-full flex items-center justify-center mb-3 animate-glow">
-                    <Shield className="text-2xl text-starlight-500" />
-                  </div>
-                  <p className="text-midnight-400 font-mystical italic">"Ready to guard more pets from danger!" - Severus ⚔️</p>
-                </div>
-              </div>
-              
-              <div className="bg-starlight-500/10 rounded-lg p-6 border border-starlight-500/30">
-                <p className="text-cosmic-300 text-xl font-mystical" data-testid="text-welcome-subtitle">
-                  🎭 The cosmic guardians have been eagerly awaiting your return! 
-                  Choose your next <span className="text-starlight-400 font-bold">mystical adventure</span> below! 🚀✨
+                <p className="text-xl text-cosmic-300 max-w-2xl mx-auto mb-6">
+                  Your personalized pet product safety dashboard
                 </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-mystical-purple/5 rounded-xl p-6 border border-mystical-purple/20">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-mystical-purple to-cosmic-600 rounded-lg flex items-center justify-center mb-4">
+                    <WandSparkles className="text-lg text-starlight-500" />
+                  </div>
+                  <p className="text-mystical-purple text-sm">Advanced AI analysis ready for your products</p>
+                  <p className="text-cosmic-400 text-xs mt-1">Aleister Analytics</p>
+                </div>
+                <div className="bg-midnight-600/5 rounded-xl p-6 border border-midnight-600/20">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-midnight-600 to-cosmic-700 rounded-lg flex items-center justify-center mb-4">
+                    <Shield className="text-lg text-starlight-500" />
+                  </div>
+                  <p className="text-midnight-400 text-sm">Real-time safety monitoring active</p>
+                  <p className="text-cosmic-400 text-xs mt-1">Severus Protection</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Magical Quick Actions */}
+          {/* Quick Actions */}
           <div className="mb-12">
-            <h2 className="font-mystical text-3xl font-bold text-starlight-500 text-center mb-8">🎪 Your Magical Toolkit 🎪</h2>
+            <h2 className="text-2xl font-semibold text-starlight-400 mb-8">Quick Actions</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Link href="/scan">
-                <Card className="cosmic-card hover:scale-110 hover:rotate-2 transition-all duration-300 cursor-pointer border-2 border-mystical-green/30 hover:border-mystical-green hover:shadow-2xl hover:shadow-mystical-green/20" data-testid="card-quick-scan">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto bg-mystical-green/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                      <Camera className="text-mystical-green" />
+                <Card className="cosmic-card hover:scale-105 transition-all duration-200 cursor-pointer border border-mystical-green/30 hover:border-mystical-green/50 hover:shadow-lg" data-testid="card-quick-scan">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-mystical-green/20 rounded-lg flex items-center justify-center mb-4">
+                      <Camera className="text-mystical-green h-5 w-5" />
                     </div>
-                    <h3 className="font-mystical text-lg text-starlight-400 mb-2">📱 Mystical Scanner 🔮</h3>
-                    <p className="text-cosmic-300 text-sm">✨ Analyze product essence ✨</p>
-                    <div className="mt-3 text-xs text-mystical-green italic">"Let's scan some magic!" - Aleister</div>
+                    <h3 className="text-lg font-semibold text-starlight-400 mb-2">Product Scanner</h3>
+                    <p className="text-cosmic-300 text-sm">Analyze products with barcode or image scanning</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/database">
-                <Card className="cosmic-card hover:scale-110 hover:-rotate-2 transition-all duration-300 cursor-pointer border-2 border-mystical-purple/30 hover:border-mystical-purple hover:shadow-2xl hover:shadow-mystical-purple/20" data-testid="card-database">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto bg-mystical-purple/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                      <Search className="text-mystical-purple" />
+                <Card className="cosmic-card hover:scale-105 transition-all duration-200 cursor-pointer border border-mystical-purple/30 hover:border-mystical-purple/50 hover:shadow-lg" data-testid="card-database">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-mystical-purple/20 rounded-lg flex items-center justify-center mb-4">
+                      <Search className="text-mystical-purple h-5 w-5" />
                     </div>
-                    <h3 className="font-mystical text-lg text-starlight-400 mb-2">🔍 Cosmic Database 📚</h3>
-                    <p className="text-cosmic-300 text-sm">🌙 Search divine knowledge 🌙</p>
-                    <div className="mt-3 text-xs text-mystical-purple italic">"All the cosmic secrets!" - Severus</div>
+                    <h3 className="text-lg font-semibold text-starlight-400 mb-2">Product Database</h3>
+                    <p className="text-cosmic-300 text-sm">Search and explore comprehensive product information</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/recalls">
-                <Card className="cosmic-card hover:scale-110 hover:rotate-1 transition-all duration-300 cursor-pointer border-2 border-mystical-red/30 hover:border-mystical-red hover:shadow-2xl hover:shadow-mystical-red/20" data-testid="card-recalls">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto bg-mystical-red/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                      <Shield className="text-mystical-red" />
+                <Card className="cosmic-card hover:scale-105 transition-all duration-200 cursor-pointer border border-mystical-red/30 hover:border-mystical-red/50 hover:shadow-lg" data-testid="card-recalls">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-mystical-red/20 rounded-lg flex items-center justify-center mb-4">
+                      <Shield className="text-mystical-red h-5 w-5" />
                     </div>
-                    <h3 className="font-mystical text-lg text-starlight-400 mb-2">⚠️ Cosmic Warnings 🛡️</h3>
-                    <p className="text-cosmic-300 text-sm">🚨 View active recalls 🚨</p>
-                    <div className="mt-3 text-xs text-mystical-red italic">"Stay vigilant!" - Both cats</div>
+                    <h3 className="text-lg font-semibold text-starlight-400 mb-2">Safety Recalls</h3>
+                    <p className="text-cosmic-300 text-sm">View active product recalls and safety alerts</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/community">
-                <Card className="cosmic-card hover:scale-110 hover:-rotate-1 transition-all duration-300 cursor-pointer border-2 border-starlight-500/30 hover:border-starlight-500 hover:shadow-2xl hover:shadow-starlight-500/20" data-testid="card-community">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto bg-starlight-500/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
-                      <BarChart3 className="text-starlight-500" />
+                <Card className="cosmic-card hover:scale-105 transition-all duration-200 cursor-pointer border border-starlight-500/30 hover:border-starlight-500/50 hover:shadow-lg" data-testid="card-community">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-starlight-500/20 rounded-lg flex items-center justify-center mb-4">
+                      <BarChart3 className="text-starlight-500 h-5 w-5" />
                     </div>
-                    <h3 className="font-mystical text-lg text-starlight-400 mb-2">💬 Resistance Hub 🌟</h3>
-                    <p className="text-cosmic-300 text-sm">👥 Join fellow seekers 👥</p>
-                    <div className="mt-3 text-xs text-starlight-500 italic">"Community power!" - Everyone</div>
+                    <h3 className="text-lg font-semibold text-starlight-400 mb-2">Community</h3>
+                    <p className="text-cosmic-300 text-sm">Connect with other pet owners and share reviews</p>
                   </CardContent>
                 </Card>
               </Link>
