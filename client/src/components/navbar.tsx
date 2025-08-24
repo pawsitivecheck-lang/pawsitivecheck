@@ -170,6 +170,46 @@ export default function Navbar() {
                   </div>
                 </Link>
               )}
+              
+              {/* Mobile Profile Section */}
+              <div className="border-t border-cosmic-700 pt-4 mt-4">
+                <Link href="/profile">
+                  <div 
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                      isActivePage('/profile') 
+                        ? 'text-starlight-400 bg-starlight-500/10' 
+                        : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    data-testid="nav-mobile-profile"
+                  >
+                    {user?.profileImageUrl ? (
+                      <img 
+                        src={user.profileImageUrl} 
+                        alt="Profile" 
+                        className="w-5 h-5 rounded-full"
+                      />
+                    ) : (
+                      <Users className="h-5 w-5" />
+                    )}
+                    <span>{user?.firstName || 'Profile'}</span>
+                  </div>
+                </Link>
+                
+                <div 
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-mystical-red hover:text-mystical-red hover:bg-mystical-red/10 cursor-pointer"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    window.location.href = '/api/logout';
+                  }}
+                  data-testid="nav-mobile-logout"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  <span>Leave Realm</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
