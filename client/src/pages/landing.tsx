@@ -1,0 +1,422 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import MascotCard from "@/components/mascot-card";
+import ProductCard from "@/components/product-card";
+import RecallAlert from "@/components/recall-alert";
+import UserReview from "@/components/user-review";
+import { useQuery } from "@tanstack/react-query";
+import { Eye, Search, Shield, Users, Crown, Camera, WandSparkles, ShieldHalf, TriangleAlert, ChartLine, Ban } from "lucide-react";
+
+export default function Landing() {
+  const { data: featuredProducts } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const res = await fetch('/api/products?limit=3');
+      return await res.json();
+    },
+  });
+
+  const { data: recalls } = useQuery({
+    queryKey: ['/api/recalls'],
+    queryFn: async () => {
+      const res = await fetch('/api/recalls');
+      return await res.json();
+    },
+  });
+
+  return (
+    <div className="min-h-screen text-cosmic-100">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 bg-cosmic-900/90 backdrop-blur-md border-b border-starlight-500/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center space-x-3" data-testid="nav-logo">
+              <div className="w-10 h-10 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center animate-glow">
+                <svg className="w-6 h-6 text-cosmic-900" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <h1 className="font-mystical text-2xl font-semibold text-starlight-500">PawsitiveCheck</h1>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#scanner" className="hover:text-starlight-400 transition-colors" data-testid="nav-scan">Scan Product</a>
+              <a href="#database" className="hover:text-starlight-400 transition-colors" data-testid="nav-database">Database</a>
+              <a href="#recalls" className="hover:text-starlight-400 transition-colors" data-testid="nav-recalls">Recalls</a>
+              <a href="#community" className="hover:text-starlight-400 transition-colors" data-testid="nav-community">Community</a>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button 
+                onClick={() => window.location.href = '/api/login'}
+                className="bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900 hover:from-starlight-400 hover:to-mystical-purple"
+                data-testid="button-login"
+              >
+                Join the Resistance
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Welcome Hero */}
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8" id="hero">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-mystical text-5xl md:text-7xl font-bold text-starlight-500 mb-6 animate-float" data-testid="text-welcome-title">
+              Welcome, Fellow Seeker
+            </h2>
+            <div className="max-w-4xl mx-auto cosmic-card p-8">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <MascotCard 
+                  name="Aleister"
+                  role="Mystical Analysis Expert"
+                  icon={<WandSparkles className="text-5xl text-starlight-500" />}
+                  bgGradient="from-mystical-purple to-cosmic-600"
+                />
+                <MascotCard 
+                  name="Severus"
+                  role="Guardian of Truth"
+                  icon={<ShieldHalf className="text-5xl text-starlight-500" />}
+                  bgGradient="from-midnight-600 to-cosmic-700"
+                />
+              </div>
+              
+              <div className="mt-8 p-6 bg-cosmic-900/50 rounded-xl border-l-4 border-starlight-500">
+                <p className="font-mystical text-lg leading-relaxed text-cosmic-100" data-testid="text-welcome-message">
+                  "Greetings, truth-seeker. We are <span className="text-starlight-400">Aleister and Severus</span>, 
+                  mystical guardians of the <span className="text-mystical-purple">Audit Syndicate</span>. 
+                  Through cosmic divination and ancient wisdom, we pierce the veil of corporate deception 
+                  to reveal the true nature of pet products. Join us in this sacred mission of 
+                  <span className="text-starlight-400">transparency and protection</span>."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Actions */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" id="scanner">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Mystical Scanner */}
+            <Card className="cosmic-card group" data-testid="card-scanner">
+              <CardContent className="p-8 text-center">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-mystical-green to-starlight-500 rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 transition-transform">
+                  <Eye className="text-3xl text-cosmic-900" />
+                </div>
+                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-scanner-title">Mystical Scanner</h3>
+                <p className="text-cosmic-200 mb-6" data-testid="text-scanner-description">Unleash the power of cosmic divination to analyze any pet product's true essence</p>
+                <Button 
+                  onClick={() => window.location.href = '/api/login'}
+                  className="mystical-button"
+                  data-testid="button-scan-product"
+                >
+                  <Camera className="mr-2 h-4 w-4" />
+                  Scan Product
+                </Button>
+              </CardContent>
+            </Card>
+            
+            {/* Advanced Search Portal */}
+            <Card className="cosmic-card group" data-testid="card-search">
+              <CardContent className="p-8 text-center">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-midnight-600 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 transition-transform">
+                  <Search className="text-3xl text-starlight-500" />
+                </div>
+                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-search-title">Ingredient Oracle</h3>
+                <p className="text-cosmic-200 mb-6" data-testid="text-search-description">Peer through the cosmic veil to uncover suspicious ingredients and hidden truths</p>
+                <div className="relative mb-4">
+                  <Input 
+                    type="text" 
+                    placeholder="Search the mystical database..." 
+                    className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-6 py-3 pl-12 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500"
+                    data-testid="input-search"
+                  />
+                  <WandSparkles className="absolute left-4 top-1/2 transform -translate-y-1/2 text-starlight-500 h-4 w-4" />
+                </div>
+                <Button 
+                  onClick={() => window.location.href = '/api/login'}
+                  className="bg-gradient-to-r from-mystical-purple to-midnight-600 text-starlight-400 hover:from-mystical-purple hover:to-midnight-500"
+                  data-testid="button-divine-truth"
+                >
+                  Divine Truth
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" id="database">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4" data-testid="text-featured-title">Recently Divined Products</h2>
+            <p className="text-cosmic-300 text-lg" data-testid="text-featured-description">Our mystical analysis reveals the cosmic truth behind these products</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredProducts?.slice(0, 3).map((product: any) => (
+              <ProductCard 
+                key={product.id}
+                product={product}
+                onClick={() => window.location.href = '/api/login'}
+              />
+            )) || (
+              // Empty state
+              [...Array(3)].map((_, i) => (
+                <Card key={i} className="cosmic-card" data-testid={`card-product-placeholder-${i}`}>
+                  <CardContent className="p-6">
+                    <div className="h-48 bg-cosmic-700 rounded-lg mb-4 flex items-center justify-center">
+                      <p className="text-cosmic-400" data-testid="text-no-products">Awaiting cosmic analysis...</p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-cosmic-700 rounded"></div>
+                      <div className="h-4 bg-cosmic-700 rounded w-3/4"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Recall Alerts */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30" id="recalls">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-gradient-to-r from-mystical-red/20 via-cosmic-800/60 to-mystical-red/20 rounded-2xl border border-mystical-red/30 p-8">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 mx-auto bg-mystical-red rounded-full flex items-center justify-center mb-4 animate-pulse" data-testid="icon-recall-alert">
+                <TriangleAlert className="text-2xl text-white" />
+              </div>
+              <h2 className="font-mystical text-3xl font-bold text-mystical-red mb-2" data-testid="text-recall-title">Cosmic Recall Alerts</h2>
+              <p className="text-cosmic-300" data-testid="text-recall-description">The universe has spoken - these products must be avoided</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {recalls?.slice(0, 2).map((recall: any) => (
+                <RecallAlert key={recall.id} recall={recall} />
+              )) || (
+                <div className="col-span-2 text-center py-8">
+                  <p className="text-cosmic-400" data-testid="text-no-recalls">No cosmic warnings at this time</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="text-center mt-8">
+              <Button 
+                onClick={() => window.location.href = '/api/login'}
+                className="bg-gradient-to-r from-mystical-red to-orange-600 text-white hover:from-mystical-red hover:to-orange-500"
+                data-testid="button-view-warnings"
+              >
+                <Shield className="mr-2 h-4 w-4" />
+                View All Cosmic Warnings
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Community Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8" id="community">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4" data-testid="text-community-title">The Resistance Community</h2>
+            <p className="text-cosmic-300 text-lg" data-testid="text-community-description">Fellow seekers sharing their mystical discoveries</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Mock community reviews for landing page */}
+            <UserReview 
+              username="MysticWhiskers92"
+              userType="Resistance Member"
+              content="Thanks to Aleister's divination, I discovered my cat's food contained cursed preservatives. Switched to a blessed alternative and saw immediate improvement! 🐾✨"
+              rating={5}
+              timeAgo="2 days ago"
+              icon={<Search className="text-xs" />}
+            />
+            <UserReview 
+              username="CosmicPawGuardian"
+              userType="Elder Member"
+              content="Severus revealed that my 'premium' treats were filled with cosmic deception. The ingredient scanner is revolutionary - every pet parent needs this tool!"
+              rating={5}
+              timeAgo="1 week ago"
+              icon={<Crown className="text-xs" />}
+            />
+            <UserReview 
+              username="EtherealFeline"
+              userType="Truth Seeker"
+              content="The recall alert system saved my pets from a cursed batch! The mystical analysis goes beyond surface marketing - pure cosmic wisdom."
+              rating={5}
+              timeAgo="3 days ago"
+              icon={<Eye className="text-xs" />}
+            />
+          </div>
+          
+          <div className="text-center mt-12">
+            <Button 
+              onClick={() => window.location.href = '/api/login'}
+              className="mystical-button"
+              data-testid="button-join-resistance"
+            >
+              <Users className="mr-2 h-4 w-4" />
+              Join the Resistance
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Admin Dashboard Preview */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="w-16 h-16 mx-auto bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow" data-testid="icon-admin">
+              <Crown className="text-2xl text-cosmic-900" />
+            </div>
+            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4" data-testid="text-admin-title">Audit Syndicate Command</h2>
+            <p className="text-cosmic-300 text-lg" data-testid="text-admin-description">Reserved for the cosmic guardians and their trusted lieutenants</p>
+          </div>
+          
+          <div className="cosmic-card p-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Mystical Analytics */}
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-mystical-green/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-analytics">
+                  <ChartLine className="text-2xl text-mystical-green" />
+                </div>
+                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-analytics-title">Cosmic Analytics</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-cosmic-400">Products Analyzed:</span>
+                    <span className="text-mystical-green font-bold" data-testid="text-products-analyzed">∞</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-cosmic-400">Truth Seekers:</span>
+                    <span className="text-starlight-500 font-bold" data-testid="text-truth-seekers">∞</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-cosmic-400">Cursed Products:</span>
+                    <span className="text-mystical-red font-bold" data-testid="text-cursed-products">∞</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Blacklist Management */}
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-mystical-red/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-blacklist">
+                  <Ban className="text-2xl text-mystical-red" />
+                </div>
+                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-blacklist-title">Cosmic Blacklist</h3>
+                <div className="space-y-2">
+                  <div className="bg-cosmic-900/50 rounded-lg p-2">
+                    <div className="text-xs text-cosmic-400 mb-1">Recently Banished:</div>
+                    <div className="text-sm text-mystical-red" data-testid="text-recently-banished">Awaiting divine judgment</div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full bg-mystical-red/20 text-mystical-red border-mystical-red/40 hover:bg-mystical-red/30"
+                    data-testid="button-manage-banishments"
+                  >
+                    Manage Banishments
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Divine Powers */}
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto bg-mystical-purple/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-divine-powers">
+                  <WandSparkles className="text-2xl text-mystical-purple" />
+                </div>
+                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-divine-title">Divine Powers</h3>
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full bg-mystical-purple/20 text-mystical-purple border-mystical-purple/40 hover:bg-mystical-purple/30"
+                    data-testid="button-enhance-oracle"
+                  >
+                    Enhance AI Oracle
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full bg-starlight-500/20 text-starlight-500 border-starlight-500/40 hover:bg-starlight-500/30"
+                    data-testid="button-update-database"
+                  >
+                    Update Cosmic Database
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center space-x-3 mb-6" data-testid="footer-logo">
+              <div className="w-12 h-12 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center animate-glow">
+                <svg className="w-6 h-6 text-cosmic-900" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+              </div>
+              <h3 className="font-mystical text-3xl font-bold text-starlight-500">PawsitiveCheck</h3>
+            </div>
+            <p className="text-cosmic-300 text-lg max-w-2xl mx-auto" data-testid="text-footer-mission">
+              Guided by cosmic wisdom, protected by mystical guardians, 
+              united in the eternal quest for pet product truth.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-mission-title">The Mission</h4>
+              <ul className="space-y-2 text-cosmic-300">
+                <li data-testid="text-mission-analysis">Cosmic Product Analysis</li>
+                <li data-testid="text-mission-transparency">Ingredient Transparency</li>
+                <li data-testid="text-mission-truth">Corporate Truth Seeking</li>
+                <li data-testid="text-mission-protection">Pet Protection Rituals</li>
+              </ul>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-guardians-title">The Guardians</h4>
+              <ul className="space-y-2 text-cosmic-300">
+                <li data-testid="text-guardian-aleister">Aleister - Mystical Analyst</li>
+                <li data-testid="text-guardian-severus">Severus - Truth Guardian</li>
+                <li data-testid="text-guardian-syndicate">The Audit Syndicate</li>
+                <li data-testid="text-guardian-community">Resistance Community</li>
+              </ul>
+            </div>
+            
+            <div className="text-center">
+              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-contact-title">Contact the Void</h4>
+              <ul className="space-y-2 text-cosmic-300">
+                <li data-testid="text-contact-email">mystical@pawsitivecheck.cosmic</li>
+                <li data-testid="text-contact-support">Astral Plane Support</li>
+                <li data-testid="text-contact-feedback">Cosmic Feedback Portal</li>
+                <li data-testid="text-contact-hotline">Emergency Truth Hotline</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-cosmic-700 pt-8 text-center">
+            <p className="text-cosmic-400 text-sm" data-testid="text-copyright">
+              © 2024 PawsitiveCheck - Protected by cosmic forces and mystical encryption
+            </p>
+            <p className="text-cosmic-500 text-xs mt-2" data-testid="text-motto">
+              "In truth we trust, in transparency we thrive" - The Audit Syndicate
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
