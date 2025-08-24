@@ -573,6 +573,13 @@ export default function Landing() {
           <div className="border-t border-cosmic-700 pt-8">
             <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
               <a 
+                href="/admin" 
+                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                data-testid="link-admin"
+              >
+                Admin
+              </a>
+              <a 
                 href="/privacy-policy" 
                 className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
                 data-testid="link-privacy-policy"

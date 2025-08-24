@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -258,6 +259,7 @@ export default function Recalls() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -538,6 +539,7 @@ export default function ProductDatabase() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
