@@ -488,13 +488,43 @@ export default function Landing() {
             </div>
           </div>
           
-          <div className="border-t border-cosmic-700 pt-8 text-center">
-            <p className="text-cosmic-400 text-sm" data-testid="text-copyright">
-              © 2024 PawsitiveCheck - Protected by cosmic forces and mystical encryption
-            </p>
-            <p className="text-cosmic-500 text-xs mt-2" data-testid="text-motto">
-              "In truth we trust, in transparency we thrive" - The Audit Syndicate
-            </p>
+          <div className="border-t border-cosmic-700 pt-8">
+            <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
+              <a 
+                href="/privacy-policy" 
+                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                data-testid="link-privacy-policy"
+              >
+                Privacy Policy
+              </a>
+              <a 
+                href="/terms-of-service" 
+                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                data-testid="link-terms-service"
+              >
+                Terms of Service
+              </a>
+              <button 
+                onClick={() => {
+                  // Re-show cookie consent by clearing stored consent
+                  localStorage.removeItem('cookie-consent');
+                  window.location.reload();
+                }}
+                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                data-testid="button-cookie-preferences"
+              >
+                Cookie Preferences
+              </button>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-cosmic-400 text-sm" data-testid="text-copyright">
+                © 2024 PawsitiveCheck - Protected by cosmic forces and mystical encryption
+              </p>
+              <p className="text-cosmic-500 text-xs mt-2" data-testid="text-motto">
+                "In truth we trust, in transparency we thrive" - The Audit Syndicate
+              </p>
+            </div>
           </div>
         </div>
       </footer>

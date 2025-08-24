@@ -13,6 +13,9 @@ import Recalls from "@/pages/recalls";
 import Community from "@/pages/community";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Profile from "@/pages/profile";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsOfService from "@/pages/terms-of-service";
+import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -20,7 +23,11 @@ function Router() {
   return (
     <Switch>
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+        <>
+          <Route path="/" component={Landing} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-service" component={TermsOfService} />
+        </>
       ) : (
         <>
           <Route path="/" component={Home} />
@@ -30,6 +37,8 @@ function Router() {
           <Route path="/community" component={Community} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/profile" component={Profile} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-service" component={TermsOfService} />
         </>
       )}
       <Route component={NotFound} />
@@ -43,6 +52,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <CookieConsent />
       </TooltipProvider>
     </QueryClientProvider>
   );
