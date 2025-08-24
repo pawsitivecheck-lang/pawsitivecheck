@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Search, Camera, Scan, Image, Globe, Loader2, X } from "lucide-react";
+import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock } from "lucide-react";
 import { BarcodeScanner } from "@/components/barcode-scanner";
 import { ImageScanner } from "@/components/image-scanner";
 import { useLocation } from "wouter";
@@ -24,17 +24,22 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [showScannerMenu, setShowScannerMenu] = useState(false);
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const debounceRef = useRef<NodeJS.Timeout>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const searchMutation = useMutation({
     mutationFn: async (query: string) => {
       if (!query.trim()) return [];
-      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=5`);
+      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=8`);
       if (!res.ok) throw new Error('Search failed');
       return await res.json();
     },
     onSuccess: (results: Product[]) => {
       setSearchResults(results);
-      setShowResults(results.length > 0);
+      setShowResults(true);
+      setSelectedIndex(-1);
     },
     onError: () => {
       toast({
@@ -46,6 +51,51 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       setShowResults(false);
     },
   });
+
+  // Load recent searches from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('pawsitivecheck-recent-searches');
+    if (saved) {
+      try {
+        setRecentSearches(JSON.parse(saved).slice(0, 5));
+      } catch (e) {
+        console.error('Failed to load recent searches:', e);
+      }
+    }
+  }, []);
+
+  // Debounced search as user types
+  const debouncedSearch = useCallback((query: string) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    
+    debounceRef.current = setTimeout(() => {
+      if (query.trim().length >= 2) {
+        searchMutation.mutate(query.trim());
+      } else {
+        setSearchResults([]);
+        setShowResults(query.length > 0); // Show recent searches for short queries
+      }
+    }, 300);
+  }, [searchMutation]);
+
+  // Handle input changes with real-time search
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setSelectedIndex(-1);
+    
+    if (value.length === 0) {
+      setSearchResults([]);
+      setShowResults(false);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    } else {
+      debouncedSearch(value);
+    }
+  };
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcodeInput: string) => {
@@ -142,7 +192,58 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     
-    searchMutation.mutate(searchQuery.trim());
+    // Save to recent searches
+    saveRecentSearch(searchQuery.trim());
+    
+    // Navigate to database with search
+    setLocation(`/database?search=${encodeURIComponent(searchQuery.trim())}`);
+    clearSearch();
+  };
+
+  const saveRecentSearch = (query: string) => {
+    const recent = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+    setRecentSearches(recent);
+    localStorage.setItem('pawsitivecheck-recent-searches', JSON.stringify(recent));
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!showResults) return;
+
+    const allOptions = [...(searchQuery.length < 2 ? recentSearches : []), ...searchResults.map(p => p.name)];
+    
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => (prev + 1) % allOptions.length);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => prev <= 0 ? allOptions.length - 1 : prev - 1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
+          if (selectedIndex < recentSearches.length && searchQuery.length < 2) {
+            // Recent search selected
+            setSearchQuery(recentSearches[selectedIndex]);
+            debouncedSearch(recentSearches[selectedIndex]);
+          } else {
+            // Product selected
+            const productIndex = searchQuery.length < 2 ? selectedIndex : selectedIndex - recentSearches.length;
+            if (searchResults[productIndex]) {
+              selectProduct(searchResults[productIndex]);
+            }
+          }
+        } else {
+          handleSearch(e);
+        }
+        break;
+      case 'Escape':
+        setShowResults(false);
+        inputRef.current?.blur();
+        break;
+    }
   };
 
   const handleBarcodeScanned = (barcode: string) => {
@@ -164,10 +265,11 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const selectProduct = (product: Product) => {
+    saveRecentSearch(product.name);
     setShowResults(false);
     clearSearch();
-    // Navigate to scanner with selected product
-    setLocation('/scan');
+    // Navigate to database with product search
+    setLocation(`/database?search=${encodeURIComponent(product.name)}`);
   };
 
   const isLoading = searchMutation.isPending || scanProductMutation.isPending || imageSearchMutation.isPending;
@@ -179,12 +281,24 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cosmic-400 h-4 w-4" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search products or scan..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onFocus={() => searchQuery.length > 0 && setShowResults(true)}
+              onBlur={(e) => {
+                // Delay hiding results to allow clicks
+                setTimeout(() => {
+                  if (!e.currentTarget.contains(document.activeElement)) {
+                    setShowResults(false);
+                  }
+                }, 200);
+              }}
               className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-10 pr-16 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500 h-10"
               data-testid="input-header-search"
+              autoComplete="off"
             />
             {searchQuery && (
               <Button
@@ -268,33 +382,89 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
 
         {/* Search Results Dropdown */}
-        {showResults && searchResults.length > 0 && (
-          <div className="absolute top-12 left-0 right-0 bg-cosmic-800/95 backdrop-blur-md border border-cosmic-600 rounded-lg p-2 z-40 shadow-lg max-h-64 overflow-y-auto">
-            <div className="space-y-1">
-              {searchResults.map((product) => (
-                <div
-                  key={product.id}
-                  onClick={() => selectProduct(product)}
-                  className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-cosmic-700 transition-colors"
-                  data-testid={`search-result-${product.id}`}
-                >
-                  <div className="flex-1">
-                    <p className="text-cosmic-100 text-sm font-medium">{product.name}</p>
-                    <p className="text-cosmic-400 text-xs">{product.brand}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {product.cosmicScore && (
-                      <Badge
-                        variant={product.cosmicScore >= 70 ? 'default' : 'destructive'}
-                        className="text-xs"
-                      >
-                        {product.cosmicScore}
-                      </Badge>
-                    )}
-                  </div>
+        {showResults && (searchResults.length > 0 || (searchQuery.length < 2 && recentSearches.length > 0)) && (
+          <div className="absolute top-12 left-0 right-0 bg-cosmic-800/95 backdrop-blur-md border border-cosmic-600 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
+            
+            {/* Recent Searches (shown when query is short) */}
+            {searchQuery.length < 2 && recentSearches.length > 0 && (
+              <div className="p-2">
+                <p className="text-xs text-cosmic-400 mb-2 px-2">Recent Searches</p>
+                <div className="space-y-1">
+                  {recentSearches.map((search, index) => (
+                    <div
+                      key={search}
+                      onClick={() => {
+                        setSearchQuery(search);
+                        debouncedSearch(search);
+                      }}
+                      className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
+                        selectedIndex === index ? 'bg-cosmic-700' : 'hover:bg-cosmic-700/50'
+                      }`}
+                      data-testid={`recent-search-${index}`}
+                    >
+                      <Clock className="h-4 w-4 text-cosmic-400" />
+                      <span className="text-cosmic-200 text-sm">{search}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* Search Results */}
+            {searchResults.length > 0 && (
+              <div className="p-2">
+                {recentSearches.length > 0 && searchQuery.length < 2 && (
+                  <p className="text-xs text-cosmic-400 mb-2 px-2 border-t border-cosmic-600 pt-2">Products</p>
+                )}
+                <div className="space-y-1">
+                  {searchResults.map((product, index) => {
+                    const adjustedIndex = searchQuery.length < 2 ? index + recentSearches.length : index;
+                    return (
+                      <div
+                        key={product.id}
+                        onClick={() => selectProduct(product)}
+                        className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
+                          selectedIndex === adjustedIndex ? 'bg-cosmic-700' : 'hover:bg-cosmic-700/50'
+                        }`}
+                        data-testid={`search-result-${product.id}`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-cosmic-100 text-sm font-medium truncate">{product.name}</p>
+                          <p className="text-cosmic-400 text-xs">{product.brand}</p>
+                        </div>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          {product.cosmicScore && (
+                            <Badge
+                              variant={product.cosmicScore >= 70 ? 'default' : 'destructive'}
+                              className="text-xs"
+                            >
+                              {product.cosmicScore}
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Loading state */}
+            {searchMutation.isPending && (
+              <div className="p-4 text-center">
+                <Loader2 className="h-4 w-4 animate-spin mx-auto text-cosmic-400" />
+                <p className="text-xs text-cosmic-400 mt-2">Searching cosmic database...</p>
+              </div>
+            )}
+
+            {/* No results state */}
+            {!searchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
+              <div className="p-4 text-center">
+                <Search className="h-8 w-8 mx-auto text-cosmic-400 mb-2" />
+                <p className="text-sm text-cosmic-300">No products found</p>
+                <p className="text-xs text-cosmic-400">Try a different search term</p>
+              </div>
+            )}
           </div>
         )}
       </div>
