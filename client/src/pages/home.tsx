@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Camera, Search, Shield, BarChart3, History, Crown } from "lucide-react";
+import { Camera, Search, Shield, BarChart3, History, Crown, WandSparkles } from "lucide-react";
 import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 
 export default function Home() {
