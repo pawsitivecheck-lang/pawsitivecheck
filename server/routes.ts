@@ -774,90 +774,216 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
       }
 
-      // In production, sync with:
-      // - FDA Pet Food Recalls
-      // - AVMA recall alerts
-      // - Manufacturer recall notices
-      // - Veterinary safety databases
-      
       let syncedRecalls = 0;
+      let processedRecalls = 0;
+      let source = 'mock';
       
-      // First, create some mock products for the recalls to reference
-      const mockProducts = [
-        {
-          name: "TastyBites Dog Treats",
-          brand: "PetSnacks Inc", 
-          category: "pet-treats",
-          description: "Chicken flavored dog treats",
-          ingredients: "Chicken, wheat flour, glycerin, salt",
-          barcode: "123456789012",
-        },
-        {
-          name: "FlexiLeash Retractable Leash",
-          brand: "WalkSafe",
-          category: "pet-accessories", 
-          description: "Retractable dog leash, 16ft length",
-          ingredients: "Nylon webbing, plastic handle, metal clasp",
-          barcode: "123456789013",
-        }
-      ];
-      
-      // Create products if they don't exist and get their IDs
-      const productIds: number[] = [];
-      for (const productData of mockProducts) {
-        try {
-          let existingProduct = await storage.getProductByBarcode(productData.barcode);
-          if (!existingProduct) {
-            existingProduct = await storage.createProduct(productData);
+      // Try FDA openFDA API for real recall data
+      try {
+        // Search for pet-related recalls from FDA
+        const petSearchTerms = [
+          'dog food', 'cat food', 'pet food', 'dog treats', 'cat treats', 
+          'pet treats', 'puppy food', 'kitten food', 'canine', 'feline'
+        ];
+        
+        const allFdaRecalls = [];
+        
+        for (const searchTerm of petSearchTerms) {
+          try {
+            const response = await fetch(
+              `https://api.fda.gov/food/enforcement.json?search=product_description:"${searchTerm}"&limit=20`
+            );
+            
+            if (response.ok) {
+              const data = await response.json();
+              if (data.results) {
+                allFdaRecalls.push(...data.results);
+              }
+            }
+          } catch (searchError) {
+            const error = searchError as Error;
+            console.log(`Failed to search FDA for "${searchTerm}":`, error.message);
           }
-          productIds.push(existingProduct.id);
-        } catch (error) {
-          console.log(`Failed to create/get product: ${productData.name}`);
         }
+        
+        if (allFdaRecalls.length > 0) {
+          source = 'FDA';
+          
+          // Process FDA recalls
+          for (const fdaRecall of allFdaRecalls.slice(0, 10)) { // Limit to 10 most recent
+            try {
+              processedRecalls++;
+              
+              // Map FDA data to our schema
+              const recallNumber = fdaRecall.recall_number || `FDA-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+              const productName = fdaRecall.product_description || 'Unknown Pet Product';
+              const reason = fdaRecall.reason_for_recall || 'Safety concern identified';
+              
+              // Determine severity based on classification
+              let severity: 'low' | 'moderate' | 'high' | 'urgent' = 'moderate';
+              if (fdaRecall.classification === 'Class I') {
+                severity = 'urgent';
+              } else if (fdaRecall.classification === 'Class II') {
+                severity = 'high';
+              } else if (fdaRecall.classification === 'Class III') {
+                severity = 'moderate';
+              }
+              
+              // Parse recall date
+              const recallDate = fdaRecall.recall_initiation_date ? 
+                new Date(fdaRecall.recall_initiation_date) : 
+                new Date();
+              
+              // Check if we already have this recall
+              const existingRecalls = await storage.getActiveRecalls();
+              const exists = existingRecalls.some(recall => 
+                recall.recallNumber === recallNumber
+              );
+              
+              if (!exists) {
+                // Create or find a product for this recall
+                let productId = null;
+                
+                // Try to find existing product by name similarity
+                const products = await storage.getProducts(1000, 0);
+                const matchingProduct = products.find(product => 
+                  productName.toLowerCase().includes(product.name.toLowerCase()) ||
+                  product.name.toLowerCase().includes(productName.toLowerCase().split(' ')[0])
+                );
+                
+                if (matchingProduct) {
+                  productId = matchingProduct.id;
+                } else {
+                  // Create a new product for this recall
+                  try {
+                    const newProduct = await storage.createProduct({
+                      name: productName,
+                      brand: fdaRecall.recalling_firm || "Unknown Brand",
+                      category: productName.toLowerCase().includes('treat') ? 'pet-treats' : 'pet-food',
+                      description: `Product recalled by FDA: ${reason}`,
+                      ingredients: "Ingredients not specified in recall notice",
+                      barcode: `FDA-${recallNumber}`,
+                      cosmicScore: 20, // Low score for recalled products
+                      cosmicClarity: 'cursed',
+                      transparencyLevel: 'poor',
+                      isBlacklisted: true,
+                      suspiciousIngredients: [],
+                      lastAnalyzed: new Date(),
+                    });
+                    productId = newProduct.id;
+                  } catch (productError) {
+                    console.log(`Failed to create product for recall ${recallNumber}`);
+                  }
+                }
+                
+                if (productId) {
+                  await storage.createRecall({
+                    productId,
+                    recallNumber,
+                    reason,
+                    severity,
+                    recallDate,
+                    affectedBatches: fdaRecall.product_quantity ? [fdaRecall.product_quantity] : [],
+                    source: "FDA"
+                  });
+                  syncedRecalls++;
+                }
+              }
+            } catch (recallError) {
+              const error = recallError as Error;
+              console.log(`Failed to process FDA recall:`, error.message);
+            }
+          }
+        }
+      } catch (fdaError) {
+        const error = fdaError as Error;
+        console.error('FDA API error, falling back to mock data:', error.message);
       }
       
-      const mockRecallData = [
-        {
-          productId: productIds[0] || 1, // Use actual product ID or fallback
-          recallNumber: "RCL-2024-001",
-          reason: "Potential Salmonella contamination", 
-          severity: 'urgent' as const,
-          recallDate: new Date('2024-01-15'),
-          affectedBatches: ["Lot #TB2024001", "Lot #TB2024002"],
-          source: "FDA"
-        },
-        {
-          productId: productIds[1] || 2, // Use actual product ID or fallback
-          recallNumber: "RCL-2024-002", 
-          reason: "Mechanism failure causing sudden release",
-          severity: 'moderate' as const,
-          recallDate: new Date('2024-02-01'),
-          affectedBatches: ["Model FL-2023, Serial 50000-55000"],
-          source: "CPSC"
-        }
-      ];
-      
-      for (const recallData of mockRecallData) {
-        try {
-          // Check if recall already exists by recall number
-          const existingRecalls = await storage.getActiveRecalls();
-          const exists = existingRecalls.some(r => 
-            r.recallNumber === recallData.recallNumber
-          );
-          
-          if (!exists) {
-            await storage.createRecall(recallData);
-            syncedRecalls++;
+      // Fall back to mock data if FDA API failed or returned no results
+      if (syncedRecalls === 0) {
+        source = 'mock';
+        
+        // Create some mock products for the recalls to reference
+        const mockProducts = [
+          {
+            name: "TastyBites Dog Treats",
+            brand: "PetSnacks Inc", 
+            category: "pet-treats",
+            description: "Chicken flavored dog treats",
+            ingredients: "Chicken, wheat flour, glycerin, salt",
+            barcode: "123456789012",
+          },
+          {
+            name: "FlexiLeash Retractable Leash",
+            brand: "WalkSafe",
+            category: "pet-accessories", 
+            description: "Retractable dog leash, 16ft length",
+            ingredients: "Nylon webbing, plastic handle, metal clasp",
+            barcode: "123456789013",
           }
-        } catch (error) {
-          console.log(`Skipped recall ${recallData.recallNumber}: already exists or error`);
+        ];
+        
+        // Create products if they don't exist and get their IDs
+        const productIds: number[] = [];
+        for (const productData of mockProducts) {
+          try {
+            let existingProduct = await storage.getProductByBarcode(productData.barcode);
+            if (!existingProduct) {
+              existingProduct = await storage.createProduct(productData);
+            }
+            productIds.push(existingProduct.id);
+          } catch (error) {
+            console.log(`Failed to create/get product: ${productData.name}`);
+          }
+        }
+        
+        const mockRecallData = [
+          {
+            productId: productIds[0] || 1,
+            recallNumber: "RCL-2024-001",
+            reason: "Potential Salmonella contamination", 
+            severity: 'urgent' as const,
+            recallDate: new Date('2024-01-15'),
+            affectedBatches: ["Lot #TB2024001", "Lot #TB2024002"],
+            source: "FDA"
+          },
+          {
+            productId: productIds[1] || 2,
+            recallNumber: "RCL-2024-002", 
+            reason: "Mechanism failure causing sudden release",
+            severity: 'moderate' as const,
+            recallDate: new Date('2024-02-01'),
+            affectedBatches: ["Model FL-2023, Serial 50000-55000"],
+            source: "CPSC"
+          }
+        ];
+        
+        for (const recallData of mockRecallData) {
+          try {
+            const existingRecalls = await storage.getActiveRecalls();
+            const exists = existingRecalls.some(r => 
+              r.recallNumber === recallData.recallNumber
+            );
+            
+            if (!exists) {
+              await storage.createRecall(recallData);
+              syncedRecalls++;
+              processedRecalls++;
+            }
+          } catch (error) {
+            console.log(`Skipped recall ${recallData.recallNumber}: already exists or error`);
+          }
         }
       }
       
       res.json({
-        message: `Successfully synced ${syncedRecalls} new recall alerts`,
+        message: source === 'FDA' 
+          ? `Successfully synced ${syncedRecalls} new FDA pet product recalls`
+          : `Successfully synced ${syncedRecalls} new recall alerts`,
         syncedCount: syncedRecalls,
-        totalProcessed: mockRecallData.length,
+        totalProcessed: processedRecalls,
+        source,
         timestamp: new Date().toISOString()
       });
       
