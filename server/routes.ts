@@ -109,38 +109,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { type, query } = req.body;
       
       if (type === 'barcode') {
-        // Mock internet barcode search - in production, this would integrate with APIs like:
-        // - Open Food Facts API
-        // - UPC Database
-        // - Barcode Lookup APIs
+        let productData = null;
+        let source = 'mock';
+        let message = 'Product discovered through cosmic internet divination';
         
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Try real UPC Database API if available
+        if (process.env.UPC_DATABASE_API_KEY) {
+          try {
+            const response = await fetch(`https://api.upcdatabase.org/product/${query}`, {
+              headers: {
+                'Authorization': `Bearer ${process.env.UPC_DATABASE_API_KEY}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              
+              // Only accept pet-related products
+              const isPetProduct = data.title && (
+                data.title.toLowerCase().includes('dog') ||
+                data.title.toLowerCase().includes('cat') ||
+                data.title.toLowerCase().includes('pet') ||
+                data.title.toLowerCase().includes('puppy') ||
+                data.title.toLowerCase().includes('kitten') ||
+                data.title.toLowerCase().includes('feline') ||
+                data.title.toLowerCase().includes('canine') ||
+                data.category?.toLowerCase().includes('pet')
+              );
+              
+              if (isPetProduct) {
+                // Determine category from title
+                let category = 'pet-food';
+                const title = data.title.toLowerCase();
+                if (title.includes('toy') || title.includes('ball') || title.includes('rope')) {
+                  category = 'pet-toys';
+                } else if (title.includes('treat') || title.includes('snack')) {
+                  category = 'pet-treats';
+                } else if (title.includes('leash') || title.includes('collar') || title.includes('bed')) {
+                  category = 'pet-accessories';
+                }
+                
+                productData = {
+                  name: data.title,
+                  brand: data.brand || "Unknown Brand",
+                  category,
+                  description: data.description || `Pet product with barcode ${query}`,
+                  ingredients: data.ingredients || "Ingredients not specified",
+                  imageUrl: null,
+                  barcode: query,
+                  cosmicScore: Math.floor(Math.random() * 30) + 70, // Real products get higher scores
+                  cosmicClarity: 'blessed',
+                  transparencyLevel: 'good',
+                  isBlacklisted: false,
+                  suspiciousIngredients: [],
+                  lastAnalyzed: new Date(),
+                };
+                source = 'upc-database';
+                message = 'Pet product discovered through cosmic barcode divination';
+              } else {
+                // Not a pet product, return error
+                return res.status(404).json({
+                  message: 'Product found but not pet-related. PawsitiveCheck focuses on pet product safety.'
+                });
+              }
+            }
+          } catch (error) {
+            console.error('UPC Database API error:', error);
+            // Fall back to mock data
+          }
+        }
         
-        // Mock product data based on barcode pattern
-        const mockProduct = {
-          name: `Internet Product ${query.slice(-4)}`,
-          brand: "Global Pet Co",
-          category: "pet-food",
-          description: `Premium pet product discovered through internet divination. Barcode: ${query}`,
-          ingredients: "Chicken, rice, vegetables, vitamins, minerals",
-          imageUrl: null,
-          barcode: query,
-          cosmicScore: Math.floor(Math.random() * 50) + 50,
-          cosmicClarity: Math.random() > 0.5 ? 'blessed' : 'questionable',
-          transparencyLevel: 'good',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        };
+        // Fall back to mock data if API failed or no API key
+        if (!productData) {
+          productData = {
+            name: `Internet Product ${query.slice(-4)}`,
+            brand: "Global Pet Co",
+            category: "pet-food",
+            description: `Premium pet product discovered through internet divination. Barcode: ${query}`,
+            ingredients: "Chicken, rice, vegetables, vitamins, minerals",
+            imageUrl: null,
+            barcode: query,
+            cosmicScore: Math.floor(Math.random() * 50) + 50,
+            cosmicClarity: Math.random() > 0.5 ? 'blessed' : 'questionable',
+            transparencyLevel: 'good',
+            isBlacklisted: false,
+            suspiciousIngredients: [],
+            lastAnalyzed: new Date(),
+          };
+          source = 'mock';
+        }
 
         // Add to database
-        const product = await storage.createProduct(mockProduct);
+        const product = await storage.createProduct(productData);
         
         res.json({
-          source: 'internet',
+          source,
           product,
-          message: 'Product discovered through cosmic internet divination'
+          message
         });
         
       } else if (type === 'image') {
