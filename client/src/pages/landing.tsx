@@ -5,6 +5,7 @@ import MascotCard from "@/components/mascot-card";
 import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
+import HeaderSearch from "@/components/header-search";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Search, Shield, Users, Crown, Camera, WandSparkles, ShieldHalf, TriangleAlert, ChartLine, Ban, Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -51,18 +52,21 @@ export default function Landing() {
               <h1 className="font-mystical text-2xl font-semibold text-starlight-500">PawsitiveCheck</h1>
             </div>
             
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#scanner" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-scan">Product Scanner</a>
-              <a href="#database" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-database">Browse Products</a>
-              <a href="#recalls" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-recalls">Safety Alerts</a>
-              <a href="#community" className="hover:text-starlight-400 transition-colors font-medium" data-testid="nav-community">Reviews</a>
+            <div className="hidden lg:flex items-center space-x-6">
+              <a href="#scanner" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-scan">Scanner</a>
+              <a href="#database" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-database">Products</a>
+              <a href="#recalls" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-recalls">Safety</a>
+              <a href="#community" className="hover:text-starlight-400 transition-colors text-sm font-medium" data-testid="nav-community">Reviews</a>
             </div>
+            
+            {/* Header Search */}
+            <HeaderSearch />
             
             <div className="flex items-center space-x-4">
               {/* Mobile menu button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2 rounded-lg hover:bg-cosmic-800 transition-colors"
+                className="lg:hidden p-2 rounded-lg hover:bg-cosmic-800 transition-colors"
                 data-testid="button-mobile-menu"
               >
                 {isMobileMenuOpen ? (
@@ -85,8 +89,12 @@ export default function Landing() {
         
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-cosmic-900/95 backdrop-blur-md border-b border-starlight-500/20">
+          <div className="lg:hidden bg-cosmic-900/95 backdrop-blur-md border-b border-starlight-500/20">
             <div className="px-4 py-4 space-y-4">
+              {/* Mobile Search */}
+              <div className="pb-4 border-b border-cosmic-700">
+                <HeaderSearch isMobile={true} />
+              </div>
               <a 
                 href="#scanner" 
                 className="block py-2 text-cosmic-100 hover:text-starlight-400 transition-colors font-medium"

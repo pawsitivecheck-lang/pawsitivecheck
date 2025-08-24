@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Crown, Search, Shield, Users, Camera } from "lucide-react";
+import HeaderSearch from "@/components/header-search";
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -33,7 +34,7 @@ export default function Navbar() {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -44,12 +45,15 @@ export default function Navbar() {
                       : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
                   }`} data-testid={`nav-${item.href.slice(1)}`}>
                     <Icon className="h-4 w-4" />
-                    <span>{item.name}</span>
+                    <span className="text-sm">{item.name}</span>
                   </div>
                 </Link>
               );
             })}
           </div>
+          
+          {/* Header Search */}
+          <HeaderSearch />
           
           {/* User Menu */}
           <div className="flex items-center space-x-4">
@@ -108,7 +112,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-cosmic-300"
+              className="lg:hidden text-cosmic-300"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
             >
@@ -119,7 +123,11 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-cosmic-700 py-4" data-testid="nav-mobile-menu">
+          <div className="lg:hidden border-t border-cosmic-700 py-4" data-testid="nav-mobile-menu">
+            {/* Mobile Search */}
+            <div className="px-4 pb-4">
+              <HeaderSearch isMobile={true} />
+            </div>
             <div className="space-y-2">
               {navigation.map((item) => {
                 const Icon = item.icon;
