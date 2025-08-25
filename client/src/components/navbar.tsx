@@ -94,9 +94,9 @@ export default function Navbar() {
             />
             
             {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl z-50 transform translate-x-0 transition-transform duration-300">
+            <div className="fixed top-0 right-0 h-full w-80 bg-gray-800 shadow-xl z-50 transform translate-x-0 transition-transform duration-300">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-6 border-b border-gray-600">
                 <div className="flex items-center space-x-3">
                   {user?.profileImageUrl ? (
                     <img 
@@ -110,10 +110,10 @@ export default function Navbar() {
                     </div>
                   )}
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    <h3 className="font-medium text-white">
                       {user?.firstName || 'User'}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-300">
                       {user?.email}
                     </p>
                   </div>
@@ -122,7 +122,7 @@ export default function Navbar() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsHamburgerMenuOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  className="text-gray-300 hover:text-white"
                 >
                   <X className="h-5 w-5" />
                 </Button>
@@ -130,7 +130,7 @@ export default function Navbar() {
 
               {/* Navigation Items */}
               <div className="p-4 space-y-2">
-                <div className="text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-3">
+                <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                   Navigation
                 </div>
                 {navigation.map((item) => {
@@ -140,8 +140,8 @@ export default function Navbar() {
                       <div 
                         className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
                           isActivePage(item.href) 
-                            ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' 
-                            : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                            ? 'text-blue-400 bg-blue-900/30' 
+                            : 'text-gray-200 hover:text-blue-400 hover:bg-gray-700'
                         }`}
                         onClick={() => setIsHamburgerMenuOpen(false)}
                         data-testid={`hamburger-${item.href.slice(1)}`}
@@ -155,14 +155,14 @@ export default function Navbar() {
               </div>
 
               {/* Profile Items */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+              <div className="p-4 border-t border-gray-600">
+                <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                   Account
                 </div>
                 <div className="space-y-2">
                   <Link href="/profile">
                     <div 
-                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
                       onClick={() => setIsHamburgerMenuOpen(false)}
                     >
                       <Users className="h-5 w-5" />
@@ -173,7 +173,7 @@ export default function Navbar() {
                   {user?.isAdmin && (
                     <Link href="/admin">
                       <div 
-                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
                         onClick={() => setIsHamburgerMenuOpen(false)}
                       >
                         <Crown className="h-5 w-5" />
@@ -183,7 +183,7 @@ export default function Navbar() {
                   )}
                   
                   <div 
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
                     onClick={() => window.location.href = '/api/logout'}
                   >
                     <LogOut className="h-5 w-5" />
