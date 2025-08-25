@@ -26,6 +26,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showImageScanner, setShowImageScanner] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
+  const [showInternetSearch, setShowInternetSearch] = useState(false);
+  const [internetSearchQuery, setInternetSearchQuery] = useState("");
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -50,6 +52,39 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       });
       setSearchResults([]);
       setShowResults(false);
+    },
+  });
+
+  const internetSearchMutation = useMutation({
+    mutationFn: async (query: string) => {
+      return await apiRequest('/api/products/internet-search', {
+        type: 'text', 
+        query: query.trim()
+      });
+    },
+    onSuccess: (result: any) => {
+      if (result.product) {
+        toast({
+          title: "Product Found!",
+          description: `Found "${result.product.name}" from ${result.source}`,
+        });
+        setLocation(`/product-analysis?name=${encodeURIComponent(result.product.name)}&brand=${encodeURIComponent(result.product.brand)}&ingredients=${encodeURIComponent(result.product.ingredients)}`);
+      } else {
+        toast({
+          title: "No Results",
+          description: "No products found on the internet for this search",
+          variant: "destructive",
+        });
+      }
+      setShowInternetSearch(false);
+      setInternetSearchQuery("");
+    },
+    onError: () => {
+      toast({
+        title: "Search Failed",
+        description: "Unable to search the internet for products",
+        variant: "destructive",
+      });
     },
   });
 
@@ -455,7 +490,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               </Button>
               <Button
                 onClick={() => {
-                  setLocation('/product-scanner');
+                  setShowInternetSearch(true);
                   setShowScannerMenu(false);
                 }}
                 variant="ghost"
@@ -464,7 +499,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 data-testid="button-advanced-scanner"
               >
                 <Globe className="mr-2 h-4 w-4" />
-                Advanced Scanner
+                Internet Search
               </Button>
             </div>
           </div>
@@ -581,6 +616,87 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         onScan={handleImageScanned}
         onClose={() => setShowImageScanner(false)}
       />
+
+      {/* Internet Search Modal */}
+      {showInternetSearch && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Globe className="h-5 w-5 text-blue-400" />
+                Internet Product Search
+              </h3>
+              <Button
+                onClick={() => setShowInternetSearch(false)}
+                variant="ghost"
+                size="sm"
+                className="text-gray-400 hover:text-white"
+                data-testid="button-close-internet-search"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Search for a product online:
+                </label>
+                <Input
+                  value={internetSearchQuery}
+                  onChange={(e) => setInternetSearchQuery(e.target.value)}
+                  placeholder="e.g., Blue Buffalo chicken dog food"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                  data-testid="input-internet-search"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && internetSearchQuery.trim()) {
+                      internetSearchMutation.mutate(internetSearchQuery);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    if (internetSearchQuery.trim()) {
+                      internetSearchMutation.mutate(internetSearchQuery);
+                    }
+                  }}
+                  disabled={!internetSearchQuery.trim() || internetSearchMutation.isPending}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  data-testid="button-search-internet"
+                >
+                  {internetSearchMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Searching...
+                    </>
+                  ) : (
+                    <>
+                      <Search className="mr-2 h-4 w-4" />
+                      Search Internet
+                    </>
+                  )}
+                </Button>
+                
+                <Button
+                  onClick={() => setShowInternetSearch(false)}
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  data-testid="button-cancel-internet-search"
+                >
+                  Cancel
+                </Button>
+              </div>
+              
+              <p className="text-xs text-gray-400">
+                This will search online databases for product information and safety data.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
