@@ -1606,6 +1606,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
               distance: 1.9,
               latitude: 42.7542,
               longitude: -84.5324
+            },
+            {
+              id: 'lansing-fallback-4',
+              name: 'Michigan State University Emergency Vet',
+              address: '736 Wilson Rd',
+              city: 'East Lansing',
+              state: 'MI',
+              zipCode: '48824',
+              phone: '(517) 353-5420',
+              website: 'https://cvm.msu.edu/hospital',
+              rating: 4.7,
+              reviewCount: 312,
+              services: ['24/7 Emergency Care', 'Critical Care', 'Surgery', 'Advanced Diagnostics', 'Specialty Medicine', 'Trauma Care'],
+              hours: {
+                'Monday': '24 Hours',
+                'Tuesday': '24 Hours',
+                'Wednesday': '24 Hours',
+                'Thursday': '24 Hours',
+                'Friday': '24 Hours',
+                'Saturday': '24 Hours',
+                'Sunday': '24 Hours'
+              },
+              specialties: ['Emergency Medicine', 'Critical Care', 'Teaching Hospital', 'Specialty Services'],
+              emergencyServices: true,
+              distance: 2.4,
+              latitude: 42.7011,
+              longitude: -84.4822
             }
           ];
           
