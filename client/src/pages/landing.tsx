@@ -7,10 +7,12 @@ import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 export default function Landing() {
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -75,8 +77,25 @@ export default function Landing() {
                   className="flex items-center space-x-1 sm:space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] border border-gray-200"
                   data-testid="button-user-menu"
                 >
-                  <UserCheck className="h-5 w-5 text-gray-600" />
-                  <span className="hidden sm:inline font-medium text-gray-700">Account</span>
+                  {isAuthenticated ? (
+                    <>
+                      {user?.profileImageUrl ? (
+                        <img 
+                          src={user.profileImageUrl} 
+                          alt="Profile" 
+                          className="w-5 h-5 rounded-full"
+                        />
+                      ) : (
+                        <UserCheck className="h-5 w-5 text-blue-600" />
+                      )}
+                      <span className="hidden sm:inline font-medium text-gray-700">{user?.firstName || 'Account'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <UserCheck className="h-5 w-5 text-gray-600" />
+                      <span className="hidden sm:inline font-medium text-gray-700">Account</span>
+                    </>
+                  )}
                   <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -85,40 +104,83 @@ export default function Landing() {
                 {/* Dropdown Menu */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/api/login';
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                      data-testid="button-sign-in-dropdown"
-                    >
-                      <UserCheck className="mr-3 h-4 w-4" />
-                      Sign In
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/api/register';
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                      data-testid="button-register-dropdown"
-                    >
-                      <Users className="mr-3 h-4 w-4" />
-                      Create Account
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/help';
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                      data-testid="button-help-dropdown"
-                    >
-                      <Heart className="mr-3 h-4 w-4" />
-                      Help & Support
-                    </button>
+                    {isAuthenticated ? (
+                      <>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/pets';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-pet-profiles-dropdown"
+                        >
+                          <PawPrint className="mr-3 h-4 w-4" />
+                          Pet Profiles
+                        </button>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/database';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-database-dropdown"
+                        >
+                          <Database className="mr-3 h-4 w-4" />
+                          Safety Database
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/api/logout';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-logout-dropdown"
+                        >
+                          <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/api/login';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-sign-in-dropdown"
+                        >
+                          <UserCheck className="mr-3 h-4 w-4" />
+                          Sign In
+                        </button>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/api/register';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-register-dropdown"
+                        >
+                          <Users className="mr-3 h-4 w-4" />
+                          Create Account
+                        </button>
+                        <div className="border-t border-gray-100 my-1"></div>
+                        <button 
+                          onClick={() => {
+                            window.location.href = '/help';
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                          data-testid="button-help-dropdown"
+                        >
+                          <Heart className="mr-3 h-4 w-4" />
+                          Help & Support
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -208,28 +270,89 @@ export default function Landing() {
               {/* Account Section in Mobile */}
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</div>
-                <button 
-                  onClick={() => {
-                    window.location.href = '/api/login';
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                  data-testid="mobile-nav-sign-in"
-                >
-                  <UserCheck className="mr-3 h-5 w-5" />
-                  Sign In
-                </button>
-                <button 
-                  onClick={() => {
-                    window.location.href = '/api/register';
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                  data-testid="mobile-nav-register"
-                >
-                  <Users className="mr-3 h-5 w-5" />
-                  Create Account
-                </button>
+                
+                {isAuthenticated ? (
+                  <>
+                    <div className="flex items-center py-3 px-3 mb-2">
+                      {user?.profileImageUrl ? (
+                        <img 
+                          src={user.profileImageUrl} 
+                          alt="Profile" 
+                          className="w-8 h-8 rounded-full mr-3"
+                        />
+                      ) : (
+                        <UserCheck className="mr-3 h-5 w-5 text-blue-600" />
+                      )}
+                      <div>
+                        <div className="font-medium text-gray-800">{user?.firstName || 'User'}</div>
+                        <div className="text-xs text-gray-500">{user?.email}</div>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/pets';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-pet-profiles"
+                    >
+                      <PawPrint className="mr-3 h-5 w-5" />
+                      Pet Profiles
+                    </button>
+                    
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/database';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-database"
+                    >
+                      <Database className="mr-3 h-5 w-5" />
+                      Safety Database
+                    </button>
+                    
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/api/logout';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-logout"
+                    >
+                      <svg className="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/api/login';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-sign-in"
+                    >
+                      <UserCheck className="mr-3 h-5 w-5" />
+                      Sign In
+                    </button>
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/api/register';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-register"
+                    >
+                      <Users className="mr-3 h-5 w-5" />
+                      Create Account
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
