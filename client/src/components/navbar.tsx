@@ -20,7 +20,6 @@ export default function Navbar() {
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const navigation = [
-    { name: 'Product Scanner', href: '/scan', icon: Camera },
     { name: 'Safety Database', href: '/database', icon: Search },
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vets', icon: Heart },
