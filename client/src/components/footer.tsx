@@ -36,7 +36,7 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-features-title">Key Features</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/product-scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                <a href="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
                   Product Scanner
                 </a>
               </li>
