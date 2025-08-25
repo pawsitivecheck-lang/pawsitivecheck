@@ -120,7 +120,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden text-gray-600 dark:text-gray-300 p-2"
+              className="md:hidden text-gray-600 dark:text-gray-300 p-2 border border-gray-200 dark:border-gray-600"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
             >
