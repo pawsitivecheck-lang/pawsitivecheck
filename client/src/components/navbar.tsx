@@ -130,7 +130,7 @@ export default function Navbar() {
 
               {/* Navigation Items */}
               <div className="p-4 space-y-2">
-                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                <div className="text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider mb-3">
                   Navigation
                 </div>
                 {navigation.map((item) => {
