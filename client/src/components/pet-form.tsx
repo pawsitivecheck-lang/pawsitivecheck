@@ -136,14 +136,49 @@ export function PetForm({ initialData, onSubmit, isLoading }: PetFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    {/* Traditional Pets */}
                     <SelectItem value="dog">Dog</SelectItem>
                     <SelectItem value="cat">Cat</SelectItem>
                     <SelectItem value="bird">Bird</SelectItem>
                     <SelectItem value="fish">Fish</SelectItem>
                     <SelectItem value="rabbit">Rabbit</SelectItem>
                     <SelectItem value="hamster">Hamster</SelectItem>
-                    <SelectItem value="guinea pig">Guinea Pig</SelectItem>
-                    <SelectItem value="reptile">Reptile</SelectItem>
+                    <SelectItem value="guinea-pig">Guinea Pig</SelectItem>
+                    <SelectItem value="ferret">Ferret</SelectItem>
+                    <SelectItem value="chinchilla">Chinchilla</SelectItem>
+                    
+                    {/* Farm Animals */}
+                    <SelectItem value="cattle">Cattle</SelectItem>
+                    <SelectItem value="sheep">Sheep</SelectItem>
+                    <SelectItem value="goat">Goat</SelectItem>
+                    <SelectItem value="pig">Pig</SelectItem>
+                    <SelectItem value="horse">Horse</SelectItem>
+                    <SelectItem value="chicken">Chicken</SelectItem>
+                    <SelectItem value="duck">Duck</SelectItem>
+                    <SelectItem value="turkey">Turkey</SelectItem>
+                    <SelectItem value="llama">Llama</SelectItem>
+                    <SelectItem value="alpaca">Alpaca</SelectItem>
+                    
+                    {/* Exotic Pets */}
+                    <SelectItem value="snake">Snake</SelectItem>
+                    <SelectItem value="lizard">Lizard</SelectItem>
+                    <SelectItem value="turtle">Turtle</SelectItem>
+                    <SelectItem value="gecko">Gecko</SelectItem>
+                    <SelectItem value="bearded-dragon">Bearded Dragon</SelectItem>
+                    <SelectItem value="parrot">Parrot</SelectItem>
+                    <SelectItem value="cockatiel">Cockatiel</SelectItem>
+                    <SelectItem value="canary">Canary</SelectItem>
+                    <SelectItem value="hedgehog">Hedgehog</SelectItem>
+                    <SelectItem value="sugar-glider">Sugar Glider</SelectItem>
+                    <SelectItem value="axolotl">Axolotl</SelectItem>
+                    <SelectItem value="hermit-crab">Hermit Crab</SelectItem>
+                    <SelectItem value="tarantula">Tarantula</SelectItem>
+                    <SelectItem value="scorpion">Scorpion</SelectItem>
+                    <SelectItem value="tree-frog">Tree Frog</SelectItem>
+                    <SelectItem value="betta">Betta Fish</SelectItem>
+                    <SelectItem value="angelfish">Angelfish</SelectItem>
+                    <SelectItem value="clownfish">Clownfish</SelectItem>
+                    
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
