@@ -1,9 +1,76 @@
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
-import { Users, MessageSquare, Shield, Star, TrendingUp, CheckCircle, AlertTriangle, Eye, BarChart3, Globe, FileText, Heart } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { Users, MessageSquare, Shield, Star, TrendingUp, CheckCircle, AlertTriangle, Eye, BarChart3, Globe, FileText, Heart, Crown, ThumbsUp, Search, MessageCircle } from "lucide-react";
 
 export default function CommunityReviewsInfo() {
+  const { user } = useAuth();
+  const [reviewFilter, setReviewFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const { data: userReviews } = useQuery<any[]>({
+    queryKey: ['/api/user/reviews'],
+  });
+
+  const { data: products } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const res = await fetch('/api/products?limit=100');
+      return await res.json();
+    },
+  });
+
+  // Get all reviews by fetching product reviews
+  const { data: allReviews } = useQuery({
+    queryKey: ['/api/community/reviews'],
+    queryFn: async () => {
+      if (!products) return [];
+      
+      const reviewPromises = products.map(async (product: any) => {
+        const res = await fetch(`/api/products/${product.id}/reviews`);
+        const reviews = await res.json();
+        return reviews.map((review: any) => ({
+          ...review,
+          productName: product.name,
+          productBrand: product.brand,
+        }));
+      });
+      
+      const allProductReviews = await Promise.all(reviewPromises);
+      return allProductReviews.flat().sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    },
+    enabled: !!products,
+  });
+
+  const filteredReviews = allReviews?.filter((review: any) => {
+    if (reviewFilter !== "all" && review.rating.toString() !== reviewFilter) return false;
+    if (searchTerm && !review.content.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !review.productName.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    return true;
+  }) || [];
+
+  const getRankIcon = (reviewCount: number) => {
+    if (reviewCount >= 50) return <Crown className="text-yellow-500 h-4 w-4" />;
+    if (reviewCount >= 20) return <Star className="text-purple-600 h-4 w-4" />;
+    if (reviewCount >= 5) return <Eye className="text-green-600 h-4 w-4" />;
+    return <Users className="text-blue-600 h-4 w-4" />;
+  };
+
+  const getRankTitle = (reviewCount: number) => {
+    if (reviewCount >= 50) return "Community Leader";
+    if (reviewCount >= 20) return "Expert Reviewer";
+    if (reviewCount >= 5) return "Active Member";
+    return "New Member";
+  };
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -458,6 +525,256 @@ export default function CommunityReviewsInfo() {
             </div>
           </section>
 
+          {/* Interactive Community Portal */}
+          <section className="mb-16 border-t border-gray-200 pt-16">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Community Portal
+              </h2>
+              <p className="text-xl text-gray-600">
+                Explore real reviews and share your own experiences
+              </p>
+            </div>
+
+            {/* Community Stats */}
+            <Card className="mb-8 shadow-lg" data-testid="card-community-stats">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-purple-600">
+                  <Users className="h-5 w-5" />
+                  Community Statistics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-600 mb-2" data-testid="text-total-reviews">
+                      {allReviews?.length || 0}
+                    </div>
+                    <p className="text-gray-600">Total Reviews</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-positive-reviews">
+                      {allReviews?.filter((r: any) => r.rating >= 4).length || 0}
+                    </div>
+                    <p className="text-gray-600">Positive Reviews</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-warning-reviews">
+                      {allReviews?.filter((r: any) => r.rating <= 2).length || 0}
+                    </div>
+                    <p className="text-gray-600">Safety Warnings</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-active-members">
+                      {allReviews ? new Set(allReviews.map((r: any) => r.userId)).size : 0}
+                    </div>
+                    <p className="text-gray-600">Active Members</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* User Profile Card */}
+            {user && (
+              <Card className="mb-8 border-purple-200 shadow-lg" data-testid="card-user-profile">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center">
+                      {user.profileImageUrl ? (
+                        <img 
+                          src={user.profileImageUrl} 
+                          alt="Profile" 
+                          className="w-full h-full rounded-full object-cover"
+                          data-testid="img-user-avatar"
+                        />
+                      ) : (
+                        <Users className="text-white text-xl" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-xl font-semibold text-gray-900" data-testid="text-user-name">
+                          {user.firstName || 'Community Member'}
+                        </h3>
+                        {getRankIcon(userReviews ? userReviews.length : 0)}
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <Badge className="bg-purple-100 text-purple-800 border-purple-200" data-testid="badge-user-rank">
+                          {getRankTitle(userReviews ? userReviews.length : 0)}
+                        </Badge>
+                        <span className="text-gray-500 text-sm" data-testid="text-user-reviews-count">
+                          {userReviews ? userReviews.length : 0} reviews shared
+                        </span>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="outline"
+                      className="border-purple-300 text-purple-600 hover:bg-purple-50"
+                      data-testid="button-view-profile"
+                    >
+                      View Profile
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Filters and Search */}
+            <Card className="mb-8 shadow-lg" data-testid="card-review-filters">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-600">
+                  <Search className="h-5 w-5" />
+                  Explore Community Reviews
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex gap-4">
+                  <Input
+                    type="text"
+                    placeholder="Search reviews and products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="flex-1"
+                    data-testid="input-search-reviews"
+                  />
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  {["all", "5", "4", "3", "2", "1"].map((rating) => (
+                    <Button
+                      key={rating}
+                      variant={reviewFilter === rating ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setReviewFilter(rating)}
+                      data-testid={`button-filter-${rating}`}
+                    >
+                      {rating === "all" ? "All Reviews" : `${rating} Stars`}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Community Reviews */}
+            <div className="space-y-6">
+              {filteredReviews.length > 0 ? (
+                filteredReviews.map((review: any) => (
+                  <Card key={review.id} className="shadow-lg" data-testid={`card-community-review-${review.id}`}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center">
+                          <Users className="text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h4 className="font-semibold text-gray-900" data-testid="text-reviewer-name">
+                              Community Member #{review.userId.slice(-4)}
+                            </h4>
+                            {getRankIcon(5)} {/* Default rank for community display */}
+                            <Badge className="bg-gray-100 text-gray-600" data-testid="badge-reviewer-rank">
+                              Verified Member
+                            </Badge>
+                          </div>
+                          
+                          <div className="mb-3">
+                            <h5 className="text-purple-600 font-medium mb-1" data-testid="text-product-reviewed">
+                              {review.productName} by {review.productBrand}
+                            </h5>
+                            <div className="flex items-center gap-1 mb-2">
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  className={`h-4 w-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                                  data-testid={`star-rating-${i}`}
+                                />
+                              ))}
+                              <span className="text-gray-500 text-sm ml-2">
+                                {review.rating}/5 Stars
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {review.title && (
+                            <h6 className="font-medium text-gray-800 mb-2" data-testid="text-review-title">
+                              {review.title}
+                            </h6>
+                          )}
+                          
+                          <p className="text-gray-700 mb-3" data-testid="text-review-content">
+                            {review.content}
+                          </p>
+                          
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span data-testid="text-review-date">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </span>
+                            <div className="flex items-center gap-4">
+                              <button className="flex items-center gap-1 hover:text-green-600 transition-colors" data-testid="button-like-review">
+                                <ThumbsUp className="h-3 w-3" />
+                                <span>Helpful</span>
+                              </button>
+                              <button className="flex items-center gap-1 hover:text-blue-600 transition-colors" data-testid="button-reply-review">
+                                <MessageCircle className="h-3 w-3" />
+                                <span>Reply</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <Card className="shadow-lg" data-testid="card-no-reviews">
+                  <CardContent className="p-12 text-center">
+                    <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                      <MessageCircle className="text-gray-400 text-2xl" />
+                    </div>
+                    <h3 className="text-xl text-gray-700 mb-4" data-testid="text-no-reviews-title">
+                      No Reviews Found
+                    </h3>
+                    <p className="text-gray-500 mb-6" data-testid="text-no-reviews-description">
+                      {searchTerm || reviewFilter !== "all" 
+                        ? "No reviews match your current search criteria."
+                        : "Be the first to share your experience with the community!"}
+                    </p>
+                    {(searchTerm || reviewFilter !== "all") && (
+                      <Button 
+                        variant="outline"
+                        onClick={() => {
+                          setSearchTerm("");
+                          setReviewFilter("all");
+                        }}
+                        data-testid="button-clear-filters"
+                      >
+                        Clear Filters
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* Write Review CTA */}
+            {user && (
+              <div className="mt-12">
+                <Card className="border-purple-200 shadow-lg" data-testid="card-cta">
+                  <CardContent className="p-8 text-center">
+                    <h3 className="text-2xl font-bold text-purple-600 mb-4" data-testid="text-cta-title">
+                      Share Your Experience
+                    </h3>
+                    <p className="text-gray-600 mb-6" data-testid="text-cta-description">
+                      Help other pet owners by sharing your product experiences
+                    </p>
+                    <Button className="bg-purple-600 hover:bg-purple-700" data-testid="button-share-review">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Write a Review
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </section>
+
           {/* Call to Action */}
           <section className="text-center mb-16">
             <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white">
@@ -467,12 +784,12 @@ export default function CommunityReviewsInfo() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                  href="/community"
+                  href="/product-scanner"
                   className="bg-white text-purple-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
-                  data-testid="button-join-community"
+                  data-testid="button-scan-product"
                 >
-                  <Users className="h-5 w-5" />
-                  Browse Reviews
+                  <Search className="h-5 w-5" />
+                  Scan a Product
                 </a>
                 <a
                   href="/product-scanner"
