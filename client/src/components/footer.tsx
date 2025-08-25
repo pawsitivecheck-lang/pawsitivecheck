@@ -59,27 +59,37 @@ export default function Footer() {
           </div>
           
           <div className="text-center sm:text-left sm:col-span-2 lg:col-span-1">
-            <h4 className="text-lg font-bold text-white mb-3" data-testid="text-contact-title">Contact Us</h4>
-            <ul className="space-y-2 text-gray-300 text-sm">
+            <h4 className="text-lg font-bold text-white mb-3" data-testid="text-contact-title">Contact & Support</h4>
+            <ul className="space-y-3 text-gray-300 text-sm">
               <li>
-                <a href="mailto:pawsitivecheck@gmail.com" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-email">
-                  pawsitivecheck@gmail.com
-                </a>
+                <div className="space-y-1">
+                  <a href="mailto:pawsitivecheck@gmail.com" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-email">
+                    📧 pawsitivecheck@gmail.com
+                  </a>
+                  <div className="text-xs text-gray-400 ml-4">
+                    General inquiries, support & feedback
+                  </div>
+                </div>
               </li>
               <li>
-                <a href="/profile" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-support">
-                  Customer Support
-                </a>
+                <div className="space-y-1">
+                  <a href="/community" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
+                    💬 Community Portal
+                  </a>
+                  <div className="text-xs text-gray-400 ml-4">
+                    Reviews, discussions & product insights
+                  </div>
+                </div>
               </li>
               <li>
-                <a href="/community" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-feedback">
-                  Feedback Portal
-                </a>
-              </li>
-              <li>
-                <a href="tel:+1-800-PAWSAFE" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-hotline">
-                  Safety Hotline
-                </a>
+                <div className="space-y-1">
+                  <a href="tel:+1-800-PAWSAFE" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-hotline">
+                    📞 1-800-PAWSAFE
+                  </a>
+                  <div className="text-xs text-gray-400 ml-4">
+                    Emergency pet product safety hotline
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
