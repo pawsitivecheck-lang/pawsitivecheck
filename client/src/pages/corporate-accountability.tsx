@@ -32,9 +32,15 @@ export default function CorporateAccountability() {
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-hero-title">
                 Corporate Accountability
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-hero-subtitle">
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6" data-testid="text-hero-subtitle">
                 Exposing regulatory failures, corporate cover-ups, and the urgent need for transparency in the pet industry
               </p>
+              <div className="bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900 rounded-lg p-6 max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-4">Why Corporate Accountability Matters</h2>
+                <p className="text-red-700 dark:text-red-300 text-lg leading-relaxed">
+                  <strong>Without accountability, companies prioritize profits over pet lives.</strong> When corporations face no consequences for unsafe products, contaminated food, or deceptive marketing, they have no incentive to change. The result? More sick pets, more bereaved families, and an industry that treats animal suffering as an acceptable cost of doing business.
+                </p>
+              </div>
             </div>
             
             <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8">
@@ -61,6 +67,95 @@ export default function CorporateAccountability() {
               </div>
             </div>
           </div>
+
+          {/* Why Accountability is Critical */}
+          <Card className="border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950" data-testid="card-why-accountability">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center text-blue-800 dark:text-blue-200">
+                <Scale className="w-6 h-6 mr-3" />
+                The Critical Need for Corporate Accountability
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h4 className="text-xl font-bold text-red-700 dark:text-red-300">What Happens Without Accountability:</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-red-800 dark:text-red-200">Pet Deaths Go Unaddressed:</strong>
+                        <span className="text-red-700 dark:text-red-300 block">103 pet deaths reported in January 2024 alone, yet companies deny responsibility and continue operations unchanged.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-red-800 dark:text-red-200">Human Health Risks Multiply:</strong>
+                        <span className="text-red-700 dark:text-red-300 block">Contaminated pet food sickens entire families, with 6 infants under one year affected by a single company's failures.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-red-800 dark:text-red-200">Scientific Manipulation:</strong>
+                        <span className="text-red-700 dark:text-red-300 block">Companies fund fake research and coordinate with academia to create false health scares about competitors' products.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-red-800 dark:text-red-200">Regulatory Capture:</strong>
+                        <span className="text-red-700 dark:text-red-300 block">Weak enforcement allows repeat offenders to continue contaminating products with toxic heavy metals and pathogens.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="text-xl font-bold text-green-700 dark:text-green-300">The Power of Accountability:</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-green-800 dark:text-green-200">Financial Consequences Drive Change:</strong>
+                        <span className="text-green-700 dark:text-green-300 block">Multi-million dollar lawsuits force companies to improve safety protocols and quality control systems.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-green-800 dark:text-green-200">Public Exposure Prevents Cover-ups:</strong>
+                        <span className="text-green-700 dark:text-green-300 block">Transparency platforms like PawsitiveCheck make it impossible for companies to hide safety violations from consumers.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-green-800 dark:text-green-200">Consumer Empowerment:</strong>
+                        <span className="text-green-700 dark:text-green-300 block">Armed with real safety data, pet owners can make informed choices and vote with their wallets.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></span>
+                      <div>
+                        <strong className="text-green-800 dark:text-green-200">Industry-Wide Reform:</strong>
+                        <span className="text-green-700 dark:text-green-300 block">When one company faces consequences, competitors proactively improve their practices to avoid similar exposure.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-8 p-4 bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 rounded-lg">
+                <h4 className="font-bold text-yellow-800 dark:text-yellow-200 mb-2">The Bottom Line:</h4>
+                <p className="text-yellow-700 dark:text-yellow-300 text-sm">
+                  <strong>Every lawsuit filed, every recall exposed, and every safety violation documented creates pressure for systemic change.</strong> 
+                  Corporate accountability isn't just about punishing past wrongs—it's about preventing future tragedies by making unsafe practices too expensive to continue.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Main Content Sections */}
           <div className="space-y-12">
@@ -338,19 +433,48 @@ export default function CorporateAccountability() {
                   </div>
                 </div>
                 
-                <div className="mt-8 p-4 bg-white dark:bg-gray-900 rounded-lg border">
-                  <h4 className="font-semibold mb-3">Take Action:</h4>
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <ul className="space-y-1">
-                      <li>• Report adverse events to FDA Safety Reporting Portal</li>
-                      <li>• Support independent safety research</li>
-                      <li>• Choose companies with transparent practices</li>
-                    </ul>
-                    <ul className="space-y-1">
-                      <li>• Join class action lawsuits when appropriate</li>
-                      <li>• Share experiences in our community forum</li>
-                      <li>• Demand regulatory reform from elected officials</li>
-                    </ul>
+                <div className="mt-8 p-6 bg-red-100 dark:bg-red-900 rounded-lg border-2 border-red-300 dark:border-red-700">
+                  <h4 className="font-bold text-xl text-red-800 dark:text-red-200 mb-4">🚨 Your Action Can Save Lives - Here's How:</h4>
+                  <div className="grid md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                      <h5 className="font-semibold text-red-700 dark:text-red-300 mb-2">Immediate Actions:</h5>
+                      <ul className="space-y-2">
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">📋</span>
+                          <span><strong>Report Problems:</strong> File FDA Safety Reports for every incident - companies only respond to documented pressure</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">💰</span>
+                          <span><strong>Join Lawsuits:</strong> Class actions are often the only way to force corporate change and get compensation</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">🔍</span>
+                          <span><strong>Research Before Buying:</strong> Use PawsitiveCheck to avoid companies with poor safety records</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-semibold text-red-700 dark:text-red-300 mb-2">Long-term Impact:</h5>
+                      <ul className="space-y-2">
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">📢</span>
+                          <span><strong>Spread Awareness:</strong> Share safety information - silence enables corporate negligence</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">🏛️</span>
+                          <span><strong>Demand Reform:</strong> Contact representatives about strengthening FDA pet food oversight</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-600">🤝</span>
+                          <span><strong>Support Transparency:</strong> Choose companies that voluntarily exceed minimum safety standards</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="mt-4 p-3 bg-red-200 dark:bg-red-800 rounded">
+                    <p className="text-red-800 dark:text-red-200 font-semibold text-center">
+                      💡 Remember: Every pet owner who stays silent enables the next preventable tragedy. Your voice matters.
+                    </p>
                   </div>
                 </div>
               </CardContent>
