@@ -990,6 +990,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get Google Maps API key for frontend
+  app.get('/api/google-maps-key', (req, res) => {
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ message: 'Google Maps API key not configured' });
+    }
+    res.json({ key: apiKey });
+  });
+
   // Veterinary search using Google Places API for nationwide coverage
   app.post('/api/vets/search', async (req, res) => {
     try {

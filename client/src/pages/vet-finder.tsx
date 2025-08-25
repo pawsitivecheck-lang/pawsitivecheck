@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import AdBanner from "@/components/ad-banner";
+import VetMap from "@/components/vet-map";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -307,6 +308,29 @@ export default function VetFinder() {
               <h2 className="text-2xl font-mystical text-starlight-400 mb-4" data-testid="text-results-header">
                 Mystical Veterinary Guardians ({vetPractices.length})
               </h2>
+              
+              {/* Interactive Map */}
+              <Card className="cosmic-card" data-testid="card-vet-map">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-starlight-400">
+                    <MapPin className="h-5 w-5" />
+                    Cosmic Healer Map
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <VetMap
+                    practices={vetPractices}
+                    center={userLocation ? [userLocation.lat, userLocation.lng] : [42.3314, -84.5467]}
+                    zoom={12}
+                    onMarkerClick={(practice) => {
+                      toast({
+                        title: practice.name,
+                        description: `${practice.address}, ${practice.city}, ${practice.state}`,
+                      });
+                    }}
+                  />
+                </CardContent>
+              </Card>
               
               <div className="grid gap-6">
                 {vetPractices.map((vet) => (

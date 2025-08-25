@@ -1,19 +1,4 @@
 import { useEffect, useRef } from 'react';
-import 'leaflet/dist/leaflet.css';
-import * as L from 'leaflet';
-
-// Fix for default markers in Leaflet
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-
-const DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
 
 interface VetPractice {
   id: string;
@@ -39,62 +24,125 @@ interface VetMapProps {
   onMarkerClick?: (practice: VetPractice) => void;
 }
 
-export default function VetMap({ practices, center, zoom = 10, onMarkerClick }: VetMapProps) {
+// Declare Google Maps types
+declare global {
+  interface Window {
+    google: any;
+    initGoogleMap: () => void;
+  }
+}
+
+export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: VetMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
+  const mapInstanceRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
+  const scriptLoadedRef = useRef(false);
 
+  // Load Google Maps script
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (scriptLoadedRef.current || window.google) return;
 
-    // Initialize map if not already created
-    if (!mapInstanceRef.current) {
-      mapInstanceRef.current = L.map(mapRef.current).setView(center, zoom);
+    // Get API key from backend and load script
+    fetch('/api/google-maps-key')
+      .then(response => response.json())
+      .then(data => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        
+        script.onload = () => {
+          scriptLoadedRef.current = true;
+          initializeMap();
+        };
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19,
-      }).addTo(mapInstanceRef.current);
-    }
+        script.onerror = () => {
+          console.error('Failed to load Google Maps script');
+        };
+
+        document.head.appendChild(script);
+      })
+      .catch(error => {
+        console.error('Failed to get Google Maps API key:', error);
+      });
 
     return () => {
-      // Cleanup map when component unmounts
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
+      const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+      if (existingScript && existingScript.parentNode) {
+        existingScript.parentNode.removeChild(existingScript);
       }
     };
   }, []);
 
-  useEffect(() => {
-    if (!mapInstanceRef.current) return;
+  const initializeMap = () => {
+    if (!mapRef.current || !window.google) return;
+
+    // Initialize map
+    mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+      center: { lat: center[0], lng: center[1] },
+      zoom: zoom,
+      styles: [
+        {
+          "featureType": "all",
+          "elementType": "geometry.fill",
+          "stylers": [{"color": "#1a1a2e"}]
+        },
+        {
+          "featureType": "water",
+          "elementType": "geometry.fill", 
+          "stylers": [{"color": "#16213e"}]
+        },
+        {
+          "featureType": "road",
+          "elementType": "geometry.stroke",
+          "stylers": [{"color": "#533a7b"}]
+        },
+        {
+          "featureType": "road",
+          "elementType": "geometry.fill",
+          "stylers": [{"color": "#2a2a4a"}]
+        }
+      ]
+    });
+
+    updateMarkers();
+  };
+
+  const updateMarkers = () => {
+    if (!mapInstanceRef.current || !window.google) return;
 
     // Clear existing markers
-    markersRef.current.forEach(marker => {
-      mapInstanceRef.current!.removeLayer(marker);
-    });
+    markersRef.current.forEach(marker => marker.setMap(null));
     markersRef.current = [];
+
+    const bounds = new window.google.maps.LatLngBounds();
+    let hasValidMarkers = false;
 
     // Add markers for practices with coordinates
     practices.forEach(practice => {
       if (practice.latitude && practice.longitude) {
-        const emergencyIcon = L.icon({
-          iconUrl: practice.emergencyServices ? 
-            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9IiNkYzI2MjYiLz4KPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI0IiB5PSI0Ij4KPHBhdGggZD0iTTcgM1YxM00zIDdIMTMiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cjwvc3ZnPgo=' :
-            icon,
-          shadowUrl: iconShadow,
-          iconSize: practice.emergencyServices ? [30, 30] : [25, 41],
-          iconAnchor: practice.emergencyServices ? [15, 15] : [12, 41],
+        const position = { lat: practice.latitude, lng: practice.longitude };
+        
+        // Create custom marker icon based on emergency services
+        const markerIcon = {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          scale: practice.emergencyServices ? 12 : 8,
+          fillColor: practice.emergencyServices ? '#dc2626' : '#3b82f6',
+          fillOpacity: 0.9,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        };
+
+        const marker = new window.google.maps.Marker({
+          position: position,
+          map: mapInstanceRef.current,
+          icon: markerIcon,
+          title: practice.name,
         });
 
-        const marker = L.marker([practice.latitude, practice.longitude], {
-          icon: emergencyIcon
-        }).addTo(mapInstanceRef.current);
-
-        // Create popup content
-        const popupContent = `
-          <div class="vet-popup">
+        // Create info window content
+        const infoContent = `
+          <div style="max-width: 300px; padding: 8px;">
             <h3 style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">
               ${practice.name}
             </h3>
@@ -110,42 +158,77 @@ export default function VetMap({ practices, center, zoom = 10, onMarkerClick }: 
               <span style="color: #6b7280; font-size: 12px;">(${practice.reviewCount} reviews)</span>
             </div>
             ${practice.distance ? `<p style="margin: 4px 0; color: #059669; font-size: 12px; font-weight: 500;">${practice.distance < 1 ? `${(practice.distance * 5280).toFixed(0)}ft` : `${practice.distance.toFixed(1)}mi`} away</p>` : ''}
-            ${practice.emergencyServices ? '<span style="background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 500;">Emergency</span>' : ''}
+            <div style="margin: 8px 0 4px 0; display: flex; flex-wrap: gap: 4px;">
+              ${practice.emergencyServices ? '<span style="background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 500;">24/7 Emergency</span>' : ''}
+              ${practice.services.slice(0, 3).map(service => `<span style="background: #e5e7eb; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 11px;">${service}</span>`).join('')}
+            </div>
             ${practice.website ? `<p style="margin: 8px 0 0 0;"><a href="${practice.website}" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; text-decoration: none; font-size: 12px;">Visit Website →</a></p>` : ''}
           </div>
         `;
 
-        marker.bindPopup(popupContent);
+        const infoWindow = new window.google.maps.InfoWindow({
+          content: infoContent,
+        });
 
-        // Add click handler
-        marker.on('click', () => {
+        marker.addListener('click', () => {
+          // Close all other info windows
+          markersRef.current.forEach(m => {
+            if (m.infoWindow) {
+              m.infoWindow.close();
+            }
+          });
+          
+          infoWindow.open(mapInstanceRef.current, marker);
+          
           if (onMarkerClick) {
             onMarkerClick(practice);
           }
         });
 
+        // Store info window reference with marker
+        marker.infoWindow = infoWindow;
         markersRef.current.push(marker);
+        bounds.extend(position);
+        hasValidMarkers = true;
       }
     });
 
     // Fit map to show all markers if there are any
-    if (markersRef.current.length > 0) {
-      const group = new L.FeatureGroup(markersRef.current);
-      const bounds = group.getBounds();
-      if (bounds.isValid()) {
-        mapInstanceRef.current.fitBounds(bounds, { padding: [20, 20] });
-      }
-    } else {
-      // No markers, center on provided center
-      mapInstanceRef.current.setView(center, zoom);
+    if (hasValidMarkers && markersRef.current.length > 1) {
+      mapInstanceRef.current.fitBounds(bounds);
+      // Set max zoom to prevent over-zooming on single markers
+      const listener = window.google.maps.event.addListener(mapInstanceRef.current, 'idle', () => {
+        if (mapInstanceRef.current.getZoom() > 15) {
+          mapInstanceRef.current.setZoom(15);
+        }
+        window.google.maps.event.removeListener(listener);
+      });
+    } else if (hasValidMarkers && markersRef.current.length === 1) {
+      mapInstanceRef.current.setCenter(bounds.getCenter());
+      mapInstanceRef.current.setZoom(14);
     }
-  }, [practices, center, zoom, onMarkerClick]);
+  };
+
+  // Update markers when practices change
+  useEffect(() => {
+    if (scriptLoadedRef.current && window.google && mapInstanceRef.current) {
+      updateMarkers();
+    }
+  }, [practices, onMarkerClick]);
+
+  // Update map center when center prop changes
+  useEffect(() => {
+    if (mapInstanceRef.current && window.google) {
+      mapInstanceRef.current.setCenter({ lat: center[0], lng: center[1] });
+    }
+  }, [center]);
 
   return (
     <div 
       ref={mapRef} 
       className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50"
       data-testid="vet-map"
+      style={{ minHeight: '384px' }}
     />
   );
 }
