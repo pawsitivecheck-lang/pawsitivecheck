@@ -22,7 +22,6 @@ export default function Navbar() {
   const navigation = [
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vets', icon: Heart },
-    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
     { name: 'Community', href: '/community', icon: Users },
   ];
 

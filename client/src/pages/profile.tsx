@@ -6,18 +6,39 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserReview from "@/components/user-review";
-import { useQuery } from "@tanstack/react-query";
-import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp } from "lucide-react";
+import { PetForm } from "@/components/pet-form";
+import { SavedProductsList } from "@/components/saved-products-list";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { isUnauthorizedError } from "@/lib/authUtils";
+import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp, PlusCircle, Heart, Dog, Cat, Bird, Fish, Weight, Stethoscope, Edit, Trash2 } from "lucide-react";
+import type { PetProfile } from "@shared/schema";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [selectedPet, setSelectedPet] = useState<PetProfile | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const { data: userReviews = [] } = useQuery({
     queryKey: ['/api/user/reviews'],
+    enabled: isAuthenticated,
   });
 
   const { data: userScans = [] } = useQuery({
     queryKey: ['/api/scans'],
+    enabled: isAuthenticated,
+  });
+
+  const { data: pets = [], isLoading: isPetsLoading } = useQuery({
+    queryKey: ["/api/pets"],
+    enabled: isAuthenticated,
   });
 
   const getRankIcon = (reviewCount: number) => {
@@ -48,9 +69,116 @@ export default function Profile() {
     return { current: reviewCount, max: 5, nextRank: "Active Member" };
   };
 
-  const reviewCount = userReviews?.length || 0;
-  const scanCount = userScans?.length || 0;
+  const reviewCount = Array.isArray(userReviews) ? userReviews.length : 0;
+  const scanCount = Array.isArray(userScans) ? userScans.length : 0;
+  const petCount = Array.isArray(pets) ? pets.length : 0;
   const rankProgress = getNextRankProgress(reviewCount);
+
+  const createPetMutation = useMutation({
+    mutationFn: async (petData: any) => {
+      return await apiRequest("/api/pets", "POST", petData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
+      setIsCreateDialogOpen(false);
+      toast({
+        title: "Success",
+        description: "Pet profile created successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to create pet profile. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updatePetMutation = useMutation({
+    mutationFn: async ({ id, ...petData }: any) => {
+      return await apiRequest(`/api/pets/${id}`, "PUT", petData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
+      setIsEditDialogOpen(false);
+      setSelectedPet(null);
+      toast({
+        title: "Success",
+        description: "Pet profile updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to update pet profile. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deletePetMutation = useMutation({
+    mutationFn: async (petId: number) => {
+      return await apiRequest(`/api/pets/${petId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
+      toast({
+        title: "Success",
+        description: "Pet profile deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to delete pet profile. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const getSpeciesIcon = (species: string) => {
+    switch (species?.toLowerCase()) {
+      case 'dog': return Dog;
+      case 'cat': return Cat;
+      case 'bird': return Bird;
+      case 'fish': return Fish;
+      default: return Heart;
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -161,6 +289,21 @@ export default function Profile() {
               </CardContent>
             </Card>
 
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-pets">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-pink-100 dark:bg-pink-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Heart className="text-pink-600 dark:text-pink-400" />
+                </div>
+                <div className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2" data-testid="text-pet-count">
+                  {petCount}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">Pet Profiles</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Fifth stat card for rank progress - moved to separate row */}
+          <div className="mb-8">
             <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-rank-progress">
               <CardContent className="p-6 text-center">
                 <div className="w-12 h-12 mx-auto bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-4">
@@ -207,12 +350,15 @@ export default function Profile() {
 
           {/* Profile Tabs */}
           <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
                 My Reviews
               </TabsTrigger>
               <TabsTrigger value="scans" className="data-[state=active]:bg-green-100 dark:data-[state=active]:bg-green-900/20 data-[state=active]:text-green-600 dark:data-[state=active]:text-green-400" data-testid="tab-scans">
                 Scan History
+              </TabsTrigger>
+              <TabsTrigger value="pets" className="data-[state=active]:bg-pink-100 dark:data-[state=active]:bg-pink-900/20 data-[state=active]:text-pink-600 dark:data-[state=active]:text-pink-400" data-testid="tab-pets">
+                Pet Profiles
               </TabsTrigger>
               <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
                 Achievements
@@ -220,9 +366,9 @@ export default function Profile() {
             </TabsList>
 
             <TabsContent value="reviews" className="mt-6" data-testid="content-reviews">
-              {userReviews?.length > 0 ? (
+              {Array.isArray(userReviews) && userReviews.length > 0 ? (
                 <div className="space-y-6">
-                  {userReviews.map((review: any) => (
+                  {(userReviews as any[]).map((review: any) => (
                     <Card key={review.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`review-card-${review.id}`}>
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start mb-4">
@@ -288,9 +434,9 @@ export default function Profile() {
             </TabsContent>
 
             <TabsContent value="scans" className="mt-6" data-testid="content-scans">
-              {userScans?.length > 0 ? (
+              {Array.isArray(userScans) && userScans.length > 0 ? (
                 <div className="space-y-4">
-                  {userScans.map((scan: any) => (
+                  {(userScans as any[]).map((scan: any) => (
                     <Card key={scan.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`scan-card-${scan.id}`}>
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
@@ -334,6 +480,234 @@ export default function Profile() {
                     <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-start-scanning">
                       Start Scanning
                     </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            <TabsContent value="pets" className="mt-6" data-testid="content-pets">
+              {isPetsLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
+                  <p className="text-gray-500 dark:text-gray-400 mt-2">Loading pets...</p>
+                </div>
+              ) : Array.isArray(pets) && pets.length > 0 ? (
+                <div className="space-y-6">
+                  {/* Add Pet Button */}
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">My Pet Profiles</h3>
+                    <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="bg-pink-600 hover:bg-pink-700 text-white" data-testid="button-add-pet">
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          Add Pet
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>Create Pet Profile</DialogTitle>
+                        </DialogHeader>
+                        <PetForm 
+                          onSubmit={createPetMutation.mutate}
+                          isLoading={createPetMutation.isPending}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+
+                  {/* Pet Cards */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {(pets as any[]).map((pet: any) => {
+                      const SpeciesIcon = getSpeciesIcon(pet.species);
+                      return (
+                        <Card key={pet.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`pet-card-${pet.id}`}>
+                          <CardHeader className="pb-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <Avatar className="h-12 w-12">
+                                  {pet.profileImageUrl ? (
+                                    <AvatarImage src={pet.profileImageUrl} alt={pet.name} />
+                                  ) : (
+                                    <AvatarFallback className="bg-pink-100 dark:bg-pink-900/20">
+                                      <SpeciesIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+                                    </AvatarFallback>
+                                  )}
+                                </Avatar>
+                                <div>
+                                  <CardTitle className="text-lg text-gray-900 dark:text-gray-100" data-testid="text-pet-name">
+                                    {pet.name}
+                                  </CardTitle>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400 capitalize" data-testid="text-pet-species">
+                                    {pet.breed ? `${pet.breed} ${pet.species}` : pet.species}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Dialog open={isEditDialogOpen && selectedPet?.id === pet.id} onOpenChange={(open) => {
+                                  setIsEditDialogOpen(open);
+                                  if (!open) setSelectedPet(null);
+                                }}>
+                                  <DialogTrigger asChild>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      onClick={() => setSelectedPet(pet)}
+                                      data-testid={`button-edit-pet-${pet.id}`}
+                                    >
+                                      <Edit className="h-4 w-4" />
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                                    <DialogHeader>
+                                      <DialogTitle>Edit {pet.name}'s Profile</DialogTitle>
+                                    </DialogHeader>
+                                    <PetForm 
+                                      initialData={selectedPet || undefined}
+                                      onSubmit={(data) => updatePetMutation.mutate({ id: selectedPet?.id, ...data })}
+                                      isLoading={updatePetMutation.isPending}
+                                    />
+                                  </DialogContent>
+                                </Dialog>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => {
+                                    if (confirm(`Are you sure you want to delete ${pet.name}'s profile?`)) {
+                                      deletePetMutation.mutate(pet.id);
+                                    }
+                                  }}
+                                  className="text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-600 dark:hover:bg-red-900/20"
+                                  data-testid={`button-delete-pet-${pet.id}`}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-4">
+                              {/* Pet Details */}
+                              <div className="grid grid-cols-2 gap-4 text-sm">
+                                {pet.age && (
+                                  <div className="flex items-center gap-2">
+                                    <Calendar className="h-4 w-4 text-gray-400" />
+                                    <span className="text-gray-600 dark:text-gray-300">{pet.age} years old</span>
+                                  </div>
+                                )}
+                                {pet.weight && (
+                                  <div className="flex items-center gap-2">
+                                    <Weight className="h-4 w-4 text-gray-400" />
+                                    <span className="text-gray-600 dark:text-gray-300">{pet.weight} {pet.weightUnit || 'lbs'}</span>
+                                  </div>
+                                )}
+                                {pet.gender && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-gray-600 dark:text-gray-300 capitalize">{pet.gender}</span>
+                                  </div>
+                                )}
+                                {pet.isSpayedNeutered !== null && (
+                                  <div className="flex items-center gap-2">
+                                    <Stethoscope className="h-4 w-4 text-gray-400" />
+                                    <span className="text-gray-600 dark:text-gray-300">
+                                      {pet.isSpayedNeutered ? 'Spayed/Neutered' : 'Intact'}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Health Information */}
+                              {(pet.allergies?.length > 0 || pet.medicalConditions?.length > 0 || pet.dietaryRestrictions?.length > 0) && (
+                                <div className="space-y-2">
+                                  <Separator />
+                                  <div className="text-sm">
+                                    {pet.allergies?.length > 0 && (
+                                      <div className="mb-2">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">Allergies:</span>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {pet.allergies.map((allergy: string, index: number) => (
+                                            <Badge key={index} variant="outline" className="text-xs bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">
+                                              {allergy}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                    {pet.medicalConditions?.length > 0 && (
+                                      <div className="mb-2">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">Medical Conditions:</span>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {pet.medicalConditions.map((condition: string, index: number) => (
+                                            <Badge key={index} variant="outline" className="text-xs bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">
+                                              {condition}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                    {pet.dietaryRestrictions?.length > 0 && (
+                                      <div>
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">Dietary Restrictions:</span>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {pet.dietaryRestrictions.map((restriction: string, index: number) => (
+                                            <Badge key={index} variant="outline" className="text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                                              {restriction}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Notes */}
+                              {pet.notes && (
+                                <div className="text-sm">
+                                  <span className="font-medium text-gray-900 dark:text-gray-100">Notes:</span>
+                                  <p className="text-gray-600 dark:text-gray-300 mt-1">{pet.notes}</p>
+                                </div>
+                              )}
+
+                              {/* Saved Products */}
+                              <div className="pt-2">
+                                <Separator className="mb-4" />
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">Saved Products</h4>
+                                <SavedProductsList petId={pet.id} />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-pets">
+                  <CardContent className="p-12 text-center">
+                    <Heart className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-pets-title">
+                      No Pet Profiles Yet
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-pets-description">
+                      Create profiles for your pets to track product safety and preferences
+                    </p>
+                    <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="bg-pink-600 hover:bg-pink-700 text-white" data-testid="button-create-first-pet">
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          Create Your First Pet Profile
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>Create Pet Profile</DialogTitle>
+                        </DialogHeader>
+                        <PetForm 
+                          onSubmit={createPetMutation.mutate}
+                          isLoading={createPetMutation.isPending}
+                        />
+                      </DialogContent>
+                    </Dialog>
                   </CardContent>
                 </Card>
               )}
