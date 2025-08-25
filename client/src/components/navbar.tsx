@@ -133,7 +133,8 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 py-4" data-testid="nav-mobile-menu">
             {/* Mobile Search */}
-            <div className="px-4 pb-4">
+            <div className="px-4 pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Search Products</div>
               <HeaderSearch isMobile={true} />
             </div>
             <div className="space-y-2">
