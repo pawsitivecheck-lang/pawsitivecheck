@@ -161,11 +161,11 @@ export default function DatabaseSync() {
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Products</span>
                 <Badge variant="secondary">
-                  {syncStatus?.database.products.count || 0}
+                  {syncStatus?.database?.products?.count || 0}
                 </Badge>
               </div>
               <p className="text-xs text-cosmic-400">
-                Last sync: {formatDate(syncStatus?.database.products.lastSync || null)}
+                Last sync: {formatDate(syncStatus?.database?.products?.lastSync || null)}
               </p>
             </div>
             
@@ -173,11 +173,11 @@ export default function DatabaseSync() {
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Recalls</span>
                 <Badge variant="secondary">
-                  {syncStatus?.database.recalls.count || 0}
+                  {syncStatus?.database?.recalls?.count || 0}
                 </Badge>
               </div>
               <p className="text-xs text-cosmic-400">
-                Last sync: {formatDate(syncStatus?.database.recalls.lastSync || null)}
+                Last sync: {formatDate(syncStatus?.database?.recalls?.lastSync || null)}
               </p>
             </div>
             
@@ -185,11 +185,11 @@ export default function DatabaseSync() {
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Ingredients</span>
                 <Badge variant="secondary">
-                  {syncStatus?.database.ingredients.count || 0}
+                  {syncStatus?.database?.ingredients?.count || 0}
                 </Badge>
               </div>
               <p className="text-xs text-cosmic-400">
-                Last sync: {formatDate(syncStatus?.database.ingredients.lastSync || null)}
+                Last sync: {formatDate(syncStatus?.database?.ingredients?.lastSync || null)}
               </p>
             </div>
           </div>
