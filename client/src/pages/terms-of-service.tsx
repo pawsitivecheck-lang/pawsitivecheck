@@ -69,15 +69,20 @@ export default function TermsOfService() {
             </CardHeader>
             <CardContent className="space-y-4 text-cosmic-200">
               <p>
-                PawsitiveCheck provides mystical analysis and transparency services for pet products, including:
+                PawsitiveCheck provides comprehensive pet product safety analysis for traditional pets, farm animals, and exotic species (38+ supported species), including:
               </p>
               <ul className="space-y-2 ml-4">
-                <li>• Product scanning and cosmic safety analysis</li>
-                <li>• Ingredient transparency and blacklist detection</li>
-                <li>• Community reviews and ratings platform</li>
-                <li>• Product recall alerts and safety notifications</li>
-                <li>• Database of analyzed pet products</li>
+                <li>• Barcode scanning and image-based product identification</li>
+                <li>• AI-powered cosmic safety analysis and scoring</li>
+                <li>• Animal tagging system for species, breeds, and subspecies classification</li>
+                <li>• Community reviews with health tracking and pet-specific insights</li>
+                <li>• Real-time product recall alerts and safety notifications</li>
+                <li>• Progressive Web App (PWA) with offline functionality and push notifications</li>
+                <li>• Comprehensive database of analyzed pet products across all animal types</li>
               </ul>
+              <p className="mt-4 text-cosmic-300 text-sm">
+                Our PWA can be installed on your device and provides offline access to cached data. By installing our PWA, you consent to local data storage and push notification capabilities.
+              </p>
               <p className="mt-4 text-cosmic-300 text-sm">
                 Our services are provided "as is" and we reserve the right to modify, suspend, or discontinue any aspect of our services at any time.
               </p>
@@ -181,21 +186,21 @@ export default function TermsOfService() {
               <div>
                 <h3 className="font-semibold text-mystical-red mb-2">Pet Safety Disclaimer</h3>
                 <p className="text-sm">
-                  Our mystical analysis and cosmic scores are for informational purposes only and should not replace professional veterinary advice. Always consult with a qualified veterinarian regarding your pet's health and dietary needs.
+                  Our AI-powered analysis, cosmic scores, and animal tagging system are for informational purposes only and should not replace professional veterinary advice. Product suitability varies by individual animal health, and our 38+ species classifications provide general guidance only. Always consult with a qualified veterinarian regarding your pet's specific health and dietary needs, especially for exotic species.
                 </p>
               </div>
               
               <div>
                 <h3 className="font-semibold text-mystical-red mb-2">Accuracy of Information</h3>
                 <p className="text-sm">
-                  While we strive for accuracy, we cannot guarantee that all product information, analyses, or user reviews are complete, accurate, or up-to-date. Users should verify information independently.
+                  While we strive for accuracy in our barcode scanning, product identification, and AI analysis, we cannot guarantee that all product information, cosmic scores, animal tag classifications, or user reviews are complete, accurate, or up-to-date. External product databases may contain errors. Users should verify information independently and read actual product labels.
                 </p>
               </div>
 
               <div>
                 <h3 className="font-semibold text-mystical-red mb-2">Third-Party Content</h3>
                 <p className="text-sm">
-                  We are not responsible for the accuracy, completeness, or reliability of third-party content, including user reviews, external links, or product information provided by manufacturers.
+                  We are not responsible for the accuracy, completeness, or reliability of third-party content, including user reviews, external product databases (Open Pet Food Facts), manufacturer information, or recall data from regulatory agencies. Replit provides our authentication services independently.
                 </p>
               </div>
             </CardContent>
@@ -231,6 +236,27 @@ export default function TermsOfService() {
             </CardContent>
           </Card>
 
+          {/* PWA Installation */}
+          <Card className="cosmic-card" data-testid="card-pwa-installation">
+            <CardHeader>
+              <CardTitle className="text-starlight-400">Progressive Web App Installation</CardTitle>
+            </CardHeader>
+            <CardContent className="text-cosmic-200">
+              <p className="mb-4">
+                PawsitiveCheck may be installed as a PWA on your device. By installing our PWA, you agree that:
+              </p>
+              <ul className="space-y-1 ml-4">
+                <li>• You consent to local data storage for offline functionality</li>
+                <li>• You authorize push notifications for recall alerts (manageable in settings)</li>
+                <li>• Cached data may persist until you uninstall the app or clear browser data</li>
+                <li>• Device permissions (camera for scanning) may be requested as needed</li>
+              </ul>
+              <p className="mt-4 text-sm text-cosmic-300">
+                You may uninstall the PWA at any time through your device's app management settings.
+              </p>
+            </CardContent>
+          </Card>
+
           {/* Changes to Terms */}
           <Card className="cosmic-card" data-testid="card-changes">
             <CardHeader>
@@ -241,7 +267,7 @@ export default function TermsOfService() {
                 We reserve the right to modify these Terms at any time. If we make changes, we will post the updated Terms and update the "Last updated" date.
               </p>
               <p>
-                Your continued use of our services after any such changes constitutes your acceptance of the new Terms. If you do not agree to the modified Terms, you must stop using our services.
+                Your continued use of our services after any such changes constitutes your acceptance of the new Terms. If you do not agree to the modified Terms, you must stop using our services and uninstall any PWA installations.
               </p>
             </CardContent>
           </Card>

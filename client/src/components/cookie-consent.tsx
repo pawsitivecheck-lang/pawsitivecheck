@@ -214,11 +214,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies enable enhanced functionality and personalization features like 
-                  remembering your preferences and providing customized content.
+                  These cookies enable enhanced functionality like remembering your pet profiles, 
+                  animal tag preferences, product filters, and PWA settings for offline access.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: User preferences, personalized content, enhanced features
+                  Used for: Pet profile preferences, animal tag settings, product filters, PWA functionality
                 </div>
               </CardContent>
             </Card>
@@ -238,11 +238,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies help us understand how visitors interact with our website by collecting 
-                  anonymous information about usage patterns and site performance.
+                  These cookies help us understand how users interact with barcode scanning, product analysis, 
+                  and animal tagging features by collecting anonymous usage data and performance metrics.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Site analytics, performance monitoring, user behavior analysis
+                  Used for: Scan accuracy tracking, cosmic score analytics, animal tag usage, PWA performance
                 </div>
               </CardContent>
             </Card>
@@ -262,11 +262,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies are used to deliver personalized advertisements and measure the effectiveness 
-                  of advertising campaigns. This helps support our free pet safety platform.
+                  These cookies enable personalized pet product advertisements based on your animal species 
+                  and safety preferences. This helps support our free pet safety analysis platform.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Ad personalization, campaign tracking, revenue to support free platform
+                  Used for: Pet-specific ad targeting, Google AdSense optimization, revenue to support free platform
                 </div>
               </CardContent>
             </Card>
@@ -275,7 +275,7 @@ export default function CookieConsent() {
             <div className="text-center">
               <p className="text-xs text-gray-500 mb-4">
                 For more information about how we handle your data, please read our{" "}
-                <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>.
+                <a href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</a>.
               </p>
             </div>
 

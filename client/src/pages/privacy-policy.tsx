@@ -56,29 +56,34 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Personal Information</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Account information (email, name) when you register</li>
-                  <li>• Profile information and preferences you provide</li>
-                  <li>• Communication preferences and contact details</li>
+                  <li>• Account information through Replit authentication (email, name, profile image)</li>
+                  <li>• Pet profile data (names, species, breeds, age, weight, medical conditions, allergies)</li>
+                  <li>• Animal preferences and tagging selections</li>
+                  <li>• Communication preferences and notification settings</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Usage Information</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Product scans and analysis history</li>
-                  <li>• Reviews and ratings you submit</li>
-                  <li>• Search queries and browsing patterns</li>
-                  <li>• Device information and technical data</li>
+                  <li>• Barcode scans and product image uploads for identification</li>
+                  <li>• Product safety analysis history and cosmic scores</li>
+                  <li>• Community reviews, ratings, and health tracking data</li>
+                  <li>• Search queries for products across 38+ animal species</li>
+                  <li>• Animal tag associations and product suitability preferences</li>
+                  <li>• Recall alert subscription preferences</li>
                 </ul>
               </div>
 
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Automatically Collected Data</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• IP address and location data</li>
-                  <li>• Browser type and operating system</li>
-                  <li>• Cookies and similar tracking technologies</li>
-                  <li>• Usage analytics and performance metrics</li>
+                  <li>• IP address and general location for region-specific recall alerts</li>
+                  <li>• Device information for PWA installation and camera access</li>
+                  <li>• Browser type, operating system, and device capabilities</li>
+                  <li>• PWA usage data and offline access patterns</li>
+                  <li>• Cookies for authentication, preferences, and analytics</li>
+                  <li>• Product scanning performance and accuracy metrics</li>
                 </ul>
               </div>
             </CardContent>
@@ -96,10 +101,12 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Service Provision</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Provide product safety analysis and cosmic scoring</li>
-                  <li>• Maintain your account and personalized experience</li>
-                  <li>• Process and display your reviews and ratings</li>
-                  <li>• Send important product recall notifications</li>
+                  <li>• Provide AI-powered product safety analysis and cosmic scoring</li>
+                  <li>• Enable barcode scanning and image-based product identification</li>
+                  <li>• Maintain pet profiles and animal-specific product recommendations</li>
+                  <li>• Process community reviews with health tracking capabilities</li>
+                  <li>• Deliver targeted recall alerts based on your pet species and products</li>
+                  <li>• Provide offline PWA functionality and push notifications</li>
                 </ul>
               </div>
               
@@ -141,7 +148,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Service Providers</h3>
                 <p className="ml-4">
-                  We may share information with trusted third-party service providers who assist in operating our platform, conducting business, or serving users, provided they agree to maintain confidentiality.
+                  We share information with trusted third-party providers including Replit (authentication), Google AdSense (advertising), external product databases (Open Pet Food Facts), and cloud storage providers for PWA functionality, all under strict confidentiality agreements.
                 </p>
               </div>
               
@@ -211,7 +218,7 @@ export default function PrivacyPolicy() {
               </div>
               
               <p className="text-sm text-cosmic-300 mt-4">
-                To exercise these rights, please contact us at pawsitivecheck@gmail.com
+                To exercise these rights, please contact us at pawsitivecheck@gmail.com. Note that some data required for PWA offline functionality may be stored locally on your device and can be managed through your browser settings.
               </p>
             </CardContent>
           </Card>
@@ -223,10 +230,32 @@ export default function PrivacyPolicy() {
             </CardHeader>
             <CardContent className="text-cosmic-200">
               <p className="mb-4">
-                We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. You can manage your cookie preferences through our cookie consent banner or browser settings.
+                We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. Our Progressive Web App (PWA) also stores data locally for offline functionality.
               </p>
               <p>
                 For detailed information about the cookies we use, please see our Cookie Policy accessible through the cookie consent banner.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* PWA and Data Storage */}
+          <Card className="cosmic-card" data-testid="card-pwa-storage">
+            <CardHeader>
+              <CardTitle className="text-starlight-400">PWA and Offline Data Storage</CardTitle>
+            </CardHeader>
+            <CardContent className="text-cosmic-200">
+              <p className="mb-4">
+                PawsitiveCheck operates as a Progressive Web App (PWA) that can be installed on your device. To provide offline functionality, we store certain data locally on your device:
+              </p>
+              <ul className="space-y-1 ml-4">
+                <li>• Cached product information for offline access</li>
+                <li>• Your pet profiles and preferences</li>
+                <li>• Recent scan history and analysis results</li>
+                <li>• Application assets and interface elements</li>
+                <li>• Push notification preferences and registration data</li>
+              </ul>
+              <p className="mt-4 text-sm text-cosmic-300">
+                You can clear this stored data by uninstalling the PWA or clearing your browser's application data.
               </p>
             </CardContent>
           </Card>
