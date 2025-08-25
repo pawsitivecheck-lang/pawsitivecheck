@@ -4229,6 +4229,389 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =========================== FARM ANIMAL PRODUCTS & RESOURCES ROUTES ===========================
+
+  // Farm Animal Product Routes
+  app.get('/api/farm-animal-products', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const filters = {
+        productType: req.query.productType as string,
+        targetSpecies: req.query.targetSpecies as string,
+        category: req.query.category as string,
+      };
+      
+      const products = await storage.getFarmAnimalProducts(userId, filters);
+      res.json(products);
+    } catch (error) {
+      console.error("Error fetching farm animal products:", error);
+      res.status(500).json({ error: "Failed to fetch farm animal products" });
+    }
+  });
+
+  app.get('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const product = await storage.getFarmAnimalProduct(id, userId);
+      
+      if (!product) {
+        return res.status(404).json({ error: "Farm animal product not found" });
+      }
+      
+      res.json(product);
+    } catch (error) {
+      console.error("Error fetching farm animal product:", error);
+      res.status(500).json({ error: "Failed to fetch farm animal product" });
+    }
+  });
+
+  app.post('/api/farm-animal-products', isAuthenticated, async (req: any, res) => {
+    try {
+      const productData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const product = await storage.createFarmAnimalProduct(productData);
+      res.status(201).json(product);
+    } catch (error) {
+      console.error("Error creating farm animal product:", error);
+      res.status(500).json({ error: "Failed to create farm animal product" });
+    }
+  });
+
+  app.put('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const product = await storage.updateFarmAnimalProduct(id, updates, userId);
+      
+      if (!product) {
+        return res.status(404).json({ error: "Farm animal product not found" });
+      }
+      
+      res.json(product);
+    } catch (error) {
+      console.error("Error updating farm animal product:", error);
+      res.status(500).json({ error: "Failed to update farm animal product" });
+    }
+  });
+
+  app.delete('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteFarmAnimalProduct(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Farm animal product not found" });
+      }
+      
+      res.json({ message: "Farm animal product deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting farm animal product:", error);
+      res.status(500).json({ error: "Failed to delete farm animal product" });
+    }
+  });
+
+  // Information Source Routes
+  app.get('/api/information-sources', async (req: any, res) => {
+    try {
+      const filters = {
+        sourceType: req.query.sourceType as string,
+        category: req.query.category as string,
+        specialties: req.query.specialties ? (req.query.specialties as string).split(',') : undefined,
+      };
+      
+      const sources = await storage.getInformationSources(filters);
+      res.json(sources);
+    } catch (error) {
+      console.error("Error fetching information sources:", error);
+      res.status(500).json({ error: "Failed to fetch information sources" });
+    }
+  });
+
+  app.get('/api/information-sources/:id', async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const source = await storage.getInformationSource(id);
+      
+      if (!source) {
+        return res.status(404).json({ error: "Information source not found" });
+      }
+      
+      res.json(source);
+    } catch (error) {
+      console.error("Error fetching information source:", error);
+      res.status(500).json({ error: "Failed to fetch information source" });
+    }
+  });
+
+  app.post('/api/information-sources', isAuthenticated, async (req: any, res) => {
+    try {
+      const sourceData = req.body;
+      const source = await storage.createInformationSource(sourceData);
+      res.status(201).json(source);
+    } catch (error) {
+      console.error("Error creating information source:", error);
+      res.status(500).json({ error: "Failed to create information source" });
+    }
+  });
+
+  app.put('/api/information-sources/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      const source = await storage.updateInformationSource(id, updates);
+      
+      if (!source) {
+        return res.status(404).json({ error: "Information source not found" });
+      }
+      
+      res.json(source);
+    } catch (error) {
+      console.error("Error updating information source:", error);
+      res.status(500).json({ error: "Failed to update information source" });
+    }
+  });
+
+  app.delete('/api/information-sources/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteInformationSource(id);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Information source not found" });
+      }
+      
+      res.json({ message: "Information source deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting information source:", error);
+      res.status(500).json({ error: "Failed to delete information source" });
+    }
+  });
+
+  // Informational Resource Routes
+  app.get('/api/informational-resources', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const filters = {
+        resourceType: req.query.resourceType as string,
+        category: req.query.category as string,
+        targetSpecies: req.query.targetSpecies as string,
+        isFavorite: req.query.isFavorite === 'true' ? true : req.query.isFavorite === 'false' ? false : undefined,
+      };
+      
+      const resources = await storage.getInformationalResources(userId, filters);
+      res.json(resources);
+    } catch (error) {
+      console.error("Error fetching informational resources:", error);
+      res.status(500).json({ error: "Failed to fetch informational resources" });
+    }
+  });
+
+  app.get('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const resource = await storage.getInformationalResource(id, userId);
+      
+      if (!resource) {
+        return res.status(404).json({ error: "Informational resource not found" });
+      }
+      
+      // Increment view count
+      await storage.incrementResourceViews(id);
+      
+      res.json(resource);
+    } catch (error) {
+      console.error("Error fetching informational resource:", error);
+      res.status(500).json({ error: "Failed to fetch informational resource" });
+    }
+  });
+
+  app.post('/api/informational-resources', isAuthenticated, async (req: any, res) => {
+    try {
+      const resourceData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const resource = await storage.createInformationalResource(resourceData);
+      res.status(201).json(resource);
+    } catch (error) {
+      console.error("Error creating informational resource:", error);
+      res.status(500).json({ error: "Failed to create informational resource" });
+    }
+  });
+
+  app.put('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const resource = await storage.updateInformationalResource(id, updates, userId);
+      
+      if (!resource) {
+        return res.status(404).json({ error: "Informational resource not found" });
+      }
+      
+      res.json(resource);
+    } catch (error) {
+      console.error("Error updating informational resource:", error);
+      res.status(500).json({ error: "Failed to update informational resource" });
+    }
+  });
+
+  app.delete('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteInformationalResource(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Informational resource not found" });
+      }
+      
+      res.json({ message: "Informational resource deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting informational resource:", error);
+      res.status(500).json({ error: "Failed to delete informational resource" });
+    }
+  });
+
+  app.post('/api/informational-resources/:id/favorite', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const { isFavorite } = req.body;
+      
+      const success = await storage.markResourceAsFavorite(id, userId, isFavorite);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Informational resource not found" });
+      }
+      
+      res.json({ message: `Resource ${isFavorite ? 'added to' : 'removed from'} favorites` });
+    } catch (error) {
+      console.error("Error updating resource favorite status:", error);
+      res.status(500).json({ error: "Failed to update favorite status" });
+    }
+  });
+
+  // Farm Product Review Routes
+  app.get('/api/farm-animal-products/:productId/reviews', async (req: any, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      const reviews = await storage.getFarmProductReviews(productId);
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching farm product reviews:", error);
+      res.status(500).json({ error: "Failed to fetch farm product reviews" });
+    }
+  });
+
+  app.get('/api/user/farm-product-reviews', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const reviews = await storage.getUserFarmProductReviews(userId);
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching user farm product reviews:", error);
+      res.status(500).json({ error: "Failed to fetch user farm product reviews" });
+    }
+  });
+
+  app.get('/api/farm-product-reviews/:id', async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const review = await storage.getFarmProductReview(id);
+      
+      if (!review) {
+        return res.status(404).json({ error: "Farm product review not found" });
+      }
+      
+      res.json(review);
+    } catch (error) {
+      console.error("Error fetching farm product review:", error);
+      res.status(500).json({ error: "Failed to fetch farm product review" });
+    }
+  });
+
+  app.post('/api/farm-product-reviews', isAuthenticated, async (req: any, res) => {
+    try {
+      const reviewData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const review = await storage.createFarmProductReview(reviewData);
+      res.status(201).json(review);
+    } catch (error) {
+      console.error("Error creating farm product review:", error);
+      res.status(500).json({ error: "Failed to create farm product review" });
+    }
+  });
+
+  app.put('/api/farm-product-reviews/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const review = await storage.updateFarmProductReview(id, updates, userId);
+      
+      if (!review) {
+        return res.status(404).json({ error: "Farm product review not found" });
+      }
+      
+      res.json(review);
+    } catch (error) {
+      console.error("Error updating farm product review:", error);
+      res.status(500).json({ error: "Failed to update farm product review" });
+    }
+  });
+
+  app.delete('/api/farm-product-reviews/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteFarmProductReview(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Farm product review not found" });
+      }
+      
+      res.json({ message: "Farm product review deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting farm product review:", error);
+      res.status(500).json({ error: "Failed to delete farm product review" });
+    }
+  });
+
+  app.post('/api/farm-product-reviews/:id/vote-helpful', async (req: any, res) => {
+    try {
+      const reviewId = parseInt(req.params.id);
+      const success = await storage.voteReviewHelpful(reviewId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Farm product review not found" });
+      }
+      
+      res.json({ message: "Review marked as helpful" });
+    } catch (error) {
+      console.error("Error voting review helpful:", error);
+      res.status(500).json({ error: "Failed to vote review helpful" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

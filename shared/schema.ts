@@ -419,6 +419,119 @@ export const animalMovements = pgTable("animal_movements", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Farm animal specific products (different from pet products)
+export const farmAnimalProducts = pgTable("farm_animal_products", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  productName: varchar("product_name", { length: 255 }).notNull(),
+  productType: varchar("product_type", { length: 100 }).notNull(), // feed, medicine, equipment, tool, supplement
+  category: varchar("category", { length: 100 }), // dairy_equipment, poultry_feed, cattle_medicine, etc.
+  targetSpecies: text("target_species").array(), // cattle, swine, poultry, sheep, goat
+  brand: varchar("brand", { length: 100 }),
+  manufacturer: varchar("manufacturer", { length: 200 }),
+  supplierInfo: varchar("supplier_info", { length: 255 }),
+  modelNumber: varchar("model_number", { length: 100 }),
+  specifications: jsonb("specifications"), // technical specifications
+  unitPrice: decimal("unit_price", { precision: 10, scale: 2 }),
+  unit: varchar("unit", { length: 20 }), // bag, gallon, piece, dose
+  packageSize: varchar("package_size", { length: 50 }), // 50lb bag, 5gal bucket
+  activeIngredients: text("active_ingredients").array(),
+  withdrawalPeriod: integer("withdrawal_period"), // days for medications
+  approvalStatus: varchar("approval_status", { length: 50 }), // fda_approved, organic_certified, etc.
+  safetyWarnings: text("safety_warnings").array(),
+  storageRequirements: text("storage_requirements"),
+  applicationInstructions: text("application_instructions"),
+  dosageInformation: text("dosage_information"),
+  productImageUrl: varchar("product_image_url"),
+  documentationUrls: text("documentation_urls").array(), // links to manuals, safety sheets
+  notes: text("notes"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Information sources and suppliers
+export const informationSources = pgTable("information_sources", {
+  id: serial("id").primaryKey(),
+  sourceName: varchar("source_name", { length: 255 }).notNull(),
+  sourceType: varchar("source_type", { length: 50 }).notNull(), // supplier, university, government, research_org, manufacturer
+  category: varchar("category", { length: 100 }), // equipment, feed, medicine, education, research
+  contactPerson: varchar("contact_person", { length: 200 }),
+  email: varchar("email", { length: 255 }),
+  phone: varchar("phone", { length: 20 }),
+  website: varchar("website", { length: 500 }),
+  address: varchar("address", { length: 255 }),
+  city: varchar("city", { length: 100 }),
+  state: varchar("state", { length: 50 }),
+  zipCode: varchar("zip_code", { length: 20 }),
+  country: varchar("country", { length: 100 }).default("United States"),
+  specialties: text("specialties").array(), // dairy, poultry, beef, organic, etc.
+  certifications: text("certifications").array(), // organic, iso, fda, etc.
+  serviceAreas: text("service_areas").array(), // regions they serve
+  businessHours: varchar("business_hours", { length: 255 }),
+  establishedYear: integer("established_year"),
+  reputation: integer("reputation").default(5), // 1-5 star rating
+  notes: text("notes"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Educational and informational resources
+export const informationalResources = pgTable("informational_resources", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  resourceType: varchar("resource_type", { length: 50 }).notNull(), // article, guide, video, research_paper, webinar, course
+  category: varchar("category", { length: 100 }), // health, nutrition, breeding, housing, regulations, economics
+  targetSpecies: text("target_species").array(), // cattle, swine, poultry, sheep, goat, general
+  topicTags: text("topic_tags").array(), // vaccination, feed_efficiency, biosecurity, etc.
+  author: varchar("author", { length: 200 }),
+  sourceId: integer("source_id").references(() => informationSources.id), // reference to the source
+  publicationDate: timestamp("publication_date"),
+  lastUpdated: timestamp("last_updated"),
+  contentUrl: varchar("content_url", { length: 500 }),
+  downloadUrl: varchar("download_url", { length: 500 }),
+  description: text("description"),
+  keyPoints: text("key_points").array(), // bullet points of main takeaways
+  difficulty: varchar("difficulty", { length: 20 }).default("intermediate"), // beginner, intermediate, advanced
+  estimatedReadTime: integer("estimated_read_time"), // minutes
+  language: varchar("language", { length: 20 }).default("english"),
+  accessType: varchar("access_type", { length: 20 }).default("free"), // free, paid, subscription
+  rating: integer("rating"), // user rating 1-5
+  viewCount: integer("view_count").default(0),
+  isVerified: boolean("is_verified").default(false), // verified by experts
+  isFavorite: boolean("is_favorite").default(false), // user bookmarked
+  notes: text("notes"), // user's personal notes
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Product reviews and ratings for farm animal products
+export const farmProductReviews = pgTable("farm_product_reviews", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").references(() => farmAnimalProducts.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  rating: integer("rating").notNull(), // 1-5 stars
+  title: varchar("title", { length: 200 }),
+  reviewText: text("review_text"),
+  useCase: varchar("use_case", { length: 200 }), // what they used it for
+  animalSpecies: varchar("animal_species", { length: 50 }), // what animals it was used on
+  effectivenessRating: integer("effectiveness_rating"), // 1-5 scale
+  valueForMoney: integer("value_for_money"), // 1-5 scale
+  wouldRecommend: boolean("would_recommend"),
+  purchaseDate: timestamp("purchase_date"),
+  usageDuration: integer("usage_duration"), // days used
+  sideEffects: text("side_effects").array(),
+  pros: text("pros").array(),
+  cons: text("cons").array(),
+  photos: text("photos").array(),
+  isVerified: boolean("is_verified").default(false), // verified purchase
+  helpfulVotes: integer("helpful_votes").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const animalTags = pgTable("animal_tags", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
@@ -728,6 +841,30 @@ export const insertAnimalMovementSchema = createInsertSchema(animalMovements).om
   updatedAt: true,
 });
 
+export const insertFarmAnimalProductSchema = createInsertSchema(farmAnimalProducts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertInformationSourceSchema = createInsertSchema(informationSources).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertInformationalResourceSchema = createInsertSchema(informationalResources).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertFarmProductReviewSchema = createInsertSchema(farmProductReviews).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Livestock types
 export type LivestockOperation = typeof livestockOperations.$inferSelect;
 export type InsertLivestockOperation = z.infer<typeof insertLivestockOperationSchema>;
@@ -745,3 +882,11 @@ export type ProductionRecord = typeof productionRecords.$inferSelect;
 export type InsertProductionRecord = z.infer<typeof insertProductionRecordSchema>;
 export type AnimalMovement = typeof animalMovements.$inferSelect;
 export type InsertAnimalMovement = z.infer<typeof insertAnimalMovementSchema>;
+export type FarmAnimalProduct = typeof farmAnimalProducts.$inferSelect;
+export type InsertFarmAnimalProduct = z.infer<typeof insertFarmAnimalProductSchema>;
+export type InformationSource = typeof informationSources.$inferSelect;
+export type InsertInformationSource = z.infer<typeof insertInformationSourceSchema>;
+export type InformationalResource = typeof informationalResources.$inferSelect;
+export type InsertInformationalResource = z.infer<typeof insertInformationalResourceSchema>;
+export type FarmProductReview = typeof farmProductReviews.$inferSelect;
+export type InsertFarmProductReview = z.infer<typeof insertFarmProductReviewSchema>;

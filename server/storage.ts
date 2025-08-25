@@ -21,6 +21,10 @@ import {
   breedingRecords,
   productionRecords,
   animalMovements,
+  farmAnimalProducts,
+  informationSources,
+  informationalResources,
+  farmProductReviews,
   type User,
   type UpsertUser,
   type Product,
@@ -65,6 +69,14 @@ import {
   type InsertProductionRecord,
   type AnimalMovement,
   type InsertAnimalMovement,
+  type FarmAnimalProduct,
+  type InsertFarmAnimalProduct,
+  type InformationSource,
+  type InsertInformationSource,
+  type InformationalResource,
+  type InsertInformationalResource,
+  type FarmProductReview,
+  type InsertFarmProductReview,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -242,6 +254,38 @@ export interface IStorage {
   createAnimalMovement(movement: InsertAnimalMovement): Promise<AnimalMovement>;
   updateAnimalMovement(id: number, updates: Partial<InsertAnimalMovement>, userId: string): Promise<AnimalMovement | undefined>;
   deleteAnimalMovement(id: number, userId: string): Promise<boolean>;
+
+  // Farm animal product methods
+  getFarmAnimalProducts(userId: string, filters?: { productType?: string; targetSpecies?: string; category?: string }): Promise<FarmAnimalProduct[]>;
+  getFarmAnimalProduct(id: number, userId: string): Promise<FarmAnimalProduct | undefined>;
+  createFarmAnimalProduct(product: InsertFarmAnimalProduct): Promise<FarmAnimalProduct>;
+  updateFarmAnimalProduct(id: number, updates: Partial<InsertFarmAnimalProduct>, userId: string): Promise<FarmAnimalProduct | undefined>;
+  deleteFarmAnimalProduct(id: number, userId: string): Promise<boolean>;
+
+  // Information source methods
+  getInformationSources(filters?: { sourceType?: string; category?: string; specialties?: string[] }): Promise<InformationSource[]>;
+  getInformationSource(id: number): Promise<InformationSource | undefined>;
+  createInformationSource(source: InsertInformationSource): Promise<InformationSource>;
+  updateInformationSource(id: number, updates: Partial<InsertInformationSource>): Promise<InformationSource | undefined>;
+  deleteInformationSource(id: number): Promise<boolean>;
+
+  // Informational resource methods
+  getInformationalResources(userId: string, filters?: { resourceType?: string; category?: string; targetSpecies?: string; isFavorite?: boolean }): Promise<InformationalResource[]>;
+  getInformationalResource(id: number, userId: string): Promise<InformationalResource | undefined>;
+  createInformationalResource(resource: InsertInformationalResource): Promise<InformationalResource>;
+  updateInformationalResource(id: number, updates: Partial<InsertInformationalResource>, userId: string): Promise<InformationalResource | undefined>;
+  deleteInformationalResource(id: number, userId: string): Promise<boolean>;
+  markResourceAsFavorite(id: number, userId: string, isFavorite: boolean): Promise<boolean>;
+  incrementResourceViews(id: number): Promise<boolean>;
+
+  // Farm product review methods
+  getFarmProductReviews(productId: number): Promise<FarmProductReview[]>;
+  getUserFarmProductReviews(userId: string): Promise<FarmProductReview[]>;
+  getFarmProductReview(id: number): Promise<FarmProductReview | undefined>;
+  createFarmProductReview(review: InsertFarmProductReview): Promise<FarmProductReview>;
+  updateFarmProductReview(id: number, updates: Partial<InsertFarmProductReview>, userId: string): Promise<FarmProductReview | undefined>;
+  deleteFarmProductReview(id: number, userId: string): Promise<boolean>;
+  voteReviewHelpful(reviewId: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1181,6 +1225,232 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(animalMovements)
       .where(and(eq(animalMovements.id, id), eq(animalMovements.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== FARM ANIMAL PRODUCT METHODS ===============================
+
+  async getFarmAnimalProducts(userId: string, filters?: { productType?: string; targetSpecies?: string; category?: string }): Promise<FarmAnimalProduct[]> {
+    const conditions = [eq(farmAnimalProducts.userId, userId), eq(farmAnimalProducts.isActive, true)];
+    
+    if (filters?.productType) {
+      conditions.push(eq(farmAnimalProducts.productType, filters.productType));
+    }
+    if (filters?.category) {
+      conditions.push(eq(farmAnimalProducts.category, filters.category));
+    }
+    
+    return await db
+      .select()
+      .from(farmAnimalProducts)
+      .where(and(...conditions))
+      .orderBy(desc(farmAnimalProducts.createdAt));
+  }
+
+  async getFarmAnimalProduct(id: number, userId: string): Promise<FarmAnimalProduct | undefined> {
+    const [product] = await db
+      .select()
+      .from(farmAnimalProducts)
+      .where(and(eq(farmAnimalProducts.id, id), eq(farmAnimalProducts.userId, userId)));
+    return product;
+  }
+
+  async createFarmAnimalProduct(product: InsertFarmAnimalProduct): Promise<FarmAnimalProduct> {
+    const [newProduct] = await db.insert(farmAnimalProducts).values(product).returning();
+    return newProduct;
+  }
+
+  async updateFarmAnimalProduct(id: number, updates: Partial<InsertFarmAnimalProduct>, userId: string): Promise<FarmAnimalProduct | undefined> {
+    const [product] = await db
+      .update(farmAnimalProducts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(farmAnimalProducts.id, id), eq(farmAnimalProducts.userId, userId)))
+      .returning();
+    return product;
+  }
+
+  async deleteFarmAnimalProduct(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(farmAnimalProducts)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(farmAnimalProducts.id, id), eq(farmAnimalProducts.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== INFORMATION SOURCE METHODS ===============================
+
+  async getInformationSources(filters?: { sourceType?: string; category?: string; specialties?: string[] }): Promise<InformationSource[]> {
+    const conditions = [eq(informationSources.isActive, true)];
+    
+    if (filters?.sourceType) {
+      conditions.push(eq(informationSources.sourceType, filters.sourceType));
+    }
+    if (filters?.category) {
+      conditions.push(eq(informationSources.category, filters.category));
+    }
+    
+    return await db
+      .select()
+      .from(informationSources)
+      .where(and(...conditions))
+      .orderBy(desc(informationSources.reputation), informationSources.sourceName);
+  }
+
+  async getInformationSource(id: number): Promise<InformationSource | undefined> {
+    const [source] = await db
+      .select()
+      .from(informationSources)
+      .where(eq(informationSources.id, id));
+    return source;
+  }
+
+  async createInformationSource(source: InsertInformationSource): Promise<InformationSource> {
+    const [newSource] = await db.insert(informationSources).values(source).returning();
+    return newSource;
+  }
+
+  async updateInformationSource(id: number, updates: Partial<InsertInformationSource>): Promise<InformationSource | undefined> {
+    const [source] = await db
+      .update(informationSources)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(informationSources.id, id))
+      .returning();
+    return source;
+  }
+
+  async deleteInformationSource(id: number): Promise<boolean> {
+    const result = await db
+      .update(informationSources)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(eq(informationSources.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== INFORMATIONAL RESOURCE METHODS ===============================
+
+  async getInformationalResources(userId: string, filters?: { resourceType?: string; category?: string; targetSpecies?: string; isFavorite?: boolean }): Promise<InformationalResource[]> {
+    const conditions = [eq(informationalResources.userId, userId)];
+    
+    if (filters?.resourceType) {
+      conditions.push(eq(informationalResources.resourceType, filters.resourceType));
+    }
+    if (filters?.category) {
+      conditions.push(eq(informationalResources.category, filters.category));
+    }
+    if (filters?.isFavorite !== undefined) {
+      conditions.push(eq(informationalResources.isFavorite, filters.isFavorite));
+    }
+    
+    return await db
+      .select()
+      .from(informationalResources)
+      .where(and(...conditions))
+      .orderBy(desc(informationalResources.createdAt));
+  }
+
+  async getInformationalResource(id: number, userId: string): Promise<InformationalResource | undefined> {
+    const [resource] = await db
+      .select()
+      .from(informationalResources)
+      .where(and(eq(informationalResources.id, id), eq(informationalResources.userId, userId)));
+    return resource;
+  }
+
+  async createInformationalResource(resource: InsertInformationalResource): Promise<InformationalResource> {
+    const [newResource] = await db.insert(informationalResources).values(resource).returning();
+    return newResource;
+  }
+
+  async updateInformationalResource(id: number, updates: Partial<InsertInformationalResource>, userId: string): Promise<InformationalResource | undefined> {
+    const [resource] = await db
+      .update(informationalResources)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(informationalResources.id, id), eq(informationalResources.userId, userId)))
+      .returning();
+    return resource;
+  }
+
+  async deleteInformationalResource(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(informationalResources)
+      .where(and(eq(informationalResources.id, id), eq(informationalResources.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async markResourceAsFavorite(id: number, userId: string, isFavorite: boolean): Promise<boolean> {
+    const result = await db
+      .update(informationalResources)
+      .set({ isFavorite, updatedAt: new Date() })
+      .where(and(eq(informationalResources.id, id), eq(informationalResources.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async incrementResourceViews(id: number): Promise<boolean> {
+    const result = await db
+      .update(informationalResources)
+      .set({ 
+        viewCount: sql`${informationalResources.viewCount} + 1`,
+        updatedAt: new Date() 
+      })
+      .where(eq(informationalResources.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== FARM PRODUCT REVIEW METHODS ===============================
+
+  async getFarmProductReviews(productId: number): Promise<FarmProductReview[]> {
+    return await db
+      .select()
+      .from(farmProductReviews)
+      .where(eq(farmProductReviews.productId, productId))
+      .orderBy(desc(farmProductReviews.createdAt));
+  }
+
+  async getUserFarmProductReviews(userId: string): Promise<FarmProductReview[]> {
+    return await db
+      .select()
+      .from(farmProductReviews)
+      .where(eq(farmProductReviews.userId, userId))
+      .orderBy(desc(farmProductReviews.createdAt));
+  }
+
+  async getFarmProductReview(id: number): Promise<FarmProductReview | undefined> {
+    const [review] = await db
+      .select()
+      .from(farmProductReviews)
+      .where(eq(farmProductReviews.id, id));
+    return review;
+  }
+
+  async createFarmProductReview(review: InsertFarmProductReview): Promise<FarmProductReview> {
+    const [newReview] = await db.insert(farmProductReviews).values(review).returning();
+    return newReview;
+  }
+
+  async updateFarmProductReview(id: number, updates: Partial<InsertFarmProductReview>, userId: string): Promise<FarmProductReview | undefined> {
+    const [review] = await db
+      .update(farmProductReviews)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(farmProductReviews.id, id), eq(farmProductReviews.userId, userId)))
+      .returning();
+    return review;
+  }
+
+  async deleteFarmProductReview(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(farmProductReviews)
+      .where(and(eq(farmProductReviews.id, id), eq(farmProductReviews.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async voteReviewHelpful(reviewId: number): Promise<boolean> {
+    const result = await db
+      .update(farmProductReviews)
+      .set({ 
+        helpfulVotes: sql`${farmProductReviews.helpfulVotes} + 1`,
+        updatedAt: new Date() 
+      })
+      .where(eq(farmProductReviews.id, reviewId));
     return (result.rowCount ?? 0) > 0;
   }
 }
