@@ -552,7 +552,7 @@ export default function Landing() {
             
             <div className="text-center">
               <p className="text-gray-400 text-sm" data-testid="text-copyright">
-                © 2024 PawsitiveCheck - Professional pet product safety analysis platform
+                © 2025 PawsitiveCheck - Professional pet product safety analysis platform
               </p>
               <p className="text-gray-500 text-xs mt-2" data-testid="text-motto">
                 "Transparency for safer pets, accountability for better products"
