@@ -131,9 +131,9 @@ export default function Home() {
           {/* Dashboard Grid */}
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Recent Scans */}
-            <Card className="bg-white border border-gray-200" data-testid="card-recent-scans">
+            <Card className="bg-card border border-border" data-testid="card-recent-scans">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-gray-800">
+                <CardTitle className="flex items-center gap-2 text-foreground">
                   <History className="h-5 w-5" />
                   Recent Safety Analyses
                 </CardTitle>
