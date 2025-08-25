@@ -248,6 +248,7 @@ export default function PrivacyPolicy() {
           </Card>
         </div>
       </div>
+      </div>
     </div>
   );
 }

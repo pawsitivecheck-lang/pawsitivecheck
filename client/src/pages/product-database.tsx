@@ -51,8 +51,8 @@ export default function ProductDatabase() {
   });
 
   // Get unique brands and categories for filter options
-  const uniqueBrands = Array.from(new Set(products?.map((p: any) => p.brand) || []));
-  const uniqueCategories = Array.from(new Set(products?.map((p: any) => p.category) || []));
+  const uniqueBrands: string[] = Array.from(new Set(products?.map((p: any) => p.brand).filter(Boolean) || []));
+  const uniqueCategories: string[] = Array.from(new Set(products?.map((p: any) => p.category).filter(Boolean) || []));
   
   const filteredProducts = products?.filter((product: any) => {
     // Clarity filter

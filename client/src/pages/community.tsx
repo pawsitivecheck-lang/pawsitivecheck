@@ -20,7 +20,7 @@ export default function Community() {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: userReviews } = useQuery({
+  const { data: userReviews } = useQuery<any[]>({
     queryKey: ['/api/user/reviews'],
   });
 
@@ -133,7 +133,7 @@ export default function Community() {
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-mystical-purple mb-2" data-testid="text-active-members">
-                    {new Set(allReviews?.map((r: any) => r.userId)).size || 0}
+                    {allReviews ? new Set(allReviews.map((r: any) => r.userId)).size : 0}
                   </div>
                   <p className="text-cosmic-300">Active Seekers</p>
                 </div>
@@ -163,14 +163,14 @@ export default function Community() {
                       <h3 className="text-xl font-semibold text-cosmic-100" data-testid="text-user-name">
                         {user.firstName || 'Anonymous Seeker'}
                       </h3>
-                      {getRankIcon(userReviews?.length || 0)}
+                      {getRankIcon(userReviews ? userReviews.length : 0)}
                     </div>
                     <div className="flex items-center gap-4">
                       <Badge className="bg-mystical-purple/20 text-mystical-purple border-mystical-purple" data-testid="badge-user-rank">
-                        {getRankTitle(userReviews?.length || 0)}
+                        {getRankTitle(userReviews ? userReviews.length : 0)}
                       </Badge>
                       <span className="text-cosmic-400 text-sm" data-testid="text-user-reviews-count">
-                        {userReviews?.length || 0} mystical insights shared
+                        {userReviews ? userReviews.length : 0} mystical insights shared
                       </span>
                     </div>
                   </div>
