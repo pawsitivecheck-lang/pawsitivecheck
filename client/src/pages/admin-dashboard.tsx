@@ -334,28 +334,28 @@ export default function AdminDashboard() {
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Button 
-                  className="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100"
+                  className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
                   data-testid="button-enhance-analysis"
                 >
                   <ChartLine className="mr-2 h-4 w-4" />
                   Enhance Analysis
                 </Button>
                 <Button 
-                  className="bg-green-50 text-green-600 border border-green-200 hover:bg-green-100"
+                  className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
                   data-testid="button-update-database"
                 >
                   <Package className="mr-2 h-4 w-4" />
                   Update Database
                 </Button>
                 <Button 
-                  className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
+                  className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
                   data-testid="button-issue-recall"
                 >
                   <AlertTriangle className="mr-2 h-4 w-4" />
                   Issue Recall
                 </Button>
                 <Button 
-                  className="bg-green-50 text-green-600 border border-green-200 hover:bg-green-100"
+                  className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
                   data-testid="button-approve-product"
                 >
                   <Shield className="mr-2 h-4 w-4" />
@@ -367,7 +367,7 @@ export default function AdminDashboard() {
           
           {/* Database Synchronization Section */}
           <div className="space-y-6 mt-12">
-            <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
               <Database className="h-6 w-6" />
               Database Management
             </h2>
@@ -376,14 +376,14 @@ export default function AdminDashboard() {
 
           {/* Admin Guidelines */}
           <div className="mt-12">
-            <Card className="border border-blue-200 bg-blue-50" data-testid="card-admin-guidelines">
+            <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950" data-testid="card-admin-guidelines">
               <CardContent className="p-8">
                 <div className="text-center max-w-2xl mx-auto">
                   <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6">
                     <Shield className="text-2xl text-white" />
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-800 mb-4" data-testid="text-admin-guidelines-title">Administrator Guidelines</h3>
-                  <p className="text-gray-600 leading-relaxed" data-testid="text-admin-guidelines">
+                  <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4" data-testid="text-admin-guidelines-title">Administrator Guidelines</h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed" data-testid="text-admin-guidelines">
                     As a platform administrator, you have the responsibility to ensure pet product safety data is accurate and up-to-date. 
                     Use these tools to maintain data quality, manage recalls promptly, and keep pet owners informed about product safety.
                   </p>
