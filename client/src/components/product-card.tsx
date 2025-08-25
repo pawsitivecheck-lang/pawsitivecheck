@@ -16,6 +16,7 @@ interface ProductCardProps {
     imageUrl?: string;
     sourceUrl?: string;
     suspiciousIngredients?: string[];
+    disposalInstructions?: string;
   };
   onClick: () => void;
 }
@@ -204,6 +205,18 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                   View Brand Info →
                 </a>
               </div>
+            </div>
+          )}
+
+          {/* Disposal Instructions */}
+          {product.disposalInstructions && (
+            <div className="p-3 bg-cosmic-700/20 rounded border border-cosmic-600/30 mb-3">
+              <h4 className="text-cosmic-300 text-xs font-semibold mb-2 flex items-center gap-2">
+                ♻️ Safe Disposal Instructions
+              </h4>
+              <p className="text-cosmic-400 text-xs leading-relaxed" data-testid={`disposal-instructions-${product.id}`}>
+                {product.disposalInstructions}
+              </p>
             </div>
           )}
 

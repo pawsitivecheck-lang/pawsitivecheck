@@ -189,6 +189,14 @@ export default function Home() {
                             {recall.affectedBatches.length > 2 && ` + ${recall.affectedBatches.length - 2} more`}
                           </div>
                         )}
+                        {recall.disposalInstructions && (
+                          <div className="mt-2 p-2 bg-mystical-red/5 rounded border border-mystical-red/20">
+                            <p className="text-xs font-semibold text-mystical-red mb-1">⚠️ Safe Disposal:</p>
+                            <p className="text-xs text-cosmic-400" data-testid={`disposal-instructions-${recall.id}`}>
+                              {recall.disposalInstructions}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

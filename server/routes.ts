@@ -807,6 +807,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         cosmicClarity: finalScore >= 80 ? 'blessed' : finalScore >= 50 ? 'questionable' : 'cursed',
         transparencyLevel: aiAnalysis.transparencyLevel,
         suspiciousIngredients: allSuspiciousIngredients,
+        disposalInstructions: aiAnalysis.disposalInstructions,
         userGuidance: guidance,
         lastAnalyzed: new Date(),
       };

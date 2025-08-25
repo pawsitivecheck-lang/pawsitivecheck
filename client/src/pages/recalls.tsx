@@ -233,6 +233,23 @@ export default function Recalls() {
                       </div>
                     </div>
 
+                    {/* Safe Disposal Instructions */}
+                    {recall.disposalInstructions && (
+                      <div className="mb-4 p-4 bg-cosmic-700/10 rounded-lg border border-cosmic-600/20">
+                        <h4 className="text-cosmic-300 font-semibold mb-2 flex items-center gap-2">
+                          ♻️ Safe Disposal Instructions
+                        </h4>
+                        <p className="text-cosmic-200 text-sm leading-relaxed" data-testid={`disposal-instructions-${recall.id}`}>
+                          {recall.disposalInstructions}
+                        </p>
+                        <div className="mt-3 p-2 bg-mystical-red/10 rounded border border-mystical-red/30">
+                          <p className="text-mystical-red text-xs font-medium">
+                            ⚠️ IMPORTANT: Do not donate, sell, or give away recalled products to others.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     {recall.affectedBatches?.length > 0 && (
                       <div className="mb-4">
                         <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">

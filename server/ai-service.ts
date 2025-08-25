@@ -27,6 +27,7 @@ export async function analyzeProductSafety(productData: {
   cosmicClarity: 'blessed' | 'questionable' | 'cursed';
   transparencyLevel: 'excellent' | 'good' | 'poor' | 'unknown';
   suspiciousIngredients: string[];
+  disposalInstructions: string;
   analysis: string;
 }> {
   try {
@@ -44,6 +45,7 @@ Provide analysis in this exact JSON format:
   "cosmicClarity": "blessed" | "questionable" | "cursed",
   "transparencyLevel": "excellent" | "good" | "poor" | "unknown", 
   "suspiciousIngredients": [array of concerning ingredients],
+  "disposalInstructions": "detailed, specific disposal instructions for this product type",
   "analysis": "detailed explanation of safety assessment"
 }
 
@@ -69,6 +71,7 @@ Consider:
       cosmicClarity: analysis.cosmicClarity,
       transparencyLevel: analysis.transparencyLevel,
       suspiciousIngredients: analysis.suspiciousIngredients || [],
+      disposalInstructions: analysis.disposalInstructions,
       analysis: analysis.analysis
     };
   } catch (error) {
@@ -78,6 +81,7 @@ Consider:
       cosmicClarity: 'questionable',
       transparencyLevel: 'unknown',
       suspiciousIngredients: [],
+      disposalInstructions: 'Dispose of according to local waste management guidelines. Do not flush or pour down drains.',
       analysis: 'Unable to analyze product safety at this time.'
     };
   }
@@ -118,6 +122,7 @@ export async function enhanceRecallInformation(recallData: any): Promise<{
   enhancedReason: string;
   userGuidance: string;
   riskLevel: string;
+  disposalInstructions: string;
 }> {
   try {
     const prompt = `Enhance this pet product recall information for pet owners:
@@ -131,7 +136,8 @@ Provide response in JSON format:
 {
   "enhancedReason": "Clear, detailed explanation of what's wrong",
   "userGuidance": "Specific steps pet owners should take",
-  "riskLevel": "What level of concern this represents for pets"
+  "riskLevel": "What level of concern this represents for pets",
+  "disposalInstructions": "Detailed, safe disposal instructions for the recalled product"
 }
 
 Make it informative but not panic-inducing.`;
@@ -149,7 +155,47 @@ Make it informative but not panic-inducing.`;
     return {
       enhancedReason: recallData.reason,
       userGuidance: 'Contact your veterinarian for specific advice about this recall.',
-      riskLevel: 'Follow official guidance from regulatory authorities.'
+      riskLevel: 'Follow official guidance from regulatory authorities.',
+      disposalInstructions: 'Dispose of product safely according to local waste management guidelines. Do not donate, sell, or give away recalled products.'
     };
+  }
+}
+
+export async function generateDisposalInstructions(productData: {
+  name: string;
+  category: string;
+  isBlacklisted?: boolean;
+  isRecalled?: boolean;
+  severity?: string;
+}): Promise<string> {
+  try {
+    const prompt = `Generate specific disposal instructions for this pet product:
+
+Product: ${productData.name}
+Category: ${productData.category}
+Safety Status: ${productData.isRecalled ? 'RECALLED' : productData.isBlacklisted ? 'BLACKLISTED' : 'Normal'}
+${productData.severity ? `Severity: ${productData.severity}` : ''}
+
+Provide detailed, actionable disposal instructions considering:
+- Product type and materials
+- Safety concerns 
+- Environmental impact
+- Local regulations
+- Pet safety during disposal
+- Recycling options where applicable
+
+Keep instructions specific, practical, and safety-focused.`;
+
+    const response = await anthropic.messages.create({
+      // "claude-sonnet-4-20250514"
+      model: DEFAULT_MODEL_STR,
+      max_tokens: 400,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    return response.content[0].text;
+  } catch (error) {
+    console.error('Disposal instructions generation failed:', error);
+    return 'Dispose of according to local waste management guidelines. Keep away from children and pets during disposal. Contact local environmental services for specific guidance.';
   }
 }
