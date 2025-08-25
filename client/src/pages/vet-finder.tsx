@@ -23,6 +23,7 @@ import {
   Globe,
   Loader2
 } from "lucide-react";
+import Footer from "@/components/footer";
 
 interface VetPractice {
   id: string;
@@ -524,6 +525,8 @@ export default function VetFinder() {
           )}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }

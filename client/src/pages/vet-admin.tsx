@@ -27,6 +27,7 @@ import {
   Building2,
   Search
 } from "lucide-react";
+import Footer from "@/components/footer";
 
 type VeterinaryOffice = {
   id: number;
@@ -635,6 +636,8 @@ export default function VetAdmin() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }

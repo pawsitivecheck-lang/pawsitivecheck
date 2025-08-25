@@ -16,6 +16,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { Sparkles, Upload, ArrowLeft, AlertTriangle } from "lucide-react";
 import type { UploadResult } from "@uppy/core";
 import { insertProductUpdateSubmissionSchema } from "@shared/schema";
+import Footer from "@/components/footer";
 
 const submitUpdateSchema = insertProductUpdateSubmissionSchema.extend({
   productName: z.string().optional(), // For display purposes
@@ -360,6 +361,8 @@ export default function SubmitProductUpdate() {
           </CardContent>
         </Card>
       </div>
+      
+      <Footer />
     </div>
   );
 }

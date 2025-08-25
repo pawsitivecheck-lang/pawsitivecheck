@@ -12,6 +12,7 @@ import { Sparkles, Eye, CheckCircle, XCircle, Clock, FileText, Calendar, User, P
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import type { ProductUpdateSubmission } from "@shared/schema";
+import Footer from "@/components/footer";
 
 type SubmissionStatus = 'pending' | 'approved' | 'rejected' | 'in_review';
 
@@ -320,6 +321,8 @@ export default function AdminProductSubmissions() {
           </DialogContent>
         </Dialog>
       </div>
+      
+      <Footer />
     </div>
   );
 }
