@@ -119,16 +119,17 @@ export default function DatabaseSync() {
     },
     onSuccess: (result) => {
       toast({
-        title: "Full Sync Complete",
+        title: "🌟 COSMIC SYNCHRONIZATION COMPLETE! 🌟",
         description: result.message,
+        duration: 8000,
       });
       refetchStatus();
       setActiveSync(null);
     },
     onError: () => {
       toast({
-        title: "Sync Failed",
-        description: "Full database synchronization failed",
+        title: "💥 Cosmic Synchronization Failed",
+        description: "The cosmic forces were disrupted during synchronization. Please try again.",
         variant: "destructive",
       });
       setActiveSync(null);
@@ -268,19 +269,41 @@ export default function DatabaseSync() {
               Sync Ingredients
             </Button>
             
-            <Button
-              onClick={() => syncAllMutation.mutate()}
-              disabled={syncAllMutation.isPending || activeSync !== null}
-              className="mystical-button"
-              data-testid="button-sync-all"
-            >
-              {activeSync === 'all' ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Zap className="h-4 w-4 mr-2" />
+            <div className="space-y-4">
+              <Button
+                onClick={() => syncAllMutation.mutate()}
+                disabled={syncAllMutation.isPending || activeSync !== null}
+                className="w-full bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 text-white font-bold py-4 px-6 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                data-testid="button-sync-all"
+              >
+                {activeSync === 'all' ? (
+                  <>
+                    <RefreshCw className="h-6 w-6 mr-3 animate-spin" />
+                    🌟 COSMIC SYNCHRONIZATION IN PROGRESS... 🌟
+                  </>
+                ) : (
+                  <>
+                    <Zap className="h-6 w-6 mr-3" />
+                    🚀 SYNC EVERYTHING - FULL COSMIC REFRESH 🚀
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'all' && (
+                <div className="text-center space-y-2">
+                  <div className="text-cosmic-300 font-medium animate-pulse">
+                    ✨ Channeling cosmic energies across all databases... ✨
+                  </div>
+                  <div className="text-sm text-cosmic-400">
+                    This comprehensive sync updates products, recalls, ingredients, safety scores, cosmic clarity, and transparency levels
+                  </div>
+                </div>
               )}
-              Full Sync
-            </Button>
+              
+              <div className="text-center text-sm text-cosmic-500 bg-cosmic-800/30 p-3 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">⚡ ULTIMATE SYNC POWER:</strong> This cosmic operation will refresh ALL platform data including external product sources, regulatory recalls, veterinary ingredient databases, recalculated safety scores, updated cosmic clarity assessments, and comprehensive transparency evaluations.
+              </div>
+            </div>
           </div>
           
           <p className="text-sm text-cosmic-400 mt-4">
