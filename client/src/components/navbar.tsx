@@ -17,6 +17,7 @@ export default function Navbar() {
   const { user } = useAuth();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
   const navigation = [
     { name: 'Product Scanner', href: '/scan', icon: Camera },
@@ -56,70 +57,17 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <ThemeToggle />
             
-            {/* Profile Dropdown - Desktop only */}
+            {/* Hamburger Menu Button - Desktop */}
             <div className="hidden md:block">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                    data-testid="nav-profile-dropdown"
-                >
-                  {user?.profileImageUrl ? (
-                    <img 
-                      src={user.profileImageUrl} 
-                      alt="Profile" 
-                      className="w-5 h-5 rounded-full mr-2"
-                    />
-                  ) : (
-                    <Users className="mr-2 h-4 w-4" />
-                  )}
-                  {user?.firstName || 'Profile'}
-                  <ChevronDown className="ml-1 h-3 w-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {/* Navigation Items */}
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <DropdownMenuItem key={item.name} asChild>
-                      <Link href={item.href} className="flex items-center w-full">
-                        <Icon className="mr-2 h-4 w-4" />
-                        {item.name}
-                      </Link>
-                    </DropdownMenuItem>
-                  );
-                })}
-                
-                <DropdownMenuSeparator />
-                
-                {/* Profile Items */}
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="flex items-center w-full">
-                    <Users className="mr-2 h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                {user?.isAdmin && (
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin" className="flex items-center w-full">
-                      <Crown className="mr-2 h-4 w-4" />
-                      Admin Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem 
-                  onClick={() => window.location.href = '/api/logout'}
-                  className="text-red-600 hover:text-red-600 hover:bg-red-50"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600 dark:text-gray-300 p-2 border border-gray-200 dark:border-gray-600"
+                onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
+                data-testid="nav-hamburger-menu"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
             </div>
 
             {/* Mobile menu button */}
@@ -134,6 +82,118 @@ export default function Navbar() {
             </Button>
           </div>
         </div>
+
+        {/* Desktop Hamburger Sidebar */}
+        {isHamburgerMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsHamburgerMenuOpen(false)}
+              data-testid="hamburger-backdrop"
+            />
+            
+            {/* Sidebar */}
+            <div className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-800 shadow-xl z-50 transform translate-x-0 transition-transform duration-300">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center space-x-3">
+                  {user?.profileImageUrl ? (
+                    <img 
+                      src={user.profileImageUrl} 
+                      alt="Profile" 
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                      <Users className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                      {user?.firstName || 'User'}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {user?.email}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsHamburgerMenuOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              {/* Navigation Items */}
+              <div className="p-4 space-y-2">
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                  Navigation
+                </div>
+                {navigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link key={item.name} href={item.href}>
+                      <div 
+                        className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                          isActivePage(item.href) 
+                            ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' 
+                            : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        }`}
+                        onClick={() => setIsHamburgerMenuOpen(false)}
+                        data-testid={`hamburger-${item.href.slice(1)}`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span className="font-medium">{item.name}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Profile Items */}
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                  Account
+                </div>
+                <div className="space-y-2">
+                  <Link href="/profile">
+                    <div 
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => setIsHamburgerMenuOpen(false)}
+                    >
+                      <Users className="h-5 w-5" />
+                      <span className="font-medium">Profile</span>
+                    </div>
+                  </Link>
+                  
+                  {user?.isAdmin && (
+                    <Link href="/admin">
+                      <div 
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        onClick={() => setIsHamburgerMenuOpen(false)}
+                      >
+                        <Crown className="h-5 w-5" />
+                        <span className="font-medium">Admin Dashboard</span>
+                      </div>
+                    </Link>
+                  )}
+                  
+                  <div 
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
+                    onClick={() => window.location.href = '/api/logout'}
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span className="font-medium">Sign Out</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
