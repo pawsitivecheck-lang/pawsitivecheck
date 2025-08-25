@@ -50,14 +50,14 @@ export default function CorporateAccountability() {
               </div>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-red-600" data-testid="stat-lawsuit-amount">$2.6B</div>
-                  <div className="text-sm text-red-700 dark:text-red-300">Largest pet industry lawsuit</div>
-                  <div className="text-xs text-red-600 mt-1">Hill's Pet Nutrition DCM case¹</div>
+                  <div className="text-3xl font-bold text-red-600" data-testid="stat-lawsuit-amount">$6.375M</div>
+                  <div className="text-sm text-red-700 dark:text-red-300">Largest settlement paid in 2024</div>
+                  <div className="text-xs text-red-600 mt-1">Midwestern Pet Foods contamination¹</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-red-600" data-testid="stat-purina-complaints">971</div>
-                  <div className="text-sm text-red-700 dark:text-red-300">FDA complaints in January 2024</div>
-                  <div className="text-xs text-red-600 mt-1">1,312 sick pets reported²</div>
+                  <div className="text-3xl font-bold text-red-600" data-testid="stat-recent-violations">17+</div>
+                  <div className="text-sm text-red-700 dark:text-red-300">FDA warning letters issued 2025</div>
+                  <div className="text-xs text-red-600 mt-1">Including bird flu contamination²</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-human-victims">7</div>
@@ -171,45 +171,45 @@ export default function CorporateAccountability() {
               <CardContent className="space-y-6">
                 <div className="space-y-6">
                   
-                  {/* Hill's Pet Nutrition DCM Scandal */}
+                  {/* Bird Flu Pet Food Crisis */}
                   <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">Hill's Pet Nutrition - Grain-Free Diet Deception¹</h4>
-                      <Badge variant="destructive" className="text-sm">$2.6B Lawsuit</Badge>
+                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">H5N1 Bird Flu Pet Food Crisis¹</h4>
+                      <Badge variant="destructive" className="text-sm">2025 Outbreak</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-red-700 dark:text-red-300">
-                      <p><strong>Allegation:</strong> Fabricated scientific evidence linking grain-free diets to dilated cardiomyopathy (DCM) in dogs</p>
-                      <p><strong>Market Manipulation:</strong> Lost 20% market share before FDA investigation, became fastest-growing company in 5 years after</p>
-                      <p><strong>Scientific Fraud:</strong> Over 150 independent studies found no connection between grain-free diets and DCM</p>
-                      <p><strong>Conspiracy:</strong> Coordinated with veterinary researchers and non-profits to spread misinformation</p>
+                      <p><strong>Multiple Cat Deaths:</strong> Wild Coast, Northwest Naturals, Savage Pet raw foods contaminated with H5N1</p>
+                      <p><strong>Legal Action:</strong> Wild Coast Pet Foods sued after 4-year-old cat "Kira" died from H5N1 contamination</p>
+                      <p><strong>Public Health Risk:</strong> Pet-to-human transmission concerns, especially dangerous for children</p>
+                      <p><strong>Corporate Response:</strong> Delayed recalls and inadequate warnings about bird flu risks to consumers</p>
                     </div>
                   </div>
 
-                  {/* Purina Crisis Cover-up */}
+                  {/* Mars/Pedigree Vitamin D Poisoning */}
                   <div className="p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Purina Crisis Cover-up²</h4>
-                      <Badge variant="outline" className="text-sm">1,312 Sick Pets</Badge>
+                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Mars/Pedigree Vitamin D Toxicity²</h4>
+                      <Badge variant="outline" className="text-sm">2025 Lawsuit</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-orange-700 dark:text-orange-300">
-                      <p><strong>Crisis Response:</strong> Publicly claimed "no health or safety issues" despite 631 FDA reports by mid-January 2024</p>
-                      <p><strong>Sick Animals:</strong> 1,184 of 1,312 sick pet reports linked to Purina products in January alone</p>
-                      <p><strong>Death Toll:</strong> 97 of 103 reported pet deaths in January 2024 linked to Purina</p>
-                      <p><strong>Regulatory Failure:</strong> Pet owners told "You don't have a chance to prove there is a problem with the pet food"</p>
+                      <p><strong>Toxic Levels:</strong> Independent testing found 28x minimum vitamin D requirements (5x safe maximum)</p>
+                      <p><strong>Health Impact:</strong> Causing vomiting, weight loss, diarrhea, potential death in dogs</p>
+                      <p><strong>Corporate Negligence:</strong> Products remained on market despite dangerous overdose levels</p>
+                      <p><strong>Legal Action:</strong> Class action filed February 2025 for New York General Business Law violations</p>
                     </div>
                   </div>
 
-                  {/* Oregon Testing Scandal */}
+                  {/* Answers Pet Food FDA Defiance */}
                   <div className="p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-yellow-800 dark:text-yellow-200">Oregon Department Testing Scandal⁴</h4>
-                      <Badge variant="outline" className="text-sm">Protocol Violation</Badge>
+                      <h4 className="text-lg font-bold text-yellow-800 dark:text-yellow-200">Answers Pet Food vs FDA³</h4>
+                      <Badge variant="outline" className="text-sm">June 2025</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
-                      <p><strong>Testing Fraud:</strong> Tested only opened packages instead of unopened samples (protocol violation)</p>
-                      <p><strong>Contamination Risk:</strong> Opened samples can be contaminated from external sources</p>
-                      <p><strong>Public Deception:</strong> Issued alarming press releases without disclosing improper testing procedures</p>
-                      <p><strong>Impact:</strong> Created false panic while potentially covering up real contamination issues</p>
+                      <p><strong>Contamination Crisis:</strong> Salmonella and Listeria found in 4 product lots, facility surfaces contaminated</p>
+                      <p><strong>Corporate Defiance:</strong> Company sued FDA challenging zero-tolerance Salmonella policy as "unconstitutional"</p>
+                      <p><strong>Regulatory Failure:</strong> Failed to implement preventive controls despite repeated violations</p>
+                      <p><strong>Consumer Risk:</strong> 3 consumer complaints of dog illnesses triggered FDA emergency inspection</p>
                     </div>
                   </div>
 
@@ -237,23 +237,23 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-green-800 dark:text-green-200">Midwestern Pet Foods</span>
                           <Badge className="bg-green-600">$6.375M</Badge>
                         </div>
-                        <p className="text-sm text-green-700 dark:text-green-300">Aflatoxin and Salmonella contamination settlement. Up to $150,000 per documented injury claim.</p>
+                        <p className="text-sm text-green-700 dark:text-green-300">2024 settlement for aflatoxin contamination. Payments up to $128.65 reported by October 2024.</p>
                       </div>
 
                       <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-blue-800 dark:text-blue-200">Diamond Pet Foods/Costco</span>
-                          <Badge className="bg-blue-600">$2M</Badge>
+                          <span className="font-semibold text-blue-800 dark:text-blue-200">ZuPreem Pet Foods</span>
+                          <Badge className="bg-blue-600">March 2025</Badge>
                         </div>
-                        <p className="text-sm text-blue-700 dark:text-blue-300">Salmonella outbreak that sickened pets and 49 people across 20 states.</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">Class action for false "natural" labeling despite synthetic pyridoxine hydrochloride, citric acid.</p>
                       </div>
 
                       <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-purple-800 dark:text-purple-200">Mars Petcare</span>
-                          <Badge variant="outline">Ongoing</Badge>
+                          <span className="font-semibold text-purple-800 dark:text-purple-200">Multiple "Natural" Claims</span>
+                          <Badge variant="outline">2025 Trend</Badge>
                         </div>
-                        <p className="text-sm text-purple-700 dark:text-purple-300">False "natural" marketing claims despite synthetic ingredients.</p>
+                        <p className="text-sm text-purple-700 dark:text-purple-300">Merrick Pet Care, Wellness Pet Food, Mars Petcare facing similar "natural" labeling lawsuits.</p>
                       </div>
                     </div>
                     
@@ -262,18 +262,18 @@ export default function CorporateAccountability() {
                       
                       <div className="p-3 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-red-800 dark:text-red-200">Mid America Pet Food</span>
-                          <Badge variant="destructive">Criminal Investigation</Badge>
+                          <span className="font-semibold text-red-800 dark:text-red-200">Blue Ridge Beef</span>
+                          <Badge variant="destructive">2025 Recall</Badge>
                         </div>
-                        <p className="text-sm text-red-700 dark:text-red-300">Salmonella outbreak affecting 7 humans, 6 children under 1 year old. Multi-state FDA/CDC investigation.</p>
+                        <p className="text-sm text-red-700 dark:text-red-300">Nearly 5 tons of puppy/kitten products recalled across 16 states for salmonella and listeria.</p>
                       </div>
 
                       <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200 dark:border-orange-800">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-semibold text-orange-800 dark:text-orange-200">Nestlé Purina</span>
-                          <Badge variant="outline">Facility Violations</Badge>
+                          <span className="font-semibold text-orange-800 dark:text-orange-200">Wild Coast Pet Foods</span>
+                          <Badge variant="outline">H5N1 Lawsuit</Badge>
                         </div>
-                        <p className="text-sm text-orange-700 dark:text-orange-300">Denver facility odor lawsuit affecting 2,000+ households. Multiple class actions filed.</p>
+                        <p className="text-sm text-orange-700 dark:text-orange-300">Sued after cat death from bird flu contamination in raw chicken food. Failure to warn consumers.</p>
                       </div>
 
                       <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950 rounded-lg">
@@ -321,18 +321,19 @@ export default function CorporateAccountability() {
                   </div>
 
                   <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
-                    <h4 className="font-semibold text-red-800 dark:text-red-200 mb-3">FDA-AAFCO Partnership Collapse (2024)⁴</h4>
+                    <h4 className="font-semibold text-red-800 dark:text-red-200 mb-3">FDA Enforcement Surge (2025)⁴</h4>
                     <p className="text-sm text-red-700 dark:text-red-300">
-                      In October 2024, a longstanding agreement between FDA and AAFCO ended, leaving the pet food industry with uncertainty about future ingredient approval processes. This regulatory vacuum creates accountability gaps that companies can exploit.
+                      Despite mass layoffs at FDA's Center for Veterinary Medicine, enforcement actions increased dramatically in 2025. New H5N1 bird flu guidance requires pet food companies to update safety plans, but many continue operating with contaminated products.
                     </p>
                   </div>
 
                   <div className="p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                    <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-3">Recent Warning Letters & Violations³</h4>
+                    <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-3">Recent Warning Letters & Violations (2025)³</h4>
                     <div className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
-                      <p><strong>Mid America Pet Food (Nov 2024):</strong> CGMP violations, insanitary conditions</p>
-                      <p><strong>Answers Pet Food (June 2025):</strong> Failed preventive controls, pathogen contamination</p>
-                      <p><strong>Family Dollar:</strong> $41.675M plea agreement for insanitary conditions</p>
+                      <p><strong>Answers Pet Food (June 2025):</strong> Listeria on food-contact surfaces, 4 contaminated product lots</p>
+                      <p><strong>CBD Pet Supplement Companies (April 2025):</strong> 4 companies cited for unapproved drug claims</p>
+                      <p><strong>Blue Ridge Beef:</strong> Expanded recall for nearly 5 tons across 16 states</p>
+                      <p><strong>Wild Coast, Savage Pet:</strong> H5N1 bird flu contamination in raw foods</p>
                     </div>
                   </div>
                 </div>
@@ -491,43 +492,52 @@ export default function CorporateAccountability() {
               <CardContent>
                 <div className="space-y-4 text-sm">
                   <div>
-                    <strong>1.</strong> Wolf Haldenstein Adler Freeman & Herz LLP. (2024). 
-                    <em>$2.6 Billion Class Action Against Hill's Pet Nutrition.</em> 
-                    <a href="https://www.prnewswire.com/news-releases/wolf-haldenstein-adler-freeman--herz-llp-announces-2-6-billion-unfair-competition-class-action-against-hills-pet-nutrition-two-affiliated-non-profits-and-numerous-veterinary-researchers-302057821.html" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                    <strong>1.</strong> Top Class Actions. (2024). 
+                    <em>Midwestern Pet Foods $6.375M Class Action Settlement.</em> 
+                    <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
                       View Source ↗
                     </a>
                   </div>
                   
                   <div>
-                    <strong>2.</strong> Truth About Pet Food. (2024). 
-                    <em>971 Pet Food Complaints Reported to FDA January 2024.</em> 
-                    <a href="https://truthaboutpetfood.com/971-pet-food-complaints-reported-to-fda-january-2024/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                    <strong>2.</strong> PetfoodIndustry. (2025). 
+                    <em>Mars faces lawsuit over excessive vitamin D in PEDIGREE dog food.</em> 
+                    <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
                       View Source ↗
                     </a>
                   </div>
                   
                   <div>
-                    <strong>3.</strong> U.S. Food and Drug Administration. (2024). 
-                    <em>Warning Letters - Mid America Pet Food LLC & Answers Pet Food.</em> 
-                    <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                    <strong>3.</strong> U.S. Food and Drug Administration. (2025). 
+                    <em>Warning Letter - Lystn LLC dba Answers Pet Food.</em> 
+                    <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/lystn-llc-dba-answers-pet-food-694680-06182025" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
                       View Source ↗
                     </a>
                   </div>
                   
                   <div>
-                    <strong>4.</strong> Truth About Pet Food. (2024). 
-                    <em>2024 Pet Food in Review - Regulatory Failures.</em> 
-                    <a href="https://truthaboutpetfood.com/2024-pet-food-in-review/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                    <strong>4.</strong> STAT News. (2025). 
+                    <em>The FDA's hands-off approach to pet food nutrition.</em> 
+                    <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
                       View Source ↗
                     </a>
                   </div>
                   
                   <div>
-                    <strong>Additional Resources:</strong>
+                    <strong>5.</strong> PetfoodIndustry. (2025). 
+                    <em>Raw pet food company sued after cat infected with bird flu.</em> 
+                    <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                      View Source ↗
+                    </a>
+                  </div>
+                  
+                  <div>
+                    <strong>Additional 2025 Resources:</strong>
                     <ul className="mt-2 ml-4 space-y-1">
-                      <li>• FDA Center for Veterinary Medicine Compliance & Enforcement</li>
-                      <li>• STAT News - Pet Food Safety & FDA Regulation Analysis</li>
-                      <li>• Class Action Settlement Databases & Legal Filings</li>
+                      <li>• FDA CVM Warning Letters (17+ enforcement actions in 2025)</li>
+                      <li>• Top Class Actions - Pet Food Settlement Database</li>
+                      <li>• CNN Health - Bird Flu Pet Food Contamination Analysis</li>
+                      <li>• American Veterinary Medical Association - H5N1 Pet Deaths</li>
                     </ul>
                   </div>
                 </div>
