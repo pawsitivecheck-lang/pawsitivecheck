@@ -22,6 +22,7 @@ import PetHealthProtection from "@/pages/pet-health-protection";
 import CorporateAccountability from "@/pages/corporate-accountability";
 import IngredientTransparency from "@/pages/ingredient-transparency";
 import ScannerTechnology from "@/pages/scanner-technology";
+import SafetyDatabaseInfo from "@/pages/safety-database-info";
 import ProductDetail from "@/pages/product-detail";
 import CookieConsent from "@/components/cookie-consent";
 
@@ -39,6 +40,7 @@ function Router() {
           <Route path="/corporate-accountability" component={CorporateAccountability} />
           <Route path="/ingredient-transparency" component={IngredientTransparency} />
           <Route path="/scanner-technology" component={ScannerTechnology} />
+          <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
         </>
       ) : (
         <>
@@ -55,6 +57,7 @@ function Router() {
           <Route path="/corporate-accountability" component={CorporateAccountability} />
           <Route path="/ingredient-transparency" component={IngredientTransparency} />
           <Route path="/scanner-technology" component={ScannerTechnology} />
+          <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
         </>

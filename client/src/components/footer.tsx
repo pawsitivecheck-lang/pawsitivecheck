@@ -41,7 +41,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/product-database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                <a href="/safety-database-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
                   Safety Database
                 </a>
               </li>
