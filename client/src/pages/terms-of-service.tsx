@@ -29,7 +29,7 @@ export default function TermsOfService() {
               Cosmic agreement for the mystical analysis realm
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: August 24, 2025
+              Last updated: August 25, 2025
             </p>
           </div>
         </div>
@@ -247,9 +247,11 @@ export default function TermsOfService() {
                 If you have any questions about these Terms of Service, please contact us:
               </p>
               <div className="space-y-2">
-                <p>Email: legal@pawsitivecheck.cosmic</p>
-                <p>Address: The Cosmic Realm, Mystical Dimension</p>
-                <p>Astral Plane Support Portal: Available 24/7</p>
+                <p>Email: legal@pawsitivecheck.com</p>
+                <p>Support: support@pawsitivecheck.com</p>
+                <p>Phone: 1-800-PAWSITIVE (1-800-729-7484)</p>
+                <p>Address: 123 Pet Safety Drive, Austin, TX 78701</p>
+                <p>Business Hours: Monday-Friday, 9:00 AM - 6:00 PM CST</p>
               </div>
             </CardContent>
           </Card>

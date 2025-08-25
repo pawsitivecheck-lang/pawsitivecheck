@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
               Your cosmic data protection and mystical privacy rights
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: August 24, 2025
+              Last updated: August 25, 2025
             </p>
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function PrivacyPolicy() {
               </div>
               
               <p className="text-sm text-cosmic-300 mt-4">
-                To exercise these rights, please contact us at privacy@pawsitivecheck.cosmic
+                To exercise these rights, please contact us at privacy@pawsitivecheck.com
               </p>
             </CardContent>
           </Card>
@@ -232,9 +232,11 @@ export default function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="space-y-2">
-                <p>Email: privacy@pawsitivecheck.cosmic</p>
-                <p>Address: The Cosmic Realm, Mystical Dimension</p>
-                <p>Astral Plane Support Portal: Available 24/7</p>
+                <p>Email: privacy@pawsitivecheck.com</p>
+                <p>Support: support@pawsitivecheck.com</p>
+                <p>Phone: 1-800-PAWSITIVE (1-800-729-7484)</p>
+                <p>Address: 123 Pet Safety Drive, Austin, TX 78701</p>
+                <p>Business Hours: Monday-Friday, 9:00 AM - 6:00 PM CST</p>
               </div>
             </CardContent>
           </Card>
