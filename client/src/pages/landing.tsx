@@ -66,21 +66,6 @@ export default function Landing() {
               <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600">PawsitiveCheck</h1>
             </div>
             
-            {/* Search Bar - Hidden on mobile, shown on desktop */}
-            <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input 
-                  type="text" 
-                  placeholder="Search products, ingredients, or brands for safety analysis..."
-                  className="w-full pl-10 pr-16 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
-                  data-testid="input-search"
-                />
-                <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded" data-testid="button-search">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
             
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* User Menu Dropdown */}
@@ -171,21 +156,6 @@ export default function Landing() {
         {/* Enhanced Mobile menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg">
-            {/* Mobile Search Bar */}
-            <div className="px-4 pt-4 pb-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input 
-                  type="text" 
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-16 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
-                  data-testid="input-search-mobile"
-                />
-                <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded" data-testid="button-search-mobile">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
             
             {/* Navigation Links */}
             <div className="px-4 py-4 space-y-2">
@@ -277,24 +247,63 @@ export default function Landing() {
               <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
                 Scan any pet product to get instant safety analysis, ingredient breakdown, and recall alerts. Make informed decisions for your pet's health.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-lg mx-auto lg:mx-0">
-                <Button 
-                  onClick={() => window.location.href = '/scan'}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 sm:px-8 py-4 rounded-lg text-base sm:text-lg flex items-center justify-center min-h-[48px] sm:min-h-[52px] transition-all transform hover:scale-105"
-                  data-testid="button-scan-product"
-                >
-                  <Camera className="mr-2 h-5 w-5" />
-                  Scan Product Now
-                </Button>
-                <Button 
-                  onClick={() => window.location.href = '/database'}
-                  variant="outline"
-                  className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-6 sm:px-8 py-4 rounded-lg text-base sm:text-lg flex items-center justify-center min-h-[48px] sm:min-h-[52px] transition-all transform hover:scale-105"
-                  data-testid="button-browse-database"
-                >
-                  <Search className="mr-2 h-5 w-5" />
-                  Browse Database
-                </Button>
+              {/* Comprehensive Search/Scan Bar */}
+              <div className="w-full max-w-4xl mx-auto lg:mx-0">
+                <div className="bg-white rounded-2xl shadow-xl border-2 border-blue-200 p-6">
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Check Any Pet Product for Safety</h3>
+                    <p className="text-sm text-gray-600">Search our database, scan barcodes, or analyze ingredients instantly</p>
+                  </div>
+                  
+                  {/* Search Input */}
+                  <div className="relative mb-4">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
+                    <Input 
+                      type="text" 
+                      placeholder="Search by product name, brand, ingredient, or barcode..."
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-3 focus:ring-blue-200 focus:border-blue-500 text-lg placeholder:text-gray-400"
+                      data-testid="input-comprehensive-search"
+                    />
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <Button 
+                      onClick={() => window.location.href = '/database'}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
+                      data-testid="button-search-database"
+                    >
+                      <Search className="mr-2 h-5 w-5" />
+                      Search Database
+                    </Button>
+                    
+                    <Button 
+                      onClick={() => window.location.href = '/scan'}
+                      className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
+                      data-testid="button-scan-barcode"
+                    >
+                      <Camera className="mr-2 h-5 w-5" />
+                      Scan Barcode
+                    </Button>
+                    
+                    <Button 
+                      onClick={() => window.location.href = '/recalls'}
+                      variant="outline"
+                      className="border-2 border-red-500 text-red-600 hover:bg-red-50 font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105"
+                      data-testid="button-check-recalls"
+                    >
+                      <AlertTriangle className="mr-2 h-5 w-5" />
+                      Check Recalls
+                    </Button>
+                  </div>
+                  
+                  {/* Quick Tips */}
+                  <div className="mt-4 text-center">
+                    <p className="text-xs text-gray-500">
+                      💡 <span className="font-medium">Pro tip:</span> Take a photo of ingredients list for instant analysis, or search by product name
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="relative order-first lg:order-last">
