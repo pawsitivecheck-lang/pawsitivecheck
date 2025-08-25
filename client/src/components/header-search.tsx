@@ -3,9 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { BarcodeScanner } from "@/components/barcode-scanner";
+import { ImageScanner } from "@/components/image-scanner";
+import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Search, Loader2, X, Clock } from "lucide-react";
+import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface HeaderSearchProps {
@@ -13,12 +16,16 @@ interface HeaderSearchProps {
 }
 
 export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const [showImageScanner, setShowImageScanner] = useState(false);
+  const [showScannerMenu, setShowScannerMenu] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -212,7 +219,110 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     setLocation(`/database?search=${encodeURIComponent(product.name)}`);
   };
 
-  const isLoading = searchMutation.isPending;
+  const scanProductMutation = useMutation({
+    mutationFn: async (barcodeInput: string) => {
+      try {
+        // First try to find existing product by barcode
+        const localRes = await fetch(`/api/products/barcode/${barcodeInput}`);
+        if (localRes.ok) {
+          const product = await localRes.json();
+          return { source: 'local', product };
+        }
+        
+        // If not found locally, search the internet
+        const internetRes = await apiRequest('POST', '/api/products/internet-search', {
+          type: 'barcode',
+          query: barcodeInput
+        });
+        
+        if (internetRes.ok) {
+          const result = await internetRes.json();
+          return result;
+        }
+        
+        return null;
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: (result) => {
+      if (result?.product) {
+        // Navigate to scanner page with product
+        setLocation('/scan');
+        toast({
+          title: `Product Found!`,
+          description: result.source === 'local' 
+            ? "Found in product database" 
+            : "Discovered through internet search",
+        });
+      } else {
+        toast({
+          title: "Product Not Found",
+          description: "Product not found in our database",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Scan Failed",
+        description: "Unable to scan product barcode",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const imageSearchMutation = useMutation({
+    mutationFn: async (imageData: string) => {
+      const res = await apiRequest('POST', '/api/products/internet-search', {
+        type: 'image',
+        query: imageData
+      });
+      
+      if (res.ok) {
+        const result = await res.json();
+        return result;
+      }
+      
+      return null;
+    },
+    onSuccess: (result) => {
+      if (result?.product) {
+        setLocation('/scan');
+        toast({
+          title: "Product Identified!",
+          description: "Product successfully identified from image",
+        });
+      } else {
+        toast({
+          title: "Product Not Recognized",
+          description: "Unable to identify product from image",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Image Analysis Failed",
+        description: "Unable to analyze product image",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleBarcodeScanned = (barcode: string) => {
+    setShowBarcodeScanner(false);
+    setShowScannerMenu(false);
+    scanProductMutation.mutate(barcode);
+  };
+
+  const handleImageScanned = (imageData: string) => {
+    setShowImageScanner(false);
+    setShowScannerMenu(false);
+    imageSearchMutation.mutate(imageData);
+  };
+
+  const isLoading = searchMutation.isPending || scanProductMutation.isPending || imageSearchMutation.isPending;
 
   return (
     <>
@@ -223,7 +333,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products... (Press Tab to autofill)"
+              placeholder="Search products or scan... (Press Tab to autofill)"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -238,7 +348,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full px-10 pr-12 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
+              className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full px-10 pr-20 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -248,7 +358,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={clearSearch}
                 variant="ghost"
                 size="sm"
-                className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
@@ -260,19 +370,80 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               type="submit"
               variant="ghost"
               size="sm"
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
-              disabled={!searchQuery.trim() || searchMutation.isPending}
+              className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
+              disabled={!searchQuery.trim() || isLoading}
               data-testid="button-header-search"
             >
-              {searchMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Search className="h-4 w-4" />
-              )}
+              <Search className="h-4 w-4" />
             </Button>
+            
+            {/* Scanner Menu Button */}
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+              <Button
+                type="button"
+                onClick={() => setShowScannerMenu(!showScannerMenu)}
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
+                disabled={isLoading}
+                data-testid="button-scanner-menu"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Camera className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
           </div>
         </form>
 
+        {/* Scanner Menu Dropdown */}
+        {showScannerMenu && (
+          <div className="absolute right-0 top-12 w-48 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg p-2 z-50 shadow-lg">
+            <div className="space-y-1">
+              <Button
+                onClick={() => {
+                  setShowBarcodeScanner(true);
+                  setShowScannerMenu(false);
+                }}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-testid="button-barcode-scanner"
+              >
+                <Scan className="mr-2 h-4 w-4" />
+                Barcode Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowImageScanner(true);
+                  setShowScannerMenu(false);
+                }}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-testid="button-image-scanner"
+              >
+                <Image className="mr-2 h-4 w-4" />
+                Image Scanner
+              </Button>
+              <Button
+                onClick={() => {
+                  setLocation('/scan');
+                  setShowScannerMenu(false);
+                }}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                data-testid="button-advanced-scanner"
+              >
+                <Globe className="mr-2 h-4 w-4" />
+                Advanced Scanner
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length < 2 && recentSearches.length > 0)) && (
@@ -372,6 +543,18 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
       </div>
 
+      {/* Scanner Modals */}
+      <BarcodeScanner
+        isActive={showBarcodeScanner}
+        onScan={handleBarcodeScanned}
+        onClose={() => setShowBarcodeScanner(false)}
+      />
+      
+      <ImageScanner
+        isActive={showImageScanner}
+        onScan={handleImageScanned}
+        onClose={() => setShowImageScanner(false)}
+      />
     </>
   );
 }
