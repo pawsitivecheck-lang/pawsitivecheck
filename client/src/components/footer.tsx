@@ -51,7 +51,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/community" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-community">
+                <a href="/community-reviews-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-community">
                   Community Reviews
                 </a>
               </li>
