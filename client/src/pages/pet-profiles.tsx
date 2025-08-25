@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PetForm } from "@/components/pet-form";
 import { SavedProductsList } from "@/components/saved-products-list";
+import HealthTracking from "@/components/health-tracking";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { PlusCircle, Heart, Dog, Cat, Bird, Fish, Calendar, Weight, Stethoscope, Edit, Trash2 } from "lucide-react";
 import type { PetProfile, SavedProduct } from "@shared/schema";
@@ -362,8 +363,9 @@ export default function PetProfiles() {
               </DialogHeader>
 
               <Tabs defaultValue="details" className="mt-6">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="details">Pet Details</TabsTrigger>
+                  <TabsTrigger value="health">Health Tracking</TabsTrigger>
                   <TabsTrigger value="products">Saved Products</TabsTrigger>
                 </TabsList>
 
@@ -467,6 +469,10 @@ export default function PetProfiles() {
                       )}
                     </div>
                   </ScrollArea>
+                </TabsContent>
+
+                <TabsContent value="health" className="mt-6">
+                  <HealthTracking petId={selectedPet.id} petName={selectedPet.name} />
                 </TabsContent>
 
                 <TabsContent value="products" className="mt-6">

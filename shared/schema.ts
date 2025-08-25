@@ -128,6 +128,49 @@ export const petProfiles = pgTable("pet_profiles", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Health tracking records for long-term monitoring
+export const healthRecords = pgTable("health_records", {
+  id: serial("id").primaryKey(),
+  petId: integer("pet_id").references(() => petProfiles.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  recordDate: timestamp("record_date").defaultNow().notNull(),
+  weight: decimal("weight", { precision: 5, scale: 2 }), // in pounds/kg
+  bodyConditionScore: integer("body_condition_score"), // 1-9 scale
+  energyLevel: integer("energy_level"), // 1-5 scale (1=very low, 5=very high)
+  appetiteLevel: integer("appetite_level"), // 1-5 scale
+  coatCondition: varchar("coat_condition", { length: 20 }), // excellent, good, fair, poor
+  symptomsSeen: text("symptoms_seen").array(), // array of observed symptoms
+  behaviorChanges: text("behavior_changes"), // free text description
+  productUsed: varchar("product_used"), // product being used at time of record
+  productDuration: integer("product_duration"), // days using the product
+  vetVisit: boolean("vet_visit").default(false), // was this a vet visit record
+  vetNotes: text("vet_notes"), // veterinarian notes if applicable
+  photos: text("photos").array(), // array of photo URLs
+  notes: text("notes"), // general notes about pet's condition
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Vaccination and medical event tracking
+export const medicalEvents = pgTable("medical_events", {
+  id: serial("id").primaryKey(),
+  petId: integer("pet_id").references(() => petProfiles.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  eventType: varchar("event_type", { length: 50 }).notNull(), // vaccination, checkup, surgery, illness, etc.
+  eventDate: timestamp("event_date").notNull(),
+  veterinarian: varchar("veterinarian", { length: 200 }),
+  clinic: varchar("clinic", { length: 200 }),
+  description: text("description").notNull(),
+  medications: text("medications").array(), // prescribed medications
+  followUpRequired: boolean("follow_up_required").default(false),
+  followUpDate: timestamp("follow_up_date"),
+  cost: decimal("cost", { precision: 8, scale: 2 }),
+  documents: text("documents").array(), // array of document URLs
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const savedProducts = pgTable("saved_products", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).notNull(),
@@ -370,6 +413,10 @@ export type ScanHistory = typeof scanHistory.$inferSelect;
 export type InsertScanHistory = z.infer<typeof insertScanHistorySchema>;
 export type PetProfile = typeof petProfiles.$inferSelect;
 export type InsertPetProfile = z.infer<typeof insertPetProfileSchema>;
+export type HealthRecord = typeof healthRecords.$inferSelect;
+export type InsertHealthRecord = typeof healthRecords.$inferInsert;
+export type MedicalEvent = typeof medicalEvents.$inferSelect;
+export type InsertMedicalEvent = typeof medicalEvents.$inferInsert;
 export type SavedProduct = typeof savedProducts.$inferSelect;
 export type InsertSavedProduct = z.infer<typeof insertSavedProductSchema>;
 export type VeterinaryOffice = typeof veterinaryOffices.$inferSelect;

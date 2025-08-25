@@ -9,6 +9,8 @@ import {
   savedProducts,
   veterinaryOffices,
   productUpdateSubmissions,
+  healthRecords,
+  medicalEvents,
   type User,
   type UpsertUser,
   type Product,
@@ -29,6 +31,10 @@ import {
   type InsertVeterinaryOffice,
   type ProductUpdateSubmission,
   type InsertProductUpdateSubmission,
+  type HealthRecord,
+  type InsertHealthRecord,
+  type MedicalEvent,
+  type InsertMedicalEvent,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -108,6 +114,20 @@ export interface IStorage {
     reviewedByUserId: string;
   }): Promise<ProductUpdateSubmission | undefined>;
   
+  // Health tracking operations
+  getPetHealthRecords(petId: number): Promise<HealthRecord[]>;
+  getHealthRecord(id: number): Promise<HealthRecord | undefined>;
+  createHealthRecord(record: InsertHealthRecord): Promise<HealthRecord>;
+  updateHealthRecord(id: number, updates: Partial<InsertHealthRecord>): Promise<HealthRecord | undefined>;
+  deleteHealthRecord(id: number, userId: string): Promise<boolean>;
+  
+  // Medical event operations
+  getPetMedicalEvents(petId: number): Promise<MedicalEvent[]>;
+  getMedicalEvent(id: number): Promise<MedicalEvent | undefined>;
+  createMedicalEvent(event: InsertMedicalEvent): Promise<MedicalEvent>;
+  updateMedicalEvent(id: number, updates: Partial<InsertMedicalEvent>): Promise<MedicalEvent | undefined>;
+  deleteMedicalEvent(id: number, userId: string): Promise<boolean>;
+
   // Analytics for admin
   getAnalytics(): Promise<{
     totalProducts: number;
@@ -532,6 +552,76 @@ export class DatabaseStorage implements IStorage {
       .where(eq(productUpdateSubmissions.id, id))
       .returning();
     return reviewed;
+  }
+
+  // Health tracking operations
+  async getPetHealthRecords(petId: number): Promise<HealthRecord[]> {
+    return await db
+      .select()
+      .from(healthRecords)
+      .where(eq(healthRecords.petId, petId))
+      .orderBy(desc(healthRecords.recordDate));
+  }
+
+  async getHealthRecord(id: number): Promise<HealthRecord | undefined> {
+    const [record] = await db.select().from(healthRecords).where(eq(healthRecords.id, id));
+    return record;
+  }
+
+  async createHealthRecord(record: InsertHealthRecord): Promise<HealthRecord> {
+    const [newRecord] = await db.insert(healthRecords).values(record).returning();
+    return newRecord;
+  }
+
+  async updateHealthRecord(id: number, updates: Partial<InsertHealthRecord>): Promise<HealthRecord | undefined> {
+    const [record] = await db
+      .update(healthRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(healthRecords.id, id))
+      .returning();
+    return record;
+  }
+
+  async deleteHealthRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(healthRecords)
+      .where(and(eq(healthRecords.id, id), eq(healthRecords.userId, userId)));
+    return result.rowCount > 0;
+  }
+
+  // Medical event operations
+  async getPetMedicalEvents(petId: number): Promise<MedicalEvent[]> {
+    return await db
+      .select()
+      .from(medicalEvents)
+      .where(eq(medicalEvents.petId, petId))
+      .orderBy(desc(medicalEvents.eventDate));
+  }
+
+  async getMedicalEvent(id: number): Promise<MedicalEvent | undefined> {
+    const [event] = await db.select().from(medicalEvents).where(eq(medicalEvents.id, id));
+    return event;
+  }
+
+  async createMedicalEvent(event: InsertMedicalEvent): Promise<MedicalEvent> {
+    const [newEvent] = await db.insert(medicalEvents).values(event).returning();
+    return newEvent;
+  }
+
+  async updateMedicalEvent(id: number, updates: Partial<InsertMedicalEvent>): Promise<MedicalEvent | undefined> {
+    const [event] = await db
+      .update(medicalEvents)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(medicalEvents.id, id))
+      .returning();
+    return event;
+  }
+
+  async deleteMedicalEvent(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(medicalEvents)
+      .where(and(eq(medicalEvents.id, id), eq(medicalEvents.userId, userId)));
+    return result.rowCount > 0;
   }
 }
 

@@ -1074,6 +1074,168 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Health Records - Long-term health tracking
+  app.get('/api/pets/:id/health-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet's health records" });
+      }
+      
+      const healthRecords = await storage.getPetHealthRecords(petId);
+      res.json(healthRecords);
+    } catch (error) {
+      console.error("Error fetching health records:", error);
+      res.status(500).json({ message: "Failed to fetch health records" });
+    }
+  });
+
+  app.post('/api/pets/:id/health-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet's health records" });
+      }
+      
+      const healthData = {
+        ...req.body,
+        petId,
+        userId
+      };
+      
+      const healthRecord = await storage.createHealthRecord(healthData);
+      res.status(201).json(healthRecord);
+    } catch (error) {
+      console.error("Error creating health record:", error);
+      res.status(500).json({ message: "Failed to create health record" });
+    }
+  });
+
+  app.put('/api/health-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const recordId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify record ownership
+      const existingRecord = await storage.getHealthRecord(recordId);
+      if (!existingRecord || existingRecord.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this health record" });
+      }
+      
+      const updatedRecord = await storage.updateHealthRecord(recordId, req.body);
+      res.json(updatedRecord);
+    } catch (error) {
+      console.error("Error updating health record:", error);
+      res.status(500).json({ message: "Failed to update health record" });
+    }
+  });
+
+  app.delete('/api/health-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const recordId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deleteHealthRecord(recordId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Health record not found or access denied" });
+      }
+      
+      res.json({ message: "Health record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting health record:", error);
+      res.status(500).json({ message: "Failed to delete health record" });
+    }
+  });
+
+  // Medical Events - Vet visits, vaccinations, surgeries, etc.
+  app.get('/api/pets/:id/medical-events', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet's medical events" });
+      }
+      
+      const medicalEvents = await storage.getPetMedicalEvents(petId);
+      res.json(medicalEvents);
+    } catch (error) {
+      console.error("Error fetching medical events:", error);
+      res.status(500).json({ message: "Failed to fetch medical events" });
+    }
+  });
+
+  app.post('/api/pets/:id/medical-events', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet's medical events" });
+      }
+      
+      const medicalData = {
+        ...req.body,
+        petId,
+        userId
+      };
+      
+      const medicalEvent = await storage.createMedicalEvent(medicalData);
+      res.status(201).json(medicalEvent);
+    } catch (error) {
+      console.error("Error creating medical event:", error);
+      res.status(500).json({ message: "Failed to create medical event" });
+    }
+  });
+
+  app.put('/api/medical-events/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify event ownership
+      const existingEvent = await storage.getMedicalEvent(eventId);
+      if (!existingEvent || existingEvent.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this medical event" });
+      }
+      
+      const updatedEvent = await storage.updateMedicalEvent(eventId, req.body);
+      res.json(updatedEvent);
+    } catch (error) {
+      console.error("Error updating medical event:", error);
+      res.status(500).json({ message: "Failed to update medical event" });
+    }
+  });
+
+  app.delete('/api/medical-events/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deleteMedicalEvent(eventId, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Medical event not found or access denied" });
+      }
+      
+      res.json({ message: "Medical event deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting medical event:", error);
+      res.status(500).json({ message: "Failed to delete medical event" });
+    }
+  });
+
   // Admin analytics
   app.get('/api/admin/analytics', isAdmin, async (req: any, res) => {
     try {
