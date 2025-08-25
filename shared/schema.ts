@@ -232,6 +232,19 @@ export const productUpdateSubmissions = pgTable("product_update_submissions", {
 });
 
 // Animal taxonomy tags for breed, species, and subspecies classification
+export const animalTags = pgTable("animal_tags", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'
+  animalCategory: varchar("animal_category", { length: 20 }).default('pet'), // pet, livestock, mixed
+  parentId: integer("parent_id").references(() => animalTags.id), // for hierarchical relationships (breed -> species)
+  description: text("description"),
+  aliases: text("aliases").array(), // alternative names for the same tag
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Livestock management table for farm operations
 export const livestockOperations = pgTable("livestock_operations", {
   id: serial("id").primaryKey(),
@@ -288,7 +301,7 @@ export const feedManagement = pgTable("feed_management", {
   feedingsPerDay: integer("feedings_per_day").default(2),
   costPerUnit: decimal("cost_per_unit", { precision: 10, scale: 2 }),
   lastPurchaseDate: timestamp("last_purchase_date"),
-  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default(0),
+  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default("0"),
   stockUnit: varchar("stock_unit", { length: 20 }).default("lbs"),
   nutritionAnalysis: jsonb("nutrition_analysis"), // protein, fat, fiber content
   medications: text("medications").array(), // any medications in the feed
@@ -334,8 +347,8 @@ export const farmAnimals = pgTable("farm_animals", {
   birthWeight: decimal("birth_weight", { precision: 8, scale: 2 }),
   currentWeight: decimal("current_weight", { precision: 8, scale: 2 }),
   weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"),
-  damId: integer("dam_id").references(() => farmAnimals.id), // mother reference
-  sireId: integer("sire_id").references(() => farmAnimals.id), // father reference
+  damId: integer("dam_id"), // mother reference
+  sireId: integer("sire_id"), // father reference
   generation: integer("generation").default(1), // breeding generation
   purpose: varchar("purpose", { length: 50 }), // breeding, dairy, meat, show, working
   acquisitionDate: timestamp("acquisition_date"),
@@ -357,8 +370,8 @@ export const farmAnimals = pgTable("farm_animals", {
 export const breedingRecords = pgTable("breeding_records", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).notNull(),
-  damId: integer("dam_id").references(() => farmAnimals.id).notNull(), // mother
-  sireId: integer("sire_id").references(() => farmAnimals.id), // father (can be external)
+  damId: integer("dam_id").notNull(), // mother
+  sireId: integer("sire_id"), // father (can be external)
   externalSireInfo: text("external_sire_info"), // if sire is not in our system
   breedingDate: timestamp("breeding_date").notNull(),
   breedingMethod: varchar("breeding_method", { length: 50 }).default("natural"), // natural, ai, et
@@ -379,7 +392,7 @@ export const breedingRecords = pgTable("breeding_records", {
 // Production records (milk, eggs, wool, etc.)
 export const productionRecords = pgTable("production_records", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").references(() => farmAnimals.id).notNull(),
+  animalId: integer("animal_id").notNull(),
   herdId: integer("herd_id").references(() => livestockHerds.id),
   userId: varchar("user_id").references(() => users.id).notNull(),
   recordDate: timestamp("record_date").notNull(),
@@ -401,7 +414,7 @@ export const productionRecords = pgTable("production_records", {
 // Animal movement/transfer records
 export const animalMovements = pgTable("animal_movements", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").references(() => farmAnimals.id).notNull(),
+  animalId: integer("animal_id").notNull(),
   userId: varchar("user_id").references(() => users.id).notNull(),
   movementDate: timestamp("movement_date").notNull(),
   movementType: varchar("movement_type", { length: 50 }).notNull(), // transfer, sale, purchase, death, slaughter
@@ -532,18 +545,6 @@ export const farmProductReviews = pgTable("farm_product_reviews", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const animalTags = pgTable("animal_tags", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 100 }).notNull(),
-  type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'
-  animalCategory: varchar("animal_category", { length: 20 }).default('pet'), // pet, livestock, mixed
-  parentId: integer("parent_id").references(() => animalTags.id), // for hierarchical relationships (breed -> species)
-  description: text("description"),
-  aliases: text("aliases").array(), // alternative names for the same tag
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
 
 // Junction table linking products to animal tags
 export const productTags = pgTable("product_tags", {
