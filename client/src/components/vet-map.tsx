@@ -42,7 +42,14 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Load Google Maps script
   useEffect(() => {
-    if (scriptLoadedRef.current || window.google) return;
+    if (scriptLoadedRef.current || window.google) {
+      // If script already loaded, initialize map
+      if (mapRef.current) {
+        initializeMap();
+        setIsLoading(false);
+      }
+      return;
+    }
 
     // Get API key from backend and load script
     fetch('/api/google-maps-key')
@@ -56,17 +63,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         script.onload = () => {
           console.log('Google Maps script loaded successfully');
           scriptLoadedRef.current = true;
-          try {
-            // Small delay to ensure Google Maps is fully loaded
-            setTimeout(() => {
-              initializeMap();
-              setIsLoading(false);
-            }, 100);
-          } catch (error) {
-            console.error('Failed to initialize Google Maps:', error);
-            setMapError('Failed to initialize map');
-            setIsLoading(false);
-          }
         };
 
         script.onerror = () => {
@@ -90,6 +86,21 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       }
     };
   }, []);
+
+  // Initialize map when both script and DOM are ready
+  useEffect(() => {
+    if (scriptLoadedRef.current && window.google && mapRef.current && !mapInstanceRef.current) {
+      console.log('Both script and DOM ready, initializing map...');
+      try {
+        initializeMap();
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Failed to initialize Google Maps:', error);
+        setMapError('Failed to initialize map');
+        setIsLoading(false);
+      }
+    }
+  }, [scriptLoadedRef.current, mapRef.current]);
 
   const initializeMap = () => {
     console.log('Attempting to initialize map...', { hasMapRef: !!mapRef.current, hasGoogle: !!window.google });
