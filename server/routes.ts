@@ -1000,15 +1000,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let lng = -94.5786;
       let searchRadius = 50000; // 50km - wider default search
       
-      // Use provided location if available
+      // Always prioritize GPS location when provided
       if (location && location.lat && location.lng) {
         lat = location.lat;
         lng = location.lng;
-        searchRadius = 25000; // Expand radius for user-provided location
+        searchRadius = 25000; // Use actual user location
       }
-      
-      // Try to detect location from query string
-      if (!location && query) {
+      // Only try to detect location from query string if no GPS location provided
+      else if (query) {
         const queryLower = query.toLowerCase();
         
         // Lansing, MI detection

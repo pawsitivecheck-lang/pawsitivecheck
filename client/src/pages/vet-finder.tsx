@@ -116,18 +116,19 @@ export default function VetFinder() {
   });
 
   const handleSearch = () => {
-    // If user has entered a location in the location field, include it in the search query
-    let fullQuery = searchQuery || "veterinarian";
-    if (locationQuery.trim()) {
-      fullQuery = `${fullQuery} ${locationQuery.trim()}`;
-    }
-
+    // Always prioritize GPS location if available
     if (userLocation) {
+      // Use GPS location with just the services search query
       searchVetsMutation.mutate({
-        query: fullQuery,
+        query: searchQuery || "veterinarian",
         location: userLocation
       });
     } else {
+      // No GPS location, so use manual location + services
+      let fullQuery = searchQuery || "veterinarian";
+      if (locationQuery.trim()) {
+        fullQuery = `${fullQuery} ${locationQuery.trim()}`;
+      }
       searchVetsMutation.mutate({
         query: fullQuery
       });
