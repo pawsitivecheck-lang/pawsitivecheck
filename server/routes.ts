@@ -1005,9 +1005,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         lat = location.lat;
         lng = location.lng;
         searchRadius = 25000; // ~15 miles - use actual user location
+        console.log(`🎯 Using GPS location: ${lat}, ${lng} with ${searchRadius/1000}km radius`);
       }
       // Only try to detect location from query string if no GPS location provided
       else if (query) {
+        console.log(`🔍 No GPS location, trying to detect from query: "${query}"`);
+        
+      
+      } else {
+        console.log(`📍 Using default location: ${lat}, ${lng} with ${searchRadius/1000}km radius`);
+      }
+      
+      // Continue with location detection
+      if (query && (!location || !location.lat || !location.lng)) {
         const queryLower = query.toLowerCase();
         
         // Lansing, MI detection
@@ -1061,6 +1071,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         const osmData = await response.json();
+        console.log(`🗺️ OpenStreetMap returned ${osmData.elements?.length || 0} results`);
         
         // Transform and calibrate OpenStreetMap data to our format
         let practices = osmData.elements
@@ -1124,12 +1135,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
               address = tags['addr:place'];
             }
             
+            // Debug log each result
+            console.log(`📍 Found: ${tags.name} at ${elementLat}, ${elementLng} (${distance.toFixed(2)}mi away)`);
+            
             return {
               id: `osm-${element.id}`,
               name: tags.name,
               address,
               city: tags['addr:city'] || tags['addr:town'] || tags['addr:suburb'] || 'City not specified',
-              state: tags['addr:state'] || tags['addr:province'] || tags['addr:region'] || 'CA',
+              state: tags['addr:state'] || tags['addr:province'] || tags['addr:region'] || 'MI',
               zipCode: tags['addr:postcode'] || '',
               phone: tags.phone || tags['contact:phone'] || '(Contact for phone)',
               website: tags.website || tags['contact:website'] || '',
@@ -1161,6 +1175,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           })
           .filter((practice: any) => practice.distance <= 30) // Filter out results too far away (30 miles)
           .slice(0, 20); // Limit to top 20 results
+        
+        console.log(`🎯 After filtering: ${practices.length} practices within 30 miles`);
 
         // If no OpenStreetMap results, fall back to database
         if (practices.length === 0) {
