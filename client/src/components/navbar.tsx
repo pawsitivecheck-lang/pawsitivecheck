@@ -45,23 +45,35 @@ export default function Navbar() {
           
           {/* Center Section - Desktop Navigation + Search */}
           <div className="flex-1 flex items-center justify-center space-x-8">
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-6">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link key={item.name} href={item.href}>
-                    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                      isActivePage(item.href) 
-                        ? 'text-blue-600 bg-blue-50' 
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                    }`} data-testid={`nav-${item.href.slice(1)}`}>
-                      <Icon className="h-4 w-4" />
-                      <span className="text-sm">{item.name}</span>
-                    </div>
-                  </Link>
-                );
-              })}
+            {/* Desktop Navigation Dropdown */}
+            <div className="hidden lg:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                    data-testid="nav-navigation-dropdown"
+                  >
+                    <Menu className="mr-2 h-4 w-4" />
+                    Navigation
+                    <ChevronDown className="ml-1 h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="w-48">
+                  {navigation.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <DropdownMenuItem key={item.name} asChild>
+                        <Link href={item.href} className="flex items-center w-full">
+                          <Icon className="mr-2 h-4 w-4" />
+                          {item.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             
             {/* Header Search - Center on desktop */}
