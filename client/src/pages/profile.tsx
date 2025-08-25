@@ -251,251 +251,16 @@ export default function Profile() {
             </Card>
           </div>
 
-          {/* Stats Overview */}
-          <div className="grid md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-reviews">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
-                  <MessageCircle className="text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-testid="text-review-count">
-                  {reviewCount}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">Product Reviews</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-scans">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4">
-                  <Package className="text-green-600 dark:text-green-400" />
-                </div>
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2" data-testid="text-scan-count">
-                  {scanCount}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">Products Scanned</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-helpfulness">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-4">
-                  <TrendingUp className="text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" data-testid="text-helpfulness-score">
-                  {Math.round((reviewCount * 4.2) + (scanCount * 1.5))}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">Community Score</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-pets">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-pink-100 dark:bg-pink-900/20 rounded-full flex items-center justify-center mb-4">
-                  <Heart className="text-pink-600 dark:text-pink-400" />
-                </div>
-                <div className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2" data-testid="text-pet-count">
-                  {petCount}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">Pet Profiles</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Fifth stat card for rank progress - moved to separate row */}
+          {/* Pet Profiles Section */}
           <div className="mb-8">
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-rank-progress">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="text-orange-600 dark:text-orange-400" />
-                </div>
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2" data-testid="text-rank-progress">
-                  {rankProgress.current}/{rankProgress.max}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300">to {rankProgress.nextRank}</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Rank Progress */}
-          {rankProgress.current < rankProgress.max && (
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow mb-8" data-testid="card-rank-progress">
+            <Card className="bg-white dark:bg-gray-800 border border-pink-500/20 shadow-lg" data-testid="card-pet-profiles">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                  <TrendingUp className="h-5 w-5" />
-                  Path to {rankProgress.nextRank}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="relative">
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
-                    <div 
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-500"
-                      style={{ width: `${(rankProgress.current / rankProgress.max) * 100}%` }}
-                      data-testid="progress-bar-rank"
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                    <span data-testid="text-progress-current">
-                      {rankProgress.current} reviews completed
-                    </span>
-                    <span data-testid="text-progress-remaining">
-                      {rankProgress.max - rankProgress.current} more needed
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Profile Tabs */}
-          <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
-            <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
-                My Reviews
-              </TabsTrigger>
-              <TabsTrigger value="scans" className="data-[state=active]:bg-green-100 dark:data-[state=active]:bg-green-900/20 data-[state=active]:text-green-600 dark:data-[state=active]:text-green-400" data-testid="tab-scans">
-                Scan History
-              </TabsTrigger>
-              <TabsTrigger value="pets" className="data-[state=active]:bg-pink-100 dark:data-[state=active]:bg-pink-900/20 data-[state=active]:text-pink-600 dark:data-[state=active]:text-pink-400" data-testid="tab-pets">
-                Pet Profiles
-              </TabsTrigger>
-              <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
-                Achievements
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="reviews" className="mt-6" data-testid="content-reviews">
-              {Array.isArray(userReviews) && userReviews.length > 0 ? (
-                <div className="space-y-6">
-                  {(userReviews as any[]).map((review: any) => (
-                    <Card key={review.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`review-card-${review.id}`}>
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1" data-testid="text-review-title">
-                              {review.title || 'Untitled Review'}
-                            </h3>
-                            <div className="flex items-center gap-1 mb-2">
-                              {[...Array(5)].map((_, i) => (
-                                <span 
-                                  key={i} 
-                                  className={i < review.rating ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-600'}
-                                  data-testid={`review-paw-${i}`}
-                                >
-                                  🐾
-                                </span>
-                              ))}
-                              <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">
-                                {review.rating}/5 Paws
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-review-date">
-                            {new Date(review.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <p className="text-gray-700 dark:text-gray-300 mb-4" data-testid="text-review-content">
-                          {review.content}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-500 dark:text-gray-400 text-sm">
-                            Product ID: {review.productId}
-                          </span>
-                          <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300" data-testid="button-edit-review">
-                              Edit
-                            </Button>
-                            <Button variant="outline" size="sm" className="border-red-300 dark:border-red-600 text-red-600 dark:text-red-400" data-testid="button-delete-review">
-                              Delete
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-reviews">
-                  <CardContent className="p-12 text-center">
-                    <MessageCircle className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-reviews-title">
-                      No Reviews Yet
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-reviews-description">
-                      Share your experience with pet products to help fellow pet owners
-                    </p>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-write-first-review">
-                      Write Your First Review
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="scans" className="mt-6" data-testid="content-scans">
-              {Array.isArray(userScans) && userScans.length > 0 ? (
-                <div className="space-y-4">
-                  {(userScans as any[]).map((scan: any) => (
-                    <Card key={scan.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`scan-card-${scan.id}`}>
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2" data-testid="text-scan-data">
-                              {scan.scannedData || 'Unknown Product'}
-                            </h3>
-                            {scan.analysisResult && (
-                              <Badge 
-                                className={
-                                  scan.analysisResult.cosmicClarity === 'blessed' 
-                                    ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400'
-                                    : scan.analysisResult.cosmicClarity === 'cursed'
-                                    ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
-                                    : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400'
-                                }
-                                data-testid="badge-scan-clarity"
-                              >
-                                {scan.analysisResult.cosmicClarity?.toUpperCase() || 'ANALYZED'}
-                              </Badge>
-                            )}
-                          </div>
-                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-scan-date">
-                            {new Date(scan.scannedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-scans">
-                  <CardContent className="p-12 text-center">
-                    <Package className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-scans-title">
-                      No Scans Yet
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-scans-description">
-                      Start analyzing pet products for safety information
-                    </p>
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-start-scanning">
-                      Start Scanning
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="pets" className="mt-6" data-testid="content-pets">
-              {isPetsLoading ? (
-                <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
-                  <p className="text-gray-500 dark:text-gray-400 mt-2">Loading pets...</p>
-                </div>
-              ) : Array.isArray(pets) && pets.length > 0 ? (
-                <div className="space-y-6">
-                  {/* Add Pet Button */}
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">My Pet Profiles</h3>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-pink-600 dark:text-pink-400">
+                    <Heart className="h-5 w-5" />
+                    Pet Profiles
+                  </CardTitle>
+                  {Array.isArray(pets) && pets.length > 0 && (
                     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                       <DialogTrigger asChild>
                         <Button className="bg-pink-600 hover:bg-pink-700 text-white" data-testid="button-add-pet">
@@ -513,14 +278,21 @@ export default function Profile() {
                         />
                       </DialogContent>
                     </Dialog>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                {isPetsLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
+                    <p className="text-gray-500 dark:text-gray-400 mt-2">Loading pets...</p>
                   </div>
-
-                  {/* Pet Cards */}
+                ) : Array.isArray(pets) && pets.length > 0 ? (
                   <div className="grid md:grid-cols-2 gap-6">
                     {(pets as any[]).map((pet: any) => {
                       const SpeciesIcon = getSpeciesIcon(pet.species);
                       return (
-                        <Card key={pet.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`pet-card-${pet.id}`}>
+                        <Card key={pet.id} className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow" data-testid={`pet-card-${pet.id}`}>
                           <CardHeader className="pb-4">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -680,10 +452,8 @@ export default function Profile() {
                       );
                     })}
                   </div>
-                </div>
-              ) : (
-                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-pets">
-                  <CardContent className="p-12 text-center">
+                ) : (
+                  <div className="text-center py-8">
                     <Heart className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
                     <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-pets-title">
                       No Pet Profiles Yet
@@ -708,10 +478,243 @@ export default function Profile() {
                         />
                       </DialogContent>
                     </Dialog>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Stats Overview */}
+          <div className="grid md:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-reviews">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
+                  <MessageCircle className="text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-testid="text-review-count">
+                  {reviewCount}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">Product Reviews</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-scans">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Package className="text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2" data-testid="text-scan-count">
+                  {scanCount}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">Products Scanned</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-helpfulness">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-4">
+                  <TrendingUp className="text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" data-testid="text-helpfulness-score">
+                  {Math.round((reviewCount * 4.2) + (scanCount * 1.5))}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">Community Score</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-pets">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-pink-100 dark:bg-pink-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Heart className="text-pink-600 dark:text-pink-400" />
+                </div>
+                <div className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2" data-testid="text-pet-count">
+                  {petCount}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">Pet Profiles</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Fifth stat card for rank progress - moved to separate row */}
+          <div className="mb-8">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-rank-progress">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 mx-auto bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Shield className="text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2" data-testid="text-rank-progress">
+                  {rankProgress.current}/{rankProgress.max}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300">to {rankProgress.nextRank}</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Rank Progress */}
+          {rankProgress.current < rankProgress.max && (
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow mb-8" data-testid="card-rank-progress">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                  <TrendingUp className="h-5 w-5" />
+                  Path to {rankProgress.nextRank}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="relative">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-500"
+                      style={{ width: `${(rankProgress.current / rankProgress.max) * 100}%` }}
+                      data-testid="progress-bar-rank"
+                    ></div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                    <span data-testid="text-progress-current">
+                      {rankProgress.current} reviews completed
+                    </span>
+                    <span data-testid="text-progress-remaining">
+                      {rankProgress.max - rankProgress.current} more needed
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Profile Tabs */}
+          <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
+            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
+                My Reviews
+              </TabsTrigger>
+              <TabsTrigger value="scans" className="data-[state=active]:bg-green-100 dark:data-[state=active]:bg-green-900/20 data-[state=active]:text-green-600 dark:data-[state=active]:text-green-400" data-testid="tab-scans">
+                Scan History
+              </TabsTrigger>
+              <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
+                Achievements
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="reviews" className="mt-6" data-testid="content-reviews">
+              {Array.isArray(userReviews) && userReviews.length > 0 ? (
+                <div className="space-y-6">
+                  {(userReviews as any[]).map((review: any) => (
+                    <Card key={review.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`review-card-${review.id}`}>
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1" data-testid="text-review-title">
+                              {review.title || 'Untitled Review'}
+                            </h3>
+                            <div className="flex items-center gap-1 mb-2">
+                              {[...Array(5)].map((_, i) => (
+                                <span 
+                                  key={i} 
+                                  className={i < review.rating ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-600'}
+                                  data-testid={`review-paw-${i}`}
+                                >
+                                  🐾
+                                </span>
+                              ))}
+                              <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">
+                                {review.rating}/5 Paws
+                              </span>
+                            </div>
+                          </div>
+                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-review-date">
+                            {new Date(review.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 dark:text-gray-300 mb-4" data-testid="text-review-content">
+                          {review.content}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm">
+                            Product ID: {review.productId}
+                          </span>
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300" data-testid="button-edit-review">
+                              Edit
+                            </Button>
+                            <Button variant="outline" size="sm" className="border-red-300 dark:border-red-600 text-red-600 dark:text-red-400" data-testid="button-delete-review">
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-reviews">
+                  <CardContent className="p-12 text-center">
+                    <MessageCircle className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-reviews-title">
+                      No Reviews Yet
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-reviews-description">
+                      Share your experience with pet products to help fellow pet owners
+                    </p>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-write-first-review">
+                      Write Your First Review
+                    </Button>
                   </CardContent>
                 </Card>
               )}
             </TabsContent>
+
+            <TabsContent value="scans" className="mt-6" data-testid="content-scans">
+              {Array.isArray(userScans) && userScans.length > 0 ? (
+                <div className="space-y-4">
+                  {(userScans as any[]).map((scan: any) => (
+                    <Card key={scan.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`scan-card-${scan.id}`}>
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2" data-testid="text-scan-data">
+                              {scan.scannedData || 'Unknown Product'}
+                            </h3>
+                            {scan.analysisResult && (
+                              <Badge 
+                                className={
+                                  scan.analysisResult.cosmicClarity === 'blessed' 
+                                    ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400'
+                                    : scan.analysisResult.cosmicClarity === 'cursed'
+                                    ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                                    : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400'
+                                }
+                                data-testid="badge-scan-clarity"
+                              >
+                                {scan.analysisResult.cosmicClarity?.toUpperCase() || 'ANALYZED'}
+                              </Badge>
+                            )}
+                          </div>
+                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-scan-date">
+                            {new Date(scan.scannedAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-scans">
+                  <CardContent className="p-12 text-center">
+                    <Package className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-scans-title">
+                      No Scans Yet
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-scans-description">
+                      Start analyzing pet products for safety information
+                    </p>
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-start-scanning">
+                      Start Scanning
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
 
             <TabsContent value="achievements" className="mt-6" data-testid="content-achievements">
               <div className="grid md:grid-cols-2 gap-6">
