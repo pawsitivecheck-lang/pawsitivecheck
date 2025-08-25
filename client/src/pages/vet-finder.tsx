@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { 
@@ -50,6 +51,7 @@ export default function VetFinder() {
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [locationError, setLocationError] = useState("");
   const [vetPractices, setVetPractices] = useState<VetPractice[]>([]);
+  const [searchRadius, setSearchRadius] = useState(15); // Default 15 miles
 
   // Get user's current location
   const getCurrentLocation = () => {
@@ -82,7 +84,7 @@ export default function VetFinder() {
   };
 
   const searchVetsMutation = useMutation({
-    mutationFn: async (searchData: { query: string; location?: {lat: number, lng: number} }) => {
+    mutationFn: async (searchData: { query: string; location?: {lat: number, lng: number}; radius?: number }) => {
       // In a real implementation, this would call Google Places API, Yelp API, or similar
       // For now, we'll use web search to find actual vet information
       const response = await fetch('/api/vets/search', {
@@ -121,7 +123,8 @@ export default function VetFinder() {
       // Use GPS location with just the services search query
       searchVetsMutation.mutate({
         query: searchQuery || "veterinarian",
-        location: userLocation
+        location: userLocation,
+        radius: searchRadius
       });
     } else {
       // No GPS location, so use manual location + services
@@ -130,7 +133,8 @@ export default function VetFinder() {
         fullQuery = `${fullQuery} ${locationQuery.trim()}`;
       }
       searchVetsMutation.mutate({
-        query: fullQuery
+        query: fullQuery,
+        radius: searchRadius
       });
     }
   };
@@ -139,7 +143,8 @@ export default function VetFinder() {
   useEffect(() => {
     // Default search with location hint
     searchVetsMutation.mutate({
-      query: "veterinarian"
+      query: "veterinarian",
+      radius: searchRadius
     });
   }, []);
 
@@ -230,6 +235,29 @@ export default function VetFinder() {
                   {locationError && (
                     <p className="text-mystical-red text-sm mt-2">{locationError}</p>
                   )}
+                </div>
+
+                {/* Search Radius */}
+                <div className="pt-4 border-t border-cosmic-700">
+                  <h3 className="text-cosmic-200 font-medium mb-3">Search Distance</h3>
+                  <div className="flex items-center gap-4">
+                    <Select value={searchRadius.toString()} onValueChange={(value) => setSearchRadius(Number(value))}>
+                      <SelectTrigger className="w-48 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100" data-testid="select-radius">
+                        <SelectValue placeholder="Search radius" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
+                        <SelectItem value="5" className="text-cosmic-100 hover:bg-cosmic-700">5 miles</SelectItem>
+                        <SelectItem value="10" className="text-cosmic-100 hover:bg-cosmic-700">10 miles</SelectItem>
+                        <SelectItem value="15" className="text-cosmic-100 hover:bg-cosmic-700">15 miles</SelectItem>
+                        <SelectItem value="25" className="text-cosmic-100 hover:bg-cosmic-700">25 miles</SelectItem>
+                        <SelectItem value="50" className="text-cosmic-100 hover:bg-cosmic-700">50 miles</SelectItem>
+                        <SelectItem value="100" className="text-cosmic-100 hover:bg-cosmic-700">100 miles</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <span className="text-cosmic-400 text-sm">
+                      Within {searchRadius} miles of your location
+                    </span>
+                  </div>
                 </div>
 
                 {/* Manual Search */}

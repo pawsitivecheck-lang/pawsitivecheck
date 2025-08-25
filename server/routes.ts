@@ -993,19 +993,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Veterinary search using Google Places API for nationwide coverage
   app.post('/api/vets/search', async (req, res) => {
     try {
-      const { query, location } = req.body;
+      const { query, location, radius } = req.body;
       const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
       
       // Default search coordinates (Lansing, MI as user location)
       let lat = 42.3314;  // Lansing, MI coordinates
       let lng = -84.5467;
-      let searchRadius = 25000; // ~15 miles in meters
+      
+      // Convert radius from miles to meters (default 15 miles if not provided)
+      const radiusInMiles = radius || 15;
+      let searchRadius = Math.round(radiusInMiles * 1609.34); // Convert miles to meters
       
       // Always use GPS location when provided - this takes absolute priority
       if (location && location.lat && location.lng) {
         lat = location.lat;
         lng = location.lng;
-        searchRadius = 20000; // ~12 miles for GPS location
       }
 
       // Try Google Places API first for nationwide coverage
