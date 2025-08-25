@@ -24,7 +24,7 @@ export default function Navbar() {
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
     { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: Heart },
+    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
     { name: 'Livestock Management', href: '/livestock', icon: Tractor },
   ];
 
