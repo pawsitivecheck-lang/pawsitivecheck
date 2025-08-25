@@ -838,8 +838,8 @@ export default function Landing() {
         </div>
       </footer>
 
-      {/* Cookie Consent - Temporarily disabled for debugging */}
-      {/* <CookieConsent /> */}
+      {/* Cookie Consent */}
+      <CookieConsent />
     </div>
   );
 }
