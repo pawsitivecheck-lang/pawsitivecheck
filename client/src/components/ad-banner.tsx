@@ -24,6 +24,9 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
       } catch {
         canShowAds = false;
       }
+    } else {
+      // Show placeholder ads for demo purposes when no consent decision made yet
+      canShowAds = true;
     }
 
     if (canShowAds) {
