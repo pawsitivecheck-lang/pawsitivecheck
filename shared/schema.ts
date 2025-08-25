@@ -34,8 +34,38 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   isAdmin: boolean("is_admin").default(false),
+  subscriptionTier: varchar("subscription_tier", { length: 20 }).default('free'), // free, premium, pro
+  subscriptionStatus: varchar("subscription_status", { length: 20 }).default('active'), // active, cancelled, expired
+  subscriptionExpiresAt: timestamp("subscription_expires_at"),
+  stripeCustomerId: varchar("stripe_customer_id"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const subscriptions = pgTable("subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  stripeSubscriptionId: varchar("stripe_subscription_id").unique(),
+  stripePriceId: varchar("stripe_price_id").notNull(),
+  tier: varchar("tier", { length: 20 }).notNull(), // premium, pro
+  status: varchar("status", { length: 20 }).notNull(), // active, cancelled, past_due, unpaid
+  currentPeriodStart: timestamp("current_period_start"),
+  currentPeriodEnd: timestamp("current_period_end"),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const donations = pgTable("donations", {
+  id: serial("id").primaryKey(),
+  donorEmail: varchar("donor_email"),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).default('USD'),
+  message: text("message"),
+  isAnonymous: boolean("is_anonymous").default(false),
+  stripePaymentId: varchar("stripe_payment_id").unique(),
+  status: varchar("status", { length: 20 }).default('completed'), // completed, failed, refunded
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const products = pgTable("products", {
