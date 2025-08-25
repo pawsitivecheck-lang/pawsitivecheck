@@ -12,28 +12,26 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: 'Mystical Scanner', href: '/scan', icon: Camera },
-    { name: 'Cosmic Database', href: '/database', icon: Search },
-    { name: 'Cosmic Warnings', href: '/recalls', icon: Shield },
+    { name: 'Product Scanner', href: '/scan', icon: Camera },
+    { name: 'Safety Database', href: '/database', icon: Search },
+    { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vets', icon: Heart },
     { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
-    { name: 'Resistance Hub', href: '/community', icon: Users },
+    { name: 'Community', href: '/community', icon: Users },
   ];
 
   const isActivePage = (href: string) => location === href;
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-cosmic-900/90 backdrop-blur-md border-b border-starlight-500/20">
+    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
-            <div className="w-10 h-10 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center animate-glow">
-              <svg className="w-6 h-6 text-cosmic-900" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-              </svg>
+            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+              <PawPrint className="w-6 h-6 text-white" />
             </div>
-            <h1 className="font-mystical text-2xl font-semibold text-starlight-500">PawsitiveCheck</h1>
+            <h1 className="text-2xl font-bold text-gray-800">PawsitiveCheck</h1>
           </Link>
           
           {/* Desktop Navigation */}
@@ -44,8 +42,8 @@ export default function Navbar() {
                 <Link key={item.name} href={item.href}>
                   <div className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
                     isActivePage(item.href) 
-                      ? 'text-starlight-400 bg-starlight-500/10' 
-                      : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
+                      ? 'text-blue-600 bg-blue-50' 
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                   }`} data-testid={`nav-${item.href.slice(1)}`}>
                     <Icon className="h-4 w-4" />
                     <span className="text-sm">{item.name}</span>
@@ -69,13 +67,13 @@ export default function Navbar() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className={`border-starlight-500 text-starlight-500 hover:bg-starlight-500/10 ${
-                    isActivePage('/admin') ? 'bg-starlight-500/10' : ''
+                  className={`border-blue-500 text-blue-600 hover:bg-blue-50 ${
+                    isActivePage('/admin') ? 'bg-blue-50' : ''
                   }`}
                   data-testid="nav-admin"
                 >
                   <Crown className="mr-1 h-3 w-3" />
-                  Syndicate
+                  Admin
                 </Button>
               </Link>
             )}
@@ -85,8 +83,8 @@ export default function Navbar() {
               <Button 
                 variant="outline" 
                 size="sm"
-                className={`border-cosmic-600 text-cosmic-300 hover:bg-cosmic-600/10 ${
-                  isActivePage('/profile') ? 'bg-cosmic-600/10' : ''
+                className={`border-gray-300 text-gray-600 hover:bg-gray-50 ${
+                  isActivePage('/profile') ? 'bg-gray-50' : ''
                 }`}
                 data-testid="nav-profile"
               >
@@ -108,17 +106,17 @@ export default function Navbar() {
               variant="outline" 
               size="sm"
               onClick={() => window.location.href = '/api/logout'}
-              className="border-mystical-red text-mystical-red hover:bg-mystical-red/10"
+              className="border-red-500 text-red-600 hover:bg-red-50"
               data-testid="nav-logout"
             >
-              Leave Realm
+              Sign Out
             </Button>
 
             {/* Mobile menu button */}
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden text-cosmic-300"
+              className="lg:hidden text-gray-600"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
             >
@@ -129,7 +127,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-cosmic-700 py-4" data-testid="nav-mobile-menu">
+          <div className="lg:hidden border-t border-gray-200 py-4" data-testid="nav-mobile-menu">
             {/* Mobile Search */}
             <div className="px-4 pb-4">
               <HeaderSearch isMobile={true} />
@@ -142,8 +140,8 @@ export default function Navbar() {
                     <div 
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                         isActivePage(item.href) 
-                          ? 'text-starlight-400 bg-starlight-500/10' 
-                          : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
+                          ? 'text-blue-600 bg-blue-50' 
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                       }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid={`nav-mobile-${item.href.slice(1)}`}
@@ -160,26 +158,26 @@ export default function Navbar() {
                   <div 
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                       isActivePage('/admin') 
-                        ? 'text-starlight-400 bg-starlight-500/10' 
-                        : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
+                        ? 'text-blue-600 bg-blue-50' 
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                     data-testid="nav-mobile-admin"
                   >
                     <Crown className="h-5 w-5" />
-                    <span>Syndicate Command</span>
+                    <span>Admin Dashboard</span>
                   </div>
                 </Link>
               )}
               
               {/* Mobile Profile Section */}
-              <div className="border-t border-cosmic-700 pt-4 mt-4">
+              <div className="border-t border-gray-200 pt-4 mt-4">
                 <Link href="/profile">
                   <div 
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                       isActivePage('/profile') 
-                        ? 'text-starlight-400 bg-starlight-500/10' 
-                        : 'text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-800/50'
+                        ? 'text-blue-600 bg-blue-50' 
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                     data-testid="nav-mobile-profile"
@@ -198,7 +196,7 @@ export default function Navbar() {
                 </Link>
                 
                 <div 
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-mystical-red hover:text-mystical-red hover:bg-mystical-red/10 cursor-pointer"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:text-red-600 hover:bg-red-50 cursor-pointer"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     window.location.href = '/api/logout';
@@ -208,7 +206,7 @@ export default function Navbar() {
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  <span>Leave Realm</span>
+                  <span>Sign Out</span>
                 </div>
               </div>
             </div>
