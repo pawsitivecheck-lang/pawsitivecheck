@@ -32,13 +32,24 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const searchMutation = useMutation({
     mutationFn: async (query: string) => {
       if (!query.trim()) return [];
-      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=8`);
+      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=20`); // Get more results for better sorting
       if (!res.ok) throw new Error('Search failed');
       return await res.json();
     },
-    onSuccess: (results: Product[]) => {
-      // Always update results and show dropdown when search completes
-      setSearchResults(results || []);
+    onSuccess: (results: Product[], variables: string) => {
+      // Sort results by relevance using advanced scoring algorithm
+      const scoredResults = (results || []).map(product => ({
+        product,
+        score: calculateAdvancedScore(variables, product.name, product.brand)
+      }));
+      
+      // Sort by score (highest first), then take top 8 most relevant
+      const sortedProducts = scoredResults
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 8)
+        .map(item => item.product);
+      
+      setSearchResults(sortedProducts);
       setShowResults(true);
       setSelectedIndex(-1);
     },
