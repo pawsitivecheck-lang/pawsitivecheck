@@ -147,7 +147,7 @@ export default function VetFinder() {
 
   const formatDistance = (distance?: number) => {
     if (!distance) return "";
-    return distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}mi`;
+    return distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`;
   };
 
   const formatHours = (hours: { [key: string]: string }) => {

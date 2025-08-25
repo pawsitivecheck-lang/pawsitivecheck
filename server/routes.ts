@@ -802,7 +802,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Combine AI analysis with blacklist adjustments
       const finalScore = Math.max(0, Math.min(100, aiAnalysis.cosmicScore + scoreAdjustment));
-      const allSuspiciousIngredients = [...new Set([...aiAnalysis.suspiciousIngredients, ...additionalSuspicious])];
+      const allSuspiciousIngredients = Array.from(new Set([...aiAnalysis.suspiciousIngredients, ...additionalSuspicious]));
 
       const analysis = {
         cosmicScore: finalScore,
@@ -819,11 +819,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         product: updatedProduct,
         analysis: {
           ...analysis,
-          aleisterVerdict: cosmicClarity === 'blessed' ? "The ingredients sing with purity" :
-                          cosmicClarity === 'questionable' ? "The shadows hide much" :
+          aleisterVerdict: analysis.cosmicClarity === 'blessed' ? "The ingredients sing with purity" :
+                          analysis.cosmicClarity === 'questionable' ? "The shadows hide much" :
                           "Banish this from your realm!",
-          severusVerdict: cosmicClarity === 'blessed' ? "Cosmic clarity achieved" :
-                         cosmicClarity === 'questionable' ? "Proceed with caution" :
+          severusVerdict: analysis.cosmicClarity === 'blessed' ? "Cosmic clarity achieved" :
+                         analysis.cosmicClarity === 'questionable' ? "Proceed with caution" :
                          "Dark forces detected"
         }
       });
@@ -1135,7 +1135,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               website: tags.website || tags['contact:website'] || '',
               rating: Math.round(rating * 10) / 10,
               reviewCount,
-              services: [...new Set(services)], // Remove duplicates
+              services: Array.from(new Set(services)), // Remove duplicates
               hours: tags.opening_hours ? { 
                 'Hours': tags.opening_hours 
               } : {
