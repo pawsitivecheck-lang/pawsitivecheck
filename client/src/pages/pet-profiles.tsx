@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import AdBanner from "@/components/ad-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -38,21 +41,9 @@ export default function PetProfiles() {
     return null;
   }
 
-  const { data: pets = [], isLoading: isPetsLoading } = useQuery({
+  const { data: pets = [], isLoading: isPetsLoading } = useQuery<PetProfile[]>({
     queryKey: ["/api/pets"],
     enabled: isAuthenticated,
-    onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-      }
-    },
   });
 
   const createPetMutation = useMutation({
@@ -502,6 +493,9 @@ export default function PetProfiles() {
           )}
         </DialogContent>
       </Dialog>
+      </div>
+      
+      <Footer />
     </div>
   );
 }
