@@ -159,55 +159,65 @@ export default function Navbar() {
               
               
               {/* Mobile Profile Section */}
-              <div className="border-t border-gray-200 pt-4 mt-4 px-4">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                      data-testid="nav-mobile-profile-dropdown"
-                    >
-                      {user?.profileImageUrl ? (
-                        <img 
-                          src={user.profileImageUrl} 
-                          alt="Profile" 
-                          className="w-5 h-5 rounded-full mr-2"
-                        />
-                      ) : (
-                        <Users className="mr-2 h-4 w-4" />
-                      )}
-                      {user?.firstName || 'Profile'}
-                      <ChevronDown className="ml-auto h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center w-full" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Users className="mr-2 h-4 w-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    {user?.isAdmin && (
-                      <DropdownMenuItem asChild>
-                        <Link href="/admin" className="flex items-center w-full" onClick={() => setIsMobileMenuOpen(false)}>
-                          <Crown className="mr-2 h-4 w-4" />
-                          Admin Dashboard
-                        </Link>
-                      </DropdownMenuItem>
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                <div className="px-4 pb-2">
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+                    {user?.profileImageUrl ? (
+                      <img 
+                        src={user.profileImageUrl} 
+                        alt="Profile" 
+                        className="w-4 h-4 rounded-full"
+                      />
+                    ) : (
+                      <Users className="h-4 w-4" />
                     )}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        window.location.href = '/api/logout';
-                      }}
-                      className="text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                    <span>{user?.firstName || 'Profile'}</span>
+                  </div>
+                </div>
+                
+                <Link href="/profile">
+                  <div 
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
+                      isActivePage('/profile') 
+                        ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    data-testid="nav-mobile-profile"
+                  >
+                    <Users className="h-5 w-5" />
+                    <span>Profile</span>
+                  </div>
+                </Link>
+
+                {user?.isAdmin && (
+                  <Link href="/admin">
+                    <div 
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
+                        isActivePage('/admin') 
+                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      data-testid="nav-mobile-admin"
                     >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <Crown className="h-5 w-5" />
+                      <span>Admin Dashboard</span>
+                    </div>
+                  </Link>
+                )}
+                
+                <div 
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 cursor-pointer mx-0"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    window.location.href = '/api/logout';
+                  }}
+                  data-testid="nav-mobile-logout"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Sign Out</span>
+                </div>
               </div>
             </div>
           </div>
