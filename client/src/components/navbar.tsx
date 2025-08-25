@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, ChevronDown, LogOut, Tractor, Wheat, Star } from "lucide-react";
+import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
@@ -24,8 +24,8 @@ export default function Navbar() {
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
     { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: Camera },
-    { name: 'Livestock Management', href: '/livestock', icon: Menu },
+    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
+    { name: 'Livestock Management', href: '/livestock', icon: Tractor },
   ];
 
   const isActivePage = (href: string) => location === href;
@@ -38,7 +38,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                <Star className="w-6 h-6 text-white" />
+                <PawPrint className="w-6 h-6 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-foreground">PawsitiveCheck</h1>
             </Link>

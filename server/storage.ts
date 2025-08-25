@@ -708,7 +708,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(healthRecords)
       .where(and(eq(healthRecords.id, id), eq(healthRecords.userId, userId)));
-    return (result.rowCount ?? 0) > 0;
+    return result.rowCount > 0;
   }
 
   // Medical event operations
@@ -743,26 +743,26 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(medicalEvents)
       .where(and(eq(medicalEvents.id, id), eq(medicalEvents.userId, userId)));
-    return (result.rowCount ?? 0) > 0;
+    return result.rowCount > 0;
   }
 
   // Animal tag operations
   async getAnimalTags(filters?: { type?: string; parentId?: number }): Promise<AnimalTag[]> {
-    const conditions = [eq(animalTags.isActive, true)];
+    let query = db.select().from(animalTags).where(eq(animalTags.isActive, true));
     
     if (filters?.type) {
-      conditions.push(eq(animalTags.type, filters.type));
+      query = query.where(eq(animalTags.type, filters.type));
     }
     
     if (filters?.parentId !== undefined) {
       if (filters.parentId === null) {
-        conditions.push(sql`${animalTags.parentId} IS NULL`);
+        query = query.where(sql`${animalTags.parentId} IS NULL`);
       } else {
-        conditions.push(eq(animalTags.parentId, filters.parentId));
+        query = query.where(eq(animalTags.parentId, filters.parentId));
       }
     }
     
-    return await db.select().from(animalTags).where(and(...conditions)).orderBy(animalTags.name);
+    return await query.orderBy(animalTags.name);
   }
 
   async getAnimalTag(id: number): Promise<AnimalTag | undefined> {
@@ -831,7 +831,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(productTags)
       .where(and(eq(productTags.productId, productId), eq(productTags.tagId, tagId)));
-    return (result.rowCount ?? 0) > 0;
+    return result.rowCount > 0;
   }
 
   // Analytics for admin
@@ -851,7 +851,7 @@ export class DatabaseStorage implements IStorage {
       blessedProducts,
       activeRecalls,
       blacklistedIngredients,
-      veterinaryOfficeCount,
+      veterinaryOffices,
     ] = await Promise.all([
       db.select({ count: sql`count(*)` }).from(products),
       db.select({ count: sql`count(*)` }).from(users),
@@ -869,7 +869,7 @@ export class DatabaseStorage implements IStorage {
       blessedProducts: Number(blessedProducts[0].count),
       activeRecalls: Number(activeRecalls[0].count),
       blacklistedIngredients: Number(blacklistedIngredients[0].count),
-      veterinaryOffices: Number(veterinaryOfficeCount[0].count),
+      veterinaryOffices: Number(veterinaryOffices[0].count),
     };
   }
 
