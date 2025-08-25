@@ -5,6 +5,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
+import PWAInstallButton from "@/components/pwa-install-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +52,9 @@ export default function Navbar() {
           
           {/* Right Section - User Menu */}
           <div className="flex items-center space-x-4">
+            {/* PWA Install Button */}
+            <PWAInstallButton />
+            
             {/* Theme Toggle */}
             <ThemeToggle />
             

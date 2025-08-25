@@ -1,0 +1,54 @@
+{
+  "name": "PawsitiveCheck - Pet Product Safety Analysis",
+  "short_name": "PawsitiveCheck",
+  "description": "Comprehensive pet product safety analysis platform providing barcode scanning, AI-powered safety analysis, recall alerts, and community reviews.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["productivity", "lifestyle", "health"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "PawsitiveCheck Mobile Interface"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "PawsitiveCheck Desktop Interface"
+    }
+  ],
+  "features": [
+    "Barcode scanning for product identification",
+    "AI-powered safety analysis with cosmic scoring",
+    "Real-time recall alerts and notifications",
+    "Community reviews and health tracking",
+    "Offline product database access",
+    "Multi-animal support (pets, farm animals, exotic species)"
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
+}
