@@ -227,81 +227,127 @@ export default function DatabaseSync() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button
-              onClick={() => syncProductsMutation.mutate()}
-              disabled={syncProductsMutation.isPending || activeSync !== null}
-              className="mystical-button"
-              data-testid="button-sync-products"
-            >
-              {activeSync === 'products' ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Database className="h-4 w-4 mr-2" />
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncProductsMutation.mutate()}
+                disabled={syncProductsMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-products"
+              >
+                {activeSync === 'products' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Products...
+                  </>
+                ) : (
+                  <>
+                    <Database className="h-4 w-4 mr-2" />
+                    Sync Products
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'products' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating product database from external sources...
+                </div>
               )}
-              Sync Products
-            </Button>
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Product Sync:</strong> Updates pet product database with latest information from Open Pet Food Facts and external sources.
+              </div>
+            </div>
             
-            <Button
-              onClick={() => syncRecallsMutation.mutate()}
-              disabled={syncRecallsMutation.isPending || activeSync !== null}
-              className="mystical-button"
-              data-testid="button-sync-recalls"
-            >
-              {activeSync === 'recalls' ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <AlertTriangle className="h-4 w-4 mr-2" />
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncRecallsMutation.mutate()}
+                disabled={syncRecallsMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-recalls"
+              >
+                {activeSync === 'recalls' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Recalls...
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Sync Recalls
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'recalls' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Fetching latest recall alerts from regulatory sources...
+                </div>
               )}
-              Sync Recalls
-            </Button>
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Recall Sync:</strong> Pulls latest product recalls and safety alerts from FDA and regulatory databases.
+              </div>
+            </div>
             
-            <Button
-              onClick={() => syncIngredientsMutation.mutate()}
-              disabled={syncIngredientsMutation.isPending || activeSync !== null}
-              className="mystical-button"
-              data-testid="button-sync-ingredients"
-            >
-              {activeSync === 'ingredients' ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Clock className="h-4 w-4 mr-2" />
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncIngredientsMutation.mutate()}
+                disabled={syncIngredientsMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-ingredients"
+              >
+                {activeSync === 'ingredients' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Ingredients...
+                  </>
+                ) : (
+                  <>
+                    <Clock className="h-4 w-4 mr-2" />
+                    Sync Ingredients
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'ingredients' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating dangerous ingredient blacklist...
+                </div>
               )}
-              Sync Ingredients
-            </Button>
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Ingredient Sync:</strong> Updates dangerous ingredient blacklist from veterinary safety databases and research.
+              </div>
+            </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Button
                 onClick={() => syncAllMutation.mutate()}
                 disabled={syncAllMutation.isPending || activeSync !== null}
-                className="w-full bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 text-white font-bold py-4 px-6 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="w-full bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 text-white font-bold h-12 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                 data-testid="button-sync-all"
               >
                 {activeSync === 'all' ? (
                   <>
-                    <RefreshCw className="h-6 w-6 mr-3 animate-spin" />
-                    🌟 COSMIC SYNCHRONIZATION IN PROGRESS... 🌟
+                    <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+                    Full Sync in Progress...
                   </>
                 ) : (
                   <>
-                    <Zap className="h-6 w-6 mr-3" />
-                    🚀 SYNC EVERYTHING - FULL COSMIC REFRESH 🚀
+                    <Zap className="h-5 w-5 mr-2" />
+                    Sync Everything
                   </>
                 )}
               </Button>
               
               {activeSync === 'all' && (
-                <div className="text-center space-y-2">
-                  <div className="text-cosmic-300 font-medium animate-pulse">
-                    ✨ Channeling cosmic energies across all databases... ✨
-                  </div>
-                  <div className="text-sm text-cosmic-400">
-                    This comprehensive sync updates products, recalls, ingredients, safety scores, cosmic clarity, and transparency levels
-                  </div>
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Comprehensive database synchronization in progress...
                 </div>
               )}
               
-              <div className="text-center text-sm text-cosmic-500 bg-cosmic-800/30 p-3 rounded border border-cosmic-700">
-                <strong className="text-mystical-purple">⚡ ULTIMATE SYNC POWER:</strong> This cosmic operation will refresh ALL platform data including external product sources, regulatory recalls, veterinary ingredient databases, recalculated safety scores, updated cosmic clarity assessments, and comprehensive transparency evaluations.
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, cosmic scores, and transparency levels.
               </div>
             </div>
           </div>
