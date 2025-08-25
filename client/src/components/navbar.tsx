@@ -43,39 +43,8 @@ export default function Navbar() {
             </Link>
           </div>
           
-          {/* Center Section - Desktop Navigation + Search */}
-          <div className="flex-1 flex items-center justify-center space-x-8">
-            {/* Desktop Navigation Dropdown */}
-            <div className="hidden md:block">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
-                    data-testid="nav-navigation-dropdown"
-                  >
-                    <Menu className="mr-2 h-4 w-4" />
-                    Navigation
-                    <ChevronDown className="ml-1 h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="w-48">
-                  {navigation.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <DropdownMenuItem key={item.name} asChild>
-                        <Link href={item.href} className="flex items-center w-full">
-                          <Icon className="mr-2 h-4 w-4" />
-                          {item.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    );
-                  })}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            
+          {/* Center Section - Search */}
+          <div className="flex-1 flex items-center justify-center">
             {/* Header Search - Center on desktop */}
             <div className="hidden md:block">
               <HeaderSearch />
@@ -110,7 +79,23 @@ export default function Navbar() {
                   <ChevronDown className="ml-1 h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-56">
+                {/* Navigation Items */}
+                {navigation.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem key={item.name} asChild>
+                      <Link href={item.href} className="flex items-center w-full">
+                        <Icon className="mr-2 h-4 w-4" />
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+                
+                <DropdownMenuSeparator />
+                
+                {/* Profile Items */}
                 <DropdownMenuItem asChild>
                   <Link href="/profile" className="flex items-center w-full">
                     <Users className="mr-2 h-4 w-4" />
