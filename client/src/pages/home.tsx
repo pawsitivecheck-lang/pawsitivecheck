@@ -145,39 +145,6 @@ export default function Home() {
 
           {/* Dashboard Grid */}
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Recent Scans */}
-            <Card className="bg-card border border-border" data-testid="card-recent-scans">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <History className="h-5 w-5" />
-                  Recent Safety Analyses
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {(recentScans?.length ?? 0) > 0 ? (
-                  <div className="space-y-3">
-                    {recentScans?.slice(0, 3).map((scan: any) => (
-                      <div key={scan.id} className="p-3 bg-cosmic-800/30 rounded-lg" data-testid={`scan-item-${scan.id}`}>
-                        <p className="text-cosmic-200 text-sm">{scan.scannedData || 'Unknown Product'}</p>
-                        <p className="text-cosmic-400 text-xs">
-                          {new Date(scan.scannedAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <p className="text-cosmic-400" data-testid="text-no-scans">No mystical analyses yet</p>
-                    <Link href="/product-scanner">
-                      <Button className="mt-4 mystical-button" size="sm" data-testid="button-start-scanning">
-                        Begin Your Journey
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
             {/* Active Recalls */}
             <Card className="cosmic-card" data-testid="card-active-recalls">
               <CardHeader>
