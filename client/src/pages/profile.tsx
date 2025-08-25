@@ -12,40 +12,40 @@ import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, Trend
 export default function Profile() {
   const { user } = useAuth();
 
-  const { data: userReviews } = useQuery({
+  const { data: userReviews = [] } = useQuery({
     queryKey: ['/api/user/reviews'],
   });
 
-  const { data: userScans } = useQuery({
+  const { data: userScans = [] } = useQuery({
     queryKey: ['/api/scans'],
   });
 
   const getRankIcon = (reviewCount: number) => {
-    if (reviewCount >= 50) return <Crown className="text-starlight-500 h-5 w-5" />;
-    if (reviewCount >= 20) return <Star className="text-mystical-purple h-5 w-5" />;
-    if (reviewCount >= 5) return <Eye className="text-mystical-green h-5 w-5" />;
-    return <User className="text-cosmic-400 h-5 w-5" />;
+    if (reviewCount >= 50) return <Crown className="text-blue-500 h-5 w-5" />;
+    if (reviewCount >= 20) return <Star className="text-green-600 h-5 w-5" />;
+    if (reviewCount >= 5) return <Eye className="text-blue-600 h-5 w-5" />;
+    return <User className="text-gray-400 h-5 w-5" />;
   };
 
   const getRankTitle = (reviewCount: number) => {
-    if (reviewCount >= 50) return "Cosmic Oracle";
-    if (reviewCount >= 20) return "Elder Member";
-    if (reviewCount >= 5) return "Truth Seeker";
-    return "New Initiate";
+    if (reviewCount >= 50) return "Expert Reviewer";
+    if (reviewCount >= 20) return "Trusted Member";
+    if (reviewCount >= 5) return "Active Member";
+    return "New Member";
   };
 
   const getRankDescription = (reviewCount: number) => {
-    if (reviewCount >= 50) return "Master of cosmic wisdom, trusted advisor to the Audit Syndicate";
-    if (reviewCount >= 20) return "Experienced guardian of truth, respected by fellow seekers";
-    if (reviewCount >= 5) return "Dedicated seeker of transparency and protection";
-    return "Beginning the journey of mystical discovery";
+    if (reviewCount >= 50) return "Experienced pet product expert, trusted by the community";
+    if (reviewCount >= 20) return "Knowledgeable reviewer helping fellow pet owners";
+    if (reviewCount >= 5) return "Active community member sharing valuable insights";
+    return "New to the PawsitiveCheck community";
   };
 
   const getNextRankProgress = (reviewCount: number) => {
     if (reviewCount >= 50) return { current: reviewCount, max: 50, nextRank: "Maximum Rank Achieved" };
-    if (reviewCount >= 20) return { current: reviewCount, max: 50, nextRank: "Cosmic Oracle" };
-    if (reviewCount >= 5) return { current: reviewCount, max: 20, nextRank: "Elder Member" };
-    return { current: reviewCount, max: 5, nextRank: "Truth Seeker" };
+    if (reviewCount >= 20) return { current: reviewCount, max: 50, nextRank: "Expert Reviewer" };
+    if (reviewCount >= 5) return { current: reviewCount, max: 20, nextRank: "Trusted Member" };
+    return { current: reviewCount, max: 5, nextRank: "Active Member" };
   };
 
   const reviewCount = userReviews?.length || 0;
@@ -60,11 +60,11 @@ export default function Profile() {
         <div className="max-w-6xl mx-auto">
           {/* Profile Header */}
           <div className="mb-12">
-            <Card className="cosmic-card border-starlight-500/50" data-testid="card-profile-header">
+            <Card className="bg-white dark:bg-gray-800 border border-blue-500/20 shadow-lg" data-testid="card-profile-header">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="text-center md:text-left">
-                    <div className="w-24 h-24 mx-auto md:mx-0 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-4">
+                    <div className="w-24 h-24 mx-auto md:mx-0 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-4">
                       {user?.profileImageUrl ? (
                         <img 
                           src={user.profileImageUrl} 
@@ -73,35 +73,35 @@ export default function Profile() {
                           data-testid="img-profile-avatar"
                         />
                       ) : (
-                        <User className="text-cosmic-900 text-3xl" />
+                        <User className="text-white text-3xl" />
                       )}
                     </div>
                   </div>
                   
                   <div className="flex-1 text-center md:text-left">
                     <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                      <h1 className="font-mystical text-3xl font-bold text-starlight-500" data-testid="text-profile-name">
+                      <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400" data-testid="text-profile-name">
                         {user?.firstName || 'Anonymous'} {user?.lastName || 'Seeker'}
                       </h1>
                       {getRankIcon(reviewCount)}
                     </div>
                     
                     <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-                      <Badge className="bg-mystical-purple/20 text-mystical-purple border-mystical-purple" data-testid="badge-user-rank">
+                      <Badge className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-600" data-testid="badge-user-rank">
                         {getRankTitle(reviewCount)}
                       </Badge>
                       {user?.isAdmin && (
-                        <Badge className="bg-starlight-500/20 text-starlight-500 border-starlight-500" data-testid="badge-admin">
-                          Audit Syndicate Member
+                        <Badge className="bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-300 dark:border-green-600" data-testid="badge-admin">
+                          Platform Admin
                         </Badge>
                       )}
                     </div>
                     
-                    <p className="text-cosmic-300 mb-4" data-testid="text-rank-description">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4" data-testid="text-rank-description">
                       {getRankDescription(reviewCount)}
                     </p>
                     
-                    <div className="flex items-center justify-center md:justify-start gap-1 text-cosmic-400 text-sm">
+                    <div className="flex items-center justify-center md:justify-start gap-1 text-gray-500 dark:text-gray-400 text-sm">
                       <Calendar className="h-4 w-4" />
                       <span data-testid="text-join-date">
                         Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString()}
@@ -112,7 +112,7 @@ export default function Profile() {
                   <div className="text-center">
                     <Button 
                       variant="outline"
-                      className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
+                      className="border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                       data-testid="button-edit-profile"
                     >
                       Edit Profile
@@ -125,74 +125,74 @@ export default function Profile() {
 
           {/* Stats Overview */}
           <div className="grid md:grid-cols-4 gap-6 mb-8">
-            <Card className="cosmic-card" data-testid="card-stat-reviews">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-reviews">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-mystical-purple/20 rounded-full flex items-center justify-center mb-4">
-                  <MessageCircle className="text-mystical-purple" />
+                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
+                  <MessageCircle className="text-blue-600 dark:text-blue-400" />
                 </div>
-                <div className="text-3xl font-bold text-mystical-purple mb-2" data-testid="text-review-count">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-testid="text-review-count">
                   {reviewCount}
                 </div>
-                <p className="text-cosmic-300">Mystical Insights</p>
+                <p className="text-gray-600 dark:text-gray-300">Product Reviews</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-scans">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-scans">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-mystical-green/20 rounded-full flex items-center justify-center mb-4">
-                  <Package className="text-mystical-green" />
+                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Package className="text-green-600 dark:text-green-400" />
                 </div>
-                <div className="text-3xl font-bold text-mystical-green mb-2" data-testid="text-scan-count">
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2" data-testid="text-scan-count">
                   {scanCount}
                 </div>
-                <p className="text-cosmic-300">Products Scanned</p>
+                <p className="text-gray-600 dark:text-gray-300">Products Scanned</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-helpfulness">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-helpfulness">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-starlight-500/20 rounded-full flex items-center justify-center mb-4">
-                  <TrendingUp className="text-starlight-500" />
+                <div className="w-12 h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-4">
+                  <TrendingUp className="text-purple-600 dark:text-purple-400" />
                 </div>
-                <div className="text-3xl font-bold text-starlight-500 mb-2" data-testid="text-helpfulness-score">
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" data-testid="text-helpfulness-score">
                   {Math.round((reviewCount * 4.2) + (scanCount * 1.5))}
                 </div>
-                <p className="text-cosmic-300">Helpfulness Score</p>
+                <p className="text-gray-600 dark:text-gray-300">Community Score</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-rank-progress">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-stat-rank-progress">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-cosmic-600/20 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="text-cosmic-400" />
+                <div className="w-12 h-12 mx-auto bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mb-4">
+                  <Shield className="text-orange-600 dark:text-orange-400" />
                 </div>
-                <div className="text-3xl font-bold text-cosmic-400 mb-2" data-testid="text-rank-progress">
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2" data-testid="text-rank-progress">
                   {rankProgress.current}/{rankProgress.max}
                 </div>
-                <p className="text-cosmic-300">to {rankProgress.nextRank}</p>
+                <p className="text-gray-600 dark:text-gray-300">to {rankProgress.nextRank}</p>
               </CardContent>
             </Card>
           </div>
 
           {/* Rank Progress */}
           {rankProgress.current < rankProgress.max && (
-            <Card className="cosmic-card mb-8" data-testid="card-rank-progress">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow mb-8" data-testid="card-rank-progress">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                   <TrendingUp className="h-5 w-5" />
                   Path to {rankProgress.nextRank}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="relative">
-                  <div className="w-full bg-cosmic-800 rounded-full h-4 mb-4">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
                     <div 
-                      className="bg-gradient-to-r from-starlight-500 to-mystical-purple h-4 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-500"
                       style={{ width: `${(rankProgress.current / rankProgress.max) * 100}%` }}
                       data-testid="progress-bar-rank"
                     ></div>
                   </div>
-                  <div className="flex justify-between text-sm text-cosmic-300">
+                  <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
                     <span data-testid="text-progress-current">
                       {rankProgress.current} reviews completed
                     </span>
@@ -207,14 +207,14 @@ export default function Profile() {
 
           {/* Profile Tabs */}
           <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
-            <TabsList className="grid w-full grid-cols-3 bg-cosmic-800/50 border border-cosmic-600">
-              <TabsTrigger value="reviews" className="data-[state=active]:bg-mystical-purple/20 data-[state=active]:text-mystical-purple" data-testid="tab-reviews">
+            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
                 My Reviews
               </TabsTrigger>
-              <TabsTrigger value="scans" className="data-[state=active]:bg-mystical-green/20 data-[state=active]:text-mystical-green" data-testid="tab-scans">
+              <TabsTrigger value="scans" className="data-[state=active]:bg-green-100 dark:data-[state=active]:bg-green-900/20 data-[state=active]:text-green-600 dark:data-[state=active]:text-green-400" data-testid="tab-scans">
                 Scan History
               </TabsTrigger>
-              <TabsTrigger value="achievements" className="data-[state=active]:bg-starlight-500/20 data-[state=active]:text-starlight-500" data-testid="tab-achievements">
+              <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
                 Achievements
               </TabsTrigger>
             </TabsList>
@@ -223,44 +223,44 @@ export default function Profile() {
               {userReviews?.length > 0 ? (
                 <div className="space-y-6">
                   {userReviews.map((review: any) => (
-                    <Card key={review.id} className="cosmic-card" data-testid={`review-card-${review.id}`}>
+                    <Card key={review.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`review-card-${review.id}`}>
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h3 className="text-lg font-semibold text-cosmic-100 mb-1" data-testid="text-review-title">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1" data-testid="text-review-title">
                               {review.title || 'Untitled Review'}
                             </h3>
                             <div className="flex items-center gap-1 mb-2">
                               {[...Array(5)].map((_, i) => (
                                 <span 
                                   key={i} 
-                                  className={i < review.rating ? 'text-mystical-green' : 'text-cosmic-600'}
+                                  className={i < review.rating ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-600'}
                                   data-testid={`review-paw-${i}`}
                                 >
                                   🐾
                                 </span>
                               ))}
-                              <span className="text-cosmic-400 text-sm ml-2">
+                              <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">
                                 {review.rating}/5 Paws
                               </span>
                             </div>
                           </div>
-                          <span className="text-cosmic-500 text-sm" data-testid="text-review-date">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-review-date">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-cosmic-300 mb-4" data-testid="text-review-content">
+                        <p className="text-gray-700 dark:text-gray-300 mb-4" data-testid="text-review-content">
                           {review.content}
                         </p>
                         <div className="flex justify-between items-center">
-                          <span className="text-cosmic-400 text-sm">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm">
                             Product ID: {review.productId}
                           </span>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="border-cosmic-600 text-cosmic-300" data-testid="button-edit-review">
+                            <Button variant="outline" size="sm" className="border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300" data-testid="button-edit-review">
                               Edit
                             </Button>
-                            <Button variant="outline" size="sm" className="border-mystical-red text-mystical-red" data-testid="button-delete-review">
+                            <Button variant="outline" size="sm" className="border-red-300 dark:border-red-600 text-red-600 dark:text-red-400" data-testid="button-delete-review">
                               Delete
                             </Button>
                           </div>
@@ -270,16 +270,16 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <Card className="cosmic-card" data-testid="card-no-reviews">
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-reviews">
                   <CardContent className="p-12 text-center">
-                    <MessageCircle className="mx-auto h-16 w-16 text-cosmic-500 mb-4" />
-                    <h3 className="font-mystical text-xl text-cosmic-300 mb-4" data-testid="text-no-reviews-title">
+                    <MessageCircle className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-reviews-title">
                       No Reviews Yet
                     </h3>
-                    <p className="text-cosmic-400 mb-6" data-testid="text-no-reviews-description">
-                      Share your mystical insights about pet products to help fellow truth-seekers
+                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-reviews-description">
+                      Share your experience with pet products to help fellow pet owners
                     </p>
-                    <Button className="mystical-button" data-testid="button-write-first-review">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-write-first-review">
                       Write Your First Review
                     </Button>
                   </CardContent>
@@ -291,21 +291,21 @@ export default function Profile() {
               {userScans?.length > 0 ? (
                 <div className="space-y-4">
                   {userScans.map((scan: any) => (
-                    <Card key={scan.id} className="cosmic-card" data-testid={`scan-card-${scan.id}`}>
+                    <Card key={scan.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid={`scan-card-${scan.id}`}>
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h3 className="text-lg font-semibold text-cosmic-100 mb-2" data-testid="text-scan-data">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2" data-testid="text-scan-data">
                               {scan.scannedData || 'Unknown Product'}
                             </h3>
                             {scan.analysisResult && (
                               <Badge 
                                 className={
                                   scan.analysisResult.cosmicClarity === 'blessed' 
-                                    ? 'bg-mystical-green/20 text-mystical-green'
+                                    ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400'
                                     : scan.analysisResult.cosmicClarity === 'cursed'
-                                    ? 'bg-mystical-red/20 text-mystical-red'
-                                    : 'bg-yellow-500/20 text-yellow-500'
+                                    ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                                    : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400'
                                 }
                                 data-testid="badge-scan-clarity"
                               >
@@ -313,7 +313,7 @@ export default function Profile() {
                               </Badge>
                             )}
                           </div>
-                          <span className="text-cosmic-500 text-sm" data-testid="text-scan-date">
+                          <span className="text-gray-500 dark:text-gray-400 text-sm" data-testid="text-scan-date">
                             {new Date(scan.scannedAt).toLocaleDateString()}
                           </span>
                         </div>
@@ -322,16 +322,16 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <Card className="cosmic-card" data-testid="card-no-scans">
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-no-scans">
                   <CardContent className="p-12 text-center">
-                    <Package className="mx-auto h-16 w-16 text-cosmic-500 mb-4" />
-                    <h3 className="font-mystical text-xl text-cosmic-300 mb-4" data-testid="text-no-scans-title">
+                    <Package className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-scans-title">
                       No Scans Yet
                     </h3>
-                    <p className="text-cosmic-400 mb-6" data-testid="text-no-scans-description">
-                      Begin your mystical journey by scanning your first pet product
+                    <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-scans-description">
+                      Start analyzing pet products for safety information
                     </p>
-                    <Button className="mystical-button" data-testid="button-start-scanning">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" data-testid="button-start-scanning">
                       Start Scanning
                     </Button>
                   </CardContent>
@@ -342,7 +342,7 @@ export default function Profile() {
             <TabsContent value="achievements" className="mt-6" data-testid="content-achievements">
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Achievement Cards */}
-                <Card className={`cosmic-card ${reviewCount >= 1 ? 'border-mystical-green/50' : 'border-cosmic-600/50'}`} data-testid="achievement-first-review">
+                <Card className={`bg-white dark:bg-gray-800 border shadow ${reviewCount >= 1 ? 'border-green-300 dark:border-green-600' : 'border-gray-200 dark:border-gray-700'}`} data-testid="achievement-first-review">
                   <CardContent className="p-6 text-center">
                     <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
                       reviewCount >= 1 ? 'bg-mystical-green/20' : 'bg-cosmic-700'
@@ -388,7 +388,7 @@ export default function Profile() {
                   </CardContent>
                 </Card>
 
-                <Card className={`cosmic-card ${reviewCount >= 5 ? 'border-starlight-500/50' : 'border-cosmic-600/50'}`} data-testid="achievement-truth-seeker">
+                <Card className={`bg-white dark:bg-gray-800 border shadow ${reviewCount >= 5 ? 'border-blue-300 dark:border-blue-600' : 'border-gray-200 dark:border-gray-700'}`} data-testid="achievement-truth-seeker">
                   <CardContent className="p-6 text-center">
                     <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
                       reviewCount >= 5 ? 'bg-starlight-500/20' : 'bg-cosmic-700'
@@ -413,7 +413,7 @@ export default function Profile() {
                   </CardContent>
                 </Card>
 
-                <Card className={`cosmic-card ${user?.isAdmin ? 'border-mystical-red/50' : 'border-cosmic-600/50'}`} data-testid="achievement-syndicate">
+                <Card className={`bg-white dark:bg-gray-800 border shadow ${user?.isAdmin ? 'border-orange-300 dark:border-orange-600' : 'border-gray-200 dark:border-gray-700'}`} data-testid="achievement-syndicate">
                   <CardContent className="p-6 text-center">
                     <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${
                       user?.isAdmin ? 'bg-mystical-red/20' : 'bg-cosmic-700'

@@ -76,7 +76,7 @@ export default function Navbar() {
             <ThemeToggle />
             
             {/* Profile Dropdown - Desktop only */}
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
