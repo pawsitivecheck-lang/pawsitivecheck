@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Camera, Search, Shield, BarChart3, History, Crown, WandSparkles, PawPrint } from "lucide-react";
+import { Camera, Search, Shield, BarChart3, History, Crown, WandSparkles, PawPrint, Tractor } from "lucide-react";
 import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 
 export default function Home() {
@@ -112,6 +112,18 @@ export default function Home() {
                     </div>
                     <h3 className="text-lg font-semibold text-foreground mb-2">Community</h3>
                     <p className="text-muted-foreground text-sm">Connect with other pet owners and share reviews</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/livestock">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-orange-300 dark:hover:border-orange-600" data-testid="card-livestock">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center mb-4">
+                      <Tractor className="text-orange-600 h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Livestock Management</h3>
+                    <p className="text-muted-foreground text-sm">Manage farm operations, herds, and animal health</p>
                   </CardContent>
                 </Card>
               </Link>
