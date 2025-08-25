@@ -25,7 +25,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/vet-finder" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                <a href="/pet-health-protection" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
                   Pet Health Protection
                 </a>
               </li>

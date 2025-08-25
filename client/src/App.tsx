@@ -18,6 +18,7 @@ import Profile from "@/pages/profile";
 import PetProfiles from "@/pages/pet-profiles";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
+import PetHealthProtection from "@/pages/pet-health-protection";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -41,6 +42,7 @@ function Router() {
           <Route path="/vet-finder" component={VetFinder} />
           <Route path="/pets" component={PetProfiles} />
           <Route path="/profile" component={Profile} />
+          <Route path="/pet-health-protection" component={PetHealthProtection} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
         </>
