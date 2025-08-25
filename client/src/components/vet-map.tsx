@@ -283,17 +283,17 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       <div className="relative">
         <div 
           ref={mapRef} 
-          className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50"
+          className="h-96 w-full rounded-lg border border-gray-300 bg-gray-50"
           data-testid="vet-map"
           style={{ minHeight: '384px' }}
         />
         <div 
-          className="absolute inset-0 bg-cosmic-900/50 flex items-center justify-center rounded-lg"
+          className="absolute inset-0 bg-gray-50 flex items-center justify-center rounded-lg"
           data-testid="vet-map-loading"
         >
           <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-starlight-400 mx-auto mb-2"></div>
-            <p className="text-cosmic-300">Loading Cosmic Map...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+            <p className="text-gray-600">Loading Map...</p>
           </div>
         </div>
       </div>
@@ -303,16 +303,16 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   if (mapError) {
     return (
       <div 
-        className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50 flex items-center justify-center"
+        className="h-96 w-full rounded-lg border border-gray-300 bg-gray-50 flex items-center justify-center"
         data-testid="vet-map-error"
       >
         <div className="text-center p-6">
           <div className="text-6xl mb-4">🗺️</div>
-          <h3 className="text-starlight-400 font-mystical text-xl mb-2">Cosmic Map Loading...</h3>
-          <p className="text-cosmic-300 mb-4">The interactive map is initializing. All veterinary practice details are available in the detailed list below with exact distances and contact information.</p>
-          <div className="bg-cosmic-800/50 rounded-lg p-4 border border-cosmic-700">
-            <h4 className="text-starlight-400 font-medium mb-2">Quick Reference:</h4>
-            <div className="text-sm text-cosmic-200 space-y-1">
+          <h3 className="text-blue-600 font-bold text-xl mb-2">Map Loading...</h3>
+          <p className="text-gray-600 mb-4">The interactive map is initializing. All veterinary practice details are available in the detailed list below with exact distances and contact information.</p>
+          <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+            <h4 className="text-blue-600 font-medium mb-2">Quick Reference:</h4>
+            <div className="text-sm text-gray-700 space-y-1">
               <p>🔴 Emergency Services Available</p>
               <p>🔵 Regular Veterinary Care</p>
               <p>📍 All practices show distance in the list</p>
@@ -327,12 +327,12 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
     <div className="relative">
       <div 
         ref={mapRef} 
-        className="h-96 w-full rounded-lg border border-cosmic-600"
+        className="h-96 w-full rounded-lg border border-gray-300"
         data-testid="vet-map"
         style={{ 
           minHeight: '384px',
           height: '384px',
-          backgroundColor: '#1a1a2e'
+          backgroundColor: '#f9fafb'
         }}
       />
     </div>

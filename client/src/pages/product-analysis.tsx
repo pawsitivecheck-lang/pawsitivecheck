@@ -21,25 +21,25 @@ export default function ProductAnalysis() {
     enabled: !!id
   }) as { data: any, isLoading: boolean };
 
-  const getCosmicClarityIcon = (clarity: string) => {
-    switch (clarity) {
-      case 'blessed': return <CheckCircle className="h-5 w-5 text-mystical-green" />;
+  const getSafetyIcon = (safety: string) => {
+    switch (safety) {
+      case 'safe': return <CheckCircle className="h-5 w-5 text-green-600" />;
       case 'questionable': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'cursed': return <XCircle className="h-5 w-5 text-mystical-red" />;
-      default: return <Shield className="h-5 w-5 text-cosmic-400" />;
+      case 'unsafe': return <XCircle className="h-5 w-5 text-red-600" />;
+      default: return <Shield className="h-5 w-5 text-blue-600" />;
     }
   };
 
-  const getCosmicClarityColor = (clarity: string) => {
-    switch (clarity) {
-      case 'blessed':
-        return 'bg-mystical-green/20 text-mystical-green border-mystical-green';
+  const getSafetyColor = (safety: string) => {
+    switch (safety) {
+      case 'safe':
+        return 'bg-green-50 text-green-600 border-green-600';
       case 'questionable':
-        return 'bg-yellow-500/20 text-yellow-500 border-yellow-500';
-      case 'cursed':
-        return 'bg-mystical-red/20 text-mystical-red border-mystical-red';
+        return 'bg-yellow-50 text-yellow-600 border-yellow-600';
+      case 'unsafe':
+        return 'bg-red-50 text-red-600 border-red-600';
       default:
-        return 'bg-cosmic-400/20 text-cosmic-400 border-cosmic-400';
+        return 'bg-blue-50 text-blue-600 border-blue-600';
     }
   };
 
@@ -49,18 +49,18 @@ export default function ProductAnalysis() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-cosmic-900">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <div className="pt-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="animate-pulse">
-              <div className="h-8 bg-cosmic-700 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-gray-300 rounded w-1/3 mb-6"></div>
               <div className="grid md:grid-cols-2 gap-8">
-                <div className="h-64 bg-cosmic-700 rounded-lg"></div>
+                <div className="h-64 bg-gray-300 rounded-lg"></div>
                 <div className="space-y-4">
-                  <div className="h-6 bg-cosmic-700 rounded w-2/3"></div>
-                  <div className="h-4 bg-cosmic-700 rounded w-1/2"></div>
-                  <div className="h-20 bg-cosmic-700 rounded"></div>
+                  <div className="h-6 bg-gray-300 rounded w-2/3"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-20 bg-gray-300 rounded"></div>
                 </div>
               </div>
             </div>
@@ -72,13 +72,13 @@ export default function ProductAnalysis() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-cosmic-900">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <div className="pt-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-2xl font-bold text-cosmic-100 mb-4">Product Not Found</h1>
-            <p className="text-cosmic-400 mb-6">The product you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => window.location.href = "/product-database"} className="mystical-button">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
+            <p className="text-gray-600 mb-6">The product you're looking for doesn't exist or has been removed.</p>
+            <Button onClick={() => window.location.href = "/product-database"} className="bg-blue-600 text-white hover:bg-blue-700">
               Browse Products
             </Button>
           </div>
@@ -88,7 +88,7 @@ export default function ProductAnalysis() {
   }
 
   return (
-    <div className="min-h-screen bg-cosmic-900">
+    <div className="min-h-screen bg-white">
       <Navbar />
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8 pb-16">
@@ -98,7 +98,7 @@ export default function ProductAnalysis() {
             <Button 
               onClick={() => window.history.back()}
               variant="ghost" 
-              className="text-cosmic-300 hover:text-cosmic-100 mb-4"
+              className="text-gray-600 hover:text-gray-900 mb-4"
               data-testid="button-back"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -107,21 +107,21 @@ export default function ProductAnalysis() {
             
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <h1 className="text-3xl font-bold text-cosmic-100">In-Depth Product Analysis</h1>
+                <h1 className="text-3xl font-bold text-blue-600">In-Depth Product Analysis</h1>
                 <HelpTooltip 
                   content="This comprehensive analysis breaks down every aspect of the product's safety, quality, and suitability for pets. Our analysis uses advanced algorithms, veterinary research, FDA data, and molecular ingredient science to provide the most detailed assessment available."
                   side="right"
                 />
               </div>
-              <p className="text-cosmic-300 text-lg">Complete safety breakdown for {product.name}</p>
+              <p className="text-gray-600 text-lg">Complete safety breakdown for {product.name}</p>
             </div>
           </div>
 
           {/* Product Overview */}
-          <Card className="cosmic-card mb-8" data-testid="card-product-overview">
+          <Card className="mb-8" data-testid="card-product-overview">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <CardTitle className="text-starlight-400">Product Overview</CardTitle>
+                <CardTitle className="text-blue-600">Product Overview</CardTitle>
                 <HelpTooltip 
                   content="Basic product identification information including official name, manufacturer, UPC barcode for tracking, and category classification. This information is essential for recalls, veterinary consultations, and manufacturer contact."
                   side="right"
@@ -131,19 +131,19 @@ export default function ProductAnalysis() {
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-xl font-semibold text-cosmic-100 mb-2">{product.name}</h3>
-                  <p className="text-cosmic-300 mb-4">by {product.brand}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-gray-600 mb-4">by {product.brand}</p>
                   
                   {product.barcode && (
                     <div className="mb-4">
                       <div className="flex items-center gap-1 mb-1">
-                        <span className="text-cosmic-200 font-medium">UPC Barcode:</span>
+                        <span className="text-gray-700 font-medium">UPC Barcode:</span>
                         <HelpTooltip 
                           content="Universal Product Code - This unique identifier helps track recalls, verify authenticity, report adverse reactions to manufacturers, and ensure you're getting accurate safety information for this exact product variant."
                           side="right"
                         />
                       </div>
-                      <span className="text-cosmic-300 font-mono bg-cosmic-800/30 px-2 py-1 rounded">
+                      <span className="text-gray-700 font-mono bg-gray-100 px-2 py-1 rounded">
                         {product.barcode}
                       </span>
                     </div>
@@ -151,13 +151,13 @@ export default function ProductAnalysis() {
 
                   <div className="mb-4">
                     <div className="flex items-center gap-1 mb-1">
-                      <span className="text-cosmic-200 font-medium">Product Category:</span>
+                      <span className="text-gray-700 font-medium">Product Category:</span>
                       <HelpTooltip 
                         content="Product classification helps determine appropriate safety standards, regulatory requirements, and species-specific safety guidelines. Different categories have different risk profiles and testing requirements."
                         side="right"
                       />
                     </div>
-                    <Badge variant="outline" className="border-cosmic-600 text-cosmic-300">
+                    <Badge variant="outline" className="border-blue-600 text-blue-600">
                       {product.category || 'General Pet Product'}
                     </Badge>
                   </div>
@@ -172,8 +172,8 @@ export default function ProductAnalysis() {
                       data-testid="img-product-analysis"
                     />
                   ) : (
-                    <div className="w-48 h-48 bg-cosmic-700 rounded-lg flex items-center justify-center">
-                      <Package className="text-cosmic-500 text-6xl" />
+                    <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <Package className="text-gray-400 text-6xl" />
                     </div>
                   )}
                 </div>
@@ -185,10 +185,10 @@ export default function ProductAnalysis() {
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
             
             {/* Paw Safety Rating */}
-            <Card className="cosmic-card" data-testid="card-paw-rating">
+            <Card className="" data-testid="card-paw-rating">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-starlight-400">🐾 Paw Safety Rating</CardTitle>
+                  <CardTitle className="text-blue-600">🐾 Paw Safety Rating</CardTitle>
                   <HelpTooltip 
                     content="Our signature 5-paw safety rating system. Each paw represents increasing levels of safety based on ingredient analysis, toxicity studies, allergen research, FDA recall data, veterinary warnings, and manufacturing quality. 5 paws = excellent safety, 1 paw = significant concerns."
                     side="right"
@@ -201,31 +201,31 @@ export default function ProductAnalysis() {
                     {[...Array(5)].map((_, i) => (
                       <span 
                         key={i} 
-                        className={`text-6xl ${i < generatePawRating(product.cosmicScore || 0) ? 'text-mystical-green' : 'text-cosmic-600'}`}
+                        className={`text-6xl ${i < generatePawRating(product.cosmicScore || 0) ? 'text-green-600' : 'text-gray-300'}`}
                       >
                         🐾
                       </span>
                     ))}
                   </div>
-                  <div className="text-2xl font-bold text-cosmic-100 mb-2">
+                  <div className="text-2xl font-bold text-gray-900 mb-2">
                     {generatePawRating(product.cosmicScore || 0)} out of 5 Paws
                   </div>
-                  <div className="text-cosmic-300">
+                  <div className="text-gray-600">
                     Safety Score: {product.cosmicScore || 0}/100
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Ingredient Safety:</span>
+                    <span className="text-gray-600">Ingredient Safety:</span>
                     <Progress value={(product.cosmicScore || 0) * 0.8} className="w-32" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Manufacturing Quality:</span>
+                    <span className="text-gray-600">Manufacturing Quality:</span>
                     <Progress value={(product.cosmicScore || 0) * 0.9} className="w-32" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Recall History:</span>
+                    <span className="text-gray-600">Recall History:</span>
                     <Progress value={(product.cosmicScore || 0) * 0.7} className="w-32" />
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export default function ProductAnalysis() {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-cosmic-200 mb-2">Complete Ingredient List:</h4>
-                    <p className="text-cosmic-300 text-sm leading-relaxed">
+                    <p className="text-gray-600 text-sm leading-relaxed">
                       {product.ingredients || 'Ingredient information not available'}
                     </p>
                   </div>
@@ -311,7 +311,7 @@ export default function ProductAnalysis() {
                           side="top"
                         />
                       </div>
-                      <ul className="text-sm text-cosmic-300 space-y-1">
+                      <ul className="text-sm text-gray-600 space-y-1">
                         {product.suspiciousIngredients.map((ingredient: string, index: number) => (
                           <li key={index} className="flex items-start gap-2">
                             <span className="text-mystical-red">•</span>
@@ -342,7 +342,7 @@ export default function ProductAnalysis() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Transparency Level:</span>
+                    <span className="text-gray-600">Transparency Level:</span>
                     <Badge className={
                       product.transparencyLevel === 'excellent' ? 'bg-mystical-green/20 text-mystical-green' :
                       product.transparencyLevel === 'good' ? 'bg-yellow-500/20 text-yellow-500' :
@@ -360,7 +360,7 @@ export default function ProductAnalysis() {
                         side="top"
                       />
                     </div>
-                    <div className="text-sm text-cosmic-300">
+                    <div className="text-sm text-gray-600">
                       {product.transparencyLevel === 'excellent' && '✅ Full ingredient disclosure, third-party testing, comprehensive quality certifications'}
                       {product.transparencyLevel === 'good' && '⚠️ Most information available, some testing data, basic certifications'}
                       {product.transparencyLevel === 'poor' && '❌ Limited transparency, minimal quality data available'}
@@ -409,21 +409,21 @@ export default function ProductAnalysis() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Recall History:</span>
-                    <Badge variant="outline" className="border-cosmic-600 text-cosmic-300">
+                    <span className="text-gray-600">Recall History:</span>
+                    <Badge variant="outline" className="border-blue-600 text-blue-600">
                       No Active Recalls
                     </Badge>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Last Safety Review:</span>
-                    <span className="text-cosmic-300 text-sm">
+                    <span className="text-gray-600">Last Safety Review:</span>
+                    <span className="text-gray-600 text-sm">
                       {product.lastAnalyzed ? new Date(product.lastAnalyzed).toLocaleDateString() : 'Ongoing'}
                     </span>
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-400">Blacklist Status:</span>
+                    <span className="text-gray-600">Blacklist Status:</span>
                     <Badge className={
                       product.isBlacklisted 
                         ? 'bg-mystical-red/20 text-mystical-red border-mystical-red' 
@@ -442,7 +442,7 @@ export default function ProductAnalysis() {
                           side="top"
                         />
                       </div>
-                      <p className="text-sm text-cosmic-300">
+                      <p className="text-sm text-gray-600">
                         This product has been flagged for serious safety concerns. Please consider alternatives.
                       </p>
                     </div>
@@ -451,13 +451,13 @@ export default function ProductAnalysis() {
                   {product.disposalInstructions && (
                     <div className="mt-4 p-3 bg-cosmic-700/20 rounded border border-cosmic-600/30">
                       <div className="flex items-center gap-1 mb-1">
-                        <h4 className="font-semibold text-cosmic-300">♻️ Safe Disposal:</h4>
+                        <h4 className="font-semibold text-gray-600">♻️ Safe Disposal:</h4>
                         <HelpTooltip 
                           content="Proper disposal instructions to protect the environment and prevent accidental poisoning of wildlife or other pets. Some ingredients require special handling or cannot be disposed of in regular household waste."
                           side="top"
                         />
                       </div>
-                      <p className="text-sm text-cosmic-400 leading-relaxed">
+                      <p className="text-sm text-gray-600 leading-relaxed">
                         {product.disposalInstructions}
                       </p>
                     </div>

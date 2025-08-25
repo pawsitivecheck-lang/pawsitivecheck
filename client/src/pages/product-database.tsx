@@ -124,34 +124,34 @@ export default function ProductDatabase() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-mystical-purple to-midnight-600 rounded-full flex items-center justify-center mb-6 animate-glow">
-              <Search className="text-3xl text-starlight-500" />
+            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
+              <Search className="text-3xl text-white" />
             </div>
-            <h1 className="font-mystical text-4xl md:text-6xl font-bold text-starlight-500 mb-4" data-testid="text-database-title">
-              Cosmic Product Database
+            <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-database-title">
+              Product Database
             </h1>
-            <p className="text-cosmic-300 text-lg" data-testid="text-database-description">
-              Search the mystical archives of pet product knowledge
+            <p className="text-gray-600 text-lg" data-testid="text-database-description">
+              Search our comprehensive database of pet product safety information
             </p>
           </div>
 
           {/* Current Search Display */}
           {searchTerm && (
             <div className="mb-8">
-              <Card className="cosmic-card" data-testid="card-search-results">
+              <Card className="" data-testid="card-search-results">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Search className="h-5 w-5 text-starlight-400" />
+                      <Search className="h-5 w-5 text-blue-600" />
                       <div>
-                        <p className="text-cosmic-200 text-sm">Search Results for:</p>
-                        <p className="text-starlight-400 font-medium text-lg" data-testid="text-search-term">
+                        <p className="text-gray-700 text-sm">Search Results for:</p>
+                        <p className="text-blue-600 font-medium text-lg" data-testid="text-search-term">
                           "{searchTerm}"
                         </p>
                       </div>
                       <Badge 
                         variant="secondary" 
-                        className="bg-starlight-500/20 text-starlight-300 border-starlight-500/30"
+                        className="bg-blue-50 text-blue-600 border-blue-200"
                         data-testid="badge-results-count"
                       >
                         {filteredProducts?.length || 0} results
@@ -164,7 +164,7 @@ export default function ProductDatabase() {
                         setSearchTerm("");
                         setLocation('/product-database');
                       }}
-                      className="text-cosmic-400 hover:text-cosmic-200"
+                      className="text-gray-600 hover:text-gray-900"
                       data-testid="button-clear-search"
                     >
                       <X className="h-4 w-4" />

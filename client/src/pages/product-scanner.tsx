@@ -459,9 +459,9 @@ export default function ProductScanner() {
 
           {/* Scanned Product */}
           {scannedProduct && (
-            <Card className="cosmic-card mb-8" data-testid="card-scanned-product">
+            <Card className=" mb-8" data-testid="card-scanned-product">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                <CardTitle className="flex items-center gap-2 text-blue-600">
                   <Eye className="h-5 w-5" />
                   Product Discovered
                 </CardTitle>
@@ -469,18 +469,18 @@ export default function ProductScanner() {
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="md:col-span-2">
-                    <h3 className="text-xl font-semibold text-cosmic-100 mb-2" data-testid="text-product-name">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2" data-testid="text-product-name">
                       {scannedProduct.name}
                     </h3>
-                    <p className="text-cosmic-300 mb-2" data-testid="text-product-brand">
+                    <p className="text-gray-600 mb-2" data-testid="text-product-brand">
                       by {scannedProduct.brand}
                     </p>
 
                     {/* UPC/Barcode */}
                     {scannedProduct.barcode && (
                       <div className="flex items-center gap-2 mb-4" data-testid="scanned-product-barcode">
-                        <span className="text-cosmic-200 font-medium text-sm">UPC:</span>
-                        <span className="text-cosmic-300 font-mono bg-cosmic-800/30 px-2 py-1 rounded text-sm">
+                        <span className="text-gray-700 font-medium text-sm">UPC:</span>
+                        <span className="text-gray-600 font-mono bg-gray-100/30 px-2 py-1 rounded text-sm">
                           {scannedProduct.barcode}
                         </span>
                       </div>
@@ -488,16 +488,16 @@ export default function ProductScanner() {
                     
                     {scannedProduct.description && (
                       <div className="mb-4">
-                        <h4 className="text-cosmic-200 font-medium mb-2">Description:</h4>
-                        <p className="text-cosmic-400 text-sm" data-testid="text-product-description">
+                        <h4 className="text-gray-700 font-medium mb-2">Description:</h4>
+                        <p className="text-gray-600 text-sm" data-testid="text-product-description">
                           {scannedProduct.description}
                         </p>
                       </div>
                     )}
 
                     <div className="mb-4">
-                      <h4 className="text-cosmic-200 font-medium mb-2">Ingredients:</h4>
-                      <p className="text-cosmic-400 text-sm" data-testid="text-product-ingredients">
+                      <h4 className="text-gray-700 font-medium mb-2">Ingredients:</h4>
+                      <p className="text-gray-600 text-sm" data-testid="text-product-ingredients">
                         {scannedProduct.ingredients}
                       </p>
                     </div>
@@ -506,7 +506,7 @@ export default function ProductScanner() {
                       <div className="flex items-center gap-4 mb-4">
                         <div className="flex items-center gap-2">
                           {getCosmicClarityIcon(scannedProduct.cosmicClarity)}
-                          <span className="text-cosmic-200">Cosmic Clarity:</span>
+                          <span className="text-gray-700">Cosmic Clarity:</span>
                         </div>
                         <Badge className={getCosmicClarityColor(scannedProduct.cosmicClarity)} data-testid="badge-cosmic-clarity">
                           {scannedProduct.cosmicClarity.toUpperCase()}
@@ -524,18 +524,18 @@ export default function ProductScanner() {
                         data-testid="img-product"
                       />
                     ) : (
-                      <div className="w-32 h-32 bg-cosmic-700 rounded-lg mb-4 flex items-center justify-center" data-testid="placeholder-product-image">
-                        <Camera className="text-cosmic-500" />
+                      <div className="w-32 h-32 bg-gray-200 rounded-lg mb-4 flex items-center justify-center" data-testid="placeholder-product-image">
+                        <Camera className="text-gray-500" />
                       </div>
                     )}
 
                     <Button 
                       onClick={handleAnalyze}
                       disabled={analyzeProductMutation.isPending}
-                      className="w-full mystical-button"
+                      className="w-full bg-blue-600 text-white hover:bg-blue-700"
                       data-testid="button-analyze"
                     >
-                      {analyzeProductMutation.isPending ? 'Analyzing...' : 'Perform Mystical Analysis'}
+                      {analyzeProductMutation.isPending ? 'Analyzing...' : 'Perform Safety Analysis'}
                     </Button>
                   </div>
                 </div>
@@ -545,9 +545,9 @@ export default function ProductScanner() {
 
           {/* Analysis Results */}
           {analysisResult && (
-            <Card className="cosmic-card" data-testid="card-analysis-results">
+            <Card className="" data-testid="card-analysis-results">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                <CardTitle className="flex items-center gap-2 text-blue-600">
                   <Eye className="h-5 w-5" />
                   Cosmic Analysis Results
                 </CardTitle>
@@ -555,31 +555,31 @@ export default function ProductScanner() {
               <CardContent className="space-y-6">
                 {/* Cosmic Score */}
                 <div className="text-center">
-                  <div className="w-24 h-24 mx-auto bg-cosmic-800 rounded-full flex items-center justify-center mb-4 relative">
-                    <div className="text-2xl font-bold text-starlight-500" data-testid="text-cosmic-score">
+                  <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4 relative">
+                    <div className="text-2xl font-bold text-blue-600" data-testid="text-cosmic-score">
                       {analysisResult.analysis.cosmicScore}
                     </div>
-                    <div className="absolute -bottom-2 text-xs text-cosmic-400">/ 100</div>
+                    <div className="absolute -bottom-2 text-xs text-gray-600">/ 100</div>
                   </div>
-                  <h3 className="font-mystical text-xl text-starlight-400 mb-2">Cosmic Purity Score</h3>
+                  <h3 className="font-bold text-xl text-blue-600 mb-2">Cosmic Purity Score</h3>
                 </div>
 
                 {/* Verdicts */}
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-cosmic-800/30 rounded-xl p-6">
-                    <h4 className="font-mystical text-lg text-mystical-purple mb-3" data-testid="text-aleister-verdict-title">
+                  <div className="bg-gray-100/30 rounded-xl p-6">
+                    <h4 className="font-bold text-lg text-purple-600 mb-3" data-testid="text-aleister-verdict-title">
                       Aleister's Verdict:
                     </h4>
-                    <p className="text-cosmic-200 italic" data-testid="text-aleister-verdict">
+                    <p className="text-gray-700 italic" data-testid="text-aleister-verdict">
                       "{analysisResult.analysis.aleisterVerdict}"
                     </p>
                   </div>
 
-                  <div className="bg-cosmic-800/30 rounded-xl p-6">
-                    <h4 className="font-mystical text-lg text-midnight-400 mb-3" data-testid="text-severus-verdict-title">
+                  <div className="bg-gray-100/30 rounded-xl p-6">
+                    <h4 className="font-bold text-lg text-gray-700 mb-3" data-testid="text-severus-verdict-title">
                       Severus's Verdict:
                     </h4>
-                    <p className="text-cosmic-200 italic" data-testid="text-severus-verdict">
+                    <p className="text-gray-700 italic" data-testid="text-severus-verdict">
                       "{analysisResult.analysis.severusVerdict}"
                     </p>
                   </div>
@@ -589,7 +589,7 @@ export default function ProductScanner() {
                 <div className="text-center">
                   <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 ${getCosmicClarityColor(analysisResult.analysis.cosmicClarity)}`}>
                     {getCosmicClarityIcon(analysisResult.analysis.cosmicClarity)}
-                    <span className="font-mystical text-lg" data-testid="text-final-clarity">
+                    <span className="font-bold text-lg" data-testid="text-final-clarity">
                       {analysisResult.analysis.cosmicClarity.toUpperCase()}
                     </span>
                   </div>
@@ -598,7 +598,7 @@ export default function ProductScanner() {
                 {/* Suspicious Ingredients */}
                 {analysisResult.analysis.suspiciousIngredients?.length > 0 && (
                   <div className="bg-mystical-red/10 border border-mystical-red/30 rounded-xl p-6">
-                    <h4 className="font-mystical text-lg text-mystical-red mb-3" data-testid="text-suspicious-title">
+                    <h4 className="font-bold text-lg text-red-600 mb-3" data-testid="text-suspicious-title">
                       Cursed Ingredients Detected:
                     </h4>
                     <div className="flex flex-wrap gap-2">
@@ -606,7 +606,7 @@ export default function ProductScanner() {
                         <Badge 
                           key={index}
                           variant="destructive"
-                          className="bg-mystical-red/20 text-mystical-red border-mystical-red"
+                          className="bg-mystical-red/20 text-red-600 border-mystical-red"
                           data-testid={`badge-suspicious-${index}`}
                         >
                           {ingredient}
@@ -617,15 +617,15 @@ export default function ProductScanner() {
                 )}
 
                 {/* Transparency Level */}
-                <div className="flex items-center justify-between p-4 bg-cosmic-800/30 rounded-xl">
-                  <span className="text-cosmic-300">Transparency Level:</span>
+                <div className="flex items-center justify-between p-4 bg-gray-100/30 rounded-xl">
+                  <span className="text-gray-600">Transparency Level:</span>
                   <Badge 
                     className={
                       analysisResult.analysis.transparencyLevel === 'excellent' 
-                        ? 'bg-mystical-green/20 text-mystical-green border-mystical-green'
+                        ? 'bg-mystical-green/20 text-green-600 border-mystical-green'
                         : analysisResult.analysis.transparencyLevel === 'good'
                         ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500'
-                        : 'bg-mystical-red/20 text-mystical-red border-mystical-red'
+                        : 'bg-mystical-red/20 text-red-600 border-mystical-red'
                     }
                     data-testid="badge-transparency"
                   >

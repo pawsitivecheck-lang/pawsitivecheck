@@ -31,8 +31,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       variant="ghost"
       size="sm"
-      className="text-cosmic-300 hover:text-starlight-400 hover:bg-cosmic-800/50 dark:text-cosmic-300 dark:hover:text-starlight-400 dark:hover:bg-cosmic-800/50 
-                 light:text-slate-600 light:hover:text-slate-800 light:hover:bg-slate-200/50"
+      className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20"
       data-testid="button-theme-toggle"
     >
       {isDark ? (

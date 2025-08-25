@@ -165,51 +165,11 @@
 }
 
 @layer utilities {
-  .font-mystical {
-    font-family: var(--font-mystical);
-  }
   
-  .font-cosmic {
-    font-family: var(--font-cosmic);
-  }
   
-  /* Light mode cosmic-card utilities (already defined above) */
-  .cosmic-card {
-    background-color: rgba(255, 255, 255, 0.85);
-    border: 1px solid hsl(258, 30%, 85%);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
   
-  .cosmic-card:hover {
-    border-color: hsl(258, 40%, 75%);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-  }
   
-  /* Dark mode cosmic-card utilities */
-  .dark .cosmic-card {
-    @apply bg-card border-border backdrop-blur-sm;
-    border: 1px solid hsl(253, 36%, 25%);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  }
   
-  .dark .cosmic-card:hover {
-    border-color: hsl(253, 36%, 30%);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Enhanced button contrast in dark mode */
-  .dark .mystical-button {
-    background: linear-gradient(135deg, var(--mystical-purple), var(--starlight-500));
-    color: hsl(252, 83%, 5%);
-    font-weight: 600;
-    text-shadow: none;
-  }
-  
-  .dark .mystical-button:hover {
-    background: linear-gradient(135deg, hsl(258, 95%, 75%), hsl(51, 100%, 70%));
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }
   
   /* Light mode input styling */
   input[type="text"],
@@ -248,21 +208,6 @@
   }
   
   /* Light mode text colors */
-  .text-cosmic-400 {
-    color: hsl(258, 20%, 65%);
-  }
-  
-  .text-cosmic-300 {
-    color: hsl(258, 25%, 55%);
-  }
-  
-  .text-cosmic-200 {
-    color: hsl(258, 30%, 45%);
-  }
-  
-  .text-cosmic-100 {
-    color: hsl(258, 35%, 25%);
-  }
   
   /* Dark mode text contrast */
   .dark .text-cosmic-400 {
@@ -350,38 +295,13 @@
   @apply bg-gradient-to-r from-yellow-500 to-purple-600 text-white font-semibold px-6 py-3 rounded-full hover:from-yellow-400 hover:to-purple-500 transition-all shadow-md;
 }
 
-.cosmic-text {
-  @apply text-gray-800;
-}
 
-.starlight-text {
-  @apply text-yellow-600;
-}
 
-.mystical-text {
-  @apply text-purple-600;
-}
 
-/* Dark mode component styles */
-.dark .cosmic-card {
-  @apply bg-black/40 border-purple-400/20 hover:border-purple-400/40 shadow-xl;
-}
 
-.dark .mystical-button {
-  @apply bg-gradient-to-r from-yellow-500 to-purple-500 text-black hover:from-yellow-400 hover:to-purple-400;
-}
 
-.dark .cosmic-text {
-  @apply text-gray-100;
-}
 
-.dark .starlight-text {
-  @apply text-yellow-500;
-}
 
-.dark .mystical-text {
-  @apply text-purple-400;
-}
 
 /* Petstore color classes */
 .text-pet-brown {

@@ -64,17 +64,17 @@ export default function Community() {
   }) || [];
 
   const getRankIcon = (reviewCount: number) => {
-    if (reviewCount >= 50) return <Crown className="text-starlight-500 h-4 w-4" />;
-    if (reviewCount >= 20) return <Star className="text-mystical-purple h-4 w-4" />;
-    if (reviewCount >= 5) return <Eye className="text-mystical-green h-4 w-4" />;
-    return <Users className="text-cosmic-400 h-4 w-4" />;
+    if (reviewCount >= 50) return <Crown className="text-yellow-500 h-4 w-4" />;
+    if (reviewCount >= 20) return <Star className="text-purple-600 h-4 w-4" />;
+    if (reviewCount >= 5) return <Eye className="text-green-600 h-4 w-4" />;
+    return <Users className="text-blue-600 h-4 w-4" />;
   };
 
   const getRankTitle = (reviewCount: number) => {
-    if (reviewCount >= 50) return "Cosmic Oracle";
-    if (reviewCount >= 20) return "Elder Member";
-    if (reviewCount >= 5) return "Truth Seeker";
-    return "New Initiate";
+    if (reviewCount >= 50) return "Expert Reviewer";
+    if (reviewCount >= 20) return "Senior Member";
+    if (reviewCount >= 5) return "Active Member";
+    return "New Member";
   };
 
   return (
@@ -92,50 +92,50 @@ export default function Community() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow">
-              <Users className="text-3xl text-cosmic-900" />
+            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
+              <Users className="text-3xl text-white" />
             </div>
-            <h1 className="font-mystical text-4xl md:text-6xl font-bold text-starlight-500 mb-4" data-testid="text-community-title">
-              The Resistance Community
+            <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-community-title">
+              Community Portal
             </h1>
-            <p className="text-cosmic-300 text-lg" data-testid="text-community-description">
-              United truth-seekers sharing mystical discoveries and cosmic wisdom
+            <p className="text-gray-600 text-lg" data-testid="text-community-description">
+              Pet owners sharing experiences and product reviews for safer pet care
             </p>
           </div>
 
           {/* Community Stats */}
-          <Card className="cosmic-card mb-8" data-testid="card-community-stats">
+          <Card className="mb-8" data-testid="card-community-stats">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-starlight-400">
+              <CardTitle className="flex items-center gap-2 text-blue-600">
                 <Users className="h-5 w-5" />
-                Resistance Statistics
+                Community Statistics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-starlight-500 mb-2" data-testid="text-total-reviews">
+                  <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-reviews">
                     {allReviews?.length || 0}
                   </div>
-                  <p className="text-cosmic-300">Mystical Insights</p>
+                  <p className="text-gray-600">Total Reviews</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-mystical-green mb-2" data-testid="text-blessed-reviews">
+                  <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-blessed-reviews">
                     {allReviews?.filter((r: any) => r.rating >= 4).length || 0}
                   </div>
-                  <p className="text-cosmic-300">Blessed Products</p>
+                  <p className="text-gray-600">Positive Reviews</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-mystical-red mb-2" data-testid="text-cursed-reviews">
+                  <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-cursed-reviews">
                     {allReviews?.filter((r: any) => r.rating <= 2).length || 0}
                   </div>
-                  <p className="text-cosmic-300">Cursed Warnings</p>
+                  <p className="text-gray-600">Safety Alerts</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-mystical-purple mb-2" data-testid="text-active-members">
+                  <div className="text-3xl font-bold text-purple-600 mb-2" data-testid="text-active-members">
                     {allReviews ? new Set(allReviews.map((r: any) => r.userId)).size : 0}
                   </div>
-                  <p className="text-cosmic-300">Active Seekers</p>
+                  <p className="text-gray-600">Active Members</p>
                 </div>
               </div>
             </CardContent>
@@ -143,10 +143,10 @@ export default function Community() {
 
           {/* User Profile Card */}
           {user && (
-            <Card className="cosmic-card mb-8 border-starlight-500/30" data-testid="card-user-profile">
+            <Card className="mb-8 border-blue-200" data-testid="card-user-profile">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                     {user.profileImageUrl ? (
                       <img 
                         src={user.profileImageUrl} 
@@ -155,28 +155,28 @@ export default function Community() {
                         data-testid="img-user-avatar"
                       />
                     ) : (
-                      <Users className="text-cosmic-900 text-xl" />
+                      <Users className="text-white text-xl" />
                     )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-xl font-semibold text-cosmic-100" data-testid="text-user-name">
-                        {user.firstName || 'Anonymous Seeker'}
+                      <h3 className="text-xl font-semibold text-gray-900" data-testid="text-user-name">
+                        {user.firstName || 'Anonymous Member'}
                       </h3>
                       {getRankIcon(userReviews ? userReviews.length : 0)}
                     </div>
                     <div className="flex items-center gap-4">
-                      <Badge className="bg-mystical-purple/20 text-mystical-purple border-mystical-purple" data-testid="badge-user-rank">
+                      <Badge className="bg-purple-50 text-purple-600 border-purple-600" data-testid="badge-user-rank">
                         {getRankTitle(userReviews ? userReviews.length : 0)}
                       </Badge>
-                      <span className="text-cosmic-400 text-sm" data-testid="text-user-reviews-count">
-                        {userReviews ? userReviews.length : 0} mystical insights shared
+                      <span className="text-gray-600 text-sm" data-testid="text-user-reviews-count">
+                        {userReviews ? userReviews.length : 0} reviews shared
                       </span>
                     </div>
                   </div>
                   <Button 
                     variant="outline"
-                    className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
+                    className="border-blue-600 text-blue-600 hover:bg-blue-50"
                     data-testid="button-view-profile"
                   >
                     View Full Profile
@@ -187,11 +187,11 @@ export default function Community() {
           )}
 
           {/* Filters and Search */}
-          <Card className="cosmic-card mb-8" data-testid="card-review-filters">
+          <Card className="mb-8" data-testid="card-review-filters">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-starlight-400">
+              <CardTitle className="flex items-center gap-2 text-blue-600">
                 <Search className="h-5 w-5" />
-                Explore Community Wisdom
+                Find Reviews
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -201,7 +201,7 @@ export default function Community() {
                   placeholder="Search reviews and products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="flex-1 bg-cosmic-900/50 border border-cosmic-600 text-cosmic-100 placeholder-cosmic-400"
+                  className="flex-1"
                   data-testid="input-search-reviews"
                 />
               </div>
@@ -213,8 +213,8 @@ export default function Community() {
                     size="sm"
                     onClick={() => setReviewFilter(rating)}
                     className={reviewFilter === rating 
-                      ? "mystical-button" 
-                      : "border-cosmic-600 text-cosmic-300 hover:bg-cosmic-600/10"
+                      ? "bg-blue-600 text-white" 
+                      : "border-blue-600 text-blue-600 hover:bg-blue-50"
                     }
                     data-testid={`button-filter-${rating}`}
                   >
@@ -229,63 +229,63 @@ export default function Community() {
           <div className="space-y-6">
             {filteredReviews.length > 0 ? (
               filteredReviews.map((review: any) => (
-                <Card key={review.id} className="cosmic-card" data-testid={`card-community-review-${review.id}`}>
+                <Card key={review.id} className="" data-testid={`card-community-review-${review.id}`}>
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-mystical-purple to-cosmic-600 rounded-full flex items-center justify-center">
-                        <Users className="text-starlight-500" />
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                        <Users className="text-white" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-cosmic-100" data-testid="text-reviewer-name">
-                            Truth Seeker #{review.userId.slice(-4)}
+                          <h4 className="font-semibold text-gray-900" data-testid="text-reviewer-name">
+                            Member #{review.userId.slice(-4)}
                           </h4>
                           {getRankIcon(5)} {/* Default rank for community display */}
-                          <Badge className="bg-cosmic-700 text-cosmic-300" data-testid="badge-reviewer-rank">
+                          <Badge className="bg-gray-100 text-gray-700" data-testid="badge-reviewer-rank">
                             Community Member
                           </Badge>
                         </div>
                         
                         <div className="mb-3">
-                          <h5 className="text-starlight-400 font-medium mb-1" data-testid="text-product-reviewed">
+                          <h5 className="text-blue-600 font-medium mb-1" data-testid="text-product-reviewed">
                             {review.productName} by {review.productBrand}
                           </h5>
                           <div className="flex items-center gap-1 mb-2">
                             {[...Array(5)].map((_, i) => (
                               <span 
                                 key={i} 
-                                className={i < review.rating ? 'text-mystical-green' : 'text-cosmic-600'}
+                                className={i < review.rating ? 'text-green-600' : 'text-gray-300'}
                                 data-testid={`paw-rating-${i}`}
                               >
                                 🐾
                               </span>
                             ))}
-                            <span className="text-cosmic-400 text-sm ml-2">
+                            <span className="text-gray-600 text-sm ml-2">
                               {review.rating}/5 Paws
                             </span>
                           </div>
                         </div>
                         
                         {review.title && (
-                          <h6 className="font-medium text-cosmic-200 mb-2" data-testid="text-review-title">
+                          <h6 className="font-medium text-gray-700 mb-2" data-testid="text-review-title">
                             {review.title}
                           </h6>
                         )}
                         
-                        <p className="text-cosmic-300 mb-3" data-testid="text-review-content">
+                        <p className="text-gray-600 mb-3" data-testid="text-review-content">
                           {review.content}
                         </p>
                         
-                        <div className="flex items-center justify-between text-xs text-cosmic-500">
+                        <div className="flex items-center justify-between text-xs text-gray-500">
                           <span data-testid="text-review-date">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
                           <div className="flex items-center gap-4">
-                            <button className="flex items-center gap-1 hover:text-mystical-green transition-colors" data-testid="button-like-review">
+                            <button className="flex items-center gap-1 hover:text-green-600 transition-colors" data-testid="button-like-review">
                               <ThumbsUp className="h-3 w-3" />
                               <span>Helpful</span>
                             </button>
-                            <button className="flex items-center gap-1 hover:text-starlight-400 transition-colors" data-testid="button-reply-review">
+                            <button className="flex items-center gap-1 hover:text-blue-600 transition-colors" data-testid="button-reply-review">
                               <MessageCircle className="h-3 w-3" />
                               <span>Reply</span>
                             </button>
@@ -297,18 +297,18 @@ export default function Community() {
                 </Card>
               ))
             ) : (
-              <Card className="cosmic-card" data-testid="card-no-reviews">
+              <Card className="" data-testid="card-no-reviews">
                 <CardContent className="p-12 text-center">
-                  <div className="w-16 h-16 mx-auto bg-cosmic-700 rounded-full flex items-center justify-center mb-6">
-                    <MessageCircle className="text-cosmic-500 text-2xl" />
+                  <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <MessageCircle className="text-gray-400 text-2xl" />
                   </div>
-                  <h3 className="font-mystical text-xl text-cosmic-300 mb-4" data-testid="text-no-reviews-title">
+                  <h3 className="text-xl text-gray-700 mb-4" data-testid="text-no-reviews-title">
                     No Reviews Found
                   </h3>
-                  <p className="text-cosmic-400 mb-6" data-testid="text-no-reviews-description">
+                  <p className="text-gray-600 mb-6" data-testid="text-no-reviews-description">
                     {searchTerm || reviewFilter !== "all" 
                       ? "No reviews match your current search criteria."
-                      : "The community is just beginning. Be the first to share your mystical insights!"}
+                      : "The community is just beginning. Be the first to share your experiences!"}
                   </p>
                   {(searchTerm || reviewFilter !== "all") && (
                     <Button 
@@ -317,7 +317,7 @@ export default function Community() {
                         setSearchTerm("");
                         setReviewFilter("all");
                       }}
-                      className="border-cosmic-600 text-cosmic-300"
+                      className="border-blue-600 text-blue-600 hover:bg-blue-50"
                       data-testid="button-clear-filters"
                     >
                       Clear Filters
@@ -331,15 +331,15 @@ export default function Community() {
           {/* Call to Action */}
           {user && (
             <div className="mt-12">
-              <Card className="cosmic-card border-starlight-500/50" data-testid="card-cta">
+              <Card className="border-blue-200" data-testid="card-cta">
                 <CardContent className="p-8 text-center">
-                  <h3 className="font-mystical text-2xl text-starlight-500 mb-4" data-testid="text-cta-title">
-                    Share Your Mystical Wisdom
+                  <h3 className="text-2xl font-bold text-blue-600 mb-4" data-testid="text-cta-title">
+                    Share Your Experience
                   </h3>
-                  <p className="text-cosmic-300 mb-6" data-testid="text-cta-description">
-                    Help fellow truth-seekers by sharing your experiences with pet products
+                  <p className="text-gray-600 mb-6" data-testid="text-cta-description">
+                    Help fellow pet owners by sharing your experiences with pet products
                   </p>
-                  <Button className="mystical-button" data-testid="button-share-review">
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700" data-testid="button-share-review">
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Write a Review
                   </Button>

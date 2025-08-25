@@ -11,14 +11,14 @@ interface MascotCardProps {
 export default function MascotCard({ name, role, icon, bgGradient }: MascotCardProps) {
   return (
     <div className="space-y-6">
-      <div className={`w-32 h-32 mx-auto bg-gradient-to-br ${bgGradient} rounded-full flex items-center justify-center animate-glow`} data-testid={`mascot-${name.toLowerCase()}-icon`}>
+      <div className={`w-32 h-32 mx-auto bg-gradient-to-br ${bgGradient} rounded-full flex items-center justify-center`} data-testid={`mascot-${name.toLowerCase()}-icon`}>
         {icon}
       </div>
       <div className="text-center">
-        <h3 className="font-mystical text-2xl text-starlight-400 mb-2" data-testid={`mascot-${name.toLowerCase()}-name`}>
+        <h3 className="text-2xl font-bold text-blue-600 mb-2" data-testid={`mascot-${name.toLowerCase()}-name`}>
           {name}
         </h3>
-        <p className="text-cosmic-200" data-testid={`mascot-${name.toLowerCase()}-role`}>
+        <p className="text-gray-600" data-testid={`mascot-${name.toLowerCase()}-role`}>
           {role}
         </p>
       </div>
