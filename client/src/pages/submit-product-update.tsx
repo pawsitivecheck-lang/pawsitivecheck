@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Link, useLocation } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import AdBanner from "@/components/ad-banner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -116,6 +117,8 @@ export default function SubmitProductUpdate() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <div className="container mx-auto px-4 py-8">
+        <AdBanner size="leaderboard" position="submit-product-update-header" />
+        
         {/* Header */}
         <div className="mb-8">
           <Link href="/">

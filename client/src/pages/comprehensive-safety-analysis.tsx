@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import AdBanner from "@/components/ad-banner";
 import { Eye, Shield, Users, Database, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
 
 export default function ComprehensiveSafetyAnalysis() {
@@ -10,6 +11,8 @@ export default function ComprehensiveSafetyAnalysis() {
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+          <AdBanner size="leaderboard" position="comprehensive-safety-header" />
+          
           {/* Header */}
           <div className="mb-12 text-center">
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
@@ -241,6 +244,8 @@ export default function ComprehensiveSafetyAnalysis() {
               </div>
             </CardContent>
           </Card>
+          
+          <AdBanner size="leaderboard" position="comprehensive-safety-footer" />
         </div>
       </div>
 

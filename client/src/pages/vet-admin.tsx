@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navbar from "@/components/navbar";
+import AdBanner from "@/components/ad-banner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -248,6 +249,7 @@ export default function VetAdmin() {
       <Navbar />
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
+        <AdBanner size="leaderboard" position="vet-admin-header" />
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">

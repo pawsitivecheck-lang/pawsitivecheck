@@ -1,18 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
-import AdBanner from "@/components/ad-banner";
 import Footer from "@/components/footer";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen w-full bg-background">
-      {/* Top Ad */}
-      <div className="bg-card border-b border-border py-3">
-        <div className="max-w-7xl mx-auto px-4 flex justify-center">
-          <AdBanner size="leaderboard" position="404-header" />
-        </div>
-      </div>
-      
       <div className="flex-1 flex items-center justify-center px-4">
         <Card className="w-full max-w-md mx-4">
           <CardContent className="pt-6">

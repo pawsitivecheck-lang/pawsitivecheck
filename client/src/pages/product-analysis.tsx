@@ -93,6 +93,7 @@ export default function ProductAnalysis() {
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8 pb-16">
         <div className="max-w-6xl mx-auto">
+          <AdBanner size="leaderboard" position="product-analysis-header" />
           {/* Header with Back Button */}
           <div className="mb-8">
             <Button 
