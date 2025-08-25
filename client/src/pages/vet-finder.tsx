@@ -149,14 +149,7 @@ export default function VetFinder() {
     }
   };
 
-  // Auto-search when component loads to show some initial results
-  useEffect(() => {
-    // Default search with location hint
-    searchVetsMutation.mutate({
-      query: "veterinarian",
-      radius: searchRadius
-    });
-  }, []);
+  // Removed auto-search - user must manually trigger search
 
   // Remove handleManualSearch since we're using handleSearch now
 
