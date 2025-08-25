@@ -1025,25 +1025,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
         throw new Error('Google API key not available');
       }
 
-      console.log(`🔍 Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
-
       try {
-        // Step 1: Search for veterinary places near the location
-        const searchUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`;
+        // Step 1: Search for veterinary places with multiple approaches
+        console.log(`🔍 Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
         
-        const searchResponse = await fetch(searchUrl, {
-          signal: AbortSignal.timeout(10000) // 10 second timeout
-        });
+        let searchData = { results: [] };
         
-        if (!searchResponse.ok) {
-          throw new Error(`Google Places API request failed: ${searchResponse.status}`);
+        // Try multiple search approaches to find veterinary offices
+        const searchQueries = [
+          // Primary veterinary care search
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`,
+          // Text search for veterinarians
+          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=veterinarian+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
+          // Text search for animal hospitals
+          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=animal+hospital+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
+          // Text search for vet clinics
+          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=vet+clinic+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`
+        ];
+        
+        for (const searchUrl of searchQueries) {
+          try {
+            console.log(`Trying search: ${searchUrl.includes('nearbysearch') ? 'nearby veterinary_care' : searchUrl.includes('veterinarian') ? 'text search veterinarian' : searchUrl.includes('animal+hospital') ? 'text search animal hospital' : 'text search vet clinic'}`);
+            
+            const searchResponse = await fetch(searchUrl, {
+              signal: AbortSignal.timeout(8000)
+            });
+            
+            if (!searchResponse.ok) {
+              console.warn(`Search failed with status ${searchResponse.status}`);
+              continue;
+            }
+            
+            const responseData = await searchResponse.json();
+            
+            if (responseData.results && responseData.results.length > 0) {
+              console.log(`✅ Found ${responseData.results.length} results with this search`);
+              searchData = responseData;
+              break;
+            }
+            
+            // Small delay between requests
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+          } catch (error) {
+            console.warn(`Search query failed:`, error.message);
+            continue;
+          }
         }
         
-        const searchData = await searchResponse.json();
-        console.log(`🏥 Google Places returned ${searchData.results?.length || 0} veterinary locations`);
+        console.log(`🏥 Google Places returned ${searchData.results?.length || 0} veterinary locations total`);
         
         if (!searchData.results || searchData.results.length === 0) {
-          console.log('🔍 No veterinary results from Google Places, trying fallback search');
+          console.log('🔍 No veterinary results from Google Places after trying all search methods, using fallback');
           throw new Error('No results from Google Places');
         }
         
