@@ -548,6 +548,14 @@ export default function CorporateAccountability() {
                   </div>
                   
                   <div>
+                    <strong>8.</strong> Michigan State University College of Veterinary Medicine Hospital. 
+                    <em>Veterinary Clinical Research and Pet Food Safety Analysis.</em> 
+                    <a href="https://cvm.msu.edu/hospital" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                      View Source ↗
+                    </a>
+                  </div>
+                  
+                  <div>
                     <strong>Academic & Research Institutions:</strong>
                     <ul className="mt-2 ml-4 space-y-1">
                       <li>• <strong>Michigan State University</strong> - National Food Safety and Toxicology Center</li>
