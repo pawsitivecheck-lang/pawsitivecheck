@@ -78,6 +78,7 @@ export const productRecalls = pgTable("product_recalls", {
   recallDate: timestamp("recall_date").notNull(),
   affectedBatches: text("affected_batches").array(),
   source: varchar("source", { length: 255 }),
+  sourceUrl: varchar("source_url", { length: 500 }),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
