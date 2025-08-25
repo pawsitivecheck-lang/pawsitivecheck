@@ -20,6 +20,7 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import PetHealthProtection from "@/pages/pet-health-protection";
 import CorporateAccountability from "@/pages/corporate-accountability";
+import ProductDetail from "@/pages/product-detail";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/product-scanner" component={ProductScanner} />
           <Route path="/product-database" component={ProductDatabase} />
+          <Route path="/product/:id" component={ProductDetail} />
           <Route path="/recalls" component={Recalls} />
           <Route path="/community" component={Community} />
           <Route path="/vet-finder" component={VetFinder} />

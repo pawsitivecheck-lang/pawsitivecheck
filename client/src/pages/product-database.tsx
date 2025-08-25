@@ -478,7 +478,7 @@ export default function ProductDatabase() {
                     <ProductCard 
                       key={product.id}
                       product={product}
-                      onClick={() => {}} // Handle product detail view
+                      onClick={() => window.location.href = `/product/${product.id}`}
                     />
                   ))}
                 </div>

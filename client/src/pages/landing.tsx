@@ -538,7 +538,7 @@ export default function Landing() {
               <ProductCard 
                 key={product.id}
                 product={product}
-                onClick={() => window.location.href = '/api/login'}
+                onClick={() => window.location.href = `/product/${product.id}`}
               />
             )) || (
               // Empty state
