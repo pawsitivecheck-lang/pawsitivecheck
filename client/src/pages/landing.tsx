@@ -782,7 +782,7 @@ export default function Landing() {
             <div className="text-center sm:text-left sm:col-span-2 lg:col-span-1">
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-contact-title">Contact Us</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
-                <li data-testid="text-contact-email">support@pawsitivecheck.com</li>
+                <li data-testid="text-contact-email">pawsitivecheck@gmail.com</li>
                 <li data-testid="text-contact-support">Customer Support</li>
                 <li data-testid="text-contact-feedback">Feedback Portal</li>
                 <li data-testid="text-contact-hotline">Safety Hotline</li>
