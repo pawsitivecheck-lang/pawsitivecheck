@@ -117,10 +117,10 @@ export default function Home() {
               </Link>
 
               <Link href="/livestock">
-                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-orange-300 dark:hover:border-orange-600" data-testid="card-livestock">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border-2 border-orange-200 dark:border-orange-800 hover:border-orange-400 dark:hover:border-orange-600 ring-1 ring-orange-100 dark:ring-orange-900" data-testid="card-livestock">
                   <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center mb-4">
-                      <Tractor className="text-orange-600 h-5 w-5" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-4 shadow-sm">
+                      <Tractor className="text-white h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-semibold text-foreground mb-2">Livestock Management</h3>
                     <p className="text-muted-foreground text-sm">Manage farm operations, herds, and animal health</p>
