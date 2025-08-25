@@ -38,7 +38,7 @@ export default function Navbar() {
             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
               <PawPrint className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">PawsitiveCheck</h1>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">PawsitiveCheck</h1>
           </Link>
           
           {/* Desktop Navigation */}
