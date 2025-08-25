@@ -38,21 +38,6 @@ export default function Landing() {
       
       {/* Navigation */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        {/* Top Bar */}
-        <div className="border-b border-gray-100 py-2">
-          <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Product Safety Reports</span>
-              <span className="text-gray-600">Recall Alerts</span>
-              <span className="text-gray-600">Safety Database</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600">🛡️ 11,401,185 pets protected through safety analysis.</span>
-              <span className="text-gray-600">Free safety analysis for all pet parents</span>
-            </div>
-          </div>
-        </div>
-        
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
