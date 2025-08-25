@@ -7,7 +7,7 @@ import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Shield, Users, ShoppingCart, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert } from "lucide-react";
+import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
 import { useState } from "react";
 
 export default function Landing() {
@@ -69,7 +69,7 @@ export default function Landing() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <Input 
                   type="text" 
-                  placeholder="Search PawsitiveCheck..."
+                  placeholder="Search products, ingredients, or brands for safety analysis..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   data-testid="input-search"
                 />
@@ -80,14 +80,14 @@ export default function Landing() {
             </div>
             
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Heart className="h-5 w-5 text-red-500" />
-                <span className="text-sm font-medium text-gray-700">Sign In</span>
-              </div>
-              <div className="relative">
-                <ShoppingCart className="h-6 w-6 text-gray-700" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-              </div>
+              <Button 
+                onClick={() => window.location.href = '/api/login'}
+                className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                data-testid="button-sign-in"
+              >
+                <UserCheck className="h-4 w-4" />
+                <span className="text-sm font-medium">Sign In</span>
+              </Button>
               
               {/* Mobile menu button */}
               <button 
@@ -110,12 +110,11 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-center space-x-8 py-3">
               <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-scan">Product Scanner</a>
-              <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-database">Shop by Pet</a>
-              <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-recalls">Safety Alerts</a>
-              <a href="#vets" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-vets">Pet Services</a>
-              <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-community">Learning</a>
-              <a href="#deals" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-deals">Deals</a>
-              <a href="#wellness" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-wellness">Health & Wellness</a>
+              <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-database">Safety Database</a>
+              <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-recalls">Recall Alerts</a>
+              <a href="#vets" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-vets">Veterinary Network</a>
+              <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-community">Community Reviews</a>
+              <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium" data-testid="nav-resources">Safety Resources</a>
             </div>
           </div>
         </div>
@@ -138,7 +137,7 @@ export default function Landing() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-database"
               >
-                Shop by Pet
+                Safety Database
               </a>
               <a 
                 href="#recalls" 
@@ -146,7 +145,7 @@ export default function Landing() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-recalls"
               >
-                Safety Alerts
+                Recall Alerts
               </a>
               <a 
                 href="#vets" 
@@ -154,7 +153,7 @@ export default function Landing() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-vets"
               >
-                Pet Services
+                Veterinary Network
               </a>
               <a 
                 href="#community" 
@@ -162,7 +161,7 @@ export default function Landing() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-community"
               >
-                Learning
+                Community Reviews
               </a>
             </div>
           </div>
@@ -175,18 +174,30 @@ export default function Landing() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6" data-testid="text-welcome-title">
-                Protect pets you love!
+                Keep Your Pets Safe!
               </h1>
               <p className="text-xl text-gray-600 mb-6">
-                Comprehensive safety analysis for pet products. Scan, analyze, and make informed decisions for your pet's health.
+                Scan any pet product to get instant safety analysis, ingredient breakdown, and recall alerts. Make informed decisions for your pet's health.
               </p>
-              <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg text-lg"
-                data-testid="button-start-analysis"
-              >
-                Start Safety Analysis
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={() => window.location.href = '/scan'}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg text-lg flex items-center justify-center"
+                  data-testid="button-scan-product"
+                >
+                  <Camera className="mr-2 h-5 w-5" />
+                  Scan Product Now
+                </Button>
+                <Button 
+                  onClick={() => window.location.href = '/database'}
+                  variant="outline"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 rounded-lg text-lg flex items-center justify-center"
+                  data-testid="button-browse-database"
+                >
+                  <Search className="mr-2 h-5 w-5" />
+                  Browse Safety Database
+                </Button>
+              </div>
             </div>
             <div className="relative">
               <div className="absolute top-4 right-4 bg-green-500 text-white rounded-full w-32 h-32 flex items-center justify-center">
@@ -211,12 +222,12 @@ export default function Landing() {
       <section className="py-16 bg-white" id="scanner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-6">
-            <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-register">
+            <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-instant">
               <div className="w-12 h-12 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                <Heart className="text-white h-6 w-6" />
+                <Shield className="text-white h-6 w-6" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Free Registration</h3>
-              <p className="text-sm text-gray-600 mb-4">Access comprehensive safety reports and personalized alerts</p>
+              <h3 className="font-semibold text-gray-800 mb-2">Instant Safety Check</h3>
+              <p className="text-sm text-gray-600 mb-4">Get immediate safety scores and ingredient analysis for any product</p>
             </Card>
             
             <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-analysis">
@@ -227,27 +238,37 @@ export default function Landing() {
               <p className="text-sm text-gray-600 mb-4">Get detailed safety scores and ingredient breakdowns</p>
             </Card>
             
-            <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-scanner">
-              <div className="w-12 h-12 mx-auto bg-purple-600 rounded-lg flex items-center justify-center mb-4">
+            <Card className="p-6 text-center border border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow" data-testid="card-scanner">
+              <div className="w-12 h-12 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Camera className="text-white h-6 w-6" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Product Scanner</h3>
-              <p className="text-sm text-gray-600 mb-4">Scan barcodes to check product safety instantly</p>
+              <h3 className="font-semibold text-gray-800 mb-2">📱 Product Scanner</h3>
+              <p className="text-sm text-gray-600 mb-4">Scan barcodes or take photos to check product safety instantly</p>
               <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
-                data-testid="button-scan-product"
+                onClick={() => window.location.href = '/scan'}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm w-full"
+                data-testid="button-scan-now"
               >
-                Start Scanning
+                <Camera className="mr-2 h-4 w-4" />
+                Scan Now
               </Button>
             </Card>
             
-            <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-safety">
+            <Card className="p-6 text-center border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-alerts">
               <div className="w-12 h-12 mx-auto bg-red-600 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="text-white h-6 w-6" />
+                <AlertTriangle className="text-white h-6 w-6" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Safety Alerts</h3>
-              <p className="text-sm text-gray-600 mb-4">Stay informed about product recalls</p>
+              <h3 className="font-semibold text-gray-800 mb-2">🚨 Real-time Alerts</h3>
+              <p className="text-sm text-gray-600 mb-4">Get instant notifications about product recalls and safety issues</p>
+              <Button 
+                onClick={() => window.location.href = '/recalls'}
+                variant="outline"
+                className="border-red-600 text-red-600 hover:bg-red-50 text-sm w-full"
+                data-testid="button-view-alerts"
+              >
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                View Alerts
+              </Button>
             </Card>
           </div>
         </div>
@@ -271,14 +292,14 @@ export default function Landing() {
             )) || (
               // Empty state
               [...Array(3)].map((_, i) => (
-                <Card key={i} className="cosmic-card" data-testid={`card-product-placeholder-${i}`}>
+                <Card key={i} className="bg-white border border-gray-200" data-testid={`card-product-placeholder-${i}`}>
                   <CardContent className="p-6">
-                    <div className="h-48 bg-cosmic-700 rounded-lg mb-4 flex items-center justify-center">
-                      <p className="text-cosmic-400" data-testid="text-no-products">Awaiting cosmic analysis...</p>
+                    <div className="h-48 bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                      <p className="text-gray-500" data-testid="text-no-products">No products analyzed yet...</p>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-cosmic-700 rounded"></div>
-                      <div className="h-4 bg-cosmic-700 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -289,15 +310,15 @@ export default function Landing() {
       </section>
 
       {/* Recall Alerts */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30" id="recalls">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-red-50" id="recalls">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-gradient-to-r from-mystical-red/20 via-cosmic-800/60 to-mystical-red/20 rounded-2xl border border-mystical-red/30 p-8">
+          <div className="bg-white rounded-2xl border border-red-200 p-8 shadow-sm">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto bg-mystical-red rounded-full flex items-center justify-center mb-4 animate-pulse" data-testid="icon-recall-alert">
+              <div className="w-16 h-16 mx-auto bg-red-600 rounded-full flex items-center justify-center mb-4" data-testid="icon-recall-alert">
                 <TriangleAlert className="text-2xl text-white" />
               </div>
-              <h2 className="font-mystical text-3xl font-bold text-mystical-red mb-2" data-testid="text-recall-title">Cosmic Recall Alerts</h2>
-              <p className="text-cosmic-300" data-testid="text-recall-description">The universe has spoken - these products must be avoided</p>
+              <h2 className="text-3xl font-bold text-red-600 mb-2" data-testid="text-recall-title">Safety Recall Alerts</h2>
+              <p className="text-gray-600" data-testid="text-recall-description">Stay informed about important product safety alerts</p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -305,7 +326,7 @@ export default function Landing() {
                 <RecallAlert key={recall.id} recall={recall} />
               )) || (
                 <div className="col-span-2 text-center py-8">
-                  <p className="text-cosmic-400" data-testid="text-no-recalls">No cosmic warnings at this time</p>
+                  <p className="text-gray-500" data-testid="text-no-recalls">No active safety alerts at this time</p>
                 </div>
               )}
             </div>
@@ -313,11 +334,11 @@ export default function Landing() {
             <div className="text-center mt-8">
               <Button 
                 onClick={() => window.location.href = '/api/login'}
-                className="bg-gradient-to-r from-mystical-red to-orange-600 text-white hover:from-mystical-red hover:to-orange-500"
+                className="bg-red-600 hover:bg-red-700 text-white"
                 data-testid="button-view-warnings"
               >
                 <Shield className="mr-2 h-4 w-4" />
-                View All Cosmic Warnings
+                View All Safety Alerts
               </Button>
             </div>
           </div>
@@ -325,133 +346,133 @@ export default function Landing() {
       </section>
 
       {/* Community Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8" id="community">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white" id="community">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4" data-testid="text-community-title">The Resistance Community</h2>
-            <p className="text-cosmic-300 text-lg" data-testid="text-community-description">Fellow seekers sharing their mystical discoveries</p>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4" data-testid="text-community-title">Safety Community</h2>
+            <p className="text-gray-600 text-lg" data-testid="text-community-description">Pet parents sharing their safety experiences and product reviews</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Mock community reviews for landing page */}
             <UserReview 
-              username="MysticWhiskers92"
-              userType="Resistance Member"
-              content="Thanks to Aleister's divination, I discovered my cat's food contained cursed preservatives. Switched to a blessed alternative and saw immediate improvement! 🐾✨"
+              username="Sarah_PetMom"
+              userType="Verified Pet Parent"
+              content="The ingredient scanner helped me identify artificial preservatives in my cat's food that were causing digestive issues. Switched to a cleaner formula and saw immediate improvement!"
               rating={5}
               timeAgo="2 days ago"
               icon={<Search className="text-xs" />}
             />
             <UserReview 
-              username="CosmicPawGuardian"
-              userType="Elder Member"
-              content="Severus revealed that my 'premium' treats were filled with cosmic deception. The ingredient scanner is revolutionary - every pet parent needs this tool!"
+              username="VetTechMike"
+              userType="Veterinary Professional"
+              content="The detailed safety analysis is incredibly thorough. I recommend this tool to all my clients - it provides transparency that's often missing from product marketing."
               rating={5}
               timeAgo="1 week ago"
-              icon={<Crown className="text-xs" />}
+              icon={<Shield className="text-xs" />}
             />
             <UserReview 
-              username="EtherealFeline"
-              userType="Truth Seeker"
-              content="The recall alert system saved my pets from a cursed batch! The mystical analysis goes beyond surface marketing - pure cosmic wisdom."
+              username="DogDad_Alex"
+              userType="Safety Advocate"
+              content="The recall alert system saved my dog from a contaminated batch of treats. The real-time notifications are a lifesaver for busy pet parents like me."
               rating={5}
               timeAgo="3 days ago"
-              icon={<Eye className="text-xs" />}
+              icon={<TriangleAlert className="text-xs" />}
             />
           </div>
           
           <div className="text-center mt-12">
             <Button 
               onClick={() => window.location.href = '/api/login'}
-              className="mystical-button"
-              data-testid="button-join-resistance"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              data-testid="button-join-community"
             >
               <Users className="mr-2 h-4 w-4" />
-              Join the Resistance
+              Join Safety Community
             </Button>
           </div>
         </div>
       </section>
 
       {/* Admin Dashboard Preview */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900/50">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <div className="w-16 h-16 mx-auto bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow" data-testid="icon-admin">
-              <Crown className="text-2xl text-cosmic-900" />
+            <div className="w-16 h-16 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-6" data-testid="icon-admin">
+              <Crown className="text-2xl text-white" />
             </div>
-            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4" data-testid="text-admin-title">Audit Syndicate Command</h2>
-            <p className="text-cosmic-300 text-lg" data-testid="text-admin-description">Reserved for the cosmic guardians and their trusted lieutenants</p>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4" data-testid="text-admin-title">Admin Dashboard</h2>
+            <p className="text-gray-600 text-lg" data-testid="text-admin-description">Comprehensive tools for managing safety data and community oversight</p>
           </div>
           
-          <div className="cosmic-card p-8">
+          <div className="bg-white rounded-lg p-8 border border-gray-200">
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Mystical Analytics */}
+              {/* Safety Analytics */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto bg-mystical-green/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-analytics">
-                  <ChartLine className="text-2xl text-mystical-green" />
+                <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4" data-testid="icon-analytics">
+                  <ChartLine className="text-2xl text-green-600" />
                 </div>
-                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-analytics-title">Cosmic Analytics</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2" data-testid="text-analytics-title">Safety Analytics</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-cosmic-400">Products Analyzed:</span>
-                    <span className="text-mystical-green font-bold" data-testid="text-products-analyzed">∞</span>
+                    <span className="text-gray-600">Products Analyzed:</span>
+                    <span className="text-green-600 font-bold" data-testid="text-products-analyzed">12,847</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-cosmic-400">Truth Seekers:</span>
-                    <span className="text-starlight-500 font-bold" data-testid="text-truth-seekers">∞</span>
+                    <span className="text-gray-600">Active Users:</span>
+                    <span className="text-blue-600 font-bold" data-testid="text-active-users">8,432</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-cosmic-400">Cursed Products:</span>
-                    <span className="text-mystical-red font-bold" data-testid="text-cursed-products">∞</span>
+                    <span className="text-gray-600">Safety Alerts:</span>
+                    <span className="text-red-600 font-bold" data-testid="text-safety-alerts">23</span>
                   </div>
                 </div>
               </div>
               
-              {/* Blacklist Management */}
+              {/* Recall Management */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto bg-mystical-red/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-blacklist">
-                  <Ban className="text-2xl text-mystical-red" />
+                <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4" data-testid="icon-recalls">
+                  <Ban className="text-2xl text-red-600" />
                 </div>
-                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-blacklist-title">Cosmic Blacklist</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2" data-testid="text-recalls-title">Recall Management</h3>
                 <div className="space-y-2">
-                  <div className="bg-cosmic-900/50 rounded-lg p-2">
-                    <div className="text-xs text-cosmic-400 mb-1">Recently Banished:</div>
-                    <div className="text-sm text-mystical-red" data-testid="text-recently-banished">Awaiting divine judgment</div>
+                  <div className="bg-gray-50 rounded-lg p-2">
+                    <div className="text-xs text-gray-500 mb-1">Latest Recall:</div>
+                    <div className="text-sm text-red-600" data-testid="text-latest-recall">Pet Food Brand XYZ</div>
                   </div>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-mystical-red/20 text-mystical-red border-mystical-red/40 hover:bg-mystical-red/30"
-                    data-testid="button-manage-banishments"
+                    className="w-full bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                    data-testid="button-manage-recalls"
                   >
-                    Manage Banishments
+                    Manage Recalls
                   </Button>
                 </div>
               </div>
               
-              {/* Divine Powers */}
+              {/* System Management */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto bg-mystical-purple/20 rounded-full flex items-center justify-center mb-4" data-testid="icon-divine-powers">
-                  <WandSparkles className="text-2xl text-mystical-purple" />
+                <div className="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-4" data-testid="icon-system">
+                  <Database className="text-2xl text-purple-600" />
                 </div>
-                <h3 className="font-mystical text-xl text-starlight-400 mb-2" data-testid="text-divine-title">Divine Powers</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2" data-testid="text-system-title">System Management</h3>
                 <div className="space-y-2">
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-mystical-purple/20 text-mystical-purple border-mystical-purple/40 hover:bg-mystical-purple/30"
-                    data-testid="button-enhance-oracle"
+                    className="w-full bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100"
+                    data-testid="button-update-ai"
                   >
-                    Enhance AI Oracle
+                    Update AI Analysis
                   </Button>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-starlight-500/20 text-starlight-500 border-starlight-500/40 hover:bg-starlight-500/30"
+                    className="w-full bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
                     data-testid="button-update-database"
                   >
-                    Update Cosmic Database
+                    Update Safety Database
                   </Button>
                 </div>
               </div>
@@ -461,82 +482,72 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-4 sm:px-6 lg:px-8 bg-cosmic-900">
+      <footer className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-3 mb-6" data-testid="footer-logo">
-              <div className="w-12 h-12 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center animate-glow">
-                <svg className="w-7 h-7 text-cosmic-900" fill="currentColor" viewBox="0 0 24 24">
-                  {/* Mystical Pawprint */}
-                  <path d="M12 20c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-                  <path d="M6 14c-.8 0-1.5-.7-1.5-1.5S5.2 11 6 11s1.5.7 1.5 1.5S6.8 14 6 14z"/>
-                  <path d="M18 14c-.8 0-1.5-.7-1.5-1.5S17.2 11 18 11s1.5.7 1.5 1.5S18.8 14 18 14z"/>
-                  <path d="M8.5 11c-.8 0-1.5-.7-1.5-1.5S7.7 8 8.5 8 10 8.7 10 9.5 9.3 11 8.5 11z"/>
-                  <path d="M15.5 11c-.8 0-1.5-.7-1.5-1.5S14.7 8 15.5 8 17 8.7 17 9.5 16.3 11 15.5 11z"/>
-                  <path d="M12 15c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                  {/* Checkmark inside main pad */}
-                  <path d="M10.5 11.5l1 1 2.5-2.5" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                <PawPrint className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-mystical text-3xl font-bold text-starlight-500">PawsitiveCheck</h3>
+              <h3 className="text-3xl font-bold text-white">PawsitiveCheck</h3>
             </div>
-            <p className="text-cosmic-300 text-lg max-w-2xl mx-auto" data-testid="text-footer-mission">
-              Guided by cosmic wisdom, protected by mystical guardians, 
-              united in the eternal quest for pet product truth.
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto" data-testid="text-footer-mission">
+              Empowering pet parents with transparent safety analysis and 
+              comprehensive product information for healthier pets.
             </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
-              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-mission-title">The Mission</h4>
-              <ul className="space-y-2 text-cosmic-300">
-                <li data-testid="text-mission-analysis">Cosmic Product Analysis</li>
+              <h4 className="text-xl font-bold text-white mb-4" data-testid="text-mission-title">Our Mission</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li data-testid="text-mission-analysis">Comprehensive Safety Analysis</li>
                 <li data-testid="text-mission-transparency">Ingredient Transparency</li>
-                <li data-testid="text-mission-truth">Corporate Truth Seeking</li>
-                <li data-testid="text-mission-protection">Pet Protection Rituals</li>
+                <li data-testid="text-mission-truth">Corporate Accountability</li>
+                <li data-testid="text-mission-protection">Pet Health Protection</li>
               </ul>
             </div>
             
             <div className="text-center">
-              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-guardians-title">The Guardians</h4>
-              <ul className="space-y-2 text-cosmic-300">
-                <li data-testid="text-guardian-aleister">Aleister - Mystical Analyst</li>
-                <li data-testid="text-guardian-severus">Severus - Truth Guardian</li>
-                <li data-testid="text-guardian-syndicate">The Audit Syndicate</li>
-                <li data-testid="text-guardian-community">Resistance Community</li>
+              <h4 className="text-xl font-bold text-white mb-4" data-testid="text-features-title">Key Features</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li data-testid="text-feature-scanner">Product Scanner</li>
+                <li data-testid="text-feature-database">Safety Database</li>
+                <li data-testid="text-feature-alerts">Recall Alerts</li>
+                <li data-testid="text-feature-community">Community Reviews</li>
               </ul>
             </div>
             
             <div className="text-center">
-              <h4 className="font-mystical text-xl text-starlight-400 mb-4" data-testid="text-contact-title">Contact the Void</h4>
-              <ul className="space-y-2 text-cosmic-300">
-                <li data-testid="text-contact-email">mystical@pawsitivecheck.cosmic</li>
-                <li data-testid="text-contact-support">Astral Plane Support</li>
-                <li data-testid="text-contact-feedback">Cosmic Feedback Portal</li>
-                <li data-testid="text-contact-hotline">Emergency Truth Hotline</li>
+              <h4 className="text-xl font-bold text-white mb-4" data-testid="text-contact-title">Contact Us</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li data-testid="text-contact-email">support@pawsitivecheck.com</li>
+                <li data-testid="text-contact-support">Customer Support</li>
+                <li data-testid="text-contact-feedback">Feedback Portal</li>
+                <li data-testid="text-contact-hotline">Safety Hotline</li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-cosmic-700 pt-8">
+          <div className="border-t border-gray-600 pt-8">
             <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
               <a 
                 href="/admin" 
-                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
                 data-testid="link-admin"
               >
                 Admin
               </a>
               <a 
                 href="/privacy-policy" 
-                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
                 data-testid="link-privacy-policy"
               >
                 Privacy Policy
               </a>
               <a 
                 href="/terms-of-service" 
-                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
                 data-testid="link-terms-service"
               >
                 Terms of Service
@@ -547,7 +558,7 @@ export default function Landing() {
                   localStorage.removeItem('cookie-consent');
                   window.location.reload();
                 }}
-                className="text-cosmic-400 hover:text-starlight-400 text-sm transition-colors"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
                 data-testid="button-cookie-preferences"
               >
                 Cookie Preferences
@@ -555,11 +566,11 @@ export default function Landing() {
             </div>
             
             <div className="text-center">
-              <p className="text-cosmic-400 text-sm" data-testid="text-copyright">
-                © 2024 PawsitiveCheck - Protected by cosmic forces and mystical encryption
+              <p className="text-gray-400 text-sm" data-testid="text-copyright">
+                © 2024 PawsitiveCheck - Professional pet product safety analysis platform
               </p>
-              <p className="text-cosmic-500 text-xs mt-2" data-testid="text-motto">
-                "In truth we trust, in transparency we thrive" - The Audit Syndicate
+              <p className="text-gray-500 text-xs mt-2" data-testid="text-motto">
+                "Transparency for safer pets, accountability for better products"
               </p>
             </div>
           </div>
