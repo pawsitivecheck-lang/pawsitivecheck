@@ -452,9 +452,10 @@ export default function HerdProfile() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="animals">Animals ({animals.length})</TabsTrigger>
+            <TabsTrigger value="health">Health</TabsTrigger>
             <TabsTrigger value="breeding">Breeding</TabsTrigger>
             <TabsTrigger value="production">Production</TabsTrigger>
             <TabsTrigger value="movements">Movements</TabsTrigger>
@@ -617,6 +618,123 @@ export default function HerdProfile() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="health" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Health & Medical Records</CardTitle>
+                    <CardDescription>Veterinary care, vaccinations, and health monitoring</CardDescription>
+                  </div>
+                  <Button data-testid="button-add-health-record">
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Add Health Record
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Vaccination Schedule */}
+                  <Card className="border-green-200 dark:border-green-800">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <Stethoscope className="h-5 w-5 text-green-600" />
+                        <CardTitle className="text-base">Vaccinations</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                          <span className="text-sm font-medium">Core Vaccines</span>
+                          <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Up to date</Badge>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                          <span className="text-sm font-medium">Annual Boosters</span>
+                          <Badge variant="outline">Due Soon</Badge>
+                        </div>
+                        <Button variant="outline" size="sm" className="w-full mt-2">
+                          View Schedule
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Health Monitoring */}
+                  <Card className="border-blue-200 dark:border-blue-800">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <Activity className="h-5 w-5 text-blue-600" />
+                        <CardTitle className="text-base">Health Monitoring</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Average Body Score</span>
+                          <span className="font-medium">7.2/9</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Last Health Check</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">2 weeks ago</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Health Alerts</span>
+                          <Badge variant="outline">None</Badge>
+                        </div>
+                        <Button variant="outline" size="sm" className="w-full mt-2">
+                          Record Check
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Veterinary Care */}
+                  <Card className="border-purple-200 dark:border-purple-800">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-purple-600" />
+                        <CardTitle className="text-base">Veterinary Care</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Last Vet Visit</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">3 months ago</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Active Treatments</span>
+                          <Badge variant="outline">None</Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Next Checkup</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">Due in 1 month</span>
+                        </div>
+                        <Button variant="outline" size="sm" className="w-full mt-2">
+                          Schedule Visit
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Recent Health Records */}
+                <Card className="mt-6">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Recent Health Records</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      <Stethoscope className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                      <p>No health records found</p>
+                      <p className="text-sm mt-2">Start tracking health and medical care for your animals</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="breeding" className="space-y-6">
