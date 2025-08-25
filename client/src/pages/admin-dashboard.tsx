@@ -70,10 +70,10 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-4 animate-glow">
-            <Crown className="text-2xl text-cosmic-900" />
+          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
+            <Crown className="text-2xl text-white" />
           </div>
-          <p className="text-cosmic-300">Accessing the cosmic command center...</p>
+          <p className="text-gray-600">Loading admin dashboard...</p>
         </div>
       </div>
     );
@@ -91,30 +91,30 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow">
-              <Crown className="text-3xl text-cosmic-900" />
+            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6 shadow-lg">
+              <Crown className="text-3xl text-white" />
             </div>
-            <h1 className="font-mystical text-4xl md:text-6xl font-bold text-starlight-500 mb-4" data-testid="text-admin-title">
-              Audit Syndicate Command
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4" data-testid="text-admin-title">
+              Admin Dashboard
             </h1>
-            <p className="text-cosmic-300 text-lg" data-testid="text-admin-description">
-              Divine oversight of the cosmic truth-seeking mission
+            <p className="text-gray-600 text-lg" data-testid="text-admin-description">
+              Manage platform content, users, and safety data
             </p>
           </div>
 
           {/* Welcome Message */}
-          <Card className="cosmic-card border-starlight-500/50 mb-8" data-testid="card-admin-welcome">
+          <Card className="border border-blue-200 bg-blue-50 mb-8" data-testid="card-admin-welcome">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-starlight-500 to-mystical-purple rounded-full flex items-center justify-center">
-                  <Crown className="text-cosmic-900" />
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
+                  <Crown className="text-white" />
                 </div>
                 <div>
-                  <h2 className="font-mystical text-xl text-starlight-500 mb-1" data-testid="text-welcome-admin">
-                    Welcome, Cosmic Guardian {user.firstName}
+                  <h2 className="text-xl font-semibold text-gray-800 mb-1" data-testid="text-welcome-admin">
+                    Welcome, Administrator {user.firstName}
                   </h2>
-                  <p className="text-cosmic-300" data-testid="text-admin-status">
-                    The mystical realm awaits your divine command
+                  <p className="text-gray-600" data-testid="text-admin-status">
+                    Manage your pet safety platform from here
                   </p>
                 </div>
               </div>
@@ -123,51 +123,51 @@ export default function AdminDashboard() {
 
           {/* Analytics Overview */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="cosmic-card" data-testid="card-stat-products">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-products">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-mystical-green/20 rounded-full flex items-center justify-center mb-4">
-                  <Package className="text-mystical-green" />
+                <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                  <Package className="text-blue-600" />
                 </div>
-                <div className="text-3xl font-bold text-mystical-green mb-2" data-testid="text-total-products">
+                <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-products">
                   {(analytics as any)?.totalProducts || 0}
                 </div>
-                <p className="text-cosmic-300">Products Analyzed</p>
+                <p className="text-gray-600">Products Analyzed</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-users">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-users">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-starlight-500/20 rounded-full flex items-center justify-center mb-4">
-                  <Users className="text-starlight-500" />
+                <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Users className="text-green-600" />
                 </div>
-                <div className="text-3xl font-bold text-starlight-500 mb-2" data-testid="text-total-users">
+                <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-total-users">
                   {(analytics as any)?.totalUsers || 0}
                 </div>
-                <p className="text-cosmic-300">Truth Seekers</p>
+                <p className="text-gray-600">Active Users</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-cursed">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-unsafe">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-mystical-red/20 rounded-full flex items-center justify-center mb-4">
-                  <AlertTriangle className="text-mystical-red" />
+                <div className="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                  <AlertTriangle className="text-red-600" />
                 </div>
-                <div className="text-3xl font-bold text-mystical-red mb-2" data-testid="text-cursed-products">
+                <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-unsafe-products">
                   {(analytics as any)?.cursedProducts || 0}
                 </div>
-                <p className="text-cosmic-300">Cursed Products</p>
+                <p className="text-gray-600">Unsafe Products</p>
               </CardContent>
             </Card>
 
-            <Card className="cosmic-card" data-testid="card-stat-blessed">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-safe">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-mystical-purple/20 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="text-mystical-purple" />
+                <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  <Shield className="text-green-600" />
                 </div>
-                <div className="text-3xl font-bold text-mystical-purple mb-2" data-testid="text-blessed-products">
+                <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-safe-products">
                   {(analytics as any)?.blessedProducts || 0}
                 </div>
-                <p className="text-cosmic-300">Blessed Products</p>
+                <p className="text-gray-600">Safe Products</p>
               </CardContent>
             </Card>
           </div>
@@ -175,64 +175,64 @@ export default function AdminDashboard() {
           {/* Main Dashboard Grid */}
           <div className="grid lg:grid-cols-3 gap-8 mb-8">
             {/* Active Recalls Management */}
-            <Card className="cosmic-card" data-testid="card-recalls-management">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recalls-management">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-mystical-red">
+                <CardTitle className="flex items-center gap-2 text-red-600">
                   <AlertTriangle className="h-5 w-5" />
-                  Active Cosmic Warnings
+                  Active Recalls
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {(recentRecalls as any[]).slice(0, 3).map((recall: any) => (
-                    <div key={recall.id} className="p-3 bg-mystical-red/10 border-l-2 border-mystical-red rounded" data-testid={`recall-item-${recall.id}`}>
+                    <div key={recall.id} className="p-3 bg-red-50 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
                       <div className="flex justify-between items-start mb-1">
-                        <p className="text-cosmic-200 text-sm font-medium">{recall.reason}</p>
-                        <Badge className="bg-mystical-red/20 text-mystical-red text-xs" data-testid="badge-recall-severity">
+                        <p className="text-gray-800 text-sm font-medium">{recall.reason}</p>
+                        <Badge className="bg-red-100 text-red-600 text-xs" data-testid="badge-recall-severity">
                           {recall.severity}
                         </Badge>
                       </div>
-                      <p className="text-cosmic-400 text-xs">
+                      <p className="text-gray-500 text-xs">
                         {new Date(recall.recallDate).toLocaleDateString()}
                       </p>
                     </div>
                   )) || (
-                    <p className="text-cosmic-400 text-center py-4" data-testid="text-no-active-recalls">
-                      No active warnings
+                    <p className="text-gray-500 text-center py-4" data-testid="text-no-active-recalls">
+                      No active recalls
                     </p>
                   )}
                 </div>
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-mystical-red text-mystical-red hover:bg-mystical-red/10"
+                  className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50"
                   data-testid="button-manage-recalls"
                 >
-                  Manage Warnings
+                  Manage Recalls
                 </Button>
               </CardContent>
             </Card>
 
             {/* Blacklist Management */}
-            <Card className="cosmic-card" data-testid="card-blacklist-management">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-blacklist-management">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-mystical-red">
+                <CardTitle className="flex items-center gap-2 text-red-600">
                   <Ban className="h-5 w-5" />
-                  Cosmic Blacklist
+                  Ingredient Blacklist
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
                     <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
-                      <span className="text-cosmic-200 text-sm">{ingredient.ingredientName}</span>
+                      <span className="text-gray-800 text-sm">{ingredient.ingredientName}</span>
                       <Badge 
                         className={
                           ingredient.severity === 'high' 
-                            ? 'bg-mystical-red/20 text-mystical-red' 
+                            ? 'bg-red-100 text-red-600' 
                             : ingredient.severity === 'medium'
-                            ? 'bg-yellow-500/20 text-yellow-500'
-                            : 'bg-cosmic-600/20 text-cosmic-400'
+                            ? 'bg-yellow-100 text-yellow-600'
+                            : 'bg-gray-100 text-gray-600'
                         }
                         data-testid="badge-ingredient-severity"
                       >
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
                       </Badge>
                     </div>
                   )) || (
-                    <p className="text-cosmic-400 text-center py-4" data-testid="text-no-blacklisted">
+                    <p className="text-gray-500 text-center py-4" data-testid="text-no-blacklisted">
                       No blacklisted ingredients
                     </p>
                   )}
@@ -249,7 +249,7 @@ export default function AdminDashboard() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1 border-mystical-red text-mystical-red hover:bg-mystical-red/10 text-xs"
+                    className="flex-1 border-red-500 text-red-600 hover:bg-red-50 text-xs"
                     data-testid="button-add-ingredient"
                   >
                     Add Ingredient
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1 border-cosmic-600 text-cosmic-300 hover:bg-cosmic-600/10 text-xs"
+                    className="flex-1 border-gray-400 text-gray-600 hover:bg-gray-50 text-xs"
                     data-testid="button-manage-blacklist"
                   >
                     Manage List
@@ -267,38 +267,38 @@ export default function AdminDashboard() {
             </Card>
 
             {/* Recent Activity */}
-            <Card className="cosmic-card" data-testid="card-recent-activity">
+            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recent-activity">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                <CardTitle className="flex items-center gap-2 text-blue-600">
                   <TrendingUp className="h-5 w-5" />
-                  Recent Divine Activity
+                  Recent Activity
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {recentProducts && recentProducts.slice(0, 3).map((product: any) => (
-                    <div key={product.id} className="p-3 bg-cosmic-800/30 rounded" data-testid={`activity-item-${product.id}`}>
-                      <p className="text-cosmic-200 text-sm font-medium">{product.name}</p>
+                    <div key={product.id} className="p-3 bg-gray-50 border rounded" data-testid={`activity-item-${product.id}`}>
+                      <p className="text-gray-800 text-sm font-medium">{product.name}</p>
                       <div className="flex justify-between items-center mt-1">
-                        <span className="text-cosmic-400 text-xs">Added by {product.brand}</span>
+                        <span className="text-gray-600 text-xs">Added by {product.brand}</span>
                         {product.cosmicClarity && (
                           <Badge 
                             className={
                               product.cosmicClarity === 'blessed' 
-                                ? 'bg-mystical-green/20 text-mystical-green' 
+                                ? 'bg-green-100 text-green-600' 
                                 : product.cosmicClarity === 'cursed'
-                                ? 'bg-mystical-red/20 text-mystical-red'
-                                : 'bg-yellow-500/20 text-yellow-500'
+                                ? 'bg-red-100 text-red-600'
+                                : 'bg-yellow-100 text-yellow-600'
                             }
                             data-testid="badge-product-clarity"
                           >
-                            {product.cosmicClarity}
+                            {product.cosmicClarity === 'blessed' ? 'Safe' : product.cosmicClarity === 'cursed' ? 'Unsafe' : 'Unknown'}
                           </Badge>
                         )}
                       </div>
                     </div>
                   )) || (
-                    <p className="text-cosmic-400 text-center py-4" data-testid="text-no-recent-activity">
+                    <p className="text-gray-500 text-center py-4" data-testid="text-no-recent-activity">
                       No recent activity
                     </p>
                   )}
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
+                  className="w-full mt-4 border-blue-500 text-blue-600 hover:bg-blue-50"
                   data-testid="button-view-all-activity"
                 >
                   View All Activity
@@ -315,43 +315,43 @@ export default function AdminDashboard() {
             </Card>
           </div>
 
-          {/* Divine Powers */}
-          <Card className="cosmic-card border-mystical-purple/50" data-testid="card-divine-powers">
+          {/* Admin Powers */}
+          <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-admin-powers">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-mystical-purple">
+              <CardTitle className="flex items-center gap-2 text-blue-600">
                 <Eye className="h-5 w-5" />
-                Divine Command Powers
+                Admin Tools
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Button 
-                  className="bg-mystical-purple/20 text-mystical-purple border border-mystical-purple/40 hover:bg-mystical-purple/30"
-                  data-testid="button-enhance-oracle"
+                  className="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100"
+                  data-testid="button-enhance-analysis"
                 >
                   <ChartLine className="mr-2 h-4 w-4" />
-                  Enhance AI Oracle
+                  Enhance Analysis
                 </Button>
                 <Button 
-                  className="bg-starlight-500/20 text-starlight-500 border border-starlight-500/40 hover:bg-starlight-500/30"
+                  className="bg-green-50 text-green-600 border border-green-200 hover:bg-green-100"
                   data-testid="button-update-database"
                 >
                   <Package className="mr-2 h-4 w-4" />
                   Update Database
                 </Button>
                 <Button 
-                  className="bg-mystical-red/20 text-mystical-red border border-mystical-red/40 hover:bg-mystical-red/30"
+                  className="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
                   data-testid="button-issue-recall"
                 >
                   <AlertTriangle className="mr-2 h-4 w-4" />
                   Issue Recall
                 </Button>
                 <Button 
-                  className="bg-mystical-green/20 text-mystical-green border border-mystical-green/40 hover:bg-mystical-green/30"
-                  data-testid="button-bless-product"
+                  className="bg-green-50 text-green-600 border border-green-200 hover:bg-green-100"
+                  data-testid="button-approve-product"
                 >
                   <Shield className="mr-2 h-4 w-4" />
-                  Bless Product
+                  Approve Product
                 </Button>
               </div>
             </CardContent>
@@ -359,36 +359,26 @@ export default function AdminDashboard() {
           
           {/* Database Synchronization Section */}
           <div className="space-y-6 mt-12">
-            <h2 className="text-2xl font-mystical text-starlight-400 flex items-center gap-2">
+            <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
               <Database className="h-6 w-6" />
-              Cosmic Database Management
+              Database Management
             </h2>
             <DatabaseSync />
           </div>
 
-          {/* Mascot Wisdom */}
+          {/* Admin Guidelines */}
           <div className="mt-12">
-            <Card className="cosmic-card border-mystical-purple/30" data-testid="card-mascot-wisdom">
+            <Card className="border border-blue-200 bg-blue-50" data-testid="card-admin-guidelines">
               <CardContent className="p-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="text-center">
-                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-mystical-purple to-cosmic-600 rounded-full flex items-center justify-center mb-4 animate-glow">
-                      <Eye className="text-2xl text-starlight-500" />
-                    </div>
-                    <h3 className="font-mystical text-xl text-mystical-purple mb-2" data-testid="text-aleister-wisdom-title">Aleister's Wisdom</h3>
-                    <p className="text-cosmic-200 italic" data-testid="text-aleister-wisdom">
-                      "With great cosmic power comes the responsibility to protect all creatures. Use these divine tools wisely, Guardian."
-                    </p>
+                <div className="text-center max-w-2xl mx-auto">
+                  <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6">
+                    <Shield className="text-2xl text-white" />
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-midnight-600 to-cosmic-700 rounded-full flex items-center justify-center mb-4 animate-glow">
-                      <Shield className="text-2xl text-starlight-500" />
-                    </div>
-                    <h3 className="font-mystical text-xl text-midnight-400 mb-2" data-testid="text-severus-wisdom-title">Severus's Counsel</h3>
-                    <p className="text-cosmic-200 italic" data-testid="text-severus-wisdom">
-                      "The truth you guard today protects countless innocent souls tomorrow. Your vigilance shapes the cosmic order."
-                    </p>
-                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-4" data-testid="text-admin-guidelines-title">Administrator Guidelines</h3>
+                  <p className="text-gray-600 leading-relaxed" data-testid="text-admin-guidelines">
+                    As a platform administrator, you have the responsibility to ensure pet product safety data is accurate and up-to-date. 
+                    Use these tools to maintain data quality, manage recalls promptly, and keep pet owners informed about product safety.
+                  </p>
                 </div>
               </CardContent>
             </Card>
