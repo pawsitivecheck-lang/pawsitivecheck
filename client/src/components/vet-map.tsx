@@ -159,7 +159,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         }
       }, 100);
     } catch (error) {
-      console.error('Error initializing map:', error);
       setMapError(`Map initialization failed: ${error.message}`);
     }
   };

@@ -1608,8 +1608,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     specialties: office.specialties || ['General Veterinary Care'],
                     emergencyServices: office.emergencyServices || false,
                     distance: Math.round(distance * 10) / 10,
-                    latitude: office.latitude,
-                    longitude: office.longitude,
+                    latitude: parseFloat(office.latitude),
+                    longitude: parseFloat(office.longitude),
                     description: office.description
                   });
                 }
