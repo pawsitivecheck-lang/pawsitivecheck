@@ -181,8 +181,8 @@ export default function HerdProfile() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-          <div className="h-48 bg-gray-200 rounded-lg"></div>
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+          <div className="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
         </div>
       </div>
     );
@@ -599,7 +599,7 @@ export default function HerdProfile() {
             ) : (
               <Card className="text-center py-12">
                 <CardContent>
-                  <Users className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+                  <Users className="h-16 w-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                     No animals yet
                   </h3>
@@ -634,8 +634,8 @@ export default function HerdProfile() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-gray-500">
-                  <Baby className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <Baby className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
                   <p>No breeding records found</p>
                   <p className="text-sm mt-2">Start tracking breeding activities for your herd</p>
                 </div>
@@ -658,8 +658,8 @@ export default function HerdProfile() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-gray-500">
-                  <TrendingUp className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <TrendingUp className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
                   <p>No production records found</p>
                   <p className="text-sm mt-2">Start tracking production data for your herd</p>
                 </div>
@@ -682,8 +682,8 @@ export default function HerdProfile() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-gray-500">
-                  <MapPin className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <MapPin className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
                   <p>No movement records found</p>
                   <p className="text-sm mt-2">Track animal sales, transfers, and movements</p>
                 </div>

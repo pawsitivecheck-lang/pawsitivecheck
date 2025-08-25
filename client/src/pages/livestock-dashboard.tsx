@@ -225,7 +225,7 @@ export default function LivestockDashboard() {
                             </Badge>
                           ))}
                         </div>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           Created: {new Date(operation.createdAt).toLocaleDateString()}
                         </p>
                       </div>
@@ -307,7 +307,7 @@ export default function LivestockDashboard() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <p className="text-gray-500">No herds found for this operation.</p>
+                      <p className="text-gray-500 dark:text-gray-400">No herds found for this operation.</p>
                       <Button 
                         className="mt-4" 
                         onClick={() => navigate(`/livestock/herds/new?operation=${selectedOperation}`)}
@@ -319,7 +319,7 @@ export default function LivestockDashboard() {
                   )}
                 </div>
               ) : (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   Select an operation to view its herds
                 </p>
               )}

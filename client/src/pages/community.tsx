@@ -234,15 +234,15 @@ export default function Community() {
                 <Card key={i} className="animate-pulse" data-testid={`skeleton-review-${i}`}>
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                       <div className="flex-1">
-                        <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-gray-200 rounded"></div>
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -263,11 +263,11 @@ export default function Community() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900" data-testid="text-reviewer-name">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-100" data-testid="text-reviewer-name">
                             Member #{review.userId.slice(-4)}
                           </h4>
                           {getRankIcon(5)} {/* Default rank for community display */}
-                          <Badge className="bg-gray-100 text-gray-700" data-testid="badge-reviewer-rank">
+                          <Badge className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-testid="badge-reviewer-rank">
                             Community Member
                           </Badge>
                         </div>
@@ -280,29 +280,29 @@ export default function Community() {
                             {[...Array(5)].map((_, i) => (
                               <span 
                                 key={i} 
-                                className={i < review.rating ? 'text-green-600' : 'text-gray-300'}
+                                className={i < review.rating ? 'text-green-600' : 'text-gray-300 dark:text-gray-600'}
                                 data-testid={`paw-rating-${i}`}
                               >
                                 🐾
                               </span>
                             ))}
-                            <span className="text-gray-600 text-sm ml-2">
+                            <span className="text-gray-600 dark:text-gray-400 text-sm ml-2">
                               {review.rating}/5 Paws
                             </span>
                           </div>
                         </div>
                         
                         {review.title && (
-                          <h6 className="font-medium text-gray-700 mb-2" data-testid="text-review-title">
+                          <h6 className="font-medium text-gray-700 dark:text-gray-300 mb-2" data-testid="text-review-title">
                             {review.title}
                           </h6>
                         )}
                         
-                        <p className="text-gray-600 mb-3" data-testid="text-review-content">
+                        <p className="text-gray-600 dark:text-gray-400 mb-3" data-testid="text-review-content">
                           {review.content}
                         </p>
                         
-                        <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                           <span data-testid="text-review-date">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
@@ -325,13 +325,13 @@ export default function Community() {
             ) : (
               <Card className="" data-testid="card-no-reviews">
                 <CardContent className="p-12 text-center">
-                  <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                    <MessageCircle className="text-gray-400 text-2xl" />
+                  <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
+                    <MessageCircle className="text-gray-400 dark:text-gray-600 text-2xl" />
                   </div>
-                  <h3 className="text-xl text-gray-700 mb-4" data-testid="text-no-reviews-title">
+                  <h3 className="text-xl text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-reviews-title">
                     No Reviews Found
                   </h3>
-                  <p className="text-gray-600 mb-6" data-testid="text-no-reviews-description">
+                  <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-reviews-description">
                     {searchTerm || reviewFilter !== "all" 
                       ? "No reviews match your current search criteria."
                       : "The community is just beginning. Be the first to share your experiences!"}
@@ -363,7 +363,7 @@ export default function Community() {
                   <h3 className="text-2xl font-bold text-blue-600 mb-4" data-testid="text-cta-title">
                     Share Your Experience
                   </h3>
-                  <p className="text-gray-600 mb-6" data-testid="text-cta-description">
+                  <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-cta-description">
                     Help fellow pet owners by sharing your experiences with pet products
                   </p>
                   <Button className="bg-blue-600 text-white hover:bg-blue-700" data-testid="button-share-review">

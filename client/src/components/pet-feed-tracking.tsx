@@ -446,8 +446,8 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
             </div>
           ) : (
             <div className="text-center py-8">
-              <Wheat className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">No feed records found for {petName}</p>
+              <Wheat className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 mb-4">No feed records found for {petName}</p>
               <Button onClick={() => setIsAddingFeed(true)} data-testid="button-create-first-pet-feed">
                 Add First Feed Record
               </Button>
