@@ -54,10 +54,14 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         script.defer = true;
         
         script.onload = () => {
+          console.log('Google Maps script loaded successfully');
           scriptLoadedRef.current = true;
           try {
-            initializeMap();
-            setIsLoading(false);
+            // Small delay to ensure Google Maps is fully loaded
+            setTimeout(() => {
+              initializeMap();
+              setIsLoading(false);
+            }, 100);
           } catch (error) {
             console.error('Failed to initialize Google Maps:', error);
             setMapError('Failed to initialize map');
@@ -88,11 +92,16 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   }, []);
 
   const initializeMap = () => {
-    if (!mapRef.current || !window.google) return;
+    console.log('Attempting to initialize map...', { hasMapRef: !!mapRef.current, hasGoogle: !!window.google });
+    if (!mapRef.current || !window.google) {
+      console.log('Map initialization failed - missing requirements');
+      return;
+    }
 
     try {
+      console.log('Creating Google Maps instance...');
       // Initialize map
-    mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+      mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
       center: { lat: center[0], lng: center[1] },
       zoom: zoom,
       styles: [
@@ -119,10 +128,12 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       ]
     });
 
+      console.log('Map created successfully, updating markers...');
       updateMarkers();
+      console.log('Map initialization complete');
     } catch (error) {
       console.error('Error initializing map:', error);
-      setMapError('Map initialization failed');
+      setMapError(`Map initialization failed: ${error.message}`);
     }
   };
 
