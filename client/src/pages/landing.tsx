@@ -333,6 +333,31 @@ export default function Landing() {
       {/* Community Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white" id="community">
         <div className="max-w-7xl mx-auto">
+          {/* Mystical Message */}
+          <div className="mb-16">
+            <div className="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-8 text-center border border-purple-500">
+              <h3 className="text-2xl font-bold text-yellow-400 mb-6 flex items-center justify-center gap-2">
+                <span>🌟</span> Their Mystical Message <span>🌟</span>
+              </h3>
+              <div className="text-lg text-gray-200 mb-4">
+                <p className="mb-4">
+                  "Greetings, dear human! 🐱 We are <span className="text-purple-400 font-bold">Aleister</span> 🧙‍♂️ and <span className="text-white font-bold">Severus</span> 🛡️, your mystical 
+                  feline guardians from the legendary <span className="text-yellow-400 font-bold">Audit Syndicate!</span> ✨
+                </p>
+                <p className="mb-4">
+                  Through <span className="text-purple-400">cosmic divination</span> 🌙 and <span className="text-yellow-400">ancient wisdom</span> 📚, we'll help you pierce the veil 
+                  of corporate deception and discover the <span className="text-green-400 font-bold">TRUE ESSENCE</span> 💎 of every pet product!
+                </p>
+                <p>
+                  Join our purr-fectly magical mission of transparency and protection! 🐾❤️"
+                </p>
+              </div>
+              <div className="flex justify-center space-x-4 text-2xl">
+                <span>🐱</span><span>✨</span><span>🧙‍♂️</span><span>🛡️</span><span>🌟</span><span>🐾</span>
+              </div>
+            </div>
+          </div>
+          
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-800 mb-4" data-testid="text-community-title">Safety Community</h2>
             <p className="text-gray-600 text-lg" data-testid="text-community-description">Pet parents sharing their safety experiences and product reviews</p>
