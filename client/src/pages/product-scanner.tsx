@@ -343,7 +343,7 @@ export default function ProductScanner() {
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">Veterinary Network Validation</h4>
                       <p className="text-sm text-gray-600">
-                        Professional verification through our network of 1,200+ participating veterinary clinics using AVMA adverse event protocols.
+                        B2B data partnerships with veterinary practice management systems (PracticeIQ, Vetspire, eVetPractice) provide anonymized adverse event reports when pets experience health issues after product exposure. This creates real-world safety data from actual clinical cases across 1,200+ participating clinics.
                       </p>
                     </div>
                   </div>
