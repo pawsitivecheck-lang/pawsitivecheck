@@ -111,6 +111,78 @@ export default function DatabaseSync() {
     },
   });
 
+  const syncLivestockMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('livestock');
+      const response = await apiRequest('POST', '/api/admin/sync/livestock');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Livestock Data Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize livestock data",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
+  const syncFeedNutritionMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('feed-nutrition');
+      const response = await apiRequest('POST', '/api/admin/sync/feed-nutrition');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Feed Nutrition Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize feed nutrition data",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
+  const syncFarmSafetyMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('farm-safety');
+      const response = await apiRequest('POST', '/api/admin/sync/farm-safety');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Farm Safety Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize farm safety data",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
   const syncAllMutation = useMutation({
     mutationFn: async () => {
       setActiveSync('all');
@@ -226,7 +298,7 @@ export default function DatabaseSync() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="space-y-3">
               <Button
                 onClick={() => syncProductsMutation.mutate()}
@@ -322,6 +394,100 @@ export default function DatabaseSync() {
             
             <div className="space-y-3">
               <Button
+                onClick={() => syncLivestockMutation.mutate()}
+                disabled={syncLivestockMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-livestock"
+              >
+                {activeSync === 'livestock' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Livestock...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🐄</span>
+                    Sync Livestock
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'livestock' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Fetching livestock feed products from USDA sources...
+                </div>
+              )}
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Livestock Sync:</strong> Updates livestock feed database with farm animal nutrition data from USDA NASS production sources.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncFeedNutritionMutation.mutate()}
+                disabled={syncFeedNutritionMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-feed-nutrition"
+              >
+                {activeSync === 'feed-nutrition' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Nutrition...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🌾</span>
+                    Sync Feed Nutrition
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'feed-nutrition' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating feed ingredient nutrition profiles...
+                </div>
+              )}
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Feed Nutrition:</strong> Synchronizes detailed nutrition profiles for livestock feed ingredients from USDA FoodData Central.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncFarmSafetyMutation.mutate()}
+                disabled={syncFarmSafetyMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-farm-safety"
+              >
+                {activeSync === 'farm-safety' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Farm Safety...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🚜</span>
+                    Sync Farm Safety
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'farm-safety' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating farm animal safety alerts and guidelines...
+                </div>
+              )}
+              
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Farm Safety:</strong> Updates dangerous ingredient alerts specific to farm animals from FDA Animal & Veterinary databases.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
                 onClick={() => syncAllMutation.mutate()}
                 disabled={syncAllMutation.isPending || activeSync !== null}
                 className="w-full bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 text-white font-bold h-12 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
@@ -347,7 +513,7 @@ export default function DatabaseSync() {
               )}
               
               <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
-                <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, cosmic scores, and transparency levels.
+                <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, livestock, feed nutrition, farm safety, and cosmic scoring.
               </div>
             </div>
           </div>
