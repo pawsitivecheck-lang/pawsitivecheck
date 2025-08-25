@@ -3492,6 +3492,335 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =========================== LIVESTOCK MANAGEMENT ROUTES ===========================
+
+  // Livestock Operations Routes
+  app.get('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const operations = await storage.getLivestockOperations(userId);
+      res.json(operations);
+    } catch (error) {
+      console.error("Error fetching livestock operations:", error);
+      res.status(500).json({ error: "Failed to fetch livestock operations" });
+    }
+  });
+
+  app.get('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const operation = await storage.getLivestockOperation(id, userId);
+      
+      if (!operation) {
+        return res.status(404).json({ error: "Livestock operation not found" });
+      }
+      
+      res.json(operation);
+    } catch (error) {
+      console.error("Error fetching livestock operation:", error);
+      res.status(500).json({ error: "Failed to fetch livestock operation" });
+    }
+  });
+
+  app.post('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
+    try {
+      const operationData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const operation = await storage.createLivestockOperation(operationData);
+      res.status(201).json(operation);
+    } catch (error) {
+      console.error("Error creating livestock operation:", error);
+      res.status(500).json({ error: "Failed to create livestock operation" });
+    }
+  });
+
+  app.put('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const operation = await storage.updateLivestockOperation(id, updates, userId);
+      
+      if (!operation) {
+        return res.status(404).json({ error: "Livestock operation not found" });
+      }
+      
+      res.json(operation);
+    } catch (error) {
+      console.error("Error updating livestock operation:", error);
+      res.status(500).json({ error: "Failed to update livestock operation" });
+    }
+  });
+
+  app.delete('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteLivestockOperation(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Livestock operation not found" });
+      }
+      
+      res.json({ message: "Livestock operation deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting livestock operation:", error);
+      res.status(500).json({ error: "Failed to delete livestock operation" });
+    }
+  });
+
+  // Livestock Herds Routes
+  app.get('/api/livestock/operations/:operationId/herds', isAuthenticated, async (req: any, res) => {
+    try {
+      const operationId = parseInt(req.params.operationId);
+      const userId = req.user.id;
+      const herds = await storage.getLivestockHerds(operationId, userId);
+      res.json(herds);
+    } catch (error) {
+      console.error("Error fetching livestock herds:", error);
+      res.status(500).json({ error: "Failed to fetch livestock herds" });
+    }
+  });
+
+  app.get('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const herd = await storage.getLivestockHerd(id, userId);
+      
+      if (!herd) {
+        return res.status(404).json({ error: "Livestock herd not found" });
+      }
+      
+      res.json(herd);
+    } catch (error) {
+      console.error("Error fetching livestock herd:", error);
+      res.status(500).json({ error: "Failed to fetch livestock herd" });
+    }
+  });
+
+  app.post('/api/livestock/herds', isAuthenticated, async (req: any, res) => {
+    try {
+      const herdData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const herd = await storage.createLivestockHerd(herdData);
+      res.status(201).json(herd);
+    } catch (error) {
+      console.error("Error creating livestock herd:", error);
+      res.status(500).json({ error: "Failed to create livestock herd" });
+    }
+  });
+
+  app.put('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const herd = await storage.updateLivestockHerd(id, updates, userId);
+      
+      if (!herd) {
+        return res.status(404).json({ error: "Livestock herd not found" });
+      }
+      
+      res.json(herd);
+    } catch (error) {
+      console.error("Error updating livestock herd:", error);
+      res.status(500).json({ error: "Failed to update livestock herd" });
+    }
+  });
+
+  app.delete('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteLivestockHerd(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Livestock herd not found" });
+      }
+      
+      res.json({ message: "Livestock herd deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting livestock herd:", error);
+      res.status(500).json({ error: "Failed to delete livestock herd" });
+    }
+  });
+
+  // Feed Management Routes
+  app.get('/api/livestock/herds/:herdId/feeds', isAuthenticated, async (req: any, res) => {
+    try {
+      const herdId = parseInt(req.params.herdId);
+      const userId = req.user.id;
+      const feeds = await storage.getFeedManagement(herdId, userId);
+      res.json(feeds);
+    } catch (error) {
+      console.error("Error fetching feed records:", error);
+      res.status(500).json({ error: "Failed to fetch feed records" });
+    }
+  });
+
+  app.get('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const feed = await storage.getFeedRecord(id, userId);
+      
+      if (!feed) {
+        return res.status(404).json({ error: "Feed record not found" });
+      }
+      
+      res.json(feed);
+    } catch (error) {
+      console.error("Error fetching feed record:", error);
+      res.status(500).json({ error: "Failed to fetch feed record" });
+    }
+  });
+
+  app.post('/api/livestock/feeds', isAuthenticated, async (req: any, res) => {
+    try {
+      const feedData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const feed = await storage.createFeedRecord(feedData);
+      res.status(201).json(feed);
+    } catch (error) {
+      console.error("Error creating feed record:", error);
+      res.status(500).json({ error: "Failed to create feed record" });
+    }
+  });
+
+  app.put('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const feed = await storage.updateFeedRecord(id, updates, userId);
+      
+      if (!feed) {
+        return res.status(404).json({ error: "Feed record not found" });
+      }
+      
+      res.json(feed);
+    } catch (error) {
+      console.error("Error updating feed record:", error);
+      res.status(500).json({ error: "Failed to update feed record" });
+    }
+  });
+
+  app.delete('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteFeedRecord(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Feed record not found" });
+      }
+      
+      res.json({ message: "Feed record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting feed record:", error);
+      res.status(500).json({ error: "Failed to delete feed record" });
+    }
+  });
+
+  // Livestock Health Records Routes
+  app.get('/api/livestock/herds/:herdId/health-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const herdId = parseInt(req.params.herdId);
+      const userId = req.user.id;
+      const records = await storage.getLivestockHealthRecords(herdId, userId);
+      res.json(records);
+    } catch (error) {
+      console.error("Error fetching livestock health records:", error);
+      res.status(500).json({ error: "Failed to fetch livestock health records" });
+    }
+  });
+
+  app.get('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const record = await storage.getLivestockHealthRecord(id, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Livestock health record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error fetching livestock health record:", error);
+      res.status(500).json({ error: "Failed to fetch livestock health record" });
+    }
+  });
+
+  app.post('/api/livestock/health-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const recordData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const record = await storage.createLivestockHealthRecord(recordData);
+      res.status(201).json(record);
+    } catch (error) {
+      console.error("Error creating livestock health record:", error);
+      res.status(500).json({ error: "Failed to create livestock health record" });
+    }
+  });
+
+  app.put('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const record = await storage.updateLivestockHealthRecord(id, updates, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Livestock health record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error updating livestock health record:", error);
+      res.status(500).json({ error: "Failed to update livestock health record" });
+    }
+  });
+
+  app.delete('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteLivestockHealthRecord(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Livestock health record not found" });
+      }
+      
+      res.json({ message: "Livestock health record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting livestock health record:", error);
+      res.status(500).json({ error: "Failed to delete livestock health record" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -54,6 +54,8 @@ export const products = pgTable("products", {
   isBlacklisted: boolean("is_blacklisted").default(false),
   suspiciousIngredients: text("suspicious_ingredients").array(),
   disposalInstructions: text("disposal_instructions"),
+  animalType: varchar("animal_type", { length: 20 }).default('pet'), // pet, livestock, mixed
+  targetSpecies: text("target_species").array(), // array of species this product is designed for
   lastAnalyzed: timestamp("last_analyzed"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -230,10 +232,97 @@ export const productUpdateSubmissions = pgTable("product_update_submissions", {
 });
 
 // Animal taxonomy tags for breed, species, and subspecies classification
+// Livestock management table for farm operations
+export const livestockOperations = pgTable("livestock_operations", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  operationName: varchar("operation_name", { length: 255 }).notNull(),
+  operationType: varchar("operation_type", { length: 50 }).notNull(), // dairy, beef, poultry, swine, sheep, goat, mixed
+  address: varchar("address", { length: 255 }),
+  city: varchar("city", { length: 100 }),
+  state: varchar("state", { length: 50 }),
+  zipCode: varchar("zip_code", { length: 20 }),
+  totalHeadCount: integer("total_head_count").default(0),
+  primarySpecies: text("primary_species").array(), // cattle, pigs, chickens, sheep, goats, etc.
+  certifications: text("certifications").array(), // organic, pasture-raised, etc.
+  contactPhone: varchar("contact_phone", { length: 20 }),
+  contactEmail: varchar("contact_email"),
+  notes: text("notes"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const livestockHerds = pgTable("livestock_herds", {
+  id: serial("id").primaryKey(),
+  operationId: integer("operation_id").references(() => livestockOperations.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  herdName: varchar("herd_name", { length: 255 }).notNull(),
+  species: varchar("species", { length: 50 }).notNull(), // cattle, swine, sheep, goat, poultry
+  breed: varchar("breed", { length: 100 }),
+  headCount: integer("head_count").default(0),
+  averageWeight: decimal("average_weight", { precision: 8, scale: 2 }),
+  weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"),
+  ageRange: varchar("age_range", { length: 50 }), // e.g., "6-12 months", "adult", "breeding age"
+  purpose: varchar("purpose", { length: 50 }), // dairy, meat, breeding, egg_production
+  housingType: varchar("housing_type", { length: 100 }), // pasture, barn, free_range, cage_free
+  feedingSchedule: jsonb("feeding_schedule"), // structured feeding plan
+  healthProtocol: text("health_protocol"),
+  notes: text("notes"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const feedManagement = pgTable("feed_management", {
+  id: serial("id").primaryKey(),
+  herdId: integer("herd_id").references(() => livestockHerds.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  productId: integer("product_id").references(() => products.id), // reference to feed product
+  feedType: varchar("feed_type", { length: 100 }).notNull(), // grain, hay, silage, supplement
+  feedName: varchar("feed_name", { length: 255 }).notNull(),
+  supplier: varchar("supplier", { length: 255 }),
+  quantityPerFeeding: decimal("quantity_per_feeding", { precision: 10, scale: 2 }),
+  quantityUnit: varchar("quantity_unit", { length: 20 }).default("lbs"), // lbs, kg, bushels
+  feedingsPerDay: integer("feedings_per_day").default(2),
+  costPerUnit: decimal("cost_per_unit", { precision: 10, scale: 2 }),
+  lastPurchaseDate: timestamp("last_purchase_date"),
+  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default(0),
+  stockUnit: varchar("stock_unit", { length: 20 }).default("lbs"),
+  nutritionAnalysis: jsonb("nutrition_analysis"), // protein, fat, fiber content
+  medications: text("medications").array(), // any medications in the feed
+  withdrawalPeriod: integer("withdrawal_period"), // days before slaughter/milk consumption
+  notes: text("notes"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const livestockHealthRecords = pgTable("livestock_health_records", {
+  id: serial("id").primaryKey(),
+  herdId: integer("herd_id").references(() => livestockHerds.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  recordDate: timestamp("record_date").defaultNow().notNull(),
+  animalCount: integer("animal_count").notNull(), // number of animals examined
+  healthIssue: varchar("health_issue", { length: 255 }),
+  treatment: text("treatment"),
+  medicationUsed: varchar("medication_used", { length: 255 }),
+  withdrawalPeriod: integer("withdrawal_period"), // days before products can be used for human consumption
+  veterinarian: varchar("veterinarian", { length: 200 }),
+  treatmentCost: decimal("treatment_cost", { precision: 10, scale: 2 }),
+  followUpRequired: boolean("follow_up_required").default(false),
+  followUpDate: timestamp("follow_up_date"),
+  notes: text("notes"),
+  attachments: text("attachments").array(), // photos, documents
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const animalTags = pgTable("animal_tags", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'
+  animalCategory: varchar("animal_category", { length: 20 }).default('pet'), // pet, livestock, mixed
   parentId: integer("parent_id").references(() => animalTags.id), // for hierarchical relationships (breed -> species)
   description: text("description"),
   aliases: text("aliases").array(), // alternative names for the same tag
@@ -488,3 +577,38 @@ export type AnimalTag = typeof animalTags.$inferSelect;
 export type InsertAnimalTag = z.infer<typeof insertAnimalTagSchema>;
 export type ProductTag = typeof productTags.$inferSelect;
 export type InsertProductTag = z.infer<typeof insertProductTagSchema>;
+
+// Livestock schemas
+export const insertLivestockOperationSchema = createInsertSchema(livestockOperations).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertLivestockHerdSchema = createInsertSchema(livestockHerds).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertFeedManagementSchema = createInsertSchema(feedManagement).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertLivestockHealthRecordSchema = createInsertSchema(livestockHealthRecords).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Livestock types
+export type LivestockOperation = typeof livestockOperations.$inferSelect;
+export type InsertLivestockOperation = z.infer<typeof insertLivestockOperationSchema>;
+export type LivestockHerd = typeof livestockHerds.$inferSelect;
+export type InsertLivestockHerd = z.infer<typeof insertLivestockHerdSchema>;
+export type FeedManagement = typeof feedManagement.$inferSelect;
+export type InsertFeedManagement = z.infer<typeof insertFeedManagementSchema>;
+export type LivestockHealthRecord = typeof livestockHealthRecords.$inferSelect;
+export type InsertLivestockHealthRecord = z.infer<typeof insertLivestockHealthRecordSchema>;

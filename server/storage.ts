@@ -13,6 +13,10 @@ import {
   medicalEvents,
   animalTags,
   productTags,
+  livestockOperations,
+  livestockHerds,
+  feedManagement,
+  livestockHealthRecords,
   type User,
   type UpsertUser,
   type Product,
@@ -41,6 +45,14 @@ import {
   type InsertAnimalTag,
   type ProductTag,
   type InsertProductTag,
+  type LivestockOperation,
+  type InsertLivestockOperation,
+  type LivestockHerd,
+  type InsertLivestockHerd,
+  type FeedManagement,
+  type InsertFeedManagement,
+  type LivestockHealthRecord,
+  type InsertLivestockHealthRecord,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -155,6 +167,34 @@ export interface IStorage {
     blacklistedIngredients: number;
     veterinaryOffices: number;
   }>;
+
+  // Livestock operation methods
+  getLivestockOperations(userId: string): Promise<LivestockOperation[]>;
+  getLivestockOperation(id: number, userId: string): Promise<LivestockOperation | undefined>;
+  createLivestockOperation(operation: InsertLivestockOperation): Promise<LivestockOperation>;
+  updateLivestockOperation(id: number, updates: Partial<InsertLivestockOperation>, userId: string): Promise<LivestockOperation | undefined>;
+  deleteLivestockOperation(id: number, userId: string): Promise<boolean>;
+
+  // Livestock herd methods
+  getLivestockHerds(operationId: number, userId: string): Promise<LivestockHerd[]>;
+  getLivestockHerd(id: number, userId: string): Promise<LivestockHerd | undefined>;
+  createLivestockHerd(herd: InsertLivestockHerd): Promise<LivestockHerd>;
+  updateLivestockHerd(id: number, updates: Partial<InsertLivestockHerd>, userId: string): Promise<LivestockHerd | undefined>;
+  deleteLivestockHerd(id: number, userId: string): Promise<boolean>;
+
+  // Feed management methods
+  getFeedManagement(herdId: number, userId: string): Promise<FeedManagement[]>;
+  getFeedRecord(id: number, userId: string): Promise<FeedManagement | undefined>;
+  createFeedRecord(feed: InsertFeedManagement): Promise<FeedManagement>;
+  updateFeedRecord(id: number, updates: Partial<InsertFeedManagement>, userId: string): Promise<FeedManagement | undefined>;
+  deleteFeedRecord(id: number, userId: string): Promise<boolean>;
+
+  // Livestock health record methods
+  getLivestockHealthRecords(herdId: number, userId: string): Promise<LivestockHealthRecord[]>;
+  getLivestockHealthRecord(id: number, userId: string): Promise<LivestockHealthRecord | undefined>;
+  createLivestockHealthRecord(record: InsertLivestockHealthRecord): Promise<LivestockHealthRecord>;
+  updateLivestockHealthRecord(id: number, updates: Partial<InsertLivestockHealthRecord>, userId: string): Promise<LivestockHealthRecord | undefined>;
+  deleteLivestockHealthRecord(id: number, userId: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -488,32 +528,6 @@ export class DatabaseStorage implements IStorage {
     return (result.rowCount ?? 0) > 0;
   }
 
-  // Analytics for admin
-  async getAnalytics(): Promise<{
-    totalProducts: number;
-    totalUsers: number;
-    cursedProducts: number;
-    blessedProducts: number;
-    activeRecalls: number;
-    blacklistedIngredients: number;
-    veterinaryOffices: number;
-  }> {
-    const [analytics] = await db.select({
-      totalProducts: sql<number>`count(distinct ${products.id})`,
-      totalUsers: sql<number>`count(distinct ${users.id})`,
-      cursedProducts: sql<number>`count(distinct case when ${products.cosmicClarity} = 'cursed' then ${products.id} end)`,
-      blessedProducts: sql<number>`count(distinct case when ${products.cosmicClarity} = 'blessed' then ${products.id} end)`,
-      activeRecalls: sql<number>`count(distinct case when ${productRecalls.isActive} = true then ${productRecalls.id} end)`,
-      blacklistedIngredients: sql<number>`count(distinct case when ${ingredientBlacklist.isActive} = true then ${ingredientBlacklist.id} end)`,
-      veterinaryOffices: sql<number>`count(distinct case when ${veterinaryOffices.isActive} = true then ${veterinaryOffices.id} end)`,
-    }).from(products)
-    .leftJoin(users, sql`true`)
-    .leftJoin(productRecalls, eq(productRecalls.productId, products.id))
-    .leftJoin(ingredientBlacklist, sql`true`)
-    .leftJoin(veterinaryOffices, sql`true`);
-
-    return analytics;
-  }
   
   // Product update submission operations
   async getUserProductUpdateSubmissions(userId: string): Promise<ProductUpdateSubmission[]> {
@@ -766,6 +780,161 @@ export class DatabaseStorage implements IStorage {
       blacklistedIngredients: Number(blacklistedIngredients[0].count),
       veterinaryOffices: Number(veterinaryOffices[0].count),
     };
+  }
+
+  // Livestock operation methods
+  async getLivestockOperations(userId: string): Promise<LivestockOperation[]> {
+    return await db
+      .select()
+      .from(livestockOperations)
+      .where(and(eq(livestockOperations.userId, userId), eq(livestockOperations.isActive, true)))
+      .orderBy(desc(livestockOperations.createdAt));
+  }
+
+  async getLivestockOperation(id: number, userId: string): Promise<LivestockOperation | undefined> {
+    const [operation] = await db
+      .select()
+      .from(livestockOperations)
+      .where(and(eq(livestockOperations.id, id), eq(livestockOperations.userId, userId), eq(livestockOperations.isActive, true)));
+    return operation;
+  }
+
+  async createLivestockOperation(operation: InsertLivestockOperation): Promise<LivestockOperation> {
+    const [newOperation] = await db.insert(livestockOperations).values(operation).returning();
+    return newOperation;
+  }
+
+  async updateLivestockOperation(id: number, updates: Partial<InsertLivestockOperation>, userId: string): Promise<LivestockOperation | undefined> {
+    const [operation] = await db
+      .update(livestockOperations)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(livestockOperations.id, id), eq(livestockOperations.userId, userId)))
+      .returning();
+    return operation;
+  }
+
+  async deleteLivestockOperation(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(livestockOperations)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(livestockOperations.id, id), eq(livestockOperations.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Livestock herd methods
+  async getLivestockHerds(operationId: number, userId: string): Promise<LivestockHerd[]> {
+    return await db
+      .select()
+      .from(livestockHerds)
+      .where(and(eq(livestockHerds.operationId, operationId), eq(livestockHerds.userId, userId), eq(livestockHerds.isActive, true)))
+      .orderBy(desc(livestockHerds.createdAt));
+  }
+
+  async getLivestockHerd(id: number, userId: string): Promise<LivestockHerd | undefined> {
+    const [herd] = await db
+      .select()
+      .from(livestockHerds)
+      .where(and(eq(livestockHerds.id, id), eq(livestockHerds.userId, userId), eq(livestockHerds.isActive, true)));
+    return herd;
+  }
+
+  async createLivestockHerd(herd: InsertLivestockHerd): Promise<LivestockHerd> {
+    const [newHerd] = await db.insert(livestockHerds).values(herd).returning();
+    return newHerd;
+  }
+
+  async updateLivestockHerd(id: number, updates: Partial<InsertLivestockHerd>, userId: string): Promise<LivestockHerd | undefined> {
+    const [herd] = await db
+      .update(livestockHerds)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(livestockHerds.id, id), eq(livestockHerds.userId, userId)))
+      .returning();
+    return herd;
+  }
+
+  async deleteLivestockHerd(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(livestockHerds)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(livestockHerds.id, id), eq(livestockHerds.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Feed management methods
+  async getFeedManagement(herdId: number, userId: string): Promise<FeedManagement[]> {
+    return await db
+      .select()
+      .from(feedManagement)
+      .where(and(eq(feedManagement.herdId, herdId), eq(feedManagement.userId, userId), eq(feedManagement.isActive, true)))
+      .orderBy(desc(feedManagement.createdAt));
+  }
+
+  async getFeedRecord(id: number, userId: string): Promise<FeedManagement | undefined> {
+    const [feed] = await db
+      .select()
+      .from(feedManagement)
+      .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId), eq(feedManagement.isActive, true)));
+    return feed;
+  }
+
+  async createFeedRecord(feed: InsertFeedManagement): Promise<FeedManagement> {
+    const [newFeed] = await db.insert(feedManagement).values(feed).returning();
+    return newFeed;
+  }
+
+  async updateFeedRecord(id: number, updates: Partial<InsertFeedManagement>, userId: string): Promise<FeedManagement | undefined> {
+    const [feed] = await db
+      .update(feedManagement)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId)))
+      .returning();
+    return feed;
+  }
+
+  async deleteFeedRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(feedManagement)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Livestock health record methods
+  async getLivestockHealthRecords(herdId: number, userId: string): Promise<LivestockHealthRecord[]> {
+    return await db
+      .select()
+      .from(livestockHealthRecords)
+      .where(and(eq(livestockHealthRecords.herdId, herdId), eq(livestockHealthRecords.userId, userId)))
+      .orderBy(desc(livestockHealthRecords.recordDate));
+  }
+
+  async getLivestockHealthRecord(id: number, userId: string): Promise<LivestockHealthRecord | undefined> {
+    const [record] = await db
+      .select()
+      .from(livestockHealthRecords)
+      .where(and(eq(livestockHealthRecords.id, id), eq(livestockHealthRecords.userId, userId)));
+    return record;
+  }
+
+  async createLivestockHealthRecord(record: InsertLivestockHealthRecord): Promise<LivestockHealthRecord> {
+    const [newRecord] = await db.insert(livestockHealthRecords).values(record).returning();
+    return newRecord;
+  }
+
+  async updateLivestockHealthRecord(id: number, updates: Partial<InsertLivestockHealthRecord>, userId: string): Promise<LivestockHealthRecord | undefined> {
+    const [record] = await db
+      .update(livestockHealthRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(livestockHealthRecords.id, id), eq(livestockHealthRecords.userId, userId)))
+      .returning();
+    return record;
+  }
+
+  async deleteLivestockHealthRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(livestockHealthRecords)
+      .where(and(eq(livestockHealthRecords.id, id), eq(livestockHealthRecords.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 
