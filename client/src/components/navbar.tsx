@@ -22,7 +22,7 @@ export default function Navbar() {
   const navigation = [
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
-    { name: 'Community', href: '/community', icon: Users },
+    { name: 'Community', href: '/community-reviews-info', icon: Users },
   ];
 
   const isActivePage = (href: string) => location === href;
