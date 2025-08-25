@@ -106,23 +106,173 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     }
   }, []);
 
-  // Debounced search as user types - faster for autofill
+  // Advanced fuzzy matching utilities
+  const calculateLevenshteinDistance = (str1: string, str2: string): number => {
+    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) matrix[0][i] = i;
+    for (let j = 0; j <= str2.length; j += 1) matrix[j][0] = j;
+    for (let j = 1; j <= str2.length; j += 1) {
+      for (let i = 1; i <= str1.length; i += 1) {
+        const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+        matrix[j][i] = Math.min(
+          matrix[j][i - 1] + 1, // deletion
+          matrix[j - 1][i] + 1, // insertion
+          matrix[j - 1][i - 1] + indicator, // substitution
+        );
+      }
+    }
+    return matrix[str2.length][str1.length];
+  };
+
+  const calculateJaroSimilarity = (str1: string, str2: string): number => {
+    if (str1 === str2) return 1;
+    const len1 = str1.length;
+    const len2 = str2.length;
+    if (len1 === 0 || len2 === 0) return 0;
+    
+    const matchDistance = Math.floor(Math.max(len1, len2) / 2) - 1;
+    const str1Matches = new Array(len1).fill(false);
+    const str2Matches = new Array(len2).fill(false);
+    
+    let matches = 0;
+    let transpositions = 0;
+    
+    // Identify matches
+    for (let i = 0; i < len1; i++) {
+      const start = Math.max(0, i - matchDistance);
+      const end = Math.min(i + matchDistance + 1, len2);
+      
+      for (let j = start; j < end; j++) {
+        if (str2Matches[j] || str1[i] !== str2[j]) continue;
+        str1Matches[i] = str2Matches[j] = true;
+        matches++;
+        break;
+      }
+    }
+    
+    if (matches === 0) return 0;
+    
+    // Count transpositions
+    let k = 0;
+    for (let i = 0; i < len1; i++) {
+      if (!str1Matches[i]) continue;
+      while (!str2Matches[k]) k++;
+      if (str1[i] !== str2[k]) transpositions++;
+      k++;
+    }
+    
+    return (matches / len1 + matches / len2 + (matches - transpositions / 2) / matches) / 3;
+  };
+
+  const calculateJaroWinklerSimilarity = (str1: string, str2: string): number => {
+    const jaro = calculateJaroSimilarity(str1, str2);
+    if (jaro < 0.7) return jaro;
+    
+    let prefix = 0;
+    for (let i = 0; i < Math.min(str1.length, str2.length, 4); i++) {
+      if (str1[i] === str2[i]) prefix++;
+      else break;
+    }
+    
+    return jaro + (0.1 * prefix * (1 - jaro));
+  };
+
+  const normalizeString = (str: string): string => {
+    return str.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+  };
+
+  const generateNGrams = (str: string, n: number): string[] => {
+    const normalized = normalizeString(str);
+    const ngrams = [];
+    for (let i = 0; i <= normalized.length - n; i++) {
+      ngrams.push(normalized.slice(i, i + n));
+    }
+    return ngrams;
+  };
+
+  const calculateAdvancedScore = (query: string, candidate: string, candidateBrand?: string): number => {
+    const normalizedQuery = normalizeString(query);
+    const normalizedCandidate = normalizeString(candidate);
+    const normalizedBrand = candidateBrand ? normalizeString(candidateBrand) : '';
+    
+    let score = 0;
+    const weights = {
+      exactStart: 100,
+      jaroWinkler: 40,
+      levenshtein: 30,
+      ngram: 20,
+      brandMatch: 15,
+      contains: 10,
+      length: 5
+    };
+    
+    // Exact start match (highest priority)
+    if (normalizedCandidate.startsWith(normalizedQuery)) {
+      score += weights.exactStart;
+    }
+    
+    // Jaro-Winkler similarity (handles transpositions well)
+    const jaroWinkler = calculateJaroWinklerSimilarity(normalizedQuery, normalizedCandidate);
+    score += jaroWinkler * weights.jaroWinkler;
+    
+    // Levenshtein distance (typo tolerance)
+    const maxLen = Math.max(normalizedQuery.length, normalizedCandidate.length);
+    const levenshtein = calculateLevenshteinDistance(normalizedQuery, normalizedCandidate);
+    const levenshteinScore = maxLen > 0 ? (maxLen - levenshtein) / maxLen : 0;
+    score += levenshteinScore * weights.levenshtein;
+    
+    // N-gram matching (partial word matching)
+    const queryNgrams = generateNGrams(normalizedQuery, 2);
+    const candidateNgrams = generateNGrams(normalizedCandidate, 2);
+    const ngramMatches = queryNgrams.filter(gram => candidateNgrams.includes(gram)).length;
+    const ngramScore = queryNgrams.length > 0 ? ngramMatches / queryNgrams.length : 0;
+    score += ngramScore * weights.ngram;
+    
+    // Brand matching
+    if (normalizedBrand && (normalizedBrand.includes(normalizedQuery) || normalizedQuery.includes(normalizedBrand))) {
+      score += weights.brandMatch;
+    }
+    
+    // Contains match
+    if (normalizedCandidate.includes(normalizedQuery)) {
+      score += weights.contains;
+    }
+    
+    // Length similarity bonus (prefer similar length matches)
+    const lengthDiff = Math.abs(normalizedQuery.length - normalizedCandidate.length);
+    const lengthScore = Math.max(0, 1 - lengthDiff / Math.max(normalizedQuery.length, normalizedCandidate.length));
+    score += lengthScore * weights.length;
+    
+    return score;
+  };
+
+  // Ultra-fast debounced search with intelligent delay adjustment
   const debouncedSearch = useCallback((query: string) => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
     
+    // Dynamic delay based on query characteristics
+    let delay = 80; // Base ultra-fast delay
+    
+    // Shorter delay for longer queries (user is more confident)
+    if (query.length > 4) delay = 50;
+    if (query.length > 8) delay = 30;
+    
+    // Longer delay for very short queries to avoid excessive API calls
+    if (query.length <= 2) delay = 200;
+    
     debounceRef.current = setTimeout(() => {
-      if (query.trim().length >= 2) {
+      if (query.trim().length >= 1) { // Start searching from 1 character
         searchMutation.mutate(query.trim());
       } else {
         setSearchResults([]);
-        setShowResults(query.length > 0); // Show recent searches for short queries
+        setShowResults(query.length > 0);
       }
-    }, 150); // Faster response for better autofill UX
+    }, delay);
   }, [searchMutation]);
 
-  // Handle input changes with real-time search
+  // Handle input changes with ultra-responsive real-time search
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
@@ -135,7 +285,22 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         clearTimeout(debounceRef.current);
       }
     } else {
-      // Clear previous results immediately when user starts typing
+      // Show dropdown immediately for better responsiveness
+      setShowResults(true);
+      
+      // For single character queries, show recent searches immediately
+      if (value.length === 1 && recentSearches.length > 0) {
+        const filteredRecent = recentSearches.filter(search => 
+          normalizeString(search).startsWith(normalizeString(value))
+        );
+        if (filteredRecent.length > 0) {
+          // Don't clear results, just trigger search for more options
+          debouncedSearch(value);
+          return;
+        }
+      }
+      
+      // Clear previous results and search
       setSearchResults([]);
       debouncedSearch(value);
     }
@@ -159,40 +324,67 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     localStorage.setItem('pawsitivecheck-recent-searches', JSON.stringify(recent));
   };
 
-  // Get the best autofill suggestion
+  // Advanced autofill suggestion with fuzzy matching and error tolerance
   const getAutofillSuggestion = useCallback(() => {
     if (!searchQuery || searchQuery.length < 1) return '';
     
-    const query = searchQuery.toLowerCase().trim();
+    const query = searchQuery.trim();
+    const normalizedQuery = normalizeString(query);
     
-    // Priority 1: Exact product name match that starts with query
-    const exactMatch = searchResults.find(product => 
-      product.name.toLowerCase().startsWith(query) && 
-      product.name.toLowerCase() !== query
-    );
+    // Combine all possible suggestions with advanced scoring
+    const candidates: Array<{text: string, score: number, source: 'product' | 'recent' | 'brand'}> = [];
     
-    if (exactMatch) {
-      return exactMatch.name;
-    }
+    // Score product names
+    searchResults.forEach(product => {
+      if (product.name.toLowerCase() !== normalizedQuery) {
+        const score = calculateAdvancedScore(query, product.name, product.brand);
+        candidates.push({
+          text: product.name,
+          score: score,
+          source: 'product'
+        });
+        
+        // Also consider brand matches if they're good
+        if (product.brand && product.brand.toLowerCase() !== normalizedQuery) {
+          const brandScore = calculateAdvancedScore(query, product.brand) * 0.7; // Slightly lower weight
+          if (brandScore > 50) { // Only if it's a good match
+            candidates.push({
+              text: product.brand,
+              score: brandScore,
+              source: 'brand'
+            });
+          }
+        }
+      }
+    });
     
-    // Priority 2: Recent search that starts with query
-    const recentMatch = recentSearches.find(search => 
-      search.toLowerCase().startsWith(query) && 
-      search.toLowerCase() !== query
-    );
+    // Score recent searches with recency boost
+    recentSearches.forEach((search, index) => {
+      if (search.toLowerCase() !== normalizedQuery) {
+        const baseScore = calculateAdvancedScore(query, search);
+        // Boost recent searches, with more recent ones getting higher boost
+        const recencyBoost = (recentSearches.length - index) * 5;
+        candidates.push({
+          text: search,
+          score: baseScore + recencyBoost,
+          source: 'recent'
+        });
+      }
+    });
     
-    if (recentMatch) {
-      return recentMatch;
-    }
+    // Sort by score and return the best match
+    candidates.sort((a, b) => b.score - a.score);
     
-    // Priority 3: Brand name or partial match
-    const brandMatch = searchResults.find(product => 
-      product.brand?.toLowerCase().startsWith(query) ||
-      product.name.toLowerCase().includes(query)
-    );
+    // Only return suggestions that meet a minimum quality threshold
+    const bestCandidate = candidates[0];
+    const minThreshold = query.length <= 2 ? 80 : query.length <= 4 ? 60 : 40;
     
-    if (brandMatch && brandMatch.name.toLowerCase() !== query) {
-      return brandMatch.name;
+    if (bestCandidate && bestCandidate.score >= minThreshold) {
+      // For very short queries, only suggest if it's an exact start match or very high score
+      if (query.length <= 2 && !normalizeString(bestCandidate.text).startsWith(normalizedQuery) && bestCandidate.score < 100) {
+        return '';
+      }
+      return bestCandidate.text;
     }
     
     return '';
@@ -205,20 +397,36 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     switch (e.key) {
       case 'Tab':
         e.preventDefault();
-        // Tab completion - autofill with the best suggestion
+        // Advanced tab completion with fuzzy matching
         const suggestion = getAutofillSuggestion();
-        if (suggestion && suggestion !== searchQuery && suggestion.toLowerCase().startsWith(searchQuery.toLowerCase())) {
-          setSearchQuery(suggestion);
+        if (suggestion && suggestion !== searchQuery) {
+          // Calculate how much of the suggestion to auto-complete
+          const query = normalizeString(searchQuery);
+          const normalizedSuggestion = normalizeString(suggestion);
+          
+          // If it's a fuzzy match, complete the whole thing
+          // If it's a prefix match, just complete the common part
+          if (normalizedSuggestion.startsWith(query)) {
+            // Prefix match - complete with original casing
+            setSearchQuery(suggestion);
+          } else {
+            // Fuzzy match - complete the whole suggestion
+            setSearchQuery(suggestion);
+          }
+          
           debouncedSearch(suggestion);
-          // Keep results open to show what was autofilled
           setShowResults(true);
-          // Select the first matching result
-          const matchingIndex = searchResults.findIndex(p => p.name.toLowerCase() === suggestion.toLowerCase());
+          
+          // Select the matching result
+          const matchingIndex = searchResults.findIndex(p => 
+            normalizeString(p.name) === normalizedSuggestion ||
+            calculateAdvancedScore(suggestion, p.name, p.brand) > 80
+          );
           if (matchingIndex >= 0) {
             setSelectedIndex(searchQuery.length === 0 ? matchingIndex + recentSearches.length : matchingIndex);
           }
         } else if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
-          // If no suggestion, use selected item
+          // Fallback to selected item
           const selectedOption = allOptions[selectedIndex];
           setSearchQuery(selectedOption);
           debouncedSearch(selectedOption);
