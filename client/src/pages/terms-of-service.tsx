@@ -1,10 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import AdBanner from "@/components/ad-banner";
 import { ArrowLeft, ScrollText, Shield, Users, AlertTriangle } from "lucide-react";
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen text-cosmic-100 pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen text-cosmic-100">
+      {/* Top Ad */}
+      <div className="bg-white border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="terms-header" />
+        </div>
+      </div>
+      
+      <div className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">

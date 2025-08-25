@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import AdBanner from "@/components/ad-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,6 +87,13 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen">
       <Navbar />
+      
+      {/* Top Ad */}
+      <div className="bg-white border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="admin-header" />
+        </div>
+      </div>
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">

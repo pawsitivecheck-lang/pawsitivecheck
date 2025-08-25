@@ -197,7 +197,17 @@ export default function PetProfiles() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="min-h-screen">
+      <Navbar />
+      
+      {/* Top Ad */}
+      <div className="bg-white border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="pet-profiles-header" />
+        </div>
+      </div>
+      
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
