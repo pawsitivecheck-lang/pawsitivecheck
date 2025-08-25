@@ -30,33 +30,7 @@
   --chart-5: hsl(27, 87%, 67%);
   --radius: 0.5rem;
   
-  /* Warm petstore color palette */
-  --cosmic-900: hsl(258, 20%, 15%);
-  --cosmic-800: hsl(258, 25%, 25%);
-  --cosmic-700: hsl(258, 20%, 35%);
-  --cosmic-600: hsl(258, 15%, 45%);
-  --cosmic-500: hsl(258, 15%, 55%);
-  --cosmic-400: hsl(258, 20%, 65%);
-  --cosmic-300: hsl(258, 25%, 75%);
-  --cosmic-200: hsl(258, 30%, 85%);
-  --cosmic-100: hsl(258, 35%, 95%);
-  
-  --midnight-900: hsl(223, 20%, 20%);
-  --midnight-800: hsl(223, 25%, 30%);
-  --midnight-700: hsl(223, 20%, 40%);
-  --midnight-600: hsl(223, 15%, 50%);
-  --midnight-500: hsl(223, 15%, 60%);
-  
-  --starlight-500: hsl(45, 100%, 45%);
-  --starlight-400: hsl(45, 100%, 40%);
-  --starlight-300: hsl(45, 100%, 35%);
-  --starlight-200: hsl(45, 100%, 30%);
-  
-  --mystical-green: hsl(159, 70%, 35%);
-  --mystical-red: hsl(0, 75%, 55%);
-  --mystical-purple: hsl(258, 80%, 55%);
-  
-  /* Petstore specific colors */
+  /* Professional color palette */
   --pet-brown: hsl(25, 45%, 45%);
   --pet-brown-600: hsl(25, 45%, 35%);
   --pet-brown-700: hsl(25, 45%, 25%);
@@ -70,47 +44,25 @@
 }
 
 .dark {
-  --background: hsl(252, 83%, 5%);
-  --foreground: hsl(252, 100%, 96%);
-  --card: hsl(253, 67%, 12%);
-  --card-foreground: hsl(252, 100%, 96%);
-  --popover: hsl(252, 83%, 8%);
-  --popover-foreground: hsl(252, 100%, 96%);
-  --primary: hsl(258, 90%, 70%);
-  --primary-foreground: hsl(252, 83%, 5%);
-  --secondary: hsl(253, 46%, 22%);
-  --secondary-foreground: hsl(252, 100%, 96%);
-  --muted: hsl(253, 46%, 20%);
-  --muted-foreground: hsl(252, 40%, 70%);
-  --accent: hsl(253, 46%, 20%);
-  --accent-foreground: hsl(252, 100%, 96%);
-  --destructive: hsl(0, 84%, 65%);
-  --destructive-foreground: hsl(252, 100%, 96%);
-  --border: hsl(253, 36%, 25%);
-  --input: hsl(253, 40%, 15%);
-  --ring: hsl(258, 90%, 70%);
-  
-  /* Enhanced cosmic colors for dark mode */
-  --cosmic-900: hsl(252, 90%, 3%);
-  --cosmic-800: hsl(253, 70%, 8%);
-  --cosmic-700: hsl(253, 50%, 15%);
-  --cosmic-600: hsl(252, 40%, 25%);
-  --cosmic-500: hsl(252, 45%, 40%);
-  --cosmic-400: hsl(252, 50%, 65%);
-  --cosmic-300: hsl(252, 60%, 78%);
-  --cosmic-200: hsl(252, 70%, 85%);
-  --cosmic-100: hsl(252, 100%, 96%);
-  
-  /* Enhanced starlight colors for better contrast */
-  --starlight-500: hsl(51, 100%, 65%);
-  --starlight-400: hsl(51, 100%, 70%);
-  --starlight-300: hsl(51, 100%, 75%);
-  --starlight-200: hsl(51, 100%, 85%);
-  
-  /* Enhanced mystical colors */
-  --mystical-green: hsl(159, 85%, 50%);
-  --mystical-red: hsl(0, 90%, 68%);
-  --mystical-purple: hsl(258, 95%, 72%);
+  --background: hsl(220, 13%, 8%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(220, 13%, 12%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(220, 13%, 10%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(220, 13%, 8%);
+  --secondary: hsl(220, 13%, 18%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(220, 13%, 15%);
+  --muted-foreground: hsl(217, 10%, 65%);
+  --accent: hsl(220, 13%, 18%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 50%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(220, 13%, 20%);
+  --input: hsl(220, 13%, 15%);
+  --ring: hsl(217, 91%, 60%);
 }
 
 @layer base {
@@ -121,46 +73,24 @@
   /* Light mode body (default) */
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(258, 35%, 97%) 0%, hsl(45, 50%, 95%) 50%, hsl(258, 30%, 96%) 100%);
-    background-attachment: fixed;
-    font-family: var(--font-cosmic);
+    background: hsl(0, 0%, 100%);
+    font-family: var(--font-body);
     min-height: 100vh;
   }
   
-  /* Light mode starfield overlay */
+  /* Clean light mode background */
   body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      radial-gradient(2px 2px at 20px 30px, hsl(45, 100%, 50%), transparent),
-      radial-gradient(1px 1px at 40px 70px, hsl(258, 80%, 60%), transparent),
-      radial-gradient(1px 1px at 90px 40px, hsl(200, 100%, 70%), transparent),
-      radial-gradient(1px 1px at 130px 80px, hsl(45, 100%, 55%), transparent),
-      radial-gradient(1px 1px at 160px 30px, hsl(258, 70%, 65%), transparent);
-    background-repeat: repeat;
-    background-size: 200px 100px;
-    z-index: -1;
-    opacity: 0.15;
+    display: none;
   }
   
   /* Dark mode body */
   .dark body {
-    background: linear-gradient(135deg, var(--cosmic-800) 0%, var(--midnight-900) 50%, var(--cosmic-700) 100%);
+    background: hsl(220, 13%, 8%);
   }
   
-  /* Dark mode starfield overlay */
+  /* Dark mode - clean background */
   .dark body::before {
-    opacity: 0.2;
-    background-image: 
-      radial-gradient(2px 2px at 20px 30px, var(--starlight-500), transparent),
-      radial-gradient(2px 2px at 40px 70px, var(--mystical-purple), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.6), transparent),
-      radial-gradient(1px 1px at 130px 80px, var(--starlight-500), transparent),
-      radial-gradient(2px 2px at 160px 30px, var(--mystical-purple), transparent);
+    display: none;
   }
 }
 
@@ -286,9 +216,13 @@
   to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
 }
 
-/* Light mode component styles (default) */
-.cosmic-card {
-  @apply bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-200/40 hover:border-purple-300/60 transition-all shadow-lg;
+/* Professional card styling */
+.professional-card {
+  @apply bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all;
+}
+
+.dark .professional-card {
+  @apply bg-card border-border;
 }
 
 .mystical-button {
@@ -303,49 +237,73 @@
 
 
 
-/* Petstore color classes */
-.text-pet-brown {
-  color: var(--pet-brown);
+/* Dark theme text utilities */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  @apply text-foreground;
 }
 
-.text-pet-brown-600 {
-  color: var(--pet-brown-600);
+.dark p,
+.dark span,
+.dark div {
+  @apply text-foreground;
 }
 
-.text-pet-brown-700 {
-  color: var(--pet-brown-700);
+.dark .text-gray-600 {
+  @apply text-muted-foreground;
 }
 
-.text-pet-orange {
-  color: var(--pet-orange);
+.dark .text-gray-700 {
+  @apply text-foreground;
 }
 
-.text-pet-blue {
-  color: var(--pet-blue);
+.dark .text-gray-900 {
+  @apply text-foreground;
 }
 
-.text-pet-green {
-  color: var(--pet-green);
+.dark .bg-gray-100 {
+  @apply bg-accent;
 }
 
-.text-pet-red {
-  color: var(--pet-red);
+.dark .bg-gray-200 {
+  @apply bg-muted;
 }
 
-.bg-pet-blue\/10 {
-  background-color: hsl(210, 70%, 55%, 0.1);
+.dark .bg-gray-50 {
+  @apply bg-card;
 }
 
-.bg-pet-green\/10 {
-  background-color: hsl(120, 60%, 45%, 0.1);
+.dark .border-gray-300 {
+  @apply border-border;
 }
 
-.border-pet-blue\/30 {
-  border-color: hsl(210, 70%, 55%, 0.3);
+.dark .border-gray-200 {
+  @apply border-border;
 }
 
-.border-pet-green\/30 {
-  border-color: hsl(120, 60%, 45%, 0.3);
+/* Ensure proper contrast for blue elements in dark mode */
+.dark .text-blue-600 {
+  @apply text-primary;
+}
+
+.dark .bg-blue-600 {
+  @apply bg-primary;
+}
+
+.dark .border-blue-600 {
+  @apply border-primary;
+}
+
+.dark .hover\:bg-blue-700:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.dark .bg-blue-50 {
+  background-color: hsl(var(--primary) / 0.1);
 }
 
 .font-header {
@@ -354,4 +312,21 @@
 
 .font-body {
   font-family: var(--font-body);
+}
+
+/* Additional dark mode contrast improvements */
+.dark .text-gray-400 {
+  @apply text-muted-foreground;
+}
+
+.dark .text-gray-500 {
+  @apply text-muted-foreground;
+}
+
+.dark .bg-white {
+  @apply bg-background;
+}
+
+.dark .text-white {
+  @apply text-foreground;
 }
