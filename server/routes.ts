@@ -1005,19 +1005,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const blacklist = await storage.getBlacklistedIngredients();
 
       const status = {
-        lastSyncTime: new Date().toISOString(),
-        products: {
-          count: products.length,
-          lastUpdated: new Date().toISOString()
+        database: {
+          products: { 
+            count: products.length, 
+            lastSync: new Date().toISOString() 
+          },
+          recalls: { 
+            count: recalls.length, 
+            lastSync: new Date().toISOString() 
+          },
+          ingredients: { 
+            count: blacklist.length, 
+            lastSync: new Date().toISOString() 
+          }
         },
-        recalls: {
-          count: recalls.length,
-          lastUpdated: new Date().toISOString()
-        },
-        ingredients: {
-          count: blacklist.length,
-          lastUpdated: new Date().toISOString()
-        }
+        health: "healthy",
+        lastChecked: new Date().toISOString()
       };
 
       res.json(status);
