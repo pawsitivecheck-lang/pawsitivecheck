@@ -46,7 +46,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
       if (isLoading) {
-        console.log('Map loading timeout, showing fallback');
         setMapError('Map took too long to load');
         setIsLoading(false);
       }
@@ -61,13 +60,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Load Google Maps script
   useEffect(() => {
-    console.log('useEffect: Load Google Maps script', { 
-      scriptLoadedRef: scriptLoadedRef.current, 
-      hasGoogle: !!window.google 
-    });
-    
     if (scriptLoadedRef.current || window.google) {
-      console.log('Google Maps already available');
       scriptLoadedRef.current = true;
       // Small delay to ensure DOM is ready
       setTimeout(() => {
@@ -86,13 +79,11 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         script.defer = true;
         
         script.onload = () => {
-          console.log('Google Maps script loaded successfully');
           scriptLoadedRef.current = true;
           setScriptLoaded(true);
         };
 
         script.onerror = () => {
-          console.error('Failed to load Google Maps script');
           setMapError('Failed to load Google Maps');
           setIsLoading(false);
         };
@@ -100,7 +91,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         document.head.appendChild(script);
       })
       .catch(error => {
-        console.error('Failed to get Google Maps API key:', error);
         setMapError('Failed to load Google Maps API key');
         setIsLoading(false);
       });
@@ -115,20 +105,11 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Initialize map when both script and DOM are ready
   useEffect(() => {
-    console.log('useEffect: Initialize map check', { 
-      scriptLoaded, 
-      hasGoogle: !!window.google, 
-      hasMapRef: !!mapRef.current, 
-      hasMapInstance: !!mapInstanceRef.current 
-    });
-    
     if (scriptLoaded && window.google && mapRef.current && !mapInstanceRef.current) {
-      console.log('Both script and DOM ready, initializing map...');
       try {
         initializeMap();
         setIsLoading(false);
       } catch (error) {
-        console.error('Failed to initialize Google Maps:', error);
         setMapError(`Failed to initialize map: ${error.message}`);
         setIsLoading(false);
       }
@@ -136,14 +117,11 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   }, [scriptLoaded]);
 
   const initializeMap = () => {
-    console.log('Attempting to initialize map...', { hasMapRef: !!mapRef.current, hasGoogle: !!window.google });
     if (!mapRef.current || !window.google) {
-      console.log('Map initialization failed - missing requirements');
       return;
     }
 
     try {
-      console.log('Creating Google Maps instance...');
       // Initialize map
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
       center: { lat: center[0], lng: center[1] },
@@ -172,9 +150,14 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       ]
     });
 
-      console.log('Map created successfully, updating markers...');
       updateMarkers();
-      console.log('Map initialization complete');
+      
+      // Force a resize to ensure map renders properly
+      setTimeout(() => {
+        if (mapInstanceRef.current && window.google) {
+          window.google.maps.event.trigger(mapInstanceRef.current, 'resize');
+        }
+      }, 100);
     } catch (error) {
       console.error('Error initializing map:', error);
       setMapError(`Map initialization failed: ${error.message}`);
@@ -342,11 +325,17 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   }
 
   return (
-    <div 
-      ref={mapRef} 
-      className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50"
-      data-testid="vet-map"
-      style={{ minHeight: '384px' }}
-    />
+    <div className="relative">
+      <div 
+        ref={mapRef} 
+        className="h-96 w-full rounded-lg border border-cosmic-600"
+        data-testid="vet-map"
+        style={{ 
+          minHeight: '384px',
+          height: '384px',
+          backgroundColor: '#1a1a2e'
+        }}
+      />
+    </div>
   );
 }
