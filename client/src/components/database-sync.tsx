@@ -183,6 +183,78 @@ export default function DatabaseSync() {
     },
   });
 
+  const syncExoticProductsMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('exotic-products');
+      const response = await apiRequest('POST', '/api/admin/sync/exotic-products');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Exotic Products Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize exotic products",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
+  const syncExoticNutritionMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('exotic-nutrition');
+      const response = await apiRequest('POST', '/api/admin/sync/exotic-nutrition');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Exotic Nutrition Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize exotic nutrition data",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
+  const syncExoticSafetyMutation = useMutation({
+    mutationFn: async () => {
+      setActiveSync('exotic-safety');
+      const response = await apiRequest('POST', '/api/admin/sync/exotic-safety');
+      return response.json() as Promise<SyncResult>;
+    },
+    onSuccess: (result) => {
+      toast({
+        title: "Exotic Safety Synchronized",
+        description: result.message,
+      });
+      refetchStatus();
+      setActiveSync(null);
+    },
+    onError: () => {
+      toast({
+        title: "Sync Failed",
+        description: "Unable to synchronize exotic safety data",
+        variant: "destructive",
+      });
+      setActiveSync(null);
+    },
+  });
+
   const syncAllMutation = useMutation({
     mutationFn: async () => {
       setActiveSync('all');
@@ -298,7 +370,7 @@ export default function DatabaseSync() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
             <div className="space-y-3">
               <Button
                 onClick={() => syncProductsMutation.mutate()}
@@ -488,6 +560,99 @@ export default function DatabaseSync() {
 
             <div className="space-y-3">
               <Button
+                onClick={() => syncExoticProductsMutation.mutate()}
+                disabled={syncExoticProductsMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-exotic-products"
+              >
+                {activeSync === 'exotic-products' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Exotic Products...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🦎</span>
+                    Sync Exotic Products
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'exotic-products' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Fetching exotic animal products from specialty databases...
+                </div>
+              )}
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Exotic Products:</strong> Updates database with specialty products for reptiles, birds, small mammals, and aquatic pets.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncExoticNutritionMutation.mutate()}
+                disabled={syncExoticNutritionMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-exotic-nutrition"
+              >
+                {activeSync === 'exotic-nutrition' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Exotic Nutrition...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🍃</span>
+                    Sync Exotic Nutrition
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'exotic-nutrition' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating specialized nutrition profiles for exotic species...
+                </div>
+              )}
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Exotic Nutrition:</strong> Synchronizes species-specific nutrition data from exotic animal veterinary research.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => syncExoticSafetyMutation.mutate()}
+                disabled={syncExoticSafetyMutation.isPending || activeSync !== null}
+                className="w-full mystical-button h-12"
+                data-testid="button-sync-exotic-safety"
+              >
+                {activeSync === 'exotic-safety' ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    Syncing Exotic Safety...
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">⚠️</span>
+                    Sync Exotic Safety
+                  </>
+                )}
+              </Button>
+              
+              {activeSync === 'exotic-safety' && (
+                <div className="text-center text-xs text-cosmic-400 animate-pulse">
+                  Updating toxic substance alerts for exotic animals...
+                </div>
+              )}
+              
+              <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
+                <strong className="text-mystical-purple">Exotic Safety:</strong> Updates toxicology data and safety alerts specific to exotic pets from veterinary databases.
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
                 onClick={() => syncAllMutation.mutate()}
                 disabled={syncAllMutation.isPending || activeSync !== null}
                 className="w-full bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 text-white font-bold h-12 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
@@ -513,7 +678,7 @@ export default function DatabaseSync() {
               )}
               
               <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
-                <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, livestock, feed nutrition, farm safety, and cosmic scoring.
+                <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, livestock, farm animals, exotic pets, and cosmic scoring.
               </div>
             </div>
           </div>

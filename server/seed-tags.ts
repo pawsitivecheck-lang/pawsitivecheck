@@ -70,10 +70,112 @@ async function seedAnimalTags() {
     description: `${type} bird type`
   }));
 
-  // Insert all breeds
-  const allBreeds = [...dogBreedData, ...catBreedData, ...birdTypeData];
+  // Farm Animal Breeds
+  const cattleBreeds = [
+    "Angus", "Hereford", "Holstein", "Jersey", "Charolais",
+    "Limousin", "Simmental", "Brahman", "Texas Longhorn", "Wagyu"
+  ];
+
+  const cattleBreedData = cattleBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Cow")!,
+    description: `${breed} cattle breed`
+  }));
+
+  const pigBreeds = [
+    "Yorkshire", "Landrace", "Duroc", "Hampshire", "Berkshire",
+    "Chester White", "Poland China", "Spotted", "Large Black", "Tamworth"
+  ];
+
+  const pigBreedData = pigBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Pig")!,
+    description: `${breed} pig breed`
+  }));
+
+  const chickenBreeds = [
+    "Rhode Island Red", "Leghorn", "Plymouth Rock", "Orpington", "Wyandotte",
+    "Sussex", "Australorp", "New Hampshire", "Brahma", "Marans"
+  ];
+
+  const chickenBreedData = chickenBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Chicken")!,
+    description: `${breed} chicken breed`
+  }));
+
+  const sheepBreeds = [
+    "Suffolk", "Dorper", "Merino", "Romney", "Border Leicester",
+    "Corriedale", "Jacob", "Icelandic", "Katahdin", "Tunis"
+  ];
+
+  const sheepBreedData = sheepBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Sheep")!,
+    description: `${breed} sheep breed`
+  }));
+
+  const goatBreeds = [
+    "Boer", "Nubian", "Alpine", "Saanen", "LaMancha",
+    "Oberhasli", "Toggenburg", "Nigerian Dwarf", "Angora", "Cashmere"
+  ];
+
+  const goatBreedData = goatBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Goat")!,
+    description: `${breed} goat breed`
+  }));
+
+  // Exotic Animal Breeds/Types
+  const rabbitBreeds = [
+    "Holland Lop", "Mini Rex", "Lionhead", "Dutch", "Flemish Giant",
+    "English Angora", "Netherland Dwarf", "Mini Lop", "Californian", "New Zealand"
+  ];
+
+  const rabbitBreedData = rabbitBreeds.map(breed => ({
+    name: breed,
+    type: "breed" as const,
+    parentId: speciesMap.get("Rabbit")!,
+    description: `${breed} rabbit breed`
+  }));
+
+  const reptileTypes = [
+    "Bearded Dragon", "Ball Python", "Leopard Gecko", "Blue-Tongued Skink", "Corn Snake",
+    "Iguana", "Crested Gecko", "Red-Eared Slider", "Russian Tortoise", "Monitor Lizard"
+  ];
+
+  const reptileTypeData = reptileTypes.map(type => ({
+    name: type,
+    type: "breed" as const,
+    parentId: speciesMap.get("Reptile")!,
+    description: `${type} reptile species`
+  }));
+
+  const fishTypes = [
+    "Goldfish", "Betta", "Guppy", "Angelfish", "Tetras",
+    "Cichlids", "Discus", "Koi", "Clownfish", "Tang"
+  ];
+
+  const fishTypeData = fishTypes.map(type => ({
+    name: type,
+    type: "breed" as const,
+    parentId: speciesMap.get("Fish")!,
+    description: `${type} fish species`
+  }));
+
+  // Insert all breeds including farm and exotic animals
+  const allBreeds = [
+    ...dogBreedData, ...catBreedData, ...birdTypeData, 
+    ...cattleBreedData, ...pigBreedData, ...chickenBreedData, ...sheepBreedData, ...goatBreedData,
+    ...rabbitBreedData, ...reptileTypeData, ...fishTypeData
+  ];
   const breeds = await db.insert(animalTags).values(allBreeds).returning();
-  console.log(`✅ Created ${breeds.length} breed tags`);
+  console.log(`✅ Created ${breeds.length} breed tags (including farm and exotic animal breeds)`);
 
   // Size categories
   const sizeData = [
