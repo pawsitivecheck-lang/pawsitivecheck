@@ -32,40 +32,45 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-              <PawPrint className="w-6 h-6 text-white" />
+        <div className="flex h-16 items-center">
+          {/* Left Section - Logo */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
+              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                <PawPrint className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-800 dark:text-white">PawsitiveCheck</h1>
+            </Link>
+          </div>
+          
+          {/* Center Section - Desktop Navigation + Search */}
+          <div className="flex-1 flex items-center justify-center space-x-8">
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-6">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link key={item.name} href={item.href}>
+                    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                      isActivePage(item.href) 
+                        ? 'text-blue-600 bg-blue-50' 
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                    }`} data-testid={`nav-${item.href.slice(1)}`}>
+                      <Icon className="h-4 w-4" />
+                      <span className="text-sm">{item.name}</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">PawsitiveCheck</h1>
-          </Link>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
-            {navigation.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.name} href={item.href}>
-                  <div className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                    isActivePage(item.href) 
-                      ? 'text-blue-600 bg-blue-50' 
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                  }`} data-testid={`nav-${item.href.slice(1)}`}>
-                    <Icon className="h-4 w-4" />
-                    <span className="text-sm">{item.name}</span>
-                  </div>
-                </Link>
-              );
-            })}
+            
+            {/* Header Search - Center on desktop */}
+            <div className="hidden lg:block">
+              <HeaderSearch />
+            </div>
           </div>
           
-          {/* Header Search - Hidden on mobile */}
-          <div className="hidden lg:block">
-            <HeaderSearch />
-          </div>
-          
-          {/* User Menu */}
+          {/* Right Section - User Menu */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <ThemeToggle />
