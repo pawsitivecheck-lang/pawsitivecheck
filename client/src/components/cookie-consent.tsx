@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { X, Cookie, Settings, Shield, ChartBar, Target } from "lucide-react";
+import { X, Cookie, Settings, Shield, BarChart3, Target } from "lucide-react";
 
 interface CookiePreferences {
-  necessary: boolean;
+  essential: boolean;
   functional: boolean;
   analytics: boolean;
   marketing: boolean;
 }
 
 const defaultPreferences: CookiePreferences = {
-  necessary: true, // Always required
+  essential: true, // Always required
   functional: false,
   analytics: false,
   marketing: false,
@@ -45,7 +46,7 @@ export default function CookieConsent() {
 
   const handleAcceptAll = () => {
     const allAccepted: CookiePreferences = {
-      necessary: true,
+      essential: true,
       functional: true,
       analytics: true,
       marketing: true,
@@ -98,187 +99,215 @@ export default function CookieConsent() {
   };
 
   const updatePreference = (category: keyof CookiePreferences, value: boolean) => {
-    if (category === 'necessary') return; // Can't disable necessary cookies
+    if (category === 'essential') return; // Can't disable essential cookies
     setPreferences(prev => ({ ...prev, [category]: value }));
   };
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-4 pointer-events-none">
-      <Card className="cosmic-card w-full max-w-lg pointer-events-auto border-starlight-500/30" data-testid="card-cookie-consent">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center text-starlight-400">
-              <Cookie className="mr-2 h-5 w-5" />
-              Cookie Preferences
-            </CardTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsVisible(false)}
-              className="text-cosmic-400 hover:text-cosmic-200"
-              data-testid="button-close-cookie"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="space-y-4">
-          {!showDetails ? (
-            // Simple consent view
-            <div className="space-y-4">
-              <p className="text-cosmic-200 text-sm">
-                We use cookies to enhance your mystical experience, analyze cosmic patterns, and provide personalized content. Choose your preference below.
-              </p>
+    <>
+      {/* Simple Cookie Banner */}
+      {!showDetails && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 p-4 md:p-6" data-testid="cookie-banner">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <Cookie className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">We value your privacy</h3>
+                  <p className="text-sm text-gray-600">
+                    We use cookies to enhance your experience, analyze site usage, and provide personalized content. 
+                    You can customize your preferences or accept all cookies.
+                  </p>
+                </div>
+              </div>
               
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                 <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowDetails(true)}
+                  className="w-full sm:w-auto"
+                  data-testid="button-cookie-preferences"
+                >
+                  <Settings className="mr-2 h-4 w-4" />
+                  Preferences
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRejectAll}
+                  className="w-full sm:w-auto"
+                  data-testid="button-essential-only"
+                >
+                  Essential Only
+                </Button>
+                <Button
+                  size="sm"
                   onClick={handleAcceptAll}
-                  className="flex-1 bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900 hover:from-starlight-400 hover:to-mystical-purple"
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
                   data-testid="button-accept-all"
                 >
                   Accept All
                 </Button>
-                <Button
-                  onClick={handleRejectAll}
-                  variant="outline"
-                  className="flex-1 border-cosmic-600 text-cosmic-200 hover:bg-cosmic-800"
-                  data-testid="button-reject-all"
-                >
-                  Reject All
-                </Button>
-              </div>
-              
-              <Button
-                onClick={() => setShowDetails(true)}
-                variant="ghost"
-                className="w-full text-starlight-400 hover:text-starlight-300"
-                data-testid="button-customize"
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                Customize Preferences
-              </Button>
-            </div>
-          ) : (
-            // Detailed preferences view
-            <div className="space-y-4 max-h-96 overflow-y-auto">
-              <Button
-                onClick={() => setShowDetails(false)}
-                variant="ghost"
-                size="sm"
-                className="text-starlight-400"
-                data-testid="button-back-simple"
-              >
-                ← Back to Simple View
-              </Button>
-              
-              <div className="space-y-4">
-                {/* Necessary Cookies */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Shield className="mr-2 h-4 w-4 text-mystical-green" />
-                      <span className="font-medium text-cosmic-100">Necessary</span>
-                    </div>
-                    <Switch
-                      checked={preferences.necessary}
-                      disabled={true}
-                      data-testid="switch-necessary"
-                    />
-                  </div>
-                  <p className="text-xs text-cosmic-400 ml-6">
-                    Essential for basic site functionality, security, and user authentication. Always active.
-                  </p>
-                </div>
-
-                <Separator className="bg-cosmic-600" />
-
-                {/* Functional Cookies */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Settings className="mr-2 h-4 w-4 text-starlight-500" />
-                      <span className="font-medium text-cosmic-100">Functional</span>
-                    </div>
-                    <Switch
-                      checked={preferences.functional}
-                      onCheckedChange={(checked) => updatePreference('functional', checked)}
-                      data-testid="switch-functional"
-                    />
-                  </div>
-                  <p className="text-xs text-cosmic-400 ml-6">
-                    Remember your preferences, settings, and personalized experience features.
-                  </p>
-                </div>
-
-                <Separator className="bg-cosmic-600" />
-
-                {/* Analytics Cookies */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <ChartBar className="mr-2 h-4 w-4 text-mystical-purple" />
-                      <span className="font-medium text-cosmic-100">Analytics</span>
-                    </div>
-                    <Switch
-                      checked={preferences.analytics}
-                      onCheckedChange={(checked) => updatePreference('analytics', checked)}
-                      data-testid="switch-analytics"
-                    />
-                  </div>
-                  <p className="text-xs text-cosmic-400 ml-6">
-                    Help us understand how users interact with our platform to improve the cosmic experience.
-                  </p>
-                </div>
-
-                <Separator className="bg-cosmic-600" />
-
-                {/* Marketing Cookies */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Target className="mr-2 h-4 w-4 text-mystical-red" />
-                      <span className="font-medium text-cosmic-100">Marketing</span>
-                    </div>
-                    <Switch
-                      checked={preferences.marketing}
-                      onCheckedChange={(checked) => updatePreference('marketing', checked)}
-                      data-testid="switch-marketing"
-                    />
-                  </div>
-                  <p className="text-xs text-cosmic-400 ml-6">
-                    Personalized content, recommendations, and relevant mystical insights based on your usage.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex gap-2 pt-4">
-                <Button
-                  onClick={handleSavePreferences}
-                  className="flex-1 bg-gradient-to-r from-starlight-500 to-mystical-purple text-cosmic-900"
-                  data-testid="button-save-preferences"
-                >
-                  Save Preferences
-                </Button>
-                <Button
-                  onClick={handleAcceptAll}
-                  variant="outline"
-                  className="flex-1 border-cosmic-600 text-cosmic-200"
-                  data-testid="button-accept-all-detailed"
-                >
-                  Accept All
-                </Button>
               </div>
             </div>
-          )}
-          
-          <p className="text-xs text-cosmic-500 text-center">
-            You can change these preferences anytime in your account settings or by clicking "Cookie Preferences" in our footer.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+          </div>
+        </div>
+      )}
+
+      {/* Detailed Preferences Dialog */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Cookie className="h-5 w-5 text-blue-600" />
+              Cookie Preferences
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            <div className="text-sm text-gray-600">
+              <p className="mb-4">
+                We use different types of cookies to provide you with the best experience on PawsitiveCheck. 
+                You can choose which categories you'd like to allow. Essential cookies are required for the site to function properly.
+              </p>
+            </div>
+
+            {/* Essential Cookies */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-green-600" />
+                    <h4 className="font-semibold text-gray-800">Essential Cookies</h4>
+                  </div>
+                  <Switch
+                    checked={true}
+                    disabled={true}
+                    data-testid="switch-essential-cookies"
+                  />
+                </div>
+                <p className="text-sm text-gray-600">
+                  These cookies are necessary for the website to function and cannot be disabled. 
+                  They enable core functionality like security, authentication, and basic site features.
+                </p>
+                <div className="mt-2 text-xs text-gray-500">
+                  Always active
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Functional Cookies */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Settings className="h-5 w-5 text-orange-600" />
+                    <h4 className="font-semibold text-gray-800">Functional Cookies</h4>
+                  </div>
+                  <Switch
+                    checked={preferences.functional}
+                    onCheckedChange={(checked) => updatePreference('functional', checked)}
+                    data-testid="switch-functional-cookies"
+                  />
+                </div>
+                <p className="text-sm text-gray-600">
+                  These cookies enable enhanced functionality and personalization features like 
+                  remembering your preferences and providing customized content.
+                </p>
+                <div className="mt-2 text-xs text-gray-500">
+                  Used for: User preferences, personalized content, enhanced features
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Analytics Cookies */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-blue-600" />
+                    <h4 className="font-semibold text-gray-800">Analytics Cookies</h4>
+                  </div>
+                  <Switch
+                    checked={preferences.analytics}
+                    onCheckedChange={(checked) => updatePreference('analytics', checked)}
+                    data-testid="switch-analytics-cookies"
+                  />
+                </div>
+                <p className="text-sm text-gray-600">
+                  These cookies help us understand how visitors interact with our website by collecting 
+                  anonymous information about usage patterns and site performance.
+                </p>
+                <div className="mt-2 text-xs text-gray-500">
+                  Used for: Site analytics, performance monitoring, user behavior analysis
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Marketing Cookies */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Target className="h-5 w-5 text-purple-600" />
+                    <h4 className="font-semibold text-gray-800">Marketing Cookies</h4>
+                  </div>
+                  <Switch
+                    checked={preferences.marketing}
+                    onCheckedChange={(checked) => updatePreference('marketing', checked)}
+                    data-testid="switch-marketing-cookies"
+                  />
+                </div>
+                <p className="text-sm text-gray-600">
+                  These cookies are used to deliver personalized advertisements and measure the effectiveness 
+                  of advertising campaigns across different platforms.
+                </p>
+                <div className="mt-2 text-xs text-gray-500">
+                  Used for: Personalized ads, campaign tracking, social media integration
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Privacy Policy Link */}
+            <div className="text-center">
+              <p className="text-xs text-gray-500 mb-4">
+                For more information about how we handle your data, please read our{" "}
+                <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={handleRejectAll}
+                className="flex-1"
+                data-testid="button-accept-essential-detailed"
+              >
+                Accept Essential Only
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleSavePreferences}
+                className="flex-1"
+                data-testid="button-save-preferences"
+              >
+                Save Preferences
+              </Button>
+              <Button
+                onClick={handleAcceptAll}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                data-testid="button-accept-all-detailed"
+              >
+                Accept All
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
