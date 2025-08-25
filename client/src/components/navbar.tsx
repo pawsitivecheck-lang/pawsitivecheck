@@ -42,7 +42,7 @@ export default function Navbar() {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-6">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -60,22 +60,25 @@ export default function Navbar() {
             })}
           </div>
           
-          {/* Header Search */}
-          <HeaderSearch />
+          {/* Header Search - Hidden on mobile */}
+          <div className="hidden md:block">
+            <HeaderSearch />
+          </div>
           
           {/* User Menu */}
           <div className="flex items-center space-x-4">
             {/* Theme Toggle */}
             <ThemeToggle />
             
-            {/* Profile Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="border-gray-300 text-gray-600 hover:bg-gray-50"
-                  data-testid="nav-profile-dropdown"
+            {/* Profile Dropdown - Desktop only */}
+            <div className="hidden md:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-gray-300 text-gray-600 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                    data-testid="nav-profile-dropdown"
                 >
                   {user?.profileImageUrl ? (
                     <img 
@@ -115,6 +118,7 @@ export default function Navbar() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
 
             {/* Mobile menu button */}
             <Button
@@ -131,7 +135,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 py-4" data-testid="nav-mobile-menu">
+          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4" data-testid="nav-mobile-menu">
             {/* Mobile Search */}
             <div className="px-4 pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Search Products</div>
