@@ -149,9 +149,19 @@ export default function ProductDetail() {
                 <h1 className="text-3xl font-bold text-cosmic-100 mb-2" data-testid="text-product-name">
                   {product.name}
                 </h1>
-                <p className="text-xl text-cosmic-300 mb-4" data-testid="text-product-brand">
+                <p className="text-xl text-cosmic-300 mb-2" data-testid="text-product-brand">
                   by {product.brand}
                 </p>
+
+                {/* UPC/Barcode */}
+                {product.barcode && (
+                  <div className="flex items-center gap-2 mb-4" data-testid="product-barcode">
+                    <span className="text-cosmic-200 font-medium">UPC:</span>
+                    <span className="text-cosmic-300 font-mono bg-cosmic-800/30 px-2 py-1 rounded text-sm">
+                      {product.barcode}
+                    </span>
+                  </div>
+                )}
 
                 {/* Paw Rating */}
                 {product.cosmicScore !== undefined && (

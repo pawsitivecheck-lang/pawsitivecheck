@@ -20,6 +20,7 @@ import { insertProductUpdateSubmissionSchema } from "@shared/schema";
 const submitUpdateSchema = insertProductUpdateSubmissionSchema.extend({
   productName: z.string().optional(), // For display purposes
   productBrand: z.string().optional(), // For display purposes
+  productBarcode: z.string().optional(), // For display purposes
 });
 
 type SubmitUpdateData = z.infer<typeof submitUpdateSchema>;
@@ -260,6 +261,29 @@ export default function SubmitProductUpdate() {
                       </FormControl>
                       <FormDescription className="text-purple-300">
                         The brand or manufacturer of the product
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Product UPC/Barcode */}
+                <FormField
+                  control={form.control}
+                  name="productBarcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-purple-200">UPC/Barcode (Optional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g., 012345678906"
+                          className="bg-slate-700/50 border-purple-500/30 text-white placeholder:text-gray-400 font-mono"
+                          data-testid="input-product-barcode"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-purple-300">
+                        The UPC barcode found on the product packaging
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

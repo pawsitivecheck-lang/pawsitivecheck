@@ -401,9 +401,19 @@ export default function ProductScanner() {
                     <h3 className="text-xl font-semibold text-cosmic-100 mb-2" data-testid="text-product-name">
                       {scannedProduct.name}
                     </h3>
-                    <p className="text-cosmic-300 mb-4" data-testid="text-product-brand">
+                    <p className="text-cosmic-300 mb-2" data-testid="text-product-brand">
                       by {scannedProduct.brand}
                     </p>
+
+                    {/* UPC/Barcode */}
+                    {scannedProduct.barcode && (
+                      <div className="flex items-center gap-2 mb-4" data-testid="scanned-product-barcode">
+                        <span className="text-cosmic-200 font-medium text-sm">UPC:</span>
+                        <span className="text-cosmic-300 font-mono bg-cosmic-800/30 px-2 py-1 rounded text-sm">
+                          {scannedProduct.barcode}
+                        </span>
+                      </div>
+                    )}
                     
                     {scannedProduct.description && (
                       <div className="mb-4">

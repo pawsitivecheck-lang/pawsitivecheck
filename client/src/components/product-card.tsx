@@ -10,6 +10,7 @@ interface ProductCardProps {
     name: string;
     brand: string;
     description?: string;
+    barcode?: string;
     cosmicScore?: number;
     cosmicClarity?: string;
     transparencyLevel?: string;
@@ -102,6 +103,11 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               <p className="text-cosmic-300 text-sm" data-testid="text-product-brand">
                 by {product.brand}
               </p>
+              {product.barcode && (
+                <p className="text-cosmic-400 text-xs mt-1 font-mono" data-testid="text-product-barcode">
+                  UPC: {product.barcode}
+                </p>
+              )}
             </div>
             
             {/* Paw Rating */}
