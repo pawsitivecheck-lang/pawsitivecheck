@@ -1655,6 +1655,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Animal tags endpoints
+  app.get('/api/animal-tags', async (req, res) => {
+    try {
+      const { type, parentId } = req.query;
+      const tags = await storage.getAnimalTags({ 
+        type: type as string, 
+        parentId: parentId ? parseInt(parentId as string) : undefined 
+      });
+      res.json(tags);
+    } catch (error) {
+      console.error('Error fetching animal tags:', error);
+      res.status(500).json({ message: 'Failed to fetch animal tags' });
+    }
+  });
+
+  app.get('/api/products/:productId/tags', async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      const tags = await storage.getProductTags(productId);
+      res.json(tags);
+    } catch (error) {
+      console.error('Error fetching product tags:', error);
+      res.status(500).json({ message: 'Failed to fetch product tags' });
+    }
+  });
+
+  app.post('/api/products/:productId/tags', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      const productId = parseInt(req.params.productId);
+      const { tagIds, relevanceScores } = req.body;
+      
+      const tags = await storage.addProductTags(productId, tagIds, userId, relevanceScores);
+      res.json(tags);
+    } catch (error) {
+      console.error('Error adding product tags:', error);
+      res.status(500).json({ message: 'Failed to add product tags' });
+    }
+  });
+
   // Get Google Maps API key for frontend
   app.get('/api/google-maps-key', (req, res) => {
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;

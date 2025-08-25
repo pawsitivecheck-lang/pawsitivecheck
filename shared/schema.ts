@@ -229,6 +229,30 @@ export const productUpdateSubmissions = pgTable("product_update_submissions", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Animal taxonomy tags for breed, species, and subspecies classification
+export const animalTags = pgTable("animal_tags", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'
+  parentId: integer("parent_id").references(() => animalTags.id), // for hierarchical relationships (breed -> species)
+  description: text("description"),
+  aliases: text("aliases").array(), // alternative names for the same tag
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Junction table linking products to animal tags
+export const productTags = pgTable("product_tags", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").references(() => products.id).notNull(),
+  tagId: integer("tag_id").references(() => animalTags.id).notNull(),
+  relevanceScore: integer("relevance_score").default(100), // 1-100, how relevant this tag is to the product
+  addedByUserId: varchar("added_by_user_id").references(() => users.id),
+  isVerified: boolean("is_verified").default(false), // admin verified tags
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   reviews: many(productReviews),
@@ -247,6 +271,7 @@ export const productsRelations = relations(products, ({ many }) => ({
   scans: many(scanHistory),
   savedProducts: many(savedProducts),
   updateSubmissions: many(productUpdateSubmissions),
+  productTags: many(productTags),
 }));
 
 export const productReviewsRelations = relations(productReviews, ({ one }) => ({
@@ -331,6 +356,31 @@ export const productUpdateSubmissionsRelations = relations(productUpdateSubmissi
   }),
 }));
 
+export const animalTagsRelations = relations(animalTags, ({ one, many }) => ({
+  parent: one(animalTags, {
+    fields: [animalTags.parentId],
+    references: [animalTags.id],
+    relationName: "parent",
+  }),
+  children: many(animalTags, { relationName: "parent" }),
+  productTags: many(productTags),
+}));
+
+export const productTagsRelations = relations(productTags, ({ one }) => ({
+  product: one(products, {
+    fields: [productTags.productId],
+    references: [products.id],
+  }),
+  tag: one(animalTags, {
+    fields: [productTags.tagId],
+    references: [animalTags.id],
+  }),
+  addedBy: one(users, {
+    fields: [productTags.addedByUserId],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -398,6 +448,17 @@ export const insertProductUpdateSubmissionSchema = createInsertSchema(productUpd
   appliedAt: true,
 });
 
+export const insertAnimalTagSchema = createInsertSchema(animalTags).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProductTagSchema = createInsertSchema(productTags).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -423,3 +484,7 @@ export type VeterinaryOffice = typeof veterinaryOffices.$inferSelect;
 export type InsertVeterinaryOffice = z.infer<typeof insertVeterinaryOfficeSchema>;
 export type ProductUpdateSubmission = typeof productUpdateSubmissions.$inferSelect;
 export type InsertProductUpdateSubmission = z.infer<typeof insertProductUpdateSubmissionSchema>;
+export type AnimalTag = typeof animalTags.$inferSelect;
+export type InsertAnimalTag = z.infer<typeof insertAnimalTagSchema>;
+export type ProductTag = typeof productTags.$inferSelect;
+export type InsertProductTag = z.infer<typeof insertProductTagSchema>;

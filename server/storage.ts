@@ -11,6 +11,8 @@ import {
   productUpdateSubmissions,
   healthRecords,
   medicalEvents,
+  animalTags,
+  productTags,
   type User,
   type UpsertUser,
   type Product,
@@ -35,6 +37,10 @@ import {
   type InsertHealthRecord,
   type MedicalEvent,
   type InsertMedicalEvent,
+  type AnimalTag,
+  type InsertAnimalTag,
+  type ProductTag,
+  type InsertProductTag,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -127,6 +133,17 @@ export interface IStorage {
   createMedicalEvent(event: InsertMedicalEvent): Promise<MedicalEvent>;
   updateMedicalEvent(id: number, updates: Partial<InsertMedicalEvent>): Promise<MedicalEvent | undefined>;
   deleteMedicalEvent(id: number, userId: string): Promise<boolean>;
+
+  // Animal tag operations
+  getAnimalTags(filters?: { type?: string; parentId?: number }): Promise<AnimalTag[]>;
+  getAnimalTag(id: number): Promise<AnimalTag | undefined>;
+  createAnimalTag(tag: InsertAnimalTag): Promise<AnimalTag>;
+  updateAnimalTag(id: number, updates: Partial<InsertAnimalTag>): Promise<AnimalTag | undefined>;
+  
+  // Product tag operations
+  getProductTags(productId: number): Promise<(ProductTag & { tag: AnimalTag })[]>;
+  addProductTags(productId: number, tagIds: number[], userId: string, relevanceScores?: number[]): Promise<ProductTag[]>;
+  removeProductTag(productId: number, tagId: number): Promise<boolean>;
 
   // Analytics for admin
   getAnalytics(): Promise<{
@@ -622,6 +639,133 @@ export class DatabaseStorage implements IStorage {
       .delete(medicalEvents)
       .where(and(eq(medicalEvents.id, id), eq(medicalEvents.userId, userId)));
     return result.rowCount > 0;
+  }
+
+  // Animal tag operations
+  async getAnimalTags(filters?: { type?: string; parentId?: number }): Promise<AnimalTag[]> {
+    let query = db.select().from(animalTags).where(eq(animalTags.isActive, true));
+    
+    if (filters?.type) {
+      query = query.where(eq(animalTags.type, filters.type));
+    }
+    
+    if (filters?.parentId !== undefined) {
+      if (filters.parentId === null) {
+        query = query.where(sql`${animalTags.parentId} IS NULL`);
+      } else {
+        query = query.where(eq(animalTags.parentId, filters.parentId));
+      }
+    }
+    
+    return await query.orderBy(animalTags.name);
+  }
+
+  async getAnimalTag(id: number): Promise<AnimalTag | undefined> {
+    const [tag] = await db.select().from(animalTags).where(eq(animalTags.id, id));
+    return tag;
+  }
+
+  async createAnimalTag(tag: InsertAnimalTag): Promise<AnimalTag> {
+    const [newTag] = await db.insert(animalTags).values(tag).returning();
+    return newTag;
+  }
+
+  async updateAnimalTag(id: number, updates: Partial<InsertAnimalTag>): Promise<AnimalTag | undefined> {
+    const [tag] = await db
+      .update(animalTags)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(animalTags.id, id))
+      .returning();
+    return tag;
+  }
+
+  // Product tag operations
+  async getProductTags(productId: number): Promise<(ProductTag & { tag: AnimalTag })[]> {
+    return await db
+      .select({
+        id: productTags.id,
+        productId: productTags.productId,
+        tagId: productTags.tagId,
+        relevanceScore: productTags.relevanceScore,
+        addedByUserId: productTags.addedByUserId,
+        isVerified: productTags.isVerified,
+        createdAt: productTags.createdAt,
+        tag: animalTags,
+      })
+      .from(productTags)
+      .innerJoin(animalTags, eq(productTags.tagId, animalTags.id))
+      .where(and(
+        eq(productTags.productId, productId),
+        eq(animalTags.isActive, true)
+      ))
+      .orderBy(desc(productTags.relevanceScore), animalTags.name);
+  }
+
+  async addProductTags(productId: number, tagIds: number[], userId: string, relevanceScores?: number[]): Promise<ProductTag[]> {
+    const tagData = tagIds.map((tagId, index) => ({
+      productId,
+      tagId,
+      addedByUserId: userId,
+      relevanceScore: relevanceScores?.[index] || 100,
+    }));
+
+    return await db
+      .insert(productTags)
+      .values(tagData)
+      .onConflictDoUpdate({
+        target: [productTags.productId, productTags.tagId],
+        set: {
+          relevanceScore: sql`EXCLUDED.relevance_score`,
+          addedByUserId: sql`EXCLUDED.added_by_user_id`,
+        },
+      })
+      .returning();
+  }
+
+  async removeProductTag(productId: number, tagId: number): Promise<boolean> {
+    const result = await db
+      .delete(productTags)
+      .where(and(eq(productTags.productId, productId), eq(productTags.tagId, tagId)));
+    return result.rowCount > 0;
+  }
+
+  // Analytics for admin
+  async getAnalytics(): Promise<{
+    totalProducts: number;
+    totalUsers: number;
+    cursedProducts: number;
+    blessedProducts: number;
+    activeRecalls: number;
+    blacklistedIngredients: number;
+    veterinaryOffices: number;
+  }> {
+    const [
+      totalProducts,
+      totalUsers,
+      cursedProducts,
+      blessedProducts,
+      activeRecalls,
+      blacklistedIngredients,
+      veterinaryOffices,
+    ] = await Promise.all([
+      db.select({ count: sql`count(*)` }).from(products),
+      db.select({ count: sql`count(*)` }).from(users),
+      db.select({ count: sql`count(*)` }).from(products).where(eq(products.cosmicClarity, 'cursed')),
+      db.select({ count: sql`count(*)` }).from(products).where(eq(products.cosmicClarity, 'blessed')),
+      db.select({ count: sql`count(*)` }).from(productRecalls).where(eq(productRecalls.isActive, true)),
+      db.select({ count: sql`count(*)` }).from(ingredientBlacklist).where(eq(ingredientBlacklist.isActive, true)),
+      db.select({ count: sql`count(*)` }).from(veterinaryOffices).where(eq(veterinaryOffices.isActive, true)),
+    ]);
+
+    return {
+      totalProducts: Number(totalProducts[0].count),
+      totalUsers: Number(totalUsers[0].count),
+      cursedProducts: Number(cursedProducts[0].count),
+      blessedProducts: Number(blessedProducts[0].count),
+      activeRecalls: Number(activeRecalls[0].count),
+      blacklistedIngredients: Number(blacklistedIngredients[0].count),
+      veterinaryOffices: Number(veterinaryOffices[0].count),
+    };
   }
 }
 

@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
+import AnimalTags from "@/components/animal-tags";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +33,11 @@ export default function ProductDetail() {
 
   const { data: blacklistedIngredients } = useQuery({
     queryKey: ['/api/blacklisted-ingredients'],
+  }) as { data: any[], isLoading: boolean };
+
+  const { data: productTags } = useQuery({
+    queryKey: ['/api/products', id, 'tags'],
+    enabled: !!id && !!product,
   }) as { data: any[], isLoading: boolean };
 
   // Filter recalls for this specific product
@@ -284,6 +290,26 @@ export default function ProductDetail() {
                     <Badge className={getCosmicClarityColor(product.cosmicClarity)} data-testid="badge-cosmic-clarity">
                       {product.cosmicClarity.toUpperCase()}
                     </Badge>
+                  </div>
+                )}
+
+                {/* Animal Tags */}
+                {productTags && productTags.length > 0 && (
+                  <div className="mb-6" data-testid="section-animal-tags">
+                    <div className="flex items-center gap-1 mb-3">
+                      <span className="text-cosmic-200 font-medium">Suitable For:</span>
+                      <HelpTooltip 
+                        content="Species, breed, and size recommendations based on product specifications, ingredients, and community feedback. These tags help you find products specifically designed for your pet's characteristics."
+                        side="right"
+                      />
+                    </div>
+                    <AnimalTags 
+                      tags={productTags.map(pt => ({ ...pt.tag, relevanceScore: pt.relevanceScore }))}
+                      variant="secondary"
+                      size="sm"
+                      maxTags={8}
+                      showScore={false}
+                    />
                   </div>
                 )}
               </div>
