@@ -2,9 +2,16 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint } from "lucide-react";
+import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const { user } = useAuth();
@@ -61,56 +68,53 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <ThemeToggle />
             
-            {/* Admin Badge */}
-            {user?.isAdmin && (
-              <Link href="/admin">
+            {/* Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className={`border-blue-500 text-blue-600 hover:bg-blue-50 ${
-                    isActivePage('/admin') ? 'bg-blue-50' : ''
-                  }`}
-                  data-testid="nav-admin"
+                  className="border-gray-300 text-gray-600 hover:bg-gray-50"
+                  data-testid="nav-profile-dropdown"
                 >
-                  <Crown className="mr-1 h-3 w-3" />
-                  Admin
+                  {user?.profileImageUrl ? (
+                    <img 
+                      src={user.profileImageUrl} 
+                      alt="Profile" 
+                      className="w-5 h-5 rounded-full mr-2"
+                    />
+                  ) : (
+                    <Users className="mr-2 h-4 w-4" />
+                  )}
+                  {user?.firstName || 'Profile'}
+                  <ChevronDown className="ml-1 h-3 w-3" />
                 </Button>
-              </Link>
-            )}
-
-            {/* Profile */}
-            <Link href="/profile">
-              <Button 
-                variant="outline" 
-                size="sm"
-                className={`border-gray-300 text-gray-600 hover:bg-gray-50 ${
-                  isActivePage('/profile') ? 'bg-gray-50' : ''
-                }`}
-                data-testid="nav-profile"
-              >
-                {user?.profileImageUrl ? (
-                  <img 
-                    src={user.profileImageUrl} 
-                    alt="Profile" 
-                    className="w-5 h-5 rounded-full mr-1"
-                  />
-                ) : (
-                  <Users className="mr-1 h-3 w-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="flex items-center w-full">
+                    <Users className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                {user?.isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin" className="flex items-center w-full">
+                      <Crown className="mr-2 h-4 w-4" />
+                      Admin Dashboard
+                    </Link>
+                  </DropdownMenuItem>
                 )}
-                {user?.firstName || 'Profile'}
-              </Button>
-            </Link>
-
-            {/* Logout */}
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => window.location.href = '/api/logout'}
-              className="border-red-500 text-red-600 hover:bg-red-50"
-              data-testid="nav-logout"
-            >
-              Sign Out
-            </Button>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => window.location.href = '/api/logout'}
+                  className="text-red-600 hover:text-red-600 hover:bg-red-50"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Mobile menu button */}
             <Button
@@ -153,22 +157,6 @@ export default function Navbar() {
                 );
               })}
               
-              {user?.isAdmin && (
-                <Link href="/admin">
-                  <div 
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      isActivePage('/admin') 
-                        ? 'text-blue-600 bg-blue-50' 
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    data-testid="nav-mobile-admin"
-                  >
-                    <Crown className="h-5 w-5" />
-                    <span>Admin Dashboard</span>
-                  </div>
-                </Link>
-              )}
               
               {/* Mobile Profile Section */}
               <div className="border-t border-gray-200 pt-4 mt-4">
@@ -194,6 +182,23 @@ export default function Navbar() {
                     <span>{user?.firstName || 'Profile'}</span>
                   </div>
                 </Link>
+
+                {user?.isAdmin && (
+                  <Link href="/admin">
+                    <div 
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                        isActivePage('/admin') 
+                          ? 'text-blue-600 bg-blue-50' 
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      data-testid="nav-mobile-admin"
+                    >
+                      <Crown className="h-5 w-5" />
+                      <span>Admin Dashboard</span>
+                    </div>
+                  </Link>
+                )}
                 
                 <div 
                   className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:text-red-600 hover:bg-red-50 cursor-pointer"
@@ -203,9 +208,7 @@ export default function Navbar() {
                   }}
                   data-testid="nav-mobile-logout"
                 >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
+                  <LogOut className="h-5 w-5" />
                   <span>Sign Out</span>
                 </div>
               </div>
