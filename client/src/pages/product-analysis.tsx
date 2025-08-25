@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { AlertTriangle, CheckCircle, XCircle, Shield, Package, Microscope, Factory, Globe, Database, ArrowLeft } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Shield, Package, Microscope, Factory, Globe, Database, ArrowLeft, WandSparkles } from "lucide-react";
 
 export default function ProductAnalysis() {
   const { id } = useParams<{ id: string }>();
@@ -480,12 +480,12 @@ export default function ProductAnalysis() {
               </Button>
               <Button 
                 variant="outline"
-                onClick={() => window.location.href = '/submit-product-update'}
-                className="border-starlight-500/30 text-starlight-400"
-                data-testid="button-report-issue"
+                onClick={() => window.location.href = `/submit-product-update?productId=${id}&name=${encodeURIComponent(product.name)}&brand=${encodeURIComponent(product.brand)}&barcode=${product.barcode || ''}`}
+                className="border-amber-500/30 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                data-testid="button-submit-update"
               >
-                <AlertTriangle className="h-4 w-4 mr-2" />
-                Report Safety Issue
+                <WandSparkles className="h-4 w-4 mr-2" />
+                Submit Product Update
               </Button>
             </div>
           </div>

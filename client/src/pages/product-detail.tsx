@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SaveToPetButton } from "@/components/save-to-pet-button";
-import { Package, Shield, AlertTriangle, CheckCircle, XCircle, Heart, Star, ArrowLeft, ExternalLink, AlertCircle, Activity, Clock, TrendingDown, TrendingUp } from "lucide-react";
+import { Package, Shield, AlertTriangle, CheckCircle, XCircle, Heart, Star, ArrowLeft, ExternalLink, AlertCircle, Activity, Clock, TrendingDown, TrendingUp, WandSparkles } from "lucide-react";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -446,6 +446,22 @@ export default function ProductDetail() {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Submit Product Update */}
+              <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-amber-300 dark:hover:border-amber-600" data-testid="card-submit-update">
+                <CardContent className="p-6">
+                  <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center mb-4">
+                    <WandSparkles className="text-amber-600 h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Submit Product Update</h3>
+                  <p className="text-muted-foreground text-sm mb-4">Help improve our database with corrections and new info for this product</p>
+                  <Link href={`/submit-product-update?productId=${id}&name=${encodeURIComponent(product.name)}&brand=${encodeURIComponent(product.brand)}&barcode=${product.barcode || ''}`}>
+                    <Button className="w-full bg-amber-600 text-white hover:bg-amber-700" data-testid="button-submit-update">
+                      Submit Update
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
               {/* Quick Stats */}
               <Card className="cosmic-card" data-testid="card-quick-stats">
                 <CardHeader>
