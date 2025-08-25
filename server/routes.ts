@@ -1171,7 +1171,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const existingIngredients = await storage.getBlacklistedIngredients();
           const exists = existingIngredients.some(i => i.ingredientName === ingredient.ingredientName);
           if (!exists) {
-            await storage.createBlacklistedIngredient(ingredient);
+            await storage.addIngredientToBlacklist(ingredient);
             syncedCount++;
           }
         } catch (err) {
