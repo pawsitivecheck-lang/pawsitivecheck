@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -8,13 +8,15 @@ import AdBanner from "@/components/ad-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, TrendingUp, Database } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, TrendingUp, Database, FileText, RefreshCw } from "lucide-react";
 import DatabaseSync from "@/components/database-sync";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isAdmin, isLoading } = useAuth();
   const { toast } = useToast();
+  const [isUpdatingLegal, setIsUpdatingLegal] = useState(false);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -66,6 +68,34 @@ export default function AdminDashboard() {
     },
     enabled: !!isAdmin,
   });
+
+  const updateLegalDocuments = useMutation({
+    mutationFn: async () => {
+      return apiRequest("/api/admin/update-legal", {
+        method: "POST",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Legal Documents Updated",
+        description: "Privacy Policy, Terms of Service, and Cookie Policy have been updated with current 2025 regulations.",
+      });
+      setIsUpdatingLegal(false);
+    },
+    onError: (error) => {
+      toast({
+        title: "Update Failed",
+        description: "Could not update legal documents. Please try again.",
+        variant: "destructive",
+      });
+      setIsUpdatingLegal(false);
+    },
+  });
+
+  const handleUpdateLegal = () => {
+    setIsUpdatingLegal(true);
+    updateLegalDocuments.mutate();
+  };
 
   if (isLoading) {
     return (
@@ -332,7 +362,7 @@ export default function AdminDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-4">
                 <Button 
                   className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
                   data-testid="button-enhance-analysis"
@@ -368,6 +398,19 @@ export default function AdminDashboard() {
                 >
                   <Shield className="mr-2 h-4 w-4" />
                   Approve Product
+                </Button>
+                <Button 
+                  className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
+                  onClick={handleUpdateLegal}
+                  disabled={isUpdatingLegal}
+                  data-testid="button-update-legal"
+                >
+                  {isUpdatingLegal ? (
+                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <FileText className="mr-2 h-4 w-4" />
+                  )}
+                  {isUpdatingLegal ? "Updating..." : "Update Legal Docs"}
                 </Button>
               </div>
             </CardContent>

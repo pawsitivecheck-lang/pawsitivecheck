@@ -170,8 +170,9 @@ export default function CookieConsent() {
           <div className="space-y-6">
             <div className="text-sm text-gray-600">
               <p className="mb-4">
-                We use different types of cookies to provide you with the best experience on PawsitiveCheck. 
-                You can choose which categories you'd like to allow. Essential cookies are required for the site to function properly.
+                We use different types of cookies and similar technologies to provide you with the best experience on PawsitiveCheck. 
+                You can choose which categories you'd like to allow. Essential cookies are required for the site to function properly and cannot be disabled. 
+                Your choices are saved and can be updated anytime through your account settings or the privacy center.
               </p>
             </div>
 
@@ -214,11 +215,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies enable enhanced functionality like remembering your pet profiles, 
-                  animal tag preferences, product filters, and PWA settings for offline access.
+                  These cookies enable enhanced functionality like remembering your pet profiles across 38+ species, 
+                  animal tag preferences, product filters, PWA settings for offline access, veterinary search preferences, and personalized dashboard layouts.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Pet profile preferences, animal tag settings, product filters, PWA functionality
+                  Used for: Pet profile preferences, animal tag settings, product filters, PWA functionality, vet finder preferences, dashboard customization
                 </div>
               </CardContent>
             </Card>
@@ -238,11 +239,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies help us understand how users interact with barcode scanning, product analysis, 
-                  and animal tagging features by collecting anonymous usage data and performance metrics.
+                  These cookies help us understand how users interact with barcode scanning, AI-powered product analysis, 
+                  animal tagging features, veterinary finder services, and corporate accountability tracking by collecting anonymized usage data and performance metrics for algorithmic improvements.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Scan accuracy tracking, cosmic score analytics, animal tag usage, PWA performance
+                  Used for: Scan accuracy tracking, AI model performance, cosmic score analytics, animal tag usage, PWA performance, vet finder optimization, bias detection
                 </div>
               </CardContent>
             </Card>
@@ -262,11 +263,11 @@ export default function CookieConsent() {
                   />
                 </div>
                 <p className="text-sm text-gray-600">
-                  These cookies enable personalized pet product advertisements based on your animal species 
-                  and safety preferences. This helps support our free pet safety analysis platform.
+                  These cookies enable personalized, ethical pet product advertisements based on your animal species, 
+                  safety preferences, and browsing behavior. This helps support our free pet safety analysis platform while ensuring relevant, responsible advertising that prioritizes pet welfare.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Pet-specific ad targeting, Google AdSense optimization, revenue to support free platform
+                  Used for: Ethical pet-specific ad targeting, Google AdSense optimization, revenue to support free platform, responsible advertising standards
                 </div>
               </CardContent>
             </Card>
@@ -274,8 +275,9 @@ export default function CookieConsent() {
             {/* Privacy Policy Link */}
             <div className="text-center">
               <p className="text-xs text-gray-500 mb-4">
-                For more information about how we handle your data, please read our{" "}
-                <a href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</a>.
+                For more information about how we handle your data, AI ethics, and your privacy rights under GDPR, CCPA, and other regulations, please read our{" "}
+                <a href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</a> and{" "}
+                <a href="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</a>.
               </p>
             </div>
 
