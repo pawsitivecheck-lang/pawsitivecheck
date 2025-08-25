@@ -39,12 +39,13 @@ function Router() {
           <Route path="/community" component={Community} />
           <Route path="/vets" component={VetFinder} />
           <Route path="/pets" component={PetProfiles} />
-          <Route path="/admin" component={AdminDashboard} />
           <Route path="/profile" component={Profile} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
         </>
       )}
+      {/* Admin route accessible to all - component handles auth checks */}
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
