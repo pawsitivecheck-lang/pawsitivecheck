@@ -42,7 +42,7 @@ export default function Navbar() {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-6">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -61,7 +61,7 @@ export default function Navbar() {
           </div>
           
           {/* Header Search - Hidden on mobile */}
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <HeaderSearch />
           </div>
           
@@ -71,7 +71,7 @@ export default function Navbar() {
             <ThemeToggle />
             
             {/* Profile Dropdown - Desktop only */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
