@@ -114,7 +114,7 @@ export default function Home() {
                 </Card>
               </Link>
 
-              <Link href="/community">
+              <Link href="/community-reviews-info">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-green-300 dark:hover:border-green-600" data-testid="card-community">
                   <CardContent className="p-6">
                     <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
