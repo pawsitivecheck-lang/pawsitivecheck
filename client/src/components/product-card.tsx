@@ -117,22 +117,35 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             )}
           </div>
 
-          {/* Cosmic Clarity */}
+          {/* Safety Assessment */}
           {product.cosmicClarity && product.cosmicClarity !== 'unknown' && (
             <div className={`border-l-4 rounded-r-lg p-3 ${
-              product.cosmicClarity === 'blessed' ? 'bg-mystical-green/20 border-mystical-green' :
-              product.cosmicClarity === 'questionable' ? 'bg-yellow-500/20 border-yellow-500' :
-              'bg-mystical-red/20 border-mystical-red'
-            }`} data-testid="cosmic-clarity-section">
-              <div className="flex items-center gap-2 mb-1">
+              product.cosmicClarity === 'blessed' ? 'bg-mystical-green/10 border-mystical-green' :
+              product.cosmicClarity === 'questionable' ? 'bg-yellow-500/10 border-yellow-500' :
+              'bg-mystical-red/10 border-mystical-red'
+            }`} data-testid="safety-assessment-section">
+              <div className="flex items-center gap-2 mb-2">
                 {getCosmicClarityIcon(product.cosmicClarity)}
-                <p className="text-sm font-mystical" data-testid="text-cosmic-clarity">
-                  Cosmic Clarity: {product.cosmicClarity.toUpperCase()}
+                <p className="text-sm font-semibold" data-testid="text-safety-status">
+                  Safety Status: {product.cosmicClarity === 'blessed' ? 'SAFE' : 
+                                   product.cosmicClarity === 'questionable' ? 'CAUTION' : 'AVOID'}
                 </p>
               </div>
-              <p className="text-xs italic" data-testid="text-cosmic-verdict">
-                "{getCosmicVerdict(product.cosmicClarity, product.cosmicScore || 0)}"
+              <p className="text-xs mb-2" data-testid="text-safety-guidance">
+                {product.cosmicClarity === 'blessed' 
+                  ? "This product appears safe for most pets based on ingredient analysis. Always introduce new foods gradually."
+                  : product.cosmicClarity === 'questionable'
+                  ? "This product has some concerns. Check ingredients carefully and consult your veterinarian if your pet has sensitivities."
+                  : "This product has significant safety concerns. Consider alternatives and consult your veterinarian before use."}
               </p>
+              {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
+                <div className="mt-2 p-2 bg-mystical-red/5 rounded border border-mystical-red/20">
+                  <p className="text-xs font-medium text-mystical-red mb-1">Concerning ingredients found:</p>
+                  <p className="text-xs text-cosmic-300" data-testid="text-concerning-ingredients">
+                    {product.suspiciousIngredients.join(', ')}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
@@ -140,12 +153,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           <div className="space-y-2 text-sm">
             {product.cosmicScore !== undefined && (
               <div className="flex justify-between">
-                <span className="text-cosmic-400">Cosmic Score:</span>
+                <span className="text-cosmic-400">Safety Score:</span>
                 <span className={
                   product.cosmicScore >= 80 ? 'text-mystical-green font-semibold' :
                   product.cosmicScore >= 50 ? 'text-yellow-500 font-semibold' :
                   'text-mystical-red font-semibold'
-                } data-testid="text-cosmic-score">
+                } data-testid="text-safety-score">
                   {product.cosmicScore}/100
                 </span>
               </div>
@@ -166,9 +179,9 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
             {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
               <div className="flex justify-between">
-                <span className="text-cosmic-400">Red Flags:</span>
-                <span className="text-mystical-red font-semibold" data-testid="text-red-flags">
-                  {product.suspiciousIngredients.length} Found
+                <span className="text-cosmic-400">Concerns:</span>
+                <span className="text-mystical-red font-semibold" data-testid="text-concerns">
+                  {product.suspiciousIngredients.length} ingredient{product.suspiciousIngredients.length > 1 ? 's' : ''}
                 </span>
               </div>
             )}
@@ -188,12 +201,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             data-testid="button-view-analysis"
           >
             {product.cosmicClarity === 'blessed' 
-              ? 'View Blessed Analysis' :
+              ? 'View Safety Details' :
             product.cosmicClarity === 'cursed' 
-              ? 'View Dark Secrets' :
+              ? 'View Safety Concerns' :
             product.cosmicClarity === 'questionable'
-              ? 'Reveal Hidden Truth' :
-              'Perform Mystical Analysis'
+              ? 'View Full Analysis' :
+              'Analyze Product Safety'
             }
           </Button>
         </div>

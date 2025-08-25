@@ -163,8 +163,32 @@ export default function Home() {
                   <div className="space-y-3">
                     {recentRecalls.slice(0, 2).map((recall: any) => (
                       <div key={recall.id} className="p-3 bg-mystical-red/10 border-l-2 border-mystical-red rounded-lg" data-testid={`recall-item-${recall.id}`}>
-                        <p className="text-cosmic-200 text-sm font-medium">{recall.reason}</p>
-                        <p className="text-mystical-red text-xs font-semibold uppercase">{recall.severity}</p>
+                        <p className="text-cosmic-200 text-sm font-medium mb-2">{recall.reason}</p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-mystical-red text-xs font-semibold uppercase">{recall.severity}</p>
+                          <a 
+                            href={recall.sourceUrl || `https://api.fda.gov/food/enforcement.json?search=recall_number:${recall.recallNumber}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-starlight-400 hover:text-starlight-300 text-xs underline"
+                            data-testid={`recall-source-link-${recall.id}`}
+                          >
+                            View FDA Source →
+                          </a>
+                        </div>
+                        <div className="mt-2 text-xs text-cosmic-400">
+                          <strong>What to do:</strong> {recall.severity === 'urgent' 
+                            ? 'Stop using immediately and contact your veterinarian if your pet has consumed this product.' 
+                            : recall.severity === 'moderate' 
+                              ? 'Discontinue use and monitor your pet for any adverse effects.'
+                              : 'Consider switching to an alternative product when current supply is finished.'}
+                        </div>
+                        {recall.affectedBatches?.length > 0 && (
+                          <div className="mt-2 text-xs text-cosmic-400">
+                            <strong>Check batches:</strong> {recall.affectedBatches.slice(0, 2).join(', ')}
+                            {recall.affectedBatches.length > 2 && ` + ${recall.affectedBatches.length - 2} more`}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

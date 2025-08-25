@@ -174,11 +174,70 @@ export default function Recalls() {
                       </div>
                     </div>
 
+                    {/* Source Link */}
+                    <div className="mb-4 p-3 bg-starlight-500/10 rounded-lg border border-starlight-500/20">
+                      <div className="flex items-center justify-between">
+                        <span className="text-cosmic-300 text-sm font-medium">Official Source</span>
+                        <a 
+                          href={recall.sourceUrl || `https://api.fda.gov/food/enforcement.json?search=recall_number:${recall.recallNumber}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-starlight-400 hover:text-starlight-300 text-sm underline flex items-center gap-1"
+                          data-testid={`recall-official-source-${recall.id}`}
+                        >
+                          View FDA Report →
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Detailed Guidance */}
+                    <div className="mb-4 p-4 bg-mystical-red/5 rounded-lg border border-mystical-red/20">
+                      <h4 className="text-mystical-red font-semibold mb-2 flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        What You Should Do
+                      </h4>
+                      <div className="space-y-2 text-cosmic-200 text-sm">
+                        {recall.severity === 'urgent' && (
+                          <>
+                            <p><strong>IMMEDIATE ACTION REQUIRED:</strong></p>
+                            <ul className="list-disc list-inside space-y-1 ml-2">
+                              <li>Stop feeding this product to your pet immediately</li>
+                              <li>Check if your pet has consumed any of the affected batches</li>
+                              <li>Contact your veterinarian if your pet shows any symptoms</li>
+                              <li>Dispose of remaining product safely (do not donate or give away)</li>
+                              <li>Contact the manufacturer for refund information</li>
+                            </ul>
+                          </>
+                        )}
+                        {recall.severity === 'moderate' && (
+                          <>
+                            <p><strong>PRECAUTIONARY MEASURES:</strong></p>
+                            <ul className="list-disc list-inside space-y-1 ml-2">
+                              <li>Stop using the affected products</li>
+                              <li>Monitor your pet for any adverse reactions</li>
+                              <li>Consult your veterinarian if you notice any symptoms</li>
+                              <li>Switch to an alternative product</li>
+                            </ul>
+                          </>
+                        )}
+                        {recall.severity === 'low' && (
+                          <>
+                            <p><strong>RECOMMENDED ACTIONS:</strong></p>
+                            <ul className="list-disc list-inside space-y-1 ml-2">
+                              <li>Consider switching to an alternative when current supply is finished</li>
+                              <li>Monitor your pet for any unusual symptoms</li>
+                              <li>Keep the product packaging for reference</li>
+                            </ul>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
                     {recall.affectedBatches?.length > 0 && (
                       <div className="mb-4">
                         <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
                           <Package className="h-4 w-4" />
-                          Affected Batches:
+                          Affected Batches - Check Your Products:
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {recall.affectedBatches.map((batch: string, index: number) => (

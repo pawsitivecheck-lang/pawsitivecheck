@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { analyzeProductSafety, generateProductGuidance, enhanceRecallInformation } from "./ai-service";
 import { 
   insertProductSchema, 
   insertProductReviewSchema, 
@@ -770,55 +771,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Product not found in cosmic realm" });
       }
 
-      // Mystical analysis logic
+      // Use AI analysis first
+      const aiAnalysis = await analyzeProductSafety({
+        name: product.name,
+        brand: product.brand,
+        ingredients: product.ingredients || 'Not specified',
+        category: product.category,
+        description: product.description || ''
+      });
+
+      // Generate user guidance
+      const guidance = await generateProductGuidance(aiAnalysis);
+
+      // Combine with existing blacklist logic for additional safety
       const blacklistedIngredients = await storage.getBlacklistedIngredients();
-      const suspiciousIngredients: string[] = [];
-      let cosmicScore = 100;
+      const additionalSuspicious: string[] = [];
+      let scoreAdjustment = 0;
       
       // Check for blacklisted ingredients
       for (const blacklisted of blacklistedIngredients) {
         if (product.ingredients.toLowerCase().includes(blacklisted.ingredientName.toLowerCase())) {
-          suspiciousIngredients.push(blacklisted.ingredientName);
-          if (blacklisted.severity === 'high') cosmicScore -= 30;
-          else if (blacklisted.severity === 'medium') cosmicScore -= 15;
-          else cosmicScore -= 5;
+          additionalSuspicious.push(blacklisted.ingredientName);
+          if (blacklisted.severity === 'high') scoreAdjustment -= 20;
+          else if (blacklisted.severity === 'medium') scoreAdjustment -= 10;
+          else scoreAdjustment -= 5;
         }
       }
 
-      // Additional mystical factors
-      const naturalKeywords = ['organic', 'natural', 'grass-fed', 'free-range', 'human-grade'];
-      const artificialKeywords = ['artificial', 'preservative', 'dye', 'color', 'flavor enhancer'];
-      
-      let naturalCount = 0;
-      let artificialCount = 0;
-      
-      for (const keyword of naturalKeywords) {
-        if (product.ingredients.toLowerCase().includes(keyword)) naturalCount++;
-      }
-      for (const keyword of artificialKeywords) {
-        if (product.ingredients.toLowerCase().includes(keyword)) artificialCount++;
-      }
-
-      cosmicScore += naturalCount * 5;
-      cosmicScore -= artificialCount * 10;
-      cosmicScore = Math.max(0, Math.min(100, cosmicScore));
-
-      // Determine cosmic clarity
-      let cosmicClarity = 'unknown';
-      if (cosmicScore >= 80) cosmicClarity = 'blessed';
-      else if (cosmicScore >= 50) cosmicClarity = 'questionable';
-      else cosmicClarity = 'cursed';
-
-      // Determine transparency level
-      let transparencyLevel = 'poor';
-      if (naturalCount > artificialCount) transparencyLevel = 'excellent';
-      else if (naturalCount === artificialCount) transparencyLevel = 'good';
+      // Combine AI analysis with blacklist adjustments
+      const finalScore = Math.max(0, Math.min(100, aiAnalysis.cosmicScore + scoreAdjustment));
+      const allSuspiciousIngredients = [...new Set([...aiAnalysis.suspiciousIngredients, ...additionalSuspicious])];
 
       const analysis = {
-        cosmicScore,
-        cosmicClarity,
-        transparencyLevel,
-        suspiciousIngredients,
+        cosmicScore: finalScore,
+        cosmicClarity: finalScore >= 80 ? 'blessed' : finalScore >= 50 ? 'questionable' : 'cursed',
+        transparencyLevel: aiAnalysis.transparencyLevel,
+        suspiciousIngredients: allSuspiciousIngredients,
+        userGuidance: guidance,
         lastAnalyzed: new Date(),
       };
 
