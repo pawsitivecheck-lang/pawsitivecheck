@@ -167,13 +167,13 @@ export default function Home() {
                         <div className="flex items-center justify-between">
                           <p className="text-mystical-red text-xs font-semibold uppercase">{recall.severity}</p>
                           <a 
-                            href={recall.sourceUrl || `https://www.fda.gov/animal-veterinary/recalls-withdrawals`}
+                            href={recall.sourceUrl || (recall.source === 'CPSC' ? 'https://www.cpsc.gov/Recalls' : 'https://www.fda.gov/animal-veterinary/recalls-withdrawals')}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-starlight-400 hover:text-starlight-300 text-xs underline"
                             data-testid={`recall-source-link-${recall.id}`}
                           >
-                            View Official Source →
+                            View {recall.source || 'Official'} Report →
                           </a>
                         </div>
                         <div className="mt-2 text-xs text-cosmic-400">

@@ -179,13 +179,13 @@ export default function Recalls() {
                       <div className="flex items-center justify-between">
                         <span className="text-cosmic-300 text-sm font-medium">Official Source</span>
                         <a 
-                          href={recall.sourceUrl || `https://www.fda.gov/animal-veterinary/recalls-withdrawals`}
+                          href={recall.sourceUrl || (recall.source === 'CPSC' ? 'https://www.cpsc.gov/Recalls' : 'https://www.fda.gov/animal-veterinary/recalls-withdrawals')}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-starlight-400 hover:text-starlight-300 text-sm underline flex items-center gap-1"
                           data-testid={`recall-official-source-${recall.id}`}
                         >
-                          View Official Report →
+                          View {recall.source || 'Official'} Report →
                         </a>
                       </div>
                     </div>

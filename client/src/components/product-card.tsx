@@ -195,7 +195,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               <div className="flex items-center justify-between">
                 <span className="text-cosmic-400 text-xs">Official Source</span>
                 <a 
-                  href={product.sourceUrl}
+                  href={product.sourceUrl || `https://www.google.com/search?q=${encodeURIComponent(product.brand + ' pet products')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-starlight-400 hover:text-starlight-300 text-xs underline"
