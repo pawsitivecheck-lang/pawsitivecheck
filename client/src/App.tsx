@@ -23,6 +23,7 @@ import CorporateAccountability from "@/pages/corporate-accountability";
 import IngredientTransparency from "@/pages/ingredient-transparency";
 import ScannerTechnology from "@/pages/scanner-technology";
 import SafetyDatabaseInfo from "@/pages/safety-database-info";
+import RecallSystemInfo from "@/pages/recall-system-info";
 import ProductDetail from "@/pages/product-detail";
 import CookieConsent from "@/components/cookie-consent";
 
@@ -41,6 +42,7 @@ function Router() {
           <Route path="/ingredient-transparency" component={IngredientTransparency} />
           <Route path="/scanner-technology" component={ScannerTechnology} />
           <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
+          <Route path="/recall-system-info" component={RecallSystemInfo} />
         </>
       ) : (
         <>
@@ -58,6 +60,7 @@ function Router() {
           <Route path="/ingredient-transparency" component={IngredientTransparency} />
           <Route path="/scanner-technology" component={ScannerTechnology} />
           <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
+          <Route path="/recall-system-info" component={RecallSystemInfo} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
         </>

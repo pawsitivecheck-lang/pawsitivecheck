@@ -46,7 +46,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
+                <a href="/recall-system-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
                   Recall Alerts
                 </a>
               </li>
