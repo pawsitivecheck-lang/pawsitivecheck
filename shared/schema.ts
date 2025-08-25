@@ -111,10 +111,10 @@ export const petProfiles = pgTable("pet_profiles", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).notNull(),
   name: varchar("name", { length: 100 }).notNull(),
-  species: varchar("species", { length: 50 }).notNull(), // dog, cat, bird, etc.
+  species: varchar("species", { length: 50 }).notNull(), // dog, cat, bird, chicken, pig, cattle, sheep, goat, duck, turkey, horse, etc.
   breed: varchar("breed", { length: 100 }),
   age: integer("age"), // in years
-  weight: decimal("weight", { precision: 5, scale: 2 }), // in pounds
+  weight: decimal("weight", { precision: 8, scale: 2 }), // in pounds, supports up to 999,999.99 for large farm animals
   weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"), // lbs, kg
   gender: varchar("gender", { length: 10 }), // male, female, unknown
   isSpayedNeutered: boolean("is_spayed_neutered"),
@@ -134,7 +134,7 @@ export const healthRecords = pgTable("health_records", {
   petId: integer("pet_id").references(() => petProfiles.id).notNull(),
   userId: varchar("user_id").references(() => users.id).notNull(),
   recordDate: timestamp("record_date").defaultNow().notNull(),
-  weight: decimal("weight", { precision: 5, scale: 2 }), // in pounds/kg
+  weight: decimal("weight", { precision: 8, scale: 2 }), // in pounds/kg, supports large farm animals
   bodyConditionScore: integer("body_condition_score"), // 1-9 scale
   energyLevel: integer("energy_level"), // 1-5 scale (1=very low, 5=very high)
   appetiteLevel: integer("appetite_level"), // 1-5 scale
