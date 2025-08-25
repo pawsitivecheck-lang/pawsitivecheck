@@ -13,26 +13,8 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
   const [adContent, setAdContent] = useState<any>(null);
 
   useEffect(() => {
-    // Check if user has consented to marketing cookies
-    const consent = localStorage.getItem('cookie-consent');
-    let canShowAds = false;
-    
-    if (consent) {
-      try {
-        const preferences = JSON.parse(consent);
-        canShowAds = preferences.marketing || preferences.accepted;
-      } catch {
-        canShowAds = false;
-      }
-    } else {
-      // Show placeholder ads for demo purposes when no consent decision made yet
-      canShowAds = true;
-    }
-
-    if (canShowAds) {
-      // Simulate ad loading (replace with actual ad network integration)
-      loadAd();
-    }
+    // Always show demo ads for now
+    loadAd();
   }, []);
 
   const loadAd = () => {
