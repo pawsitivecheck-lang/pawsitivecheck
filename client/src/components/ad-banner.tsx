@@ -65,7 +65,7 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
           <ins
             className="adsbygoogle"
             style={adStyles[size]}
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+            data-ad-client="ca-pub-2513342355355066"
             data-ad-slot={adSlots[size]}
             data-ad-format="auto"
             data-full-width-responsive="true"

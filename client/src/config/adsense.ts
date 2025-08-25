@@ -2,8 +2,8 @@
 // Replace with your actual AdSense publisher ID and ad slot IDs
 
 export const ADSENSE_CONFIG = {
-  // Replace this with your actual AdSense publisher ID
-  publisherId: "ca-pub-XXXXXXXXXXXXXXXXX",
+  // Your actual AdSense publisher ID  
+  publisherId: "ca-pub-2513342355355066",
   
   // Replace these with your actual ad slot IDs from AdSense dashboard
   adSlots: {
