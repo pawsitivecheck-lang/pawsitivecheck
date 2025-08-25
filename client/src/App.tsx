@@ -32,6 +32,7 @@ import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
 import LivestockDashboard from "@/pages/livestock-dashboard";
 import FeedTracking from "@/pages/feed-tracking";
+import HerdProfile from "@/pages/herd-profile";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -78,6 +79,7 @@ function Router() {
           <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
           <Route path="/livestock" component={LivestockDashboard} />
           <Route path="/livestock/feed" component={FeedTracking} />
+          <Route path="/livestock/herds/:id" component={HerdProfile} />
         </>
       )}
       {/* Admin routes accessible to all - components handle auth checks */}

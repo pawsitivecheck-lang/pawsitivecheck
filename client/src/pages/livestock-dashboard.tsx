@@ -257,7 +257,12 @@ export default function LivestockDashboard() {
                   ) : herds && herds.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {herds.map((herd) => (
-                        <Card key={herd.id} data-testid={`card-herd-${herd.id}`}>
+                        <Card 
+                          key={herd.id} 
+                          className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+                          onClick={() => navigate(`/livestock/herds/${herd.id}`)}
+                          data-testid={`card-herd-${herd.id}`}
+                        >
                           <CardHeader>
                             <CardTitle className="text-base">{herd.herdName}</CardTitle>
                             <CardDescription>
@@ -281,6 +286,20 @@ export default function LivestockDashboard() {
                                   {herd.averageWeight} {herd.weightUnit}
                                 </p>
                               )}
+                            </div>
+                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/livestock/herds/${herd.id}`);
+                                }}
+                                data-testid={`button-manage-herd-${herd.id}`}
+                              >
+                                Manage Herd
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>

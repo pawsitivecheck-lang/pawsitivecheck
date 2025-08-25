@@ -3605,6 +3605,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/livestock/herds/:id/animals', isAuthenticated, async (req: any, res) => {
+    try {
+      const herdId = parseInt(req.params.id);
+      const userId = req.user.id;
+      const animals = await storage.getFarmAnimals(herdId, userId);
+      res.json(animals);
+    } catch (error) {
+      console.error("Error fetching farm animals for herd:", error);
+      res.status(500).json({ error: "Failed to fetch farm animals for herd" });
+    }
+  });
+
   app.post('/api/livestock/herds', isAuthenticated, async (req: any, res) => {
     try {
       const herdData = {
