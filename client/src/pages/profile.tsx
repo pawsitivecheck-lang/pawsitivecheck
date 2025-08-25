@@ -77,7 +77,7 @@ export default function Profile() {
 
   const createPetMutation = useMutation({
     mutationFn: async (petData: any) => {
-      return await apiRequest("/api/pets", "POST", petData);
+      return await apiRequest("POST", "/api/pets", petData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
@@ -109,7 +109,7 @@ export default function Profile() {
 
   const updatePetMutation = useMutation({
     mutationFn: async ({ id, ...petData }: any) => {
-      return await apiRequest(`/api/pets/${id}`, "PUT", petData);
+      return await apiRequest("PUT", `/api/pets/${id}`, petData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
@@ -142,7 +142,7 @@ export default function Profile() {
 
   const deletePetMutation = useMutation({
     mutationFn: async (petId: number) => {
-      return await apiRequest(`/api/pets/${petId}`, "DELETE");
+      return await apiRequest("DELETE", `/api/pets/${petId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
