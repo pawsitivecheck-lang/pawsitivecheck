@@ -24,22 +24,6 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "PawsitiveCheck Mobile Interface"
-    },
-    {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "PawsitiveCheck Desktop Interface"
-    }
-  ],
   "features": [
     "Barcode scanning for product identification",
     "AI-powered safety analysis with cosmic scoring",
