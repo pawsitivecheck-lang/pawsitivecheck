@@ -50,11 +50,6 @@ export default function Footer() {
                   Recall Alerts
                 </a>
               </li>
-              <li>
-                <a href="/community-reviews-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-community">
-                  Community Reviews
-                </a>
-              </li>
             </ul>
           </div>
           
