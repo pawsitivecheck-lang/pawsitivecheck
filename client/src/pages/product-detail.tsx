@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SaveToPetButton } from "@/components/save-to-pet-button";
-import { Package, Shield, AlertTriangle, CheckCircle, XCircle, Heart, Star, ArrowLeft, ExternalLink } from "lucide-react";
+import { Package, Shield, AlertTriangle, CheckCircle, XCircle, Heart, Star, ArrowLeft, ExternalLink, AlertCircle, Activity, Clock, TrendingDown, TrendingUp } from "lucide-react";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +25,33 @@ export default function ProductDetail() {
     queryKey: ['/api/products', id, 'reviews'],
     enabled: !!id
   }) as { data: any[], isLoading: boolean };
+
+  const { data: recalls, isLoading: recallsLoading } = useQuery({
+    queryKey: ['/api/recalls'],
+  }) as { data: any[], isLoading: boolean };
+
+  const { data: blacklistedIngredients } = useQuery({
+    queryKey: ['/api/blacklisted-ingredients'],
+  }) as { data: any[], isLoading: boolean };
+
+  // Filter recalls for this specific product
+  const productRecalls = recalls?.filter(recall => recall.productId === parseInt(id!)) || [];
+  
+  // Filter reviews by safety concerns
+  const safetyReviews = reviews?.filter(review => 
+    review.content?.toLowerCase().includes('sick') || 
+    review.content?.toLowerCase().includes('allergic') ||
+    review.content?.toLowerCase().includes('reaction') ||
+    review.content?.toLowerCase().includes('vomit') ||
+    review.content?.toLowerCase().includes('diarrhea') ||
+    review.content?.toLowerCase().includes('itchy') ||
+    review.content?.toLowerCase().includes('unsafe') ||
+    review.rating <= 2
+  ) || [];
+
+  const positiveReviews = reviews?.filter(review => 
+    review.rating >= 4 && !safetyReviews.includes(review)
+  ) || [];
 
   if (isLoading) {
     return (
@@ -86,6 +113,52 @@ export default function ProductDetail() {
 
   const generatePawRating = (cosmicScore: number): number => {
     return Math.max(1, Math.min(5, Math.round(cosmicScore / 20)));
+  };
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'urgent': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'moderate': 
+      case 'medium': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+      case 'low': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      default: return 'bg-cosmic-600/20 text-cosmic-400 border-cosmic-600/30';
+    }
+  };
+
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) {
+      case 'urgent': return <AlertCircle className="h-4 w-4" />;
+      case 'moderate':
+      case 'medium': return <AlertTriangle className="h-4 w-4" />;
+      case 'low': return <Activity className="h-4 w-4" />;
+      default: return <Shield className="h-4 w-4" />;
+    }
+  };
+
+  const getOverallSafetyRating = () => {
+    let score = product.cosmicScore || 50;
+    
+    // Reduce score based on recalls
+    if (productRecalls.length > 0) {
+      const urgentRecalls = productRecalls.filter(r => r.severity === 'urgent').length;
+      const moderateRecalls = productRecalls.filter(r => r.severity === 'moderate' || r.severity === 'medium').length;
+      score -= (urgentRecalls * 30) + (moderateRecalls * 20) + (productRecalls.length * 10);
+    }
+    
+    // Reduce score based on safety reviews
+    if (safetyReviews.length > 0 && reviews.length > 0) {
+      const safetyRatio = safetyReviews.length / reviews.length;
+      score -= safetyRatio * 40;
+    }
+    
+    // Check blacklisted ingredients
+    const productIngredients = product.ingredients?.toLowerCase() || '';
+    const blacklistedMatches = blacklistedIngredients?.filter(ing => 
+      productIngredients.includes(ing.ingredient.toLowerCase())
+    ).length || 0;
+    score -= blacklistedMatches * 25;
+    
+    return Math.max(0, Math.min(100, score));
   };
 
   return (
