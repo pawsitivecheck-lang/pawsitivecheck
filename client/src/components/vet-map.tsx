@@ -167,14 +167,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   const updateMarkers = () => {
     if (!mapInstanceRef.current || !window.google) return;
 
-    console.log(`Updating markers for ${practices.length} practices:`, practices.map(p => ({ 
-      name: p.name, 
-      hasLatitude: !!p.latitude, 
-      hasLongitude: !!p.longitude,
-      latitude: p.latitude,
-      longitude: p.longitude
-    })));
-
     // Clear existing markers
     markersRef.current.forEach(marker => marker.setMap(null));
     markersRef.current = [];
@@ -184,9 +176,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
     // Add markers for practices with coordinates
     practices.forEach(practice => {
-      console.log(`Processing ${practice.name}: lat=${practice.latitude}, lng=${practice.longitude}`);
       if (practice.latitude && practice.longitude) {
-        console.log(`Adding marker for ${practice.name}`);
         const position = { lat: practice.latitude, lng: practice.longitude };
         
         // Create custom marker icon based on emergency services
@@ -256,12 +246,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         markersRef.current.push(marker);
         bounds.extend(position);
         hasValidMarkers = true;
-      } else {
-        console.log(`Skipping ${practice.name} - no coordinates`);
       }
     });
-    
-    console.log(`Created ${markersRef.current.length} markers, hasValidMarkers: ${hasValidMarkers}`);
 
     // Fit map to show all markers if there are any
     if (hasValidMarkers && markersRef.current.length > 1) {
