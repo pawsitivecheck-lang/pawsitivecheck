@@ -37,7 +37,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       return await res.json();
     },
     onSuccess: (results: Product[]) => {
-      setSearchResults(results);
+      // Always update results and show dropdown when search completes
+      setSearchResults(results || []);
       setShowResults(true);
       setSelectedIndex(-1);
     },
@@ -93,6 +94,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         clearTimeout(debounceRef.current);
       }
     } else {
+      // Clear previous results immediately when user starts typing
+      setSearchResults([]);
       debouncedSearch(value);
     }
   };
