@@ -12,7 +12,7 @@ import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, Tren
 import DatabaseSync from "@/components/database-sync";
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isAdmin, isLoading } = useAuth();
   const { toast } = useToast();
 
   // Redirect to home if not authenticated
@@ -29,7 +29,7 @@ export default function AdminDashboard() {
       return;
     }
     
-    if (!isLoading && isAuthenticated && !user?.isAdmin) {
+    if (!isLoading && isAuthenticated && !isAdmin) {
       toast({
         title: "Access Denied",
         description: "Only Audit Syndicate members may enter the command center.",
@@ -40,34 +40,21 @@ export default function AdminDashboard() {
       }, 500);
       return;
     }
-  }, [isAuthenticated, isLoading, user?.isAdmin, toast]);
+  }, [isAuthenticated, isLoading, isAdmin, toast]);
 
-  const { data: analytics } = useQuery({
+  const { data: analytics = {} } = useQuery({
     queryKey: ['/api/admin/analytics'],
-    enabled: !!user?.isAdmin,
-    onError: (error) => {
-      if (isUnauthorizedError(error as Error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-    },
+    enabled: !!isAdmin,
   });
 
-  const { data: recentRecalls } = useQuery({
+  const { data: recentRecalls = [] } = useQuery({
     queryKey: ['/api/recalls'],
-    enabled: !!user?.isAdmin,
+    enabled: !!isAdmin,
   });
 
-  const { data: blacklistedIngredients } = useQuery({
+  const { data: blacklistedIngredients = [] } = useQuery({
     queryKey: ['/api/blacklist'],
-    enabled: !!user?.isAdmin,
+    enabled: !!isAdmin,
   });
 
   const { data: recentProducts } = useQuery({
@@ -76,7 +63,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/products?limit=10');
       return await res.json();
     },
-    enabled: !!user?.isAdmin,
+    enabled: !!isAdmin,
   });
 
   if (isLoading) {
@@ -142,7 +129,7 @@ export default function AdminDashboard() {
                   <Package className="text-mystical-green" />
                 </div>
                 <div className="text-3xl font-bold text-mystical-green mb-2" data-testid="text-total-products">
-                  {analytics?.totalProducts || 0}
+                  {(analytics as any)?.totalProducts || 0}
                 </div>
                 <p className="text-cosmic-300">Products Analyzed</p>
               </CardContent>
@@ -154,7 +141,7 @@ export default function AdminDashboard() {
                   <Users className="text-starlight-500" />
                 </div>
                 <div className="text-3xl font-bold text-starlight-500 mb-2" data-testid="text-total-users">
-                  {analytics?.totalUsers || 0}
+                  {(analytics as any)?.totalUsers || 0}
                 </div>
                 <p className="text-cosmic-300">Truth Seekers</p>
               </CardContent>
@@ -166,7 +153,7 @@ export default function AdminDashboard() {
                   <AlertTriangle className="text-mystical-red" />
                 </div>
                 <div className="text-3xl font-bold text-mystical-red mb-2" data-testid="text-cursed-products">
-                  {analytics?.cursedProducts || 0}
+                  {(analytics as any)?.cursedProducts || 0}
                 </div>
                 <p className="text-cosmic-300">Cursed Products</p>
               </CardContent>
@@ -178,7 +165,7 @@ export default function AdminDashboard() {
                   <Shield className="text-mystical-purple" />
                 </div>
                 <div className="text-3xl font-bold text-mystical-purple mb-2" data-testid="text-blessed-products">
-                  {analytics?.blessedProducts || 0}
+                  {(analytics as any)?.blessedProducts || 0}
                 </div>
                 <p className="text-cosmic-300">Blessed Products</p>
               </CardContent>
@@ -197,7 +184,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {recentRecalls?.slice(0, 3).map((recall: any) => (
+                  {(recentRecalls as any[]).slice(0, 3).map((recall: any) => (
                     <div key={recall.id} className="p-3 bg-mystical-red/10 border-l-2 border-mystical-red rounded" data-testid={`recall-item-${recall.id}`}>
                       <div className="flex justify-between items-start mb-1">
                         <p className="text-cosmic-200 text-sm font-medium">{recall.reason}</p>
@@ -236,7 +223,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {blacklistedIngredients?.slice(0, 4).map((ingredient: any) => (
+                  {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
                     <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
                       <span className="text-cosmic-200 text-sm">{ingredient.ingredientName}</span>
                       <Badge 
@@ -289,7 +276,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {recentProducts?.slice(0, 3).map((product: any) => (
+                  {recentProducts && recentProducts.slice(0, 3).map((product: any) => (
                     <div key={product.id} className="p-3 bg-cosmic-800/30 rounded" data-testid={`activity-item-${product.id}`}>
                       <p className="text-cosmic-200 text-sm font-medium">{product.name}</p>
                       <div className="flex justify-between items-center mt-1">

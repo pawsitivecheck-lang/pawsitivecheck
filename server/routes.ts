@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated, isAdmin } from "./replitAuth";
 import { analyzeProductSafety, generateProductGuidance, enhanceRecallInformation } from "./ai-service";
 import { 
   insertProductSchema, 
@@ -972,7 +972,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin analytics
-  app.get('/api/admin/analytics', isAuthenticated, async (req: any, res) => {
+  app.get('/api/admin/analytics', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -1173,7 +1173,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Database synchronization endpoints
-  app.post('/api/admin/sync/products', isAuthenticated, async (req: any, res) => {
+  app.post('/api/admin/sync/products', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -1333,7 +1333,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post('/api/admin/sync/recalls', isAuthenticated, async (req: any, res) => {
+  app.post('/api/admin/sync/recalls', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -1560,7 +1560,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post('/api/admin/sync/ingredients', isAuthenticated, async (req: any, res) => {
+  app.post('/api/admin/sync/ingredients', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -1630,7 +1630,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Full database refresh endpoint
-  app.post('/api/admin/sync/all', isAuthenticated, async (req: any, res) => {
+  app.post('/api/admin/sync/all', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
@@ -1709,7 +1709,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Database status and last sync info
-  app.get('/api/admin/sync/status', isAuthenticated, async (req: any, res) => {
+  app.get('/api/admin/sync/status', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
