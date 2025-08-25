@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
+import HelpTooltip from "@/components/help-tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -156,7 +157,13 @@ export default function ProductDetail() {
                 {/* UPC/Barcode */}
                 {product.barcode && (
                   <div className="flex items-center gap-2 mb-4" data-testid="product-barcode">
-                    <span className="text-cosmic-200 font-medium">UPC:</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-cosmic-200 font-medium">UPC:</span>
+                      <HelpTooltip 
+                        content="Universal Product Code - This unique barcode helps track recalls, verify authenticity, and identify the exact product variant. Essential for reporting issues to manufacturers or veterinarians."
+                        side="right"
+                      />
+                    </div>
                     <span className="text-cosmic-300 font-mono bg-cosmic-800/30 px-2 py-1 rounded text-sm">
                       {product.barcode}
                     </span>
@@ -166,7 +173,13 @@ export default function ProductDetail() {
                 {/* Paw Rating */}
                 {product.cosmicScore !== undefined && (
                   <div className="flex items-center gap-2 mb-4" data-testid="paw-rating">
-                    <span className="text-cosmic-200 font-medium">Safety Rating:</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-cosmic-200 font-medium">Safety Rating:</span>
+                      <HelpTooltip 
+                        content={`Our signature Paw Safety Rating system: ${generatePawRating(product.cosmicScore!)} out of 5 paws (${product.cosmicScore}/100). This comprehensive score analyzes ingredient safety, toxicity research, FDA recalls, veterinary warnings, allergen data, and manufacturing quality. Each paw represents increasingly safer levels for your beloved pets.`}
+                        side="right"
+                      />
+                    </div>
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <span 
@@ -188,7 +201,13 @@ export default function ProductDetail() {
                 {product.cosmicClarity && product.cosmicClarity !== 'unknown' && (
                   <div className="flex items-center gap-3 mb-6">
                     {getCosmicClarityIcon(product.cosmicClarity)}
-                    <span className="text-cosmic-200 font-medium">Cosmic Clarity:</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-cosmic-200 font-medium">Cosmic Clarity:</span>
+                      <HelpTooltip 
+                        content={`Cosmic Clarity Assessment - Our mystical safety classification: BLESSED (safe for most pets), QUESTIONABLE (use with caution, may cause issues for sensitive pets), CURSED (concerning ingredients, avoid if possible). This analysis combines ancient wisdom with modern science, reviewing ingredient toxicity, veterinary research, FDA data, and cosmic safety energies.`}
+                        side="right"
+                      />
+                    </div>
                     <Badge className={getCosmicClarityColor(product.cosmicClarity)} data-testid="badge-cosmic-clarity">
                       {product.cosmicClarity.toUpperCase()}
                     </Badge>
@@ -224,7 +243,13 @@ export default function ProductDetail() {
               {product.description && (
                 <Card className="cosmic-card" data-testid="card-description">
                   <CardHeader>
-                    <CardTitle className="text-starlight-400">Product Description</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <CardTitle className="text-starlight-400">Product Description</CardTitle>
+                      <HelpTooltip 
+                        content="Official product description provided by the manufacturer. This information helps you understand the product's intended use, target animals, and key features. Always verify with your veterinarian if you have questions about suitability for your specific pet."
+                        side="right"
+                      />
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-description">
@@ -237,7 +262,13 @@ export default function ProductDetail() {
               {/* Ingredients */}
               <Card className="cosmic-card" data-testid="card-ingredients">
                 <CardHeader>
-                  <CardTitle className="text-starlight-400">Ingredients</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-starlight-400">Ingredients</CardTitle>
+                    <HelpTooltip 
+                      content="Complete ingredient list as declared by the manufacturer. Ingredients are typically listed in descending order by weight. Our analysis flags potentially problematic ingredients based on veterinary research, FDA warnings, allergen data, and toxicology studies. Red flags may include artificial preservatives, known toxins, common allergens, or controversial additives."
+                      side="right"
+                    />
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-ingredients">

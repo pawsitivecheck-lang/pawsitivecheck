@@ -8,6 +8,7 @@ import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import CookieConsent from "@/components/cookie-consent";
 import AdBanner from "@/components/ad-banner";
+import HelpTooltip from "@/components/help-tooltip";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
@@ -472,7 +473,13 @@ export default function Landing() {
               <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Shield className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Instant Safety Check</h3>
+              <div className="flex items-center justify-center gap-1 mb-2">
+                <h3 className="font-semibold text-gray-800 text-sm sm:text-base">Instant Safety Check</h3>
+                <HelpTooltip 
+                  content="Our rapid analysis system scans product ingredients against our comprehensive safety database in real-time. Uses FDA recall data, veterinary toxicity research, allergen databases, and ingredient safety profiles to provide immediate risk assessment for your pet's specific needs."
+                  side="top"
+                />
+              </div>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Get immediate safety scores and ingredient analysis for any product</p>
             </Card>
             
@@ -480,7 +487,13 @@ export default function Landing() {
               <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-green-600 rounded-lg flex items-center justify-center mb-4">
                 <BarChart3 className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">Detailed Analysis</h3>
+              <div className="flex items-center justify-center gap-1 mb-2">
+                <h3 className="font-semibold text-gray-800 text-sm sm:text-base">Detailed Analysis</h3>
+                <HelpTooltip 
+                  content="Deep-dive into every ingredient with molecular-level analysis. Includes toxicity studies, dosage thresholds, species-specific reactions, interaction warnings, manufacturing source verification, and quality control assessments. Perfect for pets with allergies or health conditions."
+                  side="top"
+                />
+              </div>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Get comprehensive safety scores and ingredient breakdowns</p>
             </Card>
             
@@ -488,7 +501,13 @@ export default function Landing() {
               <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Camera className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">📱 Product Scanner</h3>
+              <div className="flex items-center justify-center gap-1 mb-2">
+                <h3 className="font-semibold text-gray-800 text-sm sm:text-base">📱 Product Scanner</h3>
+                <HelpTooltip 
+                  content="Advanced multi-modal scanning technology: (1) Barcode scanning for instant product database lookup, (2) Photo recognition using AI to identify products from images, (3) Internet search integration for new product discovery. All connected to our real-time safety analysis engine."
+                  side="top"
+                />
+              </div>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Scan barcodes or take photos to check product safety instantly</p>
               <Button 
                 onClick={() => window.location.href = '/product-scanner'}
@@ -524,7 +543,13 @@ export default function Landing() {
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50" id="database">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 sm:mb-4" data-testid="text-featured-title">Recently Analyzed Products</h2>
+            <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800" data-testid="text-featured-title">Recently Analyzed Products</h2>
+              <HelpTooltip 
+                content="These are the latest products analyzed by our platform and community. Each product shows comprehensive safety analysis including paw ratings (1-5 paws), cosmic clarity assessment (blessed/questionable/cursed), ingredient concerns, UPC codes, transparency scores, and community reviews. Click any product for detailed analysis including molecular ingredient breakdown and veterinary safety research."
+                side="right"
+              />
+            </div>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto" data-testid="text-featured-description">See safety scores and detailed analysis from our community</p>
           </div>
           

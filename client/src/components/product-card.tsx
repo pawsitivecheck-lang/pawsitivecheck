@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SaveToPetButton } from "@/components/save-to-pet-button";
+import HelpTooltip from "@/components/help-tooltip";
 import { CheckCircle, AlertTriangle, XCircle, Eye, Package, Star } from "lucide-react";
 
 interface ProductCardProps {
@@ -104,24 +105,36 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                 by {product.brand}
               </p>
               {product.barcode && (
-                <p className="text-cosmic-400 text-xs mt-1 font-mono" data-testid="text-product-barcode">
-                  UPC: {product.barcode}
-                </p>
+                <div className="flex items-center gap-1 mt-1">
+                  <p className="text-cosmic-400 text-xs font-mono" data-testid="text-product-barcode">
+                    UPC: {product.barcode}
+                  </p>
+                  <HelpTooltip 
+                    content="Universal Product Code (UPC) - A unique barcode identifier for this specific product. Used for scanning and tracking product authenticity, recalls, and manufacturer information."
+                    side="right"
+                  />
+                </div>
               )}
             </div>
             
             {/* Paw Rating */}
             {product.cosmicScore !== undefined && (
-              <div className="flex items-center gap-1" data-testid="paw-rating">
-                {[...Array(5)].map((_, i) => (
-                  <span 
-                    key={i} 
-                    className={i < generatePawRating(product.cosmicScore!) ? 'text-mystical-green' : 'text-cosmic-600'}
-                    data-testid={`paw-${i}`}
-                  >
-                    🐾
-                  </span>
-                ))}
+              <div className="flex items-center gap-2" data-testid="paw-rating">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span 
+                      key={i} 
+                      className={i < generatePawRating(product.cosmicScore!) ? 'text-mystical-green' : 'text-cosmic-600'}
+                      data-testid={`paw-${i}`}
+                    >
+                      🐾
+                    </span>
+                  ))}
+                </div>
+                <HelpTooltip 
+                  content={`Paw Safety Rating: ${generatePawRating(product.cosmicScore!)} out of 5 paws. Based on comprehensive ingredient analysis, veterinary research, and safety databases. More paws = safer for your pet. Score: ${product.cosmicScore}/100`}
+                  side="left"
+                />
               </div>
             )}
           </div>
@@ -139,6 +152,16 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                   Safety Status: {product.cosmicClarity === 'blessed' ? 'SAFE' : 
                                    product.cosmicClarity === 'questionable' ? 'CAUTION' : 'AVOID'}
                 </p>
+                <HelpTooltip 
+                  content={`Cosmic Clarity Safety Assessment: ${
+                    product.cosmicClarity === 'blessed' 
+                      ? 'BLESSED - This product has been analyzed and deemed safe for most pets. Ingredients are well-researched and pose minimal risk when used as directed.'
+                      : product.cosmicClarity === 'questionable'
+                      ? 'QUESTIONABLE - This product contains ingredients that may cause issues for sensitive pets or lack sufficient safety data. Use with caution and consult your veterinarian.'
+                      : 'CURSED - This product contains concerning ingredients that are potentially harmful to pets. We strongly recommend avoiding this product and consulting your veterinarian for alternatives.'
+                  } Our analysis considers ingredient toxicity, allergen potential, FDA recalls, veterinary warnings, and peer-reviewed research.`}
+                  side="top"
+                />
               </div>
               <p className="text-xs mb-2" data-testid="text-safety-guidance">
                 {product.cosmicClarity === 'blessed' 
@@ -161,8 +184,14 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           {/* Product Stats */}
           <div className="space-y-2 text-sm">
             {product.cosmicScore !== undefined && (
-              <div className="flex justify-between">
-                <span className="text-cosmic-400">Safety Score:</span>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-1">
+                  <span className="text-cosmic-400">Safety Score:</span>
+                  <HelpTooltip 
+                    content={`Comprehensive Safety Score (${product.cosmicScore}/100): Calculated using advanced algorithms that analyze ingredient toxicity data, FDA recall history, veterinary research, allergen potential, manufacturing standards, and consumer reports. 80-100 = Excellent, 60-79 = Good, 40-59 = Fair, 20-39 = Poor, 0-19 = Dangerous.`}
+                    side="top"
+                  />
+                </div>
                 <span className={
                   product.cosmicScore >= 80 ? 'text-mystical-green font-semibold' :
                   product.cosmicScore >= 50 ? 'text-yellow-500 font-semibold' :
@@ -174,8 +203,14 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             )}
             
             {product.transparencyLevel && (
-              <div className="flex justify-between">
-                <span className="text-cosmic-400">Transparency:</span>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-1">
+                  <span className="text-cosmic-400">Transparency:</span>
+                  <HelpTooltip 
+                    content={`Manufacturing Transparency Level: Measures how open and honest the manufacturer is about their ingredients, sourcing, testing procedures, and quality control. Excellent = Full ingredient disclosure, third-party testing, source transparency. Good = Most information available, some testing data. Poor = Limited information, vague ingredient lists, no testing transparency.`}
+                    side="top"
+                  />
+                </div>
                 <span className={
                   product.transparencyLevel === 'excellent' ? 'text-mystical-green' :
                   product.transparencyLevel === 'good' ? 'text-yellow-500' :
@@ -187,8 +222,14 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             )}
 
             {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
-              <div className="flex justify-between">
-                <span className="text-cosmic-400">Concerns:</span>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-1">
+                  <span className="text-cosmic-400">Concerns:</span>
+                  <HelpTooltip 
+                    content={`Ingredient Concerns Detected: ${product.suspiciousIngredients.length} potentially problematic ingredients found. These may include known toxins, allergens, preservatives with safety concerns, artificial additives, or ingredients flagged by veterinary authorities. Specific ingredients: ${product.suspiciousIngredients.join(', ')}. Always consult your veterinarian before using products with concerning ingredients.`}
+                    side="top"
+                  />
+                </div>
                 <span className="text-mystical-red font-semibold" data-testid="text-concerns">
                   {product.suspiciousIngredients.length} ingredient{product.suspiciousIngredients.length > 1 ? 's' : ''}
                 </span>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import AdBanner from "@/components/ad-banner";
+import HelpTooltip from "@/components/help-tooltip";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -316,10 +317,16 @@ export default function ProductScanner() {
           {/* Scanner Interface */}
           <Card className="cosmic-card mb-8" data-testid="card-scanner-interface">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-starlight-400">
-                <Scan className="h-5 w-5" />
-                Cosmic Divination Portal
-              </CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                  <Scan className="h-5 w-5" />
+                  Cosmic Divination Portal
+                </CardTitle>
+                <HelpTooltip 
+                  content="Three powerful scanning methods to reveal the cosmic truth about any pet product: (1) Manual barcode entry or camera scanning for instant database lookup, (2) AI-powered image recognition to identify products from photos, (3) Internet search integration for discovering new products. All methods connect to our comprehensive safety analysis engine for immediate cosmic clarity assessment."
+                  side="right"
+                />
+              </div>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex gap-4">
@@ -342,40 +349,61 @@ export default function ProductScanner() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Button 
-                  onClick={() => setShowBarcodeScanner(true)}
-                  variant="outline" 
-                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
-                  data-testid="button-camera-scan"
-                  disabled={isSearching}
-                >
-                  <Camera className="h-6 w-6 mb-2" />
-                  Scan Barcode
-                </Button>
+                <div className="relative">
+                  <Button 
+                    onClick={() => setShowBarcodeScanner(true)}
+                    variant="outline" 
+                    className="border-cosmic-600 text-cosmic-300 h-20 flex-col w-full"
+                    data-testid="button-camera-scan"
+                    disabled={isSearching}
+                  >
+                    <Camera className="h-6 w-6 mb-2" />
+                    Scan Barcode
+                  </Button>
+                  <HelpTooltip 
+                    content="Camera Barcode Scanner - Use your device's camera to scan UPC barcodes for instant product identification. Point camera at any barcode on pet products for immediate safety analysis. Works with phones, tablets, and webcams."
+                    side="top"
+                    className="absolute top-1 right-1"
+                  />
+                </div>
 
-                <Button 
-                  onClick={() => setShowImageScanner(true)}
-                  variant="outline" 
-                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
-                  data-testid="button-image-scan"
-                  disabled={isSearching}
-                >
-                  <Image className="h-6 w-6 mb-2" />
-                  Scan Image
-                </Button>
+                <div className="relative">
+                  <Button 
+                    onClick={() => setShowImageScanner(true)}
+                    variant="outline" 
+                    className="border-cosmic-600 text-cosmic-300 h-20 flex-col w-full"
+                    data-testid="button-image-scan"
+                    disabled={isSearching}
+                  >
+                    <Image className="h-6 w-6 mb-2" />
+                    Scan Image
+                  </Button>
+                  <HelpTooltip 
+                    content="AI Image Recognition Scanner - Upload photos or take pictures of pet products for AI-powered visual identification. Our advanced computer vision can recognize products from packaging, labels, or even partial images. Perfect when barcodes are damaged or unclear."
+                    side="top"
+                    className="absolute top-1 right-1"
+                  />
+                </div>
 
-                <Button 
-                  variant="outline" 
-                  className="border-cosmic-600 text-cosmic-300 h-20 flex-col"
-                  data-testid="button-internet-search"
-                  disabled={isSearching}
-                >
-                  <Globe className="h-6 w-6 mb-2" />
-                  Internet Search
-                  {isSearching && (
-                    <div className="animate-spin w-4 h-4 border border-starlight-500 border-t-transparent rounded-full mt-1" />
-                  )}
-                </Button>
+                <div className="relative">
+                  <Button 
+                    variant="outline" 
+                    className="border-cosmic-600 text-cosmic-300 h-20 flex-col w-full"
+                    data-testid="button-internet-search"
+                    disabled={isSearching}
+                  >
+                    <Globe className="h-6 w-6 mb-2" />
+                    Internet Search
+                    {isSearching && (
+                      <div className="animate-spin w-4 h-4 border border-starlight-500 border-t-transparent rounded-full mt-1" />
+                    )}
+                  </Button>
+                  <HelpTooltip 
+                    content="Internet Product Discovery - Search our connected databases and online sources to find new products not yet in our system. Enter product names, brands, or descriptions to discover products and automatically add them to our safety analysis platform with full ingredient evaluation."
+                    side="top"
+                    className="absolute top-1 right-1"
+                  />
+                </div>
               </div>
 
               <div className="text-center">

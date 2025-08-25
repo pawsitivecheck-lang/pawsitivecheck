@@ -26,6 +26,7 @@ import SafetyDatabaseInfo from "@/pages/safety-database-info";
 import RecallSystemInfo from "@/pages/recall-system-info";
 import CommunityReviewsInfo from "@/pages/community-reviews-info";
 import ProductDetail from "@/pages/product-detail";
+import ProductAnalysis from "@/pages/product-analysis";
 import SubmitProductUpdate from "@/pages/submit-product-update";
 import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import CookieConsent from "@/components/cookie-consent";
@@ -54,6 +55,7 @@ function Router() {
           <Route path="/product-scanner" component={ProductScanner} />
           <Route path="/product-database" component={ProductDatabase} />
           <Route path="/product/:id" component={ProductDetail} />
+          <Route path="/product/:id/analysis" component={ProductAnalysis} />
           <Route path="/recalls" component={Recalls} />
           <Route path="/community" component={Community} />
           <Route path="/vet-finder" component={VetFinder} />
