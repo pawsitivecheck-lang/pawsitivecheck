@@ -7,6 +7,7 @@ import {
   scanHistory,
   petProfiles,
   savedProducts,
+  veterinaryOffices,
   type User,
   type UpsertUser,
   type Product,
@@ -23,6 +24,8 @@ import {
   type InsertPetProfile,
   type SavedProduct,
   type InsertSavedProduct,
+  type VeterinaryOffice,
+  type InsertVeterinaryOffice,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -83,6 +86,13 @@ export interface IStorage {
   updateSavedProduct(id: number, updates: Partial<InsertSavedProduct>): Promise<SavedProduct | undefined>;
   removeSavedProduct(id: number, userId: string): Promise<boolean>;
   
+  // Veterinary office operations
+  getVeterinaryOffices(limit?: number, offset?: number, search?: string, latitude?: number, longitude?: number): Promise<VeterinaryOffice[]>;
+  getVeterinaryOffice(id: number): Promise<VeterinaryOffice | undefined>;
+  createVeterinaryOffice(office: InsertVeterinaryOffice): Promise<VeterinaryOffice>;
+  updateVeterinaryOffice(id: number, updates: Partial<InsertVeterinaryOffice>): Promise<VeterinaryOffice | undefined>;
+  deleteVeterinaryOffice(id: number, userId: string): Promise<boolean>;
+  
   // Analytics for admin
   getAnalytics(): Promise<{
     totalProducts: number;
@@ -91,6 +101,7 @@ export interface IStorage {
     blessedProducts: number;
     activeRecalls: number;
     blacklistedIngredients: number;
+    veterinaryOffices: number;
   }>;
 }
 
@@ -371,6 +382,60 @@ export class DatabaseStorage implements IStorage {
     return (result.rowCount ?? 0) > 0;
   }
 
+  // Veterinary office operations
+  async getVeterinaryOffices(limit = 50, offset = 0, search?: string, latitude?: number, longitude?: number): Promise<VeterinaryOffice[]> {
+    let query = db.select().from(veterinaryOffices);
+    
+    let whereConditions = [eq(veterinaryOffices.isActive, true)];
+    
+    if (search) {
+      whereConditions.push(
+        or(
+          ilike(veterinaryOffices.name, `%${search}%`),
+          ilike(veterinaryOffices.city, `%${search}%`),
+          ilike(veterinaryOffices.state, `%${search}%`),
+          ilike(veterinaryOffices.zipCode, `%${search}%`)
+        )!
+      );
+    }
+    
+    return query
+      .where(and(...whereConditions))
+      .limit(limit)
+      .offset(offset)
+      .orderBy(desc(veterinaryOffices.createdAt));
+  }
+
+  async getVeterinaryOffice(id: number): Promise<VeterinaryOffice | undefined> {
+    const [office] = await db
+      .select()
+      .from(veterinaryOffices)
+      .where(and(eq(veterinaryOffices.id, id), eq(veterinaryOffices.isActive, true)));
+    return office;
+  }
+
+  async createVeterinaryOffice(office: InsertVeterinaryOffice): Promise<VeterinaryOffice> {
+    const [newOffice] = await db.insert(veterinaryOffices).values(office).returning();
+    return newOffice;
+  }
+
+  async updateVeterinaryOffice(id: number, updates: Partial<InsertVeterinaryOffice>): Promise<VeterinaryOffice | undefined> {
+    const [office] = await db
+      .update(veterinaryOffices)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(veterinaryOffices.id, id))
+      .returning();
+    return office;
+  }
+
+  async deleteVeterinaryOffice(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(veterinaryOffices)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(veterinaryOffices.id, id), eq(veterinaryOffices.addedByUserId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
   // Analytics for admin
   async getAnalytics(): Promise<{
     totalProducts: number;
@@ -379,6 +444,7 @@ export class DatabaseStorage implements IStorage {
     blessedProducts: number;
     activeRecalls: number;
     blacklistedIngredients: number;
+    veterinaryOffices: number;
   }> {
     const [analytics] = await db.select({
       totalProducts: sql<number>`count(distinct ${products.id})`,
@@ -387,10 +453,12 @@ export class DatabaseStorage implements IStorage {
       blessedProducts: sql<number>`count(distinct case when ${products.cosmicClarity} = 'blessed' then ${products.id} end)`,
       activeRecalls: sql<number>`count(distinct case when ${productRecalls.isActive} = true then ${productRecalls.id} end)`,
       blacklistedIngredients: sql<number>`count(distinct case when ${ingredientBlacklist.isActive} = true then ${ingredientBlacklist.id} end)`,
+      veterinaryOffices: sql<number>`count(distinct case when ${veterinaryOffices.isActive} = true then ${veterinaryOffices.id} end)`,
     }).from(products)
     .leftJoin(users, sql`true`)
     .leftJoin(productRecalls, eq(productRecalls.productId, products.id))
-    .leftJoin(ingredientBlacklist, sql`true`);
+    .leftJoin(ingredientBlacklist, sql`true`)
+    .leftJoin(veterinaryOffices, sql`true`);
 
     return analytics;
   }

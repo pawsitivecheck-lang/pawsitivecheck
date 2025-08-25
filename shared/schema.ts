@@ -140,6 +140,33 @@ export const savedProducts = pgTable("saved_products", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const veterinaryOffices = pgTable("veterinary_offices", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  address: varchar("address", { length: 255 }).notNull(),
+  city: varchar("city", { length: 100 }).notNull(),
+  state: varchar("state", { length: 50 }).notNull(),
+  zipCode: varchar("zip_code", { length: 20 }).notNull(),
+  phone: varchar("phone", { length: 20 }).notNull(),
+  website: varchar("website"),
+  email: varchar("email"),
+  latitude: decimal("latitude", { precision: 10, scale: 8 }),
+  longitude: decimal("longitude", { precision: 11, scale: 8 }),
+  rating: decimal("rating", { precision: 3, scale: 2 }), // 0.00 - 5.00
+  reviewCount: integer("review_count").default(0),
+  services: text("services").array(), // array of services offered
+  specialties: text("specialties").array(), // array of specialties
+  hours: jsonb("hours"), // store hours as JSON object
+  emergencyServices: boolean("emergency_services").default(false),
+  acceptsWalkIns: boolean("accepts_walk_ins").default(false),
+  languages: text("languages").array(), // languages spoken
+  description: text("description"),
+  isActive: boolean("is_active").default(true),
+  addedByUserId: varchar("added_by_user_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   reviews: many(productReviews),
@@ -147,6 +174,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   blacklistedIngredients: many(ingredientBlacklist),
   petProfiles: many(petProfiles),
   savedProducts: many(savedProducts),
+  veterinaryOffices: many(veterinaryOffices),
 }));
 
 export const productsRelations = relations(products, ({ many }) => ({
@@ -215,6 +243,13 @@ export const savedProductsRelations = relations(savedProducts, ({ one }) => ({
   }),
 }));
 
+export const veterinaryOfficesRelations = relations(veterinaryOffices, ({ one }) => ({
+  addedBy: one(users, {
+    fields: [veterinaryOffices.addedByUserId],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -268,6 +303,12 @@ export const insertSavedProductSchema = createInsertSchema(savedProducts).omit({
   updatedAt: true,
 });
 
+export const insertVeterinaryOfficeSchema = createInsertSchema(veterinaryOffices).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -285,3 +326,5 @@ export type PetProfile = typeof petProfiles.$inferSelect;
 export type InsertPetProfile = z.infer<typeof insertPetProfileSchema>;
 export type SavedProduct = typeof savedProducts.$inferSelect;
 export type InsertSavedProduct = z.infer<typeof insertSavedProductSchema>;
+export type VeterinaryOffice = typeof veterinaryOffices.$inferSelect;
+export type InsertVeterinaryOffice = z.infer<typeof insertVeterinaryOfficeSchema>;

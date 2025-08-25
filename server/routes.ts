@@ -1174,6 +1174,102 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all veterinary offices
+  app.get('/api/vets', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = parseInt(req.query.offset as string) || 0;
+      const search = req.query.search as string;
+      
+      const offices = await storage.getVeterinaryOffices(limit, offset, search);
+      res.json(offices);
+    } catch (error) {
+      console.error("Error fetching vet offices:", error);
+      res.status(500).json({ message: "Failed to fetch veterinary offices" });
+    }
+  });
+
+  // Get specific veterinary office
+  app.get('/api/vets/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const office = await storage.getVeterinaryOffice(id);
+      
+      if (!office) {
+        return res.status(404).json({ message: "Veterinary office not found" });
+      }
+      
+      res.json(office);
+    } catch (error) {
+      console.error("Error fetching vet office:", error);
+      res.status(500).json({ message: "Failed to fetch veterinary office" });
+    }
+  });
+
+  // Create new veterinary office (admin only)
+  app.post('/api/vets', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const officeData = { ...req.body, addedByUserId: user.id };
+      const office = await storage.createVeterinaryOffice(officeData);
+      res.status(201).json(office);
+    } catch (error) {
+      console.error("Error creating vet office:", error);
+      res.status(500).json({ message: "Failed to create veterinary office" });
+    }
+  });
+
+  // Update veterinary office (admin only)
+  app.put('/api/vets/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const id = parseInt(req.params.id);
+      const office = await storage.updateVeterinaryOffice(id, req.body);
+      
+      if (!office) {
+        return res.status(404).json({ message: "Veterinary office not found" });
+      }
+      
+      res.json(office);
+    } catch (error) {
+      console.error("Error updating vet office:", error);
+      res.status(500).json({ message: "Failed to update veterinary office" });
+    }
+  });
+
+  // Delete veterinary office (admin only)
+  app.delete('/api/vets/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteVeterinaryOffice(id, user.id);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Veterinary office not found or access denied" });
+      }
+      
+      res.json({ message: "Veterinary office deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting vet office:", error);
+      res.status(500).json({ message: "Failed to delete veterinary office" });
+    }
+  });
+
   // Database synchronization endpoints
   app.post('/api/admin/sync/products', isAdmin, async (req: any, res) => {
     try {

@@ -12,6 +12,7 @@ import ProductDatabase from "@/pages/product-database";
 import Recalls from "@/pages/recalls";
 import Community from "@/pages/community";
 import VetFinder from "@/pages/vet-finder";
+import VetAdmin from "@/pages/vet-admin";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Profile from "@/pages/profile";
 import PetProfiles from "@/pages/pet-profiles";
@@ -44,8 +45,9 @@ function Router() {
           <Route path="/terms-of-service" component={TermsOfService} />
         </>
       )}
-      {/* Admin route accessible to all - component handles auth checks */}
+      {/* Admin routes accessible to all - components handle auth checks */}
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/vets" component={VetAdmin} />
       <Route component={NotFound} />
     </Switch>
   );
