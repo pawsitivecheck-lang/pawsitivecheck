@@ -1533,9 +1533,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (googleError) {
         console.log("Google Places API failed, using fallback:", googleError);
         
-        // For Lansing area, use our detailed local data as fallback
+        // For Lansing area, combine database and local data as fallback
         if (Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
           console.log('📍 Using detailed Lansing area veterinary data as fallback');
+          
+          // First get any database entries
+          const dbOffices = await storage.getVeterinaryOffices();
+          let allVets = [];
+          
+          // Add database veterinary offices with distance calculation
+          if (dbOffices && dbOffices.length > 0) {
+            console.log(`Found ${dbOffices.length} veterinary offices in database`);
+            for (const office of dbOffices) {
+              if (office.latitude && office.longitude) {
+                // Calculate distance using Haversine formula
+                const R = 3959; // Earth's radius in miles
+                const dLat = (office.latitude - lat) * Math.PI / 180;
+                const dLng = (office.longitude - lng) * Math.PI / 180;
+                const a = 
+                  Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
+                  Math.sin(dLng/2) * Math.sin(dLng/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                const distance = R * c;
+                
+                // Only include if within radius
+                if (distance <= radiusInMiles) {
+                  allVets.push({
+                    id: `db-${office.id}`,
+                    name: office.name,
+                    address: office.address,
+                    city: office.city,
+                    state: office.state,
+                    zipCode: office.zipCode,
+                    phone: office.phone,
+                    website: office.website || '',
+                    rating: office.rating || 4.2,
+                    reviewCount: office.reviewCount || 0,
+                    services: office.services || ['General Veterinary Care'],
+                    hours: office.hours || {},
+                    specialties: office.specialties || ['General Veterinary Care'],
+                    emergencyServices: office.emergencyServices || false,
+                    distance: Math.round(distance * 10) / 10,
+                    latitude: office.latitude,
+                    longitude: office.longitude,
+                    description: office.description
+                  });
+                }
+              }
+            }
+          }
+          
+          // Then add hardcoded fallback data
           const lansingVets = [
             {
               id: 'lansing-fallback-1',
@@ -1647,12 +1696,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           ];
           
+          // Filter fallback data by distance and add to results
+          const filteredFallbackVets = lansingVets.filter(vet => vet.distance <= radiusInMiles);
+          allVets.push(...filteredFallbackVets);
+          
+          // Remove duplicates and sort by distance
+          const uniqueVets = allVets.filter((vet, index, self) => 
+            index === self.findIndex(v => v.name === vet.name)
+          );
+          
+          console.log(`Returning ${uniqueVets.length} total veterinary practices (${dbOffices?.length || 0} from database)`);
+          
           res.json({ 
-            practices: lansingVets,
-            total: lansingVets.length,
+            practices: uniqueVets.sort((a, b) => a.distance - b.distance),
+            total: uniqueVets.length,
             searchQuery: query || 'veterinarian',
             location: location || null,
-            source: 'Local Database (Lansing)'
+            source: 'Database + Local Fallback (Lansing)'
           });
           return;
         }
