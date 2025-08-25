@@ -8,10 +8,26 @@ import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Landing() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   const { data: featuredProducts } = useQuery({
     queryKey: ['/api/products'],
@@ -67,15 +83,60 @@ export default function Landing() {
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <Button 
-                onClick={() => window.location.href = '/api/login'}
-                className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base min-h-[44px]"
-                data-testid="button-sign-in"
-              >
-                <UserCheck className="h-4 w-4" />
-                <span className="hidden sm:inline font-medium">Sign In</span>
-                <span className="sm:hidden font-medium">Sign In</span>
-              </Button>
+              {/* User Menu Dropdown */}
+              <div className="relative" ref={userMenuRef}>
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-1 sm:space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] border border-gray-200"
+                  data-testid="button-user-menu"
+                >
+                  <UserCheck className="h-5 w-5 text-gray-600" />
+                  <span className="hidden sm:inline font-medium text-gray-700">Account</span>
+                  <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {/* Dropdown Menu */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/api/login';
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                      data-testid="button-sign-in-dropdown"
+                    >
+                      <UserCheck className="mr-3 h-4 w-4" />
+                      Sign In
+                    </button>
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/api/register';
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                      data-testid="button-register-dropdown"
+                    >
+                      <Users className="mr-3 h-4 w-4" />
+                      Create Account
+                    </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/help';
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
+                      data-testid="button-help-dropdown"
+                    >
+                      <Heart className="mr-3 h-4 w-4" />
+                      Help & Support
+                    </button>
+                  </div>
+                )}
+              </div>
               
               {/* Mobile menu button */}
               <button 
@@ -173,6 +234,33 @@ export default function Landing() {
                 <Users className="mr-3 h-5 w-5" />
                 Community Reviews
               </a>
+              
+              {/* Account Section in Mobile */}
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</div>
+                <button 
+                  onClick={() => {
+                    window.location.href = '/api/login';
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                  data-testid="mobile-nav-sign-in"
+                >
+                  <UserCheck className="mr-3 h-5 w-5" />
+                  Sign In
+                </button>
+                <button 
+                  onClick={() => {
+                    window.location.href = '/api/register';
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                  data-testid="mobile-nav-register"
+                >
+                  <Users className="mr-3 h-5 w-5" />
+                  Create Account
+                </button>
+              </div>
             </div>
           </div>
         )}
