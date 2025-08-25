@@ -159,60 +159,60 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="mb-8">
-              <h2 className="font-mono text-6xl md:text-8xl font-bold text-starlight-500 mb-4 animate-float" data-testid="text-welcome-title">
-                ✨ Welcome, Fellow Seeker! ✨
+              <h2 className="font-header text-6xl md:text-8xl font-bold text-pet-orange mb-4 animate-float" data-testid="text-welcome-title">
+                🐾 Welcome to PawsitiveCheck! 🐾
               </h2>
               <div className="text-xl md:text-2xl text-cosmic-200 mb-6 animate-bounce">
                 <span className="inline-block">🐾</span> 
-                <span className="text-mystical-purple font-mystical">The cosmic cats have been expecting you...</span>
+                <span className="text-pet-brown font-header">Your trusted pet product safety companion</span>
                 <span className="inline-block">🌟</span>
               </div>
             </div>
             
             <div className="max-w-4xl mx-auto cosmic-card p-8 border-2 border-starlight-500/30 shadow-2xl">
               <div className="mb-6">
-                <h3 className="font-mystical text-2xl text-starlight-400 mb-4">🎭 Meet Your Mystical Guides 🎭</h3>
-                <p className="text-cosmic-300 text-lg">These enchanted feline guardians will guide you through the magical realm of pet product safety!</p>
+                <h3 className="font-header text-2xl text-pet-blue mb-4">🐕 Meet Your Safety Experts 🐱</h3>
+                <p className="text-pet-brown-600 text-lg">Our dedicated team helps you make informed decisions about your pet's products and safety!</p>
               </div>
               
               <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
                 <div className="group hover:scale-105 transition-transform duration-300">
                   <MascotCard 
-                    name="🔮 Aleister 🔮"
-                    role="✨ Master of Mystical Analysis ✨"
+                    name="🔍 Alex 🔍"
+                    role="🏷️ Product Safety Analyst 🏷️"
                     icon={<WandSparkles className="text-5xl text-starlight-500 animate-pulse" />}
                     bgGradient="from-mystical-purple to-cosmic-600"
                   />
-                  <div className="mt-4 p-3 bg-mystical-purple/10 rounded-lg border border-mystical-purple/30">
-                    <p className="text-sm text-mystical-purple italic">"Meow! I see through corporate lies with my cosmic third eye! 👁️✨"</p>
+                  <div className="mt-4 p-3 bg-pet-blue/10 rounded-lg border border-pet-blue/30">
+                    <p className="text-sm text-pet-blue italic">"I analyze ingredients and safety data to keep your pets healthy and safe! 🛡️🐾"</p>
                   </div>
                 </div>
                 
                 <div className="group hover:scale-105 transition-transform duration-300">
                   <MascotCard 
-                    name="🛡️ Severus 🛡️"
-                    role="⚔️ Protector of Truth & Justice ⚔️"
+                    name="⚕️ Sam ⚕️"
+                    role="🥼 Veterinary Safety Specialist 🥼"
                     icon={<ShieldHalf className="text-5xl text-starlight-500 animate-pulse" />}
                     bgGradient="from-midnight-600 to-cosmic-700"
                   />
-                  <div className="mt-4 p-3 bg-midnight-600/10 rounded-lg border border-midnight-600/30">
-                    <p className="text-sm text-midnight-400 italic">"Purr-fection through vigilance! I guard against dangerous ingredients! 🐾⚔️"</p>
+                  <div className="mt-4 p-3 bg-pet-green/10 rounded-lg border border-pet-green/30">
+                    <p className="text-sm text-pet-green italic">"With veterinary expertise, I help identify potential health risks in pet products! 🩺🐾"</p>
                   </div>
                 </div>
               </div>
               
               <div className="mt-8 p-6 bg-gradient-to-r from-cosmic-900/60 via-mystical-purple/10 to-cosmic-900/60 rounded-xl border-2 border-starlight-500/40 shadow-inner">
                 <div className="flex items-center justify-center mb-4">
-                  <span className="text-2xl animate-bounce mr-2">🌟</span>
-                  <h4 className="font-mystical text-xl text-starlight-400">Their Mystical Message</h4>
-                  <span className="text-2xl animate-bounce ml-2">🌟</span>
+                  <span className="text-2xl animate-bounce mr-2">🐾</span>
+                  <h4 className="font-header text-xl text-pet-orange">Our Mission</h4>
+                  <span className="text-2xl animate-bounce ml-2">🐾</span>
                 </div>
-                <p className="font-mystical text-lg leading-relaxed text-cosmic-100 text-center" data-testid="text-welcome-message">
-                  "<span className="text-starlight-400 text-xl">Greetings, dear human!</span> 🙋‍♀️ We are <span className="text-mystical-purple font-bold">Aleister</span> 🔮 and <span className="text-midnight-400 font-bold">Severus</span> 🛡️, 
-                  your mystical feline guardians from the legendary <span className="text-starlight-400 font-bold">Audit Syndicate</span>! ✨<br/><br/>
-                  Through <span className="text-mystical-purple">cosmic divination</span> 🌙 and <span className="text-starlight-400">ancient wisdom</span> 📚, 
-                  we'll help you pierce the veil of corporate deception and discover the <span className="text-mystical-green font-bold">TRUE ESSENCE</span> 💎 
-                  of every pet product! Join our <span className="text-starlight-400">purr-fectly magical mission</span> of transparency and protection! 🐾💖"
+                <p className="font-body text-lg leading-relaxed text-pet-brown-700 text-center" data-testid="text-welcome-message">
+                  "<span className="text-pet-orange text-xl">Hello, fellow pet parent!</span> 🙋‍♀️ We are <span className="text-pet-blue font-bold">Alex</span> 🔍 and <span className="text-pet-green font-bold">Sam</span> ⚕️, 
+                  your dedicated pet safety experts! 🐾<br/><br/>
+                  Through <span className="text-pet-blue">scientific analysis</span> 🔬 and <span className="text-pet-green">veterinary expertise</span> 🩺, 
+                  we help you make informed decisions and discover the <span className="text-pet-green font-bold">SAFEST OPTIONS</span> 🛡️ 
+                  for your beloved pets! Join our mission of pet safety and transparency! 🐾❤️"
                 </p>
               </div>
               
@@ -233,8 +233,8 @@ export default function Landing() {
       <section className="py-16 px-4 sm:px-6 lg:px-8" id="scanner">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-mystical text-4xl font-bold text-starlight-500 mb-4">🎪 Choose Your Magical Adventure! 🎪</h2>
-            <p className="text-cosmic-300 text-lg">Pick your preferred method to unveil the cosmic truth! ✨</p>
+            <h2 className="font-header text-4xl font-bold text-pet-orange mb-4">🐾 Choose Your Safety Tool! 🛡️</h2>
+            <p className="text-pet-brown-600 text-lg">Select your preferred method to check product safety! 🔍</p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -244,11 +244,11 @@ export default function Landing() {
                 <div className="w-20 h-20 mx-auto bg-gradient-to-br from-mystical-green to-starlight-500 rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
                   <Eye className="text-3xl text-cosmic-900 animate-pulse" />
                 </div>
-                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-scanner-title">📱 Aleister's Mystical Scanner 🔮</h3>
-                <div className="bg-mystical-green/10 rounded-lg p-4 mb-4 border border-mystical-green/30">
-                  <p className="text-mystical-green italic text-sm mb-2">"Meow! Point your magic rectangle at any product!" - Aleister ✨</p>
+                <h3 className="font-header text-2xl text-pet-blue mb-4" data-testid="text-scanner-title">📱 Smart Product Scanner 🔍</h3>
+                <div className="bg-pet-blue/10 rounded-lg p-4 mb-4 border border-pet-blue/30">
+                  <p className="text-pet-blue italic text-sm mb-2">"Simply scan any barcode or take a photo to get instant safety analysis!" - Alex 🔍</p>
                 </div>
-                <p className="text-cosmic-200 mb-6" data-testid="text-scanner-description">🌟 Unleash the power of cosmic divination to analyze any pet product's true essence through camera magic!</p>
+                <p className="text-pet-brown-600 mb-6" data-testid="text-scanner-description">📷 Use advanced scanning technology to analyze any pet product's safety and ingredients instantly!</p>
                 <Button 
                   onClick={() => window.location.href = '/api/login'}
                   className="mystical-button group-hover:scale-105 transition-transform"
@@ -269,11 +269,11 @@ export default function Landing() {
                 <div className="w-20 h-20 mx-auto bg-gradient-to-br from-midnight-600 to-mystical-purple rounded-full flex items-center justify-center mb-6 animate-glow group-hover:scale-110 group-hover:-rotate-12 transition-all duration-300">
                   <Search className="text-3xl text-starlight-500 animate-pulse" />
                 </div>
-                <h3 className="font-mystical text-2xl text-starlight-400 mb-4" data-testid="text-search-title">🔍 Severus's Ingredient Oracle 🛡️</h3>
-                <div className="bg-midnight-600/10 rounded-lg p-4 mb-4 border border-midnight-600/30">
-                  <p className="text-midnight-400 italic text-sm mb-2">"Purr! I'll sniff out suspicious ingredients!" - Severus ⚔️</p>
+                <h3 className="font-header text-2xl text-pet-green mb-4" data-testid="text-search-title">🔍 Ingredient Safety Search ⚕️</h3>
+                <div className="bg-pet-green/10 rounded-lg p-4 mb-4 border border-pet-green/30">
+                  <p className="text-pet-green italic text-sm mb-2">"Search our comprehensive database for ingredient safety information!" - Sam ⚕️</p>
                 </div>
-                <p className="text-cosmic-200 mb-6" data-testid="text-search-description">🌙 Peer through the cosmic veil to uncover suspicious ingredients and hidden truths in our mystical database!</p>
+                <p className="text-pet-brown-600 mb-6" data-testid="text-search-description">📋 Search our extensive database to find detailed safety information about ingredients and potential health risks!</p>
                 <div className="relative mb-4">
                   <Input 
                     type="text" 

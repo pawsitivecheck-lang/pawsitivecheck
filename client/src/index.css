@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,7 +30,7 @@
   --chart-5: hsl(27, 87%, 67%);
   --radius: 0.5rem;
   
-  /* Light mode cosmic color palette */
+  /* Warm petstore color palette */
   --cosmic-900: hsl(258, 20%, 15%);
   --cosmic-800: hsl(258, 25%, 25%);
   --cosmic-700: hsl(258, 20%, 35%);
@@ -56,8 +56,17 @@
   --mystical-red: hsl(0, 75%, 55%);
   --mystical-purple: hsl(258, 80%, 55%);
   
-  --font-mystical: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-cosmic: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Petstore specific colors */
+  --pet-brown: hsl(25, 45%, 45%);
+  --pet-brown-600: hsl(25, 45%, 35%);
+  --pet-brown-700: hsl(25, 45%, 25%);
+  --pet-orange: hsl(25, 85%, 55%);
+  --pet-blue: hsl(210, 70%, 55%);
+  --pet-green: hsl(120, 60%, 45%);
+  --pet-red: hsl(0, 70%, 55%);
+  
+  --font-header: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
 }
 
 .dark {
@@ -372,4 +381,57 @@
 
 .dark .mystical-text {
   @apply text-purple-400;
+}
+
+/* Petstore color classes */
+.text-pet-brown {
+  color: var(--pet-brown);
+}
+
+.text-pet-brown-600 {
+  color: var(--pet-brown-600);
+}
+
+.text-pet-brown-700 {
+  color: var(--pet-brown-700);
+}
+
+.text-pet-orange {
+  color: var(--pet-orange);
+}
+
+.text-pet-blue {
+  color: var(--pet-blue);
+}
+
+.text-pet-green {
+  color: var(--pet-green);
+}
+
+.text-pet-red {
+  color: var(--pet-red);
+}
+
+.bg-pet-blue\/10 {
+  background-color: hsl(210, 70%, 55%, 0.1);
+}
+
+.bg-pet-green\/10 {
+  background-color: hsl(120, 60%, 45%, 0.1);
+}
+
+.border-pet-blue\/30 {
+  border-color: hsl(210, 70%, 55%, 0.3);
+}
+
+.border-pet-green\/30 {
+  border-color: hsl(120, 60%, 45%, 0.3);
+}
+
+.font-header {
+  font-family: var(--font-header);
+}
+
+.font-body {
+  font-family: var(--font-body);
 }
