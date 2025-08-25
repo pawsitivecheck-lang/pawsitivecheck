@@ -3888,6 +3888,347 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =========================== FARM ANIMAL MANAGEMENT ROUTES ===========================
+
+  // Individual Farm Animal Routes
+  app.get('/api/livestock/herds/:herdId/animals', isAuthenticated, async (req: any, res) => {
+    try {
+      const herdId = parseInt(req.params.herdId);
+      const userId = req.user.id;
+      const animals = await storage.getFarmAnimals(herdId, userId);
+      res.json(animals);
+    } catch (error) {
+      console.error("Error fetching farm animals:", error);
+      res.status(500).json({ error: "Failed to fetch farm animals" });
+    }
+  });
+
+  app.get('/api/farm-animals', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const animals = await storage.getAllFarmAnimals(userId);
+      res.json(animals);
+    } catch (error) {
+      console.error("Error fetching all farm animals:", error);
+      res.status(500).json({ error: "Failed to fetch all farm animals" });
+    }
+  });
+
+  app.get('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const animal = await storage.getFarmAnimal(id, userId);
+      
+      if (!animal) {
+        return res.status(404).json({ error: "Farm animal not found" });
+      }
+      
+      res.json(animal);
+    } catch (error) {
+      console.error("Error fetching farm animal:", error);
+      res.status(500).json({ error: "Failed to fetch farm animal" });
+    }
+  });
+
+  app.post('/api/farm-animals', isAuthenticated, async (req: any, res) => {
+    try {
+      const animalData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const animal = await storage.createFarmAnimal(animalData);
+      res.status(201).json(animal);
+    } catch (error) {
+      console.error("Error creating farm animal:", error);
+      res.status(500).json({ error: "Failed to create farm animal" });
+    }
+  });
+
+  app.put('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const animal = await storage.updateFarmAnimal(id, updates, userId);
+      
+      if (!animal) {
+        return res.status(404).json({ error: "Farm animal not found" });
+      }
+      
+      res.json(animal);
+    } catch (error) {
+      console.error("Error updating farm animal:", error);
+      res.status(500).json({ error: "Failed to update farm animal" });
+    }
+  });
+
+  app.delete('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteFarmAnimal(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Farm animal not found" });
+      }
+      
+      res.json({ message: "Farm animal deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting farm animal:", error);
+      res.status(500).json({ error: "Failed to delete farm animal" });
+    }
+  });
+
+  // Breeding Record Routes
+  app.get('/api/breeding-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const animalId = req.query.animalId ? parseInt(req.query.animalId as string) : undefined;
+      const records = await storage.getBreedingRecords(userId, animalId);
+      res.json(records);
+    } catch (error) {
+      console.error("Error fetching breeding records:", error);
+      res.status(500).json({ error: "Failed to fetch breeding records" });
+    }
+  });
+
+  app.get('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const record = await storage.getBreedingRecord(id, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Breeding record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error fetching breeding record:", error);
+      res.status(500).json({ error: "Failed to fetch breeding record" });
+    }
+  });
+
+  app.post('/api/breeding-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const recordData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const record = await storage.createBreedingRecord(recordData);
+      res.status(201).json(record);
+    } catch (error) {
+      console.error("Error creating breeding record:", error);
+      res.status(500).json({ error: "Failed to create breeding record" });
+    }
+  });
+
+  app.put('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const record = await storage.updateBreedingRecord(id, updates, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Breeding record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error updating breeding record:", error);
+      res.status(500).json({ error: "Failed to update breeding record" });
+    }
+  });
+
+  app.delete('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteBreedingRecord(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Breeding record not found" });
+      }
+      
+      res.json({ message: "Breeding record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting breeding record:", error);
+      res.status(500).json({ error: "Failed to delete breeding record" });
+    }
+  });
+
+  // Production Record Routes
+  app.get('/api/farm-animals/:animalId/production-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const animalId = parseInt(req.params.animalId);
+      const userId = req.user.id;
+      const records = await storage.getProductionRecords(animalId, userId);
+      res.json(records);
+    } catch (error) {
+      console.error("Error fetching production records:", error);
+      res.status(500).json({ error: "Failed to fetch production records" });
+    }
+  });
+
+  app.get('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const record = await storage.getProductionRecord(id, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Production record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error fetching production record:", error);
+      res.status(500).json({ error: "Failed to fetch production record" });
+    }
+  });
+
+  app.post('/api/production-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const recordData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const record = await storage.createProductionRecord(recordData);
+      res.status(201).json(record);
+    } catch (error) {
+      console.error("Error creating production record:", error);
+      res.status(500).json({ error: "Failed to create production record" });
+    }
+  });
+
+  app.put('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const record = await storage.updateProductionRecord(id, updates, userId);
+      
+      if (!record) {
+        return res.status(404).json({ error: "Production record not found" });
+      }
+      
+      res.json(record);
+    } catch (error) {
+      console.error("Error updating production record:", error);
+      res.status(500).json({ error: "Failed to update production record" });
+    }
+  });
+
+  app.delete('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteProductionRecord(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Production record not found" });
+      }
+      
+      res.json({ message: "Production record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting production record:", error);
+      res.status(500).json({ error: "Failed to delete production record" });
+    }
+  });
+
+  // Animal Movement Routes
+  app.get('/api/farm-animals/:animalId/movements', isAuthenticated, async (req: any, res) => {
+    try {
+      const animalId = parseInt(req.params.animalId);
+      const userId = req.user.id;
+      const movements = await storage.getAnimalMovements(animalId, userId);
+      res.json(movements);
+    } catch (error) {
+      console.error("Error fetching animal movements:", error);
+      res.status(500).json({ error: "Failed to fetch animal movements" });
+    }
+  });
+
+  app.get('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const movement = await storage.getAnimalMovement(id, userId);
+      
+      if (!movement) {
+        return res.status(404).json({ error: "Animal movement not found" });
+      }
+      
+      res.json(movement);
+    } catch (error) {
+      console.error("Error fetching animal movement:", error);
+      res.status(500).json({ error: "Failed to fetch animal movement" });
+    }
+  });
+
+  app.post('/api/animal-movements', isAuthenticated, async (req: any, res) => {
+    try {
+      const movementData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const movement = await storage.createAnimalMovement(movementData);
+      res.status(201).json(movement);
+    } catch (error) {
+      console.error("Error creating animal movement:", error);
+      res.status(500).json({ error: "Failed to create animal movement" });
+    }
+  });
+
+  app.put('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const movement = await storage.updateAnimalMovement(id, updates, userId);
+      
+      if (!movement) {
+        return res.status(404).json({ error: "Animal movement not found" });
+      }
+      
+      res.json(movement);
+    } catch (error) {
+      console.error("Error updating animal movement:", error);
+      res.status(500).json({ error: "Failed to update animal movement" });
+    }
+  });
+
+  app.delete('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deleteAnimalMovement(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Animal movement not found" });
+      }
+      
+      res.json({ message: "Animal movement deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting animal movement:", error);
+      res.status(500).json({ error: "Failed to delete animal movement" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

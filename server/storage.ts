@@ -17,6 +17,10 @@ import {
   livestockHerds,
   feedManagement,
   livestockHealthRecords,
+  farmAnimals,
+  breedingRecords,
+  productionRecords,
+  animalMovements,
   type User,
   type UpsertUser,
   type Product,
@@ -53,6 +57,14 @@ import {
   type InsertFeedManagement,
   type LivestockHealthRecord,
   type InsertLivestockHealthRecord,
+  type FarmAnimal,
+  type InsertFarmAnimal,
+  type BreedingRecord,
+  type InsertBreedingRecord,
+  type ProductionRecord,
+  type InsertProductionRecord,
+  type AnimalMovement,
+  type InsertAnimalMovement,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -201,6 +213,35 @@ export interface IStorage {
   createLivestockHealthRecord(record: InsertLivestockHealthRecord): Promise<LivestockHealthRecord>;
   updateLivestockHealthRecord(id: number, updates: Partial<InsertLivestockHealthRecord>, userId: string): Promise<LivestockHealthRecord | undefined>;
   deleteLivestockHealthRecord(id: number, userId: string): Promise<boolean>;
+
+  // Farm animal methods
+  getFarmAnimals(herdId: number, userId: string): Promise<FarmAnimal[]>;
+  getAllFarmAnimals(userId: string): Promise<FarmAnimal[]>;
+  getFarmAnimal(id: number, userId: string): Promise<FarmAnimal | undefined>;
+  createFarmAnimal(animal: InsertFarmAnimal): Promise<FarmAnimal>;
+  updateFarmAnimal(id: number, updates: Partial<InsertFarmAnimal>, userId: string): Promise<FarmAnimal | undefined>;
+  deleteFarmAnimal(id: number, userId: string): Promise<boolean>;
+
+  // Breeding record methods
+  getBreedingRecords(userId: string, animalId?: number): Promise<BreedingRecord[]>;
+  getBreedingRecord(id: number, userId: string): Promise<BreedingRecord | undefined>;
+  createBreedingRecord(record: InsertBreedingRecord): Promise<BreedingRecord>;
+  updateBreedingRecord(id: number, updates: Partial<InsertBreedingRecord>, userId: string): Promise<BreedingRecord | undefined>;
+  deleteBreedingRecord(id: number, userId: string): Promise<boolean>;
+
+  // Production record methods
+  getProductionRecords(animalId: number, userId: string): Promise<ProductionRecord[]>;
+  getProductionRecord(id: number, userId: string): Promise<ProductionRecord | undefined>;
+  createProductionRecord(record: InsertProductionRecord): Promise<ProductionRecord>;
+  updateProductionRecord(id: number, updates: Partial<InsertProductionRecord>, userId: string): Promise<ProductionRecord | undefined>;
+  deleteProductionRecord(id: number, userId: string): Promise<boolean>;
+
+  // Animal movement methods
+  getAnimalMovements(animalId: number, userId: string): Promise<AnimalMovement[]>;
+  getAnimalMovement(id: number, userId: string): Promise<AnimalMovement | undefined>;
+  createAnimalMovement(movement: InsertAnimalMovement): Promise<AnimalMovement>;
+  updateAnimalMovement(id: number, updates: Partial<InsertAnimalMovement>, userId: string): Promise<AnimalMovement | undefined>;
+  deleteAnimalMovement(id: number, userId: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -971,6 +1012,175 @@ export class DatabaseStorage implements IStorage {
       .update(feedManagement)
       .set({ isActive: false, updatedAt: new Date() })
       .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== FARM ANIMAL METHODS ===============================
+
+  async getFarmAnimals(herdId: number, userId: string): Promise<FarmAnimal[]> {
+    return await db
+      .select()
+      .from(farmAnimals)
+      .where(and(eq(farmAnimals.herdId, herdId), eq(farmAnimals.userId, userId)))
+      .orderBy(desc(farmAnimals.createdAt));
+  }
+
+  async getAllFarmAnimals(userId: string): Promise<FarmAnimal[]> {
+    return await db
+      .select()
+      .from(farmAnimals)
+      .where(eq(farmAnimals.userId, userId))
+      .orderBy(desc(farmAnimals.createdAt));
+  }
+
+  async getFarmAnimal(id: number, userId: string): Promise<FarmAnimal | undefined> {
+    const [animal] = await db
+      .select()
+      .from(farmAnimals)
+      .where(and(eq(farmAnimals.id, id), eq(farmAnimals.userId, userId)));
+    return animal;
+  }
+
+  async createFarmAnimal(animal: InsertFarmAnimal): Promise<FarmAnimal> {
+    const [newAnimal] = await db.insert(farmAnimals).values(animal).returning();
+    return newAnimal;
+  }
+
+  async updateFarmAnimal(id: number, updates: Partial<InsertFarmAnimal>, userId: string): Promise<FarmAnimal | undefined> {
+    const [animal] = await db
+      .update(farmAnimals)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(farmAnimals.id, id), eq(farmAnimals.userId, userId)))
+      .returning();
+    return animal;
+  }
+
+  async deleteFarmAnimal(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(farmAnimals)
+      .where(and(eq(farmAnimals.id, id), eq(farmAnimals.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== BREEDING RECORD METHODS ===============================
+
+  async getBreedingRecords(userId: string, animalId?: number): Promise<BreedingRecord[]> {
+    const conditions = [eq(breedingRecords.userId, userId)];
+    if (animalId) {
+      conditions.push(or(eq(breedingRecords.damId, animalId), eq(breedingRecords.sireId, animalId))!);
+    }
+    
+    return await db
+      .select()
+      .from(breedingRecords)
+      .where(and(...conditions))
+      .orderBy(desc(breedingRecords.breedingDate));
+  }
+
+  async getBreedingRecord(id: number, userId: string): Promise<BreedingRecord | undefined> {
+    const [record] = await db
+      .select()
+      .from(breedingRecords)
+      .where(and(eq(breedingRecords.id, id), eq(breedingRecords.userId, userId)));
+    return record;
+  }
+
+  async createBreedingRecord(record: InsertBreedingRecord): Promise<BreedingRecord> {
+    const [newRecord] = await db.insert(breedingRecords).values(record).returning();
+    return newRecord;
+  }
+
+  async updateBreedingRecord(id: number, updates: Partial<InsertBreedingRecord>, userId: string): Promise<BreedingRecord | undefined> {
+    const [record] = await db
+      .update(breedingRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(breedingRecords.id, id), eq(breedingRecords.userId, userId)))
+      .returning();
+    return record;
+  }
+
+  async deleteBreedingRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(breedingRecords)
+      .where(and(eq(breedingRecords.id, id), eq(breedingRecords.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== PRODUCTION RECORD METHODS ===============================
+
+  async getProductionRecords(animalId: number, userId: string): Promise<ProductionRecord[]> {
+    return await db
+      .select()
+      .from(productionRecords)
+      .where(and(eq(productionRecords.animalId, animalId), eq(productionRecords.userId, userId)))
+      .orderBy(desc(productionRecords.recordDate));
+  }
+
+  async getProductionRecord(id: number, userId: string): Promise<ProductionRecord | undefined> {
+    const [record] = await db
+      .select()
+      .from(productionRecords)
+      .where(and(eq(productionRecords.id, id), eq(productionRecords.userId, userId)));
+    return record;
+  }
+
+  async createProductionRecord(record: InsertProductionRecord): Promise<ProductionRecord> {
+    const [newRecord] = await db.insert(productionRecords).values(record).returning();
+    return newRecord;
+  }
+
+  async updateProductionRecord(id: number, updates: Partial<InsertProductionRecord>, userId: string): Promise<ProductionRecord | undefined> {
+    const [record] = await db
+      .update(productionRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(productionRecords.id, id), eq(productionRecords.userId, userId)))
+      .returning();
+    return record;
+  }
+
+  async deleteProductionRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(productionRecords)
+      .where(and(eq(productionRecords.id, id), eq(productionRecords.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== ANIMAL MOVEMENT METHODS ===============================
+
+  async getAnimalMovements(animalId: number, userId: string): Promise<AnimalMovement[]> {
+    return await db
+      .select()
+      .from(animalMovements)
+      .where(and(eq(animalMovements.animalId, animalId), eq(animalMovements.userId, userId)))
+      .orderBy(desc(animalMovements.movementDate));
+  }
+
+  async getAnimalMovement(id: number, userId: string): Promise<AnimalMovement | undefined> {
+    const [movement] = await db
+      .select()
+      .from(animalMovements)
+      .where(and(eq(animalMovements.id, id), eq(animalMovements.userId, userId)));
+    return movement;
+  }
+
+  async createAnimalMovement(movement: InsertAnimalMovement): Promise<AnimalMovement> {
+    const [newMovement] = await db.insert(animalMovements).values(movement).returning();
+    return newMovement;
+  }
+
+  async updateAnimalMovement(id: number, updates: Partial<InsertAnimalMovement>, userId: string): Promise<AnimalMovement | undefined> {
+    const [movement] = await db
+      .update(animalMovements)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(animalMovements.id, id), eq(animalMovements.userId, userId)))
+      .returning();
+    return movement;
+  }
+
+  async deleteAnimalMovement(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(animalMovements)
+      .where(and(eq(animalMovements.id, id), eq(animalMovements.userId, userId)));
     return (result.rowCount ?? 0) > 0;
   }
 }

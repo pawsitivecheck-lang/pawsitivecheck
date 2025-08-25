@@ -319,6 +319,106 @@ export const livestockHealthRecords = pgTable("livestock_health_records", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Individual farm animals - distinct from pet profiles for livestock tracking
+export const farmAnimals = pgTable("farm_animals", {
+  id: serial("id").primaryKey(),
+  herdId: integer("herd_id").references(() => livestockHerds.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  name: varchar("name", { length: 100 }), // optional name for individual animals
+  earTag: varchar("ear_tag", { length: 50 }), // unique ear tag identifier
+  microchipId: varchar("microchip_id", { length: 50 }), // microchip identifier
+  species: varchar("species", { length: 50 }).notNull(), // cattle, swine, sheep, goat, poultry
+  breed: varchar("breed", { length: 100 }),
+  gender: varchar("gender", { length: 10 }).notNull(), // male, female, castrated, spayed
+  birthDate: timestamp("birth_date"),
+  birthWeight: decimal("birth_weight", { precision: 8, scale: 2 }),
+  currentWeight: decimal("current_weight", { precision: 8, scale: 2 }),
+  weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"),
+  damId: integer("dam_id").references(() => farmAnimals.id), // mother reference
+  sireId: integer("sire_id").references(() => farmAnimals.id), // father reference
+  generation: integer("generation").default(1), // breeding generation
+  purpose: varchar("purpose", { length: 50 }), // breeding, dairy, meat, show, working
+  acquisitionDate: timestamp("acquisition_date"),
+  acquisitionType: varchar("acquisition_type", { length: 50 }), // born_on_farm, purchased, gift, trade
+  acquisitionCost: decimal("acquisition_cost", { precision: 10, scale: 2 }),
+  status: varchar("status", { length: 20 }).default("active"), // active, sold, deceased, transferred
+  statusDate: timestamp("status_date"),
+  statusNotes: text("status_notes"),
+  isBreeder: boolean("is_breeder").default(false),
+  expectedCalvingDate: timestamp("expected_calving_date"), // for pregnant animals
+  lastBreedingDate: timestamp("last_breeding_date"),
+  profileImageUrl: varchar("profile_image_url"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Breeding records for farm animals
+export const breedingRecords = pgTable("breeding_records", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  damId: integer("dam_id").references(() => farmAnimals.id).notNull(), // mother
+  sireId: integer("sire_id").references(() => farmAnimals.id), // father (can be external)
+  externalSireInfo: text("external_sire_info"), // if sire is not in our system
+  breedingDate: timestamp("breeding_date").notNull(),
+  breedingMethod: varchar("breeding_method", { length: 50 }).default("natural"), // natural, ai, et
+  expectedBirthDate: timestamp("expected_birth_date"),
+  actualBirthDate: timestamp("actual_birth_date"),
+  gestationDays: integer("gestation_days"),
+  offspringCount: integer("offspring_count").default(1),
+  offspringIds: integer("offspring_ids").array(), // references to farm_animals
+  birthWeight: decimal("birth_weight", { precision: 8, scale: 2 }),
+  birthComplications: text("birth_complications"),
+  veterinarianAssisted: boolean("veterinarian_assisted").default(false),
+  birthCost: decimal("birth_cost", { precision: 10, scale: 2 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Production records (milk, eggs, wool, etc.)
+export const productionRecords = pgTable("production_records", {
+  id: serial("id").primaryKey(),
+  animalId: integer("animal_id").references(() => farmAnimals.id).notNull(),
+  herdId: integer("herd_id").references(() => livestockHerds.id),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  recordDate: timestamp("record_date").notNull(),
+  productType: varchar("product_type", { length: 50 }).notNull(), // milk, eggs, wool, meat
+  quantity: decimal("quantity", { precision: 10, scale: 2 }).notNull(),
+  unit: varchar("unit", { length: 20 }).notNull(), // gallons, liters, dozen, lbs, kg
+  quality: varchar("quality", { length: 20 }), // grade_a, premium, standard, organic
+  butterfatPercentage: decimal("butterfat_percentage", { precision: 4, scale: 2 }), // for milk
+  proteinPercentage: decimal("protein_percentage", { precision: 4, scale: 2 }), // for milk
+  somaticCellCount: integer("somatic_cell_count"), // for milk quality
+  testResults: jsonb("test_results"), // comprehensive test data
+  sellingPrice: decimal("selling_price", { precision: 10, scale: 2 }),
+  buyerInfo: varchar("buyer_info", { length: 255 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Animal movement/transfer records
+export const animalMovements = pgTable("animal_movements", {
+  id: serial("id").primaryKey(),
+  animalId: integer("animal_id").references(() => farmAnimals.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  movementDate: timestamp("movement_date").notNull(),
+  movementType: varchar("movement_type", { length: 50 }).notNull(), // transfer, sale, purchase, death, slaughter
+  fromLocationId: integer("from_location_id").references(() => livestockHerds.id),
+  toLocationId: integer("to_location_id").references(() => livestockHerds.id),
+  externalLocation: varchar("external_location", { length: 255 }), // if moving to/from external location
+  reason: varchar("reason", { length: 255 }),
+  price: decimal("price", { precision: 10, scale: 2 }),
+  weight: decimal("weight", { precision: 8, scale: 2 }),
+  transportMethod: varchar("transport_method", { length: 100 }),
+  healthCertificate: varchar("health_certificate", { length: 255 }),
+  documents: text("documents").array(), // bill of sale, health certs, etc.
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const animalTags = pgTable("animal_tags", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
@@ -604,6 +704,30 @@ export const insertLivestockHealthRecordSchema = createInsertSchema(livestockHea
   updatedAt: true,
 });
 
+export const insertFarmAnimalSchema = createInsertSchema(farmAnimals).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertBreedingRecordSchema = createInsertSchema(breedingRecords).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertProductionRecordSchema = createInsertSchema(productionRecords).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAnimalMovementSchema = createInsertSchema(animalMovements).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Livestock types
 export type LivestockOperation = typeof livestockOperations.$inferSelect;
 export type InsertLivestockOperation = z.infer<typeof insertLivestockOperationSchema>;
@@ -613,3 +737,11 @@ export type FeedManagement = typeof feedManagement.$inferSelect;
 export type InsertFeedManagement = z.infer<typeof insertFeedManagementSchema>;
 export type LivestockHealthRecord = typeof livestockHealthRecords.$inferSelect;
 export type InsertLivestockHealthRecord = z.infer<typeof insertLivestockHealthRecordSchema>;
+export type FarmAnimal = typeof farmAnimals.$inferSelect;
+export type InsertFarmAnimal = z.infer<typeof insertFarmAnimalSchema>;
+export type BreedingRecord = typeof breedingRecords.$inferSelect;
+export type InsertBreedingRecord = z.infer<typeof insertBreedingRecordSchema>;
+export type ProductionRecord = typeof productionRecords.$inferSelect;
+export type InsertProductionRecord = z.infer<typeof insertProductionRecordSchema>;
+export type AnimalMovement = typeof animalMovements.$inferSelect;
+export type InsertAnimalMovement = z.infer<typeof insertAnimalMovementSchema>;
