@@ -343,6 +343,9 @@ export default function Profile() {
                                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                                     <DialogHeader>
                                       <DialogTitle>Edit {pet.name}'s Profile</DialogTitle>
+                                      <DialogDescription>
+                                        Update your pet's profile information and preferences.
+                                      </DialogDescription>
                                     </DialogHeader>
                                     <PetForm 
                                       initialData={selectedPet || undefined}
