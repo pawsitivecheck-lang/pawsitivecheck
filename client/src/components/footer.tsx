@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <div className="space-y-1">
-                  <a href="/community" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
+                  <a href="/community-reviews-info" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
                     💬 Community Portal
                   </a>
                   <div className="text-xs text-gray-400 ml-4">
