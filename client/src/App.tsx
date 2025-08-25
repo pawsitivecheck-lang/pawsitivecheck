@@ -34,7 +34,6 @@ import LivestockDashboard from "@/pages/livestock-dashboard";
 import FeedTracking from "@/pages/feed-tracking";
 import HerdProfile from "@/pages/herd-profile";
 import CookieConsent from "@/components/cookie-consent";
-import NavbarTest from "@/components/navbar-test";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -96,7 +95,6 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <NavbarTest />
         <Toaster />
         <Router />
         <CookieConsent />
