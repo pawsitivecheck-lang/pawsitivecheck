@@ -25,6 +25,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showImageScanner, setShowImageScanner] = useState(false);
+  const [showInternetSearch, setShowInternetSearch] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -713,6 +714,19 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 <Image className="mr-2 h-4 w-4" />
                 Image Scanner
               </Button>
+              <Button
+                onClick={() => {
+                  setShowInternetSearch(true);
+                  setShowScannerMenu(false);
+                }}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
+                data-testid="button-internet-search"
+              >
+                <Globe className="mr-2 h-4 w-4" />
+                Internet Search
+              </Button>
             </div>
           </div>
         )}
@@ -844,6 +858,78 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         onScan={handleImageScanned}
         onClose={() => setShowImageScanner(false)}
       />
+
+      {/* Internet Search Modal */}
+      {showInternetSearch && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Internet Product Search</h3>
+              <Button
+                onClick={() => setShowInternetSearch(false)}
+                variant="ghost"
+                size="sm"
+                data-testid="button-close-internet-search"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target as HTMLFormElement);
+                const query = formData.get('search') as string;
+                if (query.trim()) {
+                  internetSearchMutation.mutate(query.trim());
+                  setShowInternetSearch(false);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label htmlFor="internet-search-input" className="block text-sm font-medium mb-2">
+                  Product Name
+                </label>
+                <Input
+                  id="internet-search-input"
+                  name="search"
+                  type="text"
+                  placeholder="Enter product name to search online..."
+                  className="w-full"
+                  required
+                  data-testid="input-internet-search"
+                />
+              </div>
+              <div className="flex justify-end gap-3">
+                <Button
+                  type="button"
+                  onClick={() => setShowInternetSearch(false)}
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={internetSearchMutation.isPending}
+                  data-testid="button-submit-internet-search"
+                >
+                  {internetSearchMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Searching...
+                    </>
+                  ) : (
+                    <>
+                      <Globe className="mr-2 h-4 w-4" />
+                      Search Online
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </>
   );
