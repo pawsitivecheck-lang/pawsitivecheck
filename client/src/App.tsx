@@ -30,6 +30,8 @@ import ProductAnalysis from "@/pages/product-analysis";
 import SubmitProductUpdate from "@/pages/submit-product-update";
 import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
+import LivestockDashboard from "@/pages/livestock-dashboard";
+import FeedTracking from "@/pages/feed-tracking";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -74,6 +76,8 @@ function Router() {
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route path="/submit-product-update" component={SubmitProductUpdate} />
           <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
+          <Route path="/livestock" component={LivestockDashboard} />
+          <Route path="/livestock/feed" component={FeedTracking} />
         </>
       )}
       {/* Admin routes accessible to all - components handle auth checks */}

@@ -1,0 +1,394 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation } from "wouter";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlusIcon, Home, Users, Activity, TrendingUp } from "lucide-react";
+
+interface LivestockOperation {
+  id: number;
+  operationName: string;
+  operationType: string;
+  totalHeadCount: number;
+  primarySpecies: string[];
+  city: string;
+  state: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+interface LivestockHerd {
+  id: number;
+  operationId: number;
+  herdName: string;
+  species: string;
+  breed?: string;
+  headCount: number;
+  averageWeight?: string;
+  weightUnit: string;
+  purpose: string;
+  housingType: string;
+  isActive: boolean;
+}
+
+export default function LivestockDashboard() {
+  const [, navigate] = useLocation();
+  const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
+
+  const { data: operations, isLoading: operationsLoading } = useQuery<LivestockOperation[]>({
+    queryKey: ['/api/livestock/operations'],
+  });
+
+  const { data: herds, isLoading: herdsLoading } = useQuery<LivestockHerd[]>({
+    queryKey: ['/api/livestock/operations', selectedOperation, 'herds'],
+    enabled: !!selectedOperation,
+  });
+
+  if (operationsLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading livestock operations...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const hasOperations = operations && operations.length > 0;
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            🐄 Livestock Management
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Manage your farm operations, herds, feed, and health records
+          </p>
+        </div>
+        {hasOperations && (
+          <Button 
+            onClick={() => navigate("/livestock/operations/new")}
+            className="flex items-center gap-2"
+            data-testid="button-add-operation"
+          >
+            <PlusIcon className="h-4 w-4" />
+            New Operation
+          </Button>
+        )}
+      </div>
+
+      {!hasOperations ? (
+        // Welcome/Empty State
+        <div className="text-center py-12">
+          <Home className="h-24 w-24 text-gray-400 mx-auto mb-6" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Welcome to Livestock Management
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+            Get started by setting up your first livestock operation. 
+            Track herds, manage feed, monitor health, and ensure product safety.
+          </p>
+          <Button 
+            onClick={() => navigate("/livestock/operations/new")}
+            size="lg"
+            className="flex items-center gap-2"
+            data-testid="button-create-first-operation"
+          >
+            <PlusIcon className="h-5 w-5" />
+            Create Your First Operation
+          </Button>
+        </div>
+      ) : (
+        // Main Dashboard
+        <div className="space-y-6">
+          {/* Operations Overview */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Operations
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {operations?.length || 0}
+                    </p>
+                  </div>
+                  <Home className="h-8 w-8 text-purple-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Total Animals
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {operations?.reduce((sum, op) => sum + op.totalHeadCount, 0) || 0}
+                    </p>
+                  </div>
+                  <Users className="h-8 w-8 text-green-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Active Herds
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {herds?.length || 0}
+                    </p>
+                  </div>
+                  <Activity className="h-8 w-8 text-blue-600" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Feed Records
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      -
+                    </p>
+                  </div>
+                  <TrendingUp className="h-8 w-8 text-orange-600" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Operations List and Details */}
+          <Tabs defaultValue="operations" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="operations">Operations</TabsTrigger>
+              <TabsTrigger value="herds" disabled={!selectedOperation}>Herds</TabsTrigger>
+              <TabsTrigger value="feed" disabled={!selectedOperation}>
+                🌾 Feed Tracking
+              </TabsTrigger>
+              <TabsTrigger value="health" disabled={!selectedOperation}>Health Records</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="operations">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {operations?.map((operation) => (
+                  <Card 
+                    key={operation.id}
+                    className={`cursor-pointer transition-all hover:shadow-lg ${
+                      selectedOperation === operation.id 
+                        ? 'ring-2 ring-purple-500' 
+                        : ''
+                    }`}
+                    onClick={() => setSelectedOperation(operation.id)}
+                    data-testid={`card-operation-${operation.id}`}
+                  >
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-lg">{operation.operationName}</CardTitle>
+                          <CardDescription>
+                            {operation.city}, {operation.state}
+                          </CardDescription>
+                        </div>
+                        <Badge variant="secondary">
+                          {operation.operationType}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <p className="text-sm">
+                          <span className="font-medium">Animals:</span> {operation.totalHeadCount}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {operation.primarySpecies.map((species) => (
+                            <Badge key={species} variant="outline" className="text-xs">
+                              {species}
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Created: {new Date(operation.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="herds">
+              {selectedOperation ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold">Herds</h3>
+                    <Button 
+                      onClick={() => navigate(`/livestock/herds/new?operation=${selectedOperation}`)}
+                      size="sm"
+                      data-testid="button-add-herd"
+                    >
+                      <PlusIcon className="h-4 w-4 mr-2" />
+                      Add Herd
+                    </Button>
+                  </div>
+                  
+                  {herdsLoading ? (
+                    <div className="flex justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    </div>
+                  ) : herds && herds.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {herds.map((herd) => (
+                        <Card key={herd.id} data-testid={`card-herd-${herd.id}`}>
+                          <CardHeader>
+                            <CardTitle className="text-base">{herd.herdName}</CardTitle>
+                            <CardDescription>
+                              {herd.species} {herd.breed && `• ${herd.breed}`}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="space-y-2">
+                              <p className="text-sm">
+                                <span className="font-medium">Count:</span> {herd.headCount}
+                              </p>
+                              <p className="text-sm">
+                                <span className="font-medium">Purpose:</span> {herd.purpose}
+                              </p>
+                              <p className="text-sm">
+                                <span className="font-medium">Housing:</span> {herd.housingType}
+                              </p>
+                              {herd.averageWeight && (
+                                <p className="text-sm">
+                                  <span className="font-medium">Avg Weight:</span>{" "}
+                                  {herd.averageWeight} {herd.weightUnit}
+                                </p>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500">No herds found for this operation.</p>
+                      <Button 
+                        className="mt-4" 
+                        onClick={() => navigate(`/livestock/herds/new?operation=${selectedOperation}`)}
+                        data-testid="button-create-first-herd"
+                      >
+                        Create First Herd
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  Select an operation to view its herds
+                </p>
+              )}
+            </TabsContent>
+
+            <TabsContent value="feed">
+              {selectedOperation ? (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="text-xl font-semibold">🌾 Feed Tracking</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        Monitor feed consumption, costs, and nutrition across your herds
+                      </p>
+                    </div>
+                    <Button 
+                      onClick={() => navigate(`/livestock/feed/new?operation=${selectedOperation}`)}
+                      data-testid="button-add-feed-record"
+                    >
+                      <PlusIcon className="h-4 w-4 mr-2" />
+                      Add Feed Record
+                    </Button>
+                  </div>
+
+                  {/* Feed tracking will be implemented next */}
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <TrendingUp className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                      <h4 className="text-lg font-semibold mb-2">Feed Tracking System</h4>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Track feed types, quantities, costs, and nutrition for each herd
+                      </p>
+                      <Button 
+                        onClick={() => navigate(`/livestock/feed/new?operation=${selectedOperation}`)}
+                        data-testid="button-start-feed-tracking"
+                      >
+                        Start Feed Tracking
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  Select an operation to track feed
+                </p>
+              )}
+            </TabsContent>
+
+            <TabsContent value="health">
+              {selectedOperation ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold">Health Records</h3>
+                    <Button 
+                      onClick={() => navigate(`/livestock/health/new?operation=${selectedOperation}`)}
+                      size="sm"
+                      data-testid="button-add-health-record"
+                    >
+                      <PlusIcon className="h-4 w-4 mr-2" />
+                      Add Health Record
+                    </Button>
+                  </div>
+                  
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <Activity className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                      <h4 className="text-lg font-semibold mb-2">Health Monitoring</h4>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Track veterinary visits, treatments, and health events
+                      </p>
+                      <Button 
+                        onClick={() => navigate(`/livestock/health/new?operation=${selectedOperation}`)}
+                        data-testid="button-start-health-tracking"
+                      >
+                        Start Health Tracking
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <p className="text-center text-gray-500 py-8">
+                  Select an operation to view health records
+                </p>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
+    </div>
+  );
+}
