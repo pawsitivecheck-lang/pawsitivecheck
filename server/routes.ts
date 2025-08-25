@@ -990,27 +990,249 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Veterinary search using OpenStreetMap data
+  // Veterinary search using Google Places API for nationwide coverage
   app.post('/api/vets/search', async (req, res) => {
     try {
       const { query, location } = req.body;
+      const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
       
       // Default search coordinates (Lansing, MI as user location)
       let lat = 42.3314;  // Lansing, MI coordinates
       let lng = -84.5467;
-      let searchRadius = 30000; // ~18 miles
+      let searchRadius = 25000; // ~15 miles in meters
       
       // Always use GPS location when provided - this takes absolute priority
       if (location && location.lat && location.lng) {
         lat = location.lat;
         lng = location.lng;
-        searchRadius = 25000; // ~15 miles for GPS location
+        searchRadius = 20000; // ~12 miles for GPS location
       }
 
-      // For Lansing, MI area, return real local vets instead of relying on OpenStreetMap
-      if (Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
-        // User is in Lansing, MI area - return actual local vets with real addresses
-        const lansingVets = [
+      // Try Google Places API first for nationwide coverage
+      if (!googleApiKey) {
+        console.warn('⚠️  Google Places API key not found, falling back to local data');
+        throw new Error('Google API key not available');
+      }
+
+      console.log(`🔍 Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
+
+      try {
+        // Step 1: Search for veterinary places near the location
+        const searchUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`;
+        
+        const searchResponse = await fetch(searchUrl, {
+          signal: AbortSignal.timeout(10000) // 10 second timeout
+        });
+        
+        if (!searchResponse.ok) {
+          throw new Error(`Google Places API request failed: ${searchResponse.status}`);
+        }
+        
+        const searchData = await searchResponse.json();
+        console.log(`🏥 Google Places returned ${searchData.results?.length || 0} veterinary locations`);
+        
+        if (!searchData.results || searchData.results.length === 0) {
+          console.log('🔍 No veterinary results from Google Places, trying fallback search');
+          throw new Error('No results from Google Places');
+        }
+        
+        // Step 2: Get detailed information for each place (in batches to avoid API limits)
+        const detailedPractices = [];
+        const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive API calls
+        
+        for (let i = 0; i < maxResults; i++) {
+          const place = searchData.results[i];
+          
+          try {
+            // Get place details including phone, website, hours, etc.
+            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,user_ratings_total,opening_hours,geometry,types,business_status&key=${googleApiKey}`;
+            
+            const detailsResponse = await fetch(detailsUrl, {
+              signal: AbortSignal.timeout(5000) // 5 second timeout per request
+            });
+            
+            if (!detailsResponse.ok) {
+              console.warn(`Failed to get details for ${place.name}`);
+              continue;
+            }
+            
+            const detailsData = await detailsResponse.json();
+            const details = detailsData.result;
+            
+            if (!details || details.business_status === 'CLOSED_PERMANENTLY') {
+              console.log(`Skipping ${place.name} - permanently closed`);
+              continue;
+            }
+            
+            // Calculate accurate distance using Haversine formula
+            const R = 3959; // Earth's radius in miles
+            const placeLat = details.geometry?.location?.lat || place.geometry?.location?.lat;
+            const placeLng = details.geometry?.location?.lng || place.geometry?.location?.lng;
+            
+            if (!placeLat || !placeLng) {
+              console.warn(`No coordinates for ${place.name}`);
+              continue;
+            }
+            
+            const dLat = (placeLat - lat) * Math.PI / 180;
+            const dLng = (placeLng - lng) * Math.PI / 180;
+            const a = 
+              Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat * Math.PI / 180) * Math.cos(placeLat * Math.PI / 180) * 
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+            
+            // Parse address components
+            const addressParts = details.formatted_address ? details.formatted_address.split(', ') : ['Address not available'];
+            const zipMatch = details.formatted_address?.match(/\\b(\\d{5})(?:-\\d{4})?\\b/);
+            const stateMatch = details.formatted_address?.match(/\\b([A-Z]{2})\\b/);
+            
+            // Build services array based on Google place types and name
+            const services = ['General Veterinary Care'];
+            const nameAndTypes = `${details.name || place.name} ${(place.types || []).join(' ')}`.toLowerCase();
+            
+            if (nameAndTypes.includes('hospital') || nameAndTypes.includes('animal hospital')) {
+              services.push('Advanced Diagnostics', 'Surgery', 'Emergency Care', 'X-rays');
+            }
+            if (nameAndTypes.includes('clinic')) {
+              services.push('Wellness Exams', 'Vaccinations', 'Preventive Medicine');
+            }
+            if (nameAndTypes.includes('emergency') || nameAndTypes.includes('24')) {
+              services.push('24/7 Emergency Services', 'Critical Care');
+            }
+            if (nameAndTypes.includes('dental')) {
+              services.push('Dental Care');
+            }
+            if (nameAndTypes.includes('exotic')) {
+              services.push('Exotic Pet Care');
+            }
+            
+            // Build specialties
+            const specialties = ['General Veterinary Care'];
+            if (nameAndTypes.includes('small animal')) specialties.push('Small Animal Care');
+            if (nameAndTypes.includes('large animal')) specialties.push('Large Animal Care');
+            if (nameAndTypes.includes('equine')) specialties.push('Equine Care');
+            if (nameAndTypes.includes('exotic')) specialties.push('Exotic Animal Care');
+            if (nameAndTypes.includes('emergency')) specialties.push('Emergency Medicine');
+            
+            // Format hours
+            let formattedHours = {
+              'Monday': 'Call for hours',
+              'Tuesday': 'Call for hours',
+              'Wednesday': 'Call for hours',
+              'Thursday': 'Call for hours',
+              'Friday': 'Call for hours',
+              'Saturday': 'Call for hours',
+              'Sunday': 'Call for hours'
+            };
+            
+            if (details.opening_hours?.weekday_text) {
+              const dayMap: {[key: string]: string} = {
+                'Monday': 'Monday',
+                'Tuesday': 'Tuesday', 
+                'Wednesday': 'Wednesday',
+                'Thursday': 'Thursday',
+                'Friday': 'Friday',
+                'Saturday': 'Saturday',
+                'Sunday': 'Sunday'
+              };
+              
+              details.opening_hours.weekday_text.forEach((dayText: string) => {
+                const parts = dayText.split(': ');
+                if (parts.length === 2) {
+                  const day = parts[0];
+                  const hours = parts[1];
+                  if (dayMap[day]) {
+                    formattedHours[dayMap[day] as keyof typeof formattedHours] = hours === 'Closed' ? 'Closed' : hours;
+                  }
+                }
+              });
+            }
+            
+            const practice = {
+              id: `google-${place.place_id}`,
+              name: details.name || place.name,
+              address: addressParts.length > 1 ? addressParts[0] : details.formatted_address || 'Address not available',
+              city: addressParts.length > 2 ? addressParts[addressParts.length - 3] : 'City not specified',
+              state: stateMatch ? stateMatch[1] : 'State not specified',
+              zipCode: zipMatch ? zipMatch[1] : '',
+              phone: details.formatted_phone_number || '(Contact for phone)',
+              website: details.website || '',
+              rating: Math.round((details.rating || 4.2) * 10) / 10,
+              reviewCount: details.user_ratings_total || 0,
+              services: Array.from(new Set(services)), // Remove duplicates
+              hours: formattedHours,
+              specialties: Array.from(new Set(specialties)), // Remove duplicates
+              emergencyServices: nameAndTypes.includes('emergency') || nameAndTypes.includes('24'),
+              distance: Math.round(distance * 10) / 10,
+              latitude: placeLat,
+              longitude: placeLng
+            };
+            
+            detailedPractices.push(practice);
+            console.log(`✅ Added: ${practice.name} (${practice.distance}mi away, ${practice.rating}⭐)`);
+            
+            // Small delay between API requests to avoid rate limiting
+            if (i < maxResults - 1) {
+              await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+          } catch (detailError) {
+            console.warn(`Error getting details for ${place.name}:`, detailError);
+            // Add basic info without details if coordinates available
+            const placeLat = place.geometry?.location?.lat;
+            const placeLng = place.geometry?.location?.lng;
+            
+            if (placeLat && placeLng) {
+              const R = 3959;
+              const dLat = (placeLat - lat) * Math.PI / 180;
+              const dLng = (placeLng - lng) * Math.PI / 180;
+              const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat * Math.PI / 180) * Math.cos(placeLat * Math.PI / 180) * 
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+              const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+              const distance = R * c;
+              
+              detailedPractices.push({
+                id: `google-basic-${place.place_id}`,
+                name: place.name,
+                address: place.vicinity || 'Address not available',
+                city: 'City not specified',
+                state: 'State not specified',
+                zipCode: '',
+                phone: '(Contact for phone)',
+                website: '',
+                rating: Math.round((place.rating || 4.2) * 10) / 10,
+                reviewCount: place.user_ratings_total || 0,
+                services: ['General Veterinary Care'],
+                hours: {
+                  'Monday': 'Call for hours',
+                  'Tuesday': 'Call for hours',
+                  'Wednesday': 'Call for hours', 
+                  'Thursday': 'Call for hours',
+                  'Friday': 'Call for hours',
+                  'Saturday': 'Call for hours',
+                  'Sunday': 'Call for hours'
+                },
+                specialties: ['General Veterinary Care'],
+                emergencyServices: false,
+                distance: Math.round(distance * 10) / 10,
+                latitude: placeLat,
+                longitude: placeLng
+              });
+            }
+          }
+        }
+        
+        console.log(`🎯 Successfully processed ${detailedPractices.length} practices from Google Places`);
+        let practices = detailedPractices;
+
+        // If no Google Places results, fall back to local Lansing data for that area
+        if (practices.length === 0 && Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
+          console.log('🏥 No Google results for Lansing area, using local vet data');
+          practices = [
           {
             id: 'lansing-1',
             name: 'Miller Animal Clinic',
@@ -1228,165 +1450,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             longitude: -84.4655
           }
         ];
-        
-        res.json({ practices: lansingVets });
-        return;
-      }
-      
-      // Build OpenStreetMap query for other areas
-      const overpassQuery = `
-        [out:json][timeout:25];
-        (
-          node["amenity"="veterinary"](around:${searchRadius},${lat},${lng});
-          way["amenity"="veterinary"](around:${searchRadius},${lat},${lng});
-          relation["amenity"="veterinary"](around:${searchRadius},${lat},${lng});
-        );
-        out geom;
-      `;
-
-      try {
-        // Query OpenStreetMap Overpass API
-        const response = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: `data=${encodeURIComponent(overpassQuery)}`,
-          signal: AbortSignal.timeout(20000) // 20 second timeout
-        });
-
-        if (!response.ok) {
-          throw new Error('OpenStreetMap API request failed');
-        }
-
-        const osmData = await response.json();
-        console.log(`🗺️ OpenStreetMap returned ${osmData.elements?.length || 0} results`);
-        
-        // Transform and calibrate OpenStreetMap data to our format
-        let practices = osmData.elements
-          .filter((element: any) => {
-            const tags = element.tags || {};
-            // Quality filters: must have name and basic info
-            return tags.name && 
-                   tags.name.length > 2 && 
-                   !tags.name.includes('test') && 
-                   !tags.name.includes('Test');
-          })
-          .map((element: any) => {
-            const tags = element.tags || {};
-            const elementLat = element.lat || (element.center ? element.center.lat : lat);
-            const elementLng = element.lon || (element.center ? element.center.lon : lng);
-            
-            // More accurate distance calculation using Haversine formula
-            const R = 3959; // Earth's radius in miles
-            const dLat = (elementLat - lat) * Math.PI / 180;
-            const dLng = (elementLng - lng) * Math.PI / 180;
-            const a = 
-              Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat * Math.PI / 180) * Math.cos(elementLat * Math.PI / 180) * 
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            const distance = R * c;
-            
-            // Generate more realistic ratings based on available data
-            let baseRating = 4.0;
-            if (tags.phone || tags['contact:phone']) baseRating += 0.2;
-            if (tags.website || tags['contact:website']) baseRating += 0.2;
-            if (tags.opening_hours) baseRating += 0.1;
-            if (tags.emergency === 'yes') baseRating += 0.2;
-            const rating = Math.min(4.8, baseRating + (Math.random() * 0.4 - 0.2));
-            
-            // Generate realistic review counts based on establishment type
-            const baseReviews = tags.emergency === 'yes' ? 200 : 100;
-            const reviewCount = Math.floor(baseReviews + Math.random() * 150);
-            
-            // Build comprehensive services list
-            const services = ['General Veterinary Care'];
-            if (tags.emergency === 'yes') services.push('Emergency Care', '24/7 Emergency Services');
-            if (tags.surgery === 'yes') services.push('Surgery', 'Surgical Procedures');
-            if (!tags.emergency) services.push('Wellness Exams', 'Vaccinations', 'Routine Check-ups');
-            
-            // Add common services based on clinic type
-            const clinicType = tags.name.toLowerCase();
-            if (clinicType.includes('hospital') || clinicType.includes('animal')) {
-              services.push('Advanced Diagnostics', 'X-rays', 'Laboratory Services');
-            }
-            if (clinicType.includes('clinic') || clinicType.includes('care')) {
-              services.push('Dental Care', 'Preventive Medicine', 'Pet Wellness');
-            }
-            
-            // Build address with better formatting
-            let address = 'Address not available';
-            if (tags['addr:street']) {
-              const houseNum = tags['addr:housenumber'] || '';
-              address = `${houseNum} ${tags['addr:street']}`.trim();
-            } else if (tags['addr:place']) {
-              address = tags['addr:place'];
-            }
-            
-            // Debug log each result
-            console.log(`📍 Found: ${tags.name} at ${elementLat}, ${elementLng} (${distance.toFixed(2)}mi away)`);
-            
-            return {
-              id: `osm-${element.id}`,
-              name: tags.name,
-              address,
-              city: tags['addr:city'] || tags['addr:town'] || tags['addr:suburb'] || 'City not specified',
-              state: tags['addr:state'] || tags['addr:province'] || tags['addr:region'] || 'MI',
-              zipCode: tags['addr:postcode'] || '',
-              phone: tags.phone || tags['contact:phone'] || '(Contact for phone)',
-              website: tags.website || tags['contact:website'] || '',
-              rating: Math.round(rating * 10) / 10,
-              reviewCount,
-              services: Array.from(new Set(services)), // Remove duplicates
-              hours: tags.opening_hours ? { 
-                'Hours': tags.opening_hours 
-              } : {
-                'Monday': '8:00 AM - 6:00 PM',
-                'Tuesday': '8:00 AM - 6:00 PM',
-                'Wednesday': '8:00 AM - 6:00 PM',
-                'Thursday': '8:00 AM - 6:00 PM',
-                'Friday': '8:00 AM - 6:00 PM',
-                'Saturday': '9:00 AM - 4:00 PM',
-                'Sunday': tags.emergency === 'yes' ? '24/7 Emergency Only' : 'Closed'
-              },
-              specialties: [
-                ...(tags.speciality ? [tags.speciality] : []),
-                ...(tags.emergency === 'yes' ? ['Emergency Medicine', 'Critical Care'] : ['General Veterinary Care']),
-                ...(clinicType.includes('small animal') ? ['Small Animal Care'] : []),
-                ...(clinicType.includes('exotic') ? ['Exotic Animal Care'] : [])
-              ],
-              emergencyServices: tags.emergency === 'yes',
-              distance: Math.round(distance * 10) / 10,
-              latitude: elementLat,
-              longitude: elementLng
-            };
-          })
-          .filter((practice: any) => practice.distance <= 30) // Filter out results too far away (30 miles)
-          .slice(0, 20); // Limit to top 20 results
-        
-        console.log(`🎯 After filtering: ${practices.length} practices within 30 miles`);
-
-        // If no OpenStreetMap results, fall back to database
-        if (practices.length === 0) {
-          const offices = await storage.getVeterinaryOffices(15, 0);
-          practices = offices.map((office: any) => ({
-            id: `db-${office.id}`,
-            name: office.name,
-            address: office.address,
-            city: office.city,
-            state: office.state,
-            zipCode: office.zipCode,
-            phone: office.phone,
-            website: office.website || '',
-            rating: parseFloat(office.rating || '4.0'),
-            reviewCount: office.reviewCount || 0,
-            services: office.services || ['General Veterinary Care'],
-            hours: office.hours || {},
-            specialties: office.specialties || ['General Veterinary Care'],
-            emergencyServices: office.emergencyServices || false,
-            distance: Math.random() * 5 + 1 // Random distance 1-6km
-          }));
         }
 
         // Enhanced filtering by search query
@@ -1453,51 +1516,172 @@ export async function registerRoutes(app: Express): Promise<Server> {
           total: filteredPractices.length,
           searchQuery: query || 'veterinarian',
           location: location || null,
-          source: practices.length > 0 ? 'OpenStreetMap' : 'Database'
+          source: 'Google Places API'
         });
 
-      } catch (osmError) {
-        console.log("OpenStreetMap API failed, using database fallback:", osmError);
+      } catch (googleError) {
+        console.log("Google Places API failed, using fallback:", googleError);
         
-        // Calibrated database fallback search
-        const offices = await storage.getVeterinaryOffices(20, 0, query);
+        // For Lansing area, use our detailed local data as fallback
+        if (Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
+          console.log('📍 Using detailed Lansing area veterinary data as fallback');
+          const lansingVets = [
+            {
+              id: 'lansing-fallback-1',
+              name: 'Miller Animal Clinic',
+              address: '6515 W. Saginaw Hwy',
+              city: 'Lansing',
+              state: 'MI',
+              zipCode: '48917',
+              phone: '(517) 321-6406',
+              website: 'https://milleranimalclinic.com/',
+              rating: 4.5,
+              reviewCount: 189,
+              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Vaccinations'],
+              hours: {
+                'Monday': '8:00 AM - 7:00 PM',
+                'Tuesday': '8:00 AM - 7:00 PM',
+                'Wednesday': '8:00 AM - 6:00 PM',
+                'Thursday': '8:00 AM - 7:00 PM',
+                'Friday': '8:00 AM - 6:00 PM',
+                'Saturday': '9:00 AM - 5:00 PM',
+                'Sunday': 'Closed'
+              },
+              specialties: ['Small Animal Care', 'Over 70 Years Experience'],
+              emergencyServices: false,
+              distance: 3.2,
+              latitude: 42.7025,
+              longitude: -84.6891
+            },
+            {
+              id: 'lansing-fallback-2',
+              name: 'Pennsylvania Veterinary Care',
+              address: '5438 S Pennsylvania Ave',
+              city: 'Lansing',
+              state: 'MI',
+              zipCode: '48911',
+              phone: '(517) 393-8010',
+              website: 'https://www.pennvetcare.com/',
+              rating: 4.6,
+              reviewCount: 178,
+              services: ['General Veterinary Care', 'Surgery', 'Digital X-Rays', 'Dental Care', 'Microchipping'],
+              hours: {
+                'Monday': '8:00 AM - 6:00 PM',
+                'Tuesday': '7:00 AM - 6:00 PM',
+                'Wednesday': '8:00 AM - 6:00 PM',
+                'Thursday': '7:00 AM - 6:00 PM',
+                'Friday': '8:00 AM - 2:00 PM',
+                'Saturday': 'Closed',
+                'Sunday': 'Closed'
+              },
+              specialties: ['Fear Free Certified', 'Regenerative Medicine', 'Since 1992'],
+              emergencyServices: false,
+              distance: 4.1,
+              latitude: 42.6652,
+              longitude: -84.5553
+            },
+            {
+              id: 'lansing-fallback-3',
+              name: 'Lake Lansing Road Animal Clinic',
+              address: '1615 Lake Lansing Rd',
+              city: 'Lansing',
+              state: 'MI',
+              zipCode: '48912',
+              phone: '(517) 484-8031',
+              website: 'https://lansingvetclinic.com/',
+              rating: 4.4,
+              reviewCount: 298,
+              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Medical Care'],
+              hours: {
+                'Monday': '8:00 AM - 5:30 PM',
+                'Tuesday': '8:00 AM - 5:30 PM',
+                'Wednesday': '8:00 AM - 5:30 PM',
+                'Thursday': '8:00 AM - 5:30 PM',
+                'Friday': '8:00 AM - 5:30 PM',
+                'Saturday': '8:00 AM - 1:00 PM, 2:00 PM - 5:30 PM',
+                'Sunday': 'Closed'
+              },
+              specialties: ['Full Service Hospital', 'Comprehensive Care', 'Since 1985'],
+              emergencyServices: false,
+              distance: 1.9,
+              latitude: 42.7542,
+              longitude: -84.5324
+            }
+          ];
+          
+          res.json({ 
+            practices: lansingVets,
+            total: lansingVets.length,
+            searchQuery: query || 'veterinarian',
+            location: location || null,
+            source: 'Local Database (Lansing)'
+          });
+          return;
+        }
+
+        // Database fallback for other locations
+        console.log('🗄️ Using database fallback for location search');
+        const offices = await storage.getVeterinaryOffices();
+        
+        if (!offices || offices.length === 0) {
+          return res.status(404).json({
+            practices: [],
+            total: 0,
+            searchQuery: query || 'veterinarian',
+            location: location || null,
+            source: 'Database (Empty)',
+            message: 'No veterinary practices found. Please try a different location.'
+          });
+        }
+        
+        // Convert database records to our standard format and calculate distances
         const practices = offices.map((office: any, index: number) => {
-          // Generate realistic distances based on search area
-          const baseDistance = location ? 2 : 5; // Closer if location provided
-          const distance = baseDistance + (Math.random() * 15) + (index * 0.5);
+          // Calculate distance if coordinates are available
+          let distance = 999; // Default large distance
+          if (office.latitude && office.longitude) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (office.latitude - lat) * Math.PI / 180;
+            const dLng = (office.longitude - lng) * Math.PI / 180;
+            const a = 
+              Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            distance = R * c;
+          }
           
           return {
-            id: `db-${office.id}`,
-            name: office.name,
-            address: office.address || 'Address not specified',
+            id: `db-${office.id || index}`,
+            name: office.name || `Veterinary Practice ${index + 1}`,
+            address: office.address || 'Address not available',
             city: office.city || 'City not specified',
-            state: office.state || 'CA',
+            state: office.state || 'State not specified',
             zipCode: office.zipCode || '',
             phone: office.phone || '(Contact for phone)',
             website: office.website || '',
-            rating: parseFloat(office.rating || '4.2'),
-            reviewCount: office.reviewCount || Math.floor(Math.random() * 150 + 50),
-            services: office.services?.length ? office.services : [
-              'General Veterinary Care',
-              'Wellness Exams', 
-              'Vaccinations',
-              'Preventive Medicine'
-            ],
-            hours: office.hours && Object.keys(office.hours).length ? office.hours : {
-              'Monday': '8:00 AM - 6:00 PM',
-              'Tuesday': '8:00 AM - 6:00 PM',
-              'Wednesday': '8:00 AM - 6:00 PM',
-              'Thursday': '8:00 AM - 6:00 PM',
-              'Friday': '8:00 AM - 6:00 PM',
-              'Saturday': '9:00 AM - 4:00 PM',
-              'Sunday': 'Closed'
+            rating: office.rating || 4.2,
+            reviewCount: office.reviewCount || 0,
+            services: office.services || ['General Veterinary Care'],
+            hours: office.hours || {
+              'Monday': 'Call for hours',
+              'Tuesday': 'Call for hours',
+              'Wednesday': 'Call for hours',
+              'Thursday': 'Call for hours',
+              'Friday': 'Call for hours',
+              'Saturday': 'Call for hours',
+              'Sunday': 'Call for hours'
             },
-            specialties: office.specialties?.length ? office.specialties : ['General Veterinary Care'],
+            specialties: office.specialties || ['General Veterinary Care'],
             emergencyServices: office.emergencyServices || false,
-            distance: Math.round(distance * 10) / 10
+            distance: Math.round(distance * 10) / 10,
+            latitude: office.latitude || null,
+            longitude: office.longitude || null
           };
         });
-
+        
+        // Sort by distance
+        practices.sort((a: any, b: any) => (a.distance || 999) - (b.distance || 999));
+        
         res.json({
           practices,
           total: practices.length,
@@ -1506,97 +1690,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
           source: 'Database'
         });
       }
-      
     } catch (error) {
-      console.error("Error in vet search:", error);
-      res.status(500).json({ message: "Failed to search for veterinarians" });
+      console.error('Veterinary search error:', error);
+      res.status(500).json({
+        practices: [],
+        total: 0,
+        searchQuery: query || 'veterinarian',
+        location: location || null,
+        source: 'Error',
+        message: 'Search service temporarily unavailable. Please try again.'
+      });
     }
   });
 
-  // Get all veterinary offices
-  app.get('/api/vets', async (req, res) => {
+  // Save veterinary office route
+  app.post('/api/veterinary-offices', isAuthenticated, async (req: any, res) => {
     try {
-      const limit = parseInt(req.query.limit as string) || 50;
-      const offset = parseInt(req.query.offset as string) || 0;
-      const search = req.query.search as string;
+      const userId = req.user.claims.sub;
+      const officeData = insertVeterinaryOfficeSchema.parse(req.body);
       
-      const offices = await storage.getVeterinaryOffices(limit, offset, search);
-      res.json(offices);
+      const newOffice = await storage.addVeterinaryOffice({
+        ...officeData,
+        createdBy: userId,
+      });
+      
+      res.status(201).json(newOffice);
     } catch (error) {
-      console.error("Error fetching vet offices:", error);
+      console.error("Error saving veterinary office:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid veterinary office data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to save veterinary office" });
+    }
+  });
+
+  // Get all veterinary offices  
+  app.get('/api/veterinary-offices', async (req, res) => {
+    try {
+      const offices = await storage.getVeterinaryOffices();
+      res.json(offices || []);
+    } catch (error) {
+      console.error("Error fetching veterinary offices:", error);
       res.status(500).json({ message: "Failed to fetch veterinary offices" });
     }
   });
 
-  // Get specific veterinary office
-  app.get('/api/vets/:id', async (req, res) => {
+  // Update veterinary office
+  app.put('/api/veterinary-offices/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const office = await storage.getVeterinaryOffice(id);
-      
-      if (!office) {
-        return res.status(404).json({ message: "Veterinary office not found" });
-      }
-      
-      res.json(office);
-    } catch (error) {
-      console.error("Error fetching vet office:", error);
-      res.status(500).json({ message: "Failed to fetch veterinary office" });
-    }
-  });
-
-  // Create new veterinary office (admin only)
-  app.post('/api/vets', isAdmin, async (req: any, res) => {
-    try {
       const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Admin access required" });
-      }
-
-      const officeData = { ...req.body, addedByUserId: user.id };
-      const office = await storage.createVeterinaryOffice(officeData);
-      res.status(201).json(office);
-    } catch (error) {
-      console.error("Error creating vet office:", error);
-      res.status(500).json({ message: "Failed to create veterinary office" });
-    }
-  });
-
-  // Update veterinary office (admin only)
-  app.put('/api/vets/:id', isAdmin, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Admin access required" });
-      }
-
-      const id = parseInt(req.params.id);
-      const office = await storage.updateVeterinaryOffice(id, req.body);
+      const officeData = insertVeterinaryOfficeSchema.partial().parse(req.body);
       
-      if (!office) {
-        return res.status(404).json({ message: "Veterinary office not found" });
+      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData, userId);
+      
+      if (!updatedOffice) {
+        return res.status(404).json({ message: "Veterinary office not found or access denied" });
       }
       
-      res.json(office);
+      res.json(updatedOffice);
     } catch (error) {
-      console.error("Error updating vet office:", error);
+      console.error("Error updating veterinary office:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid veterinary office data", errors: error.errors });
+      }
       res.status(500).json({ message: "Failed to update veterinary office" });
     }
   });
 
-  // Delete veterinary office (admin only)
-  app.delete('/api/vets/:id', isAdmin, async (req: any, res) => {
+  // Delete veterinary office
+  app.delete('/api/veterinary-offices/:id', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Admin access required" });
-      }
-
       const id = parseInt(req.params.id);
-      const success = await storage.deleteVeterinaryOffice(id, user.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.removeVeterinaryOffice(id, userId);
       
       if (!success) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -1604,707 +1772,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ message: "Veterinary office deleted successfully" });
     } catch (error) {
-      console.error("Error deleting vet office:", error);
+      console.error("Error deleting veterinary office:", error);
       res.status(500).json({ message: "Failed to delete veterinary office" });
     }
   });
 
-  // Database synchronization endpoints
-  app.post('/api/admin/sync/products', isAdmin, async (req: any, res) => {
+  // Saved products routes
+  app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
-      }
-
-      // In production, this would sync with:
-      // - Pet food manufacturer APIs
-      // - Open Food Facts API
-      // - FDA/AAFCO databases
-      // - Veterinary product databases
-      
-      let syncedProducts = 0;
-      const batchSize = 50;
-      
-      // Popular pet product database synchronization  
-      const mockApiProducts = [
-        {
-          name: "Blue Buffalo Chicken & Rice Dog Food",
-          brand: "Blue Buffalo",
-          category: "pet-food",
-          description: "Natural dog food made with real chicken, brown rice and vegetables",
-          ingredients: "Deboned chicken, chicken meal, brown rice, barley, oatmeal, natural flavor",
-          barcode: "012345678901",
-          cosmicScore: 85,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'excellent',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Purina Pro Plan Cat Food",
-          brand: "Purina",
-          category: "pet-food", 
-          description: "High protein dry cat food with real salmon",
-          ingredients: "Salmon, rice flour, poultry by-product meal, corn protein meal, beef fat",
-          barcode: "012345678902",
-          cosmicScore: 72,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'good',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Greenies Dog Dental Treats",
-          brand: "Greenies",
-          category: "pet-treats",
-          description: "Dental chews that clean teeth and freshen breath",
-          ingredients: "Wheat flour, wheat protein isolate, glycerin, gelatin, water, natural flavors",
-          barcode: "012345678903",
-          cosmicScore: 78,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'good',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Hill's Science Diet Puppy Food",
-          brand: "Hill's",
-          category: "pet-food",
-          description: "Puppy food with DHA from fish oil for healthy brain development",
-          ingredients: "Chicken, whole grain wheat, cracked pearled barley, whole grain sorghum",
-          barcode: "012345678904",
-          cosmicScore: 88,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'excellent',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Friskies Indoor Cat Treats",
-          brand: "Friskies",
-          category: "pet-treats",
-          description: "Crunchy cat treats made with real chicken",
-          ingredients: "Chicken, brewers rice, corn protein meal, animal fat, chicken by-product meal",
-          barcode: "012345678905",
-          cosmicScore: 65,
-          cosmicClarity: 'neutral',
-          transparencyLevel: 'fair',
-          isBlacklisted: false,
-          suspiciousIngredients: ['by-product meal'],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Kong Classic Dog Toy",
-          brand: "Kong",
-          category: "pet-toys",
-          description: "Durable rubber toy for stuffing treats, made in USA",
-          ingredients: "Natural rubber",
-          barcode: "012345678906",
-          cosmicScore: 95,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'excellent',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Royal Canin Breed Health Dog Food",
-          brand: "Royal Canin",
-          category: "pet-food",
-          description: "Breed-specific nutrition for adult dogs",
-          ingredients: "Chicken by-product meal, brewers rice, corn, wheat, chicken fat",
-          barcode: "012345678907",
-          cosmicScore: 70,
-          cosmicClarity: 'neutral',
-          transparencyLevel: 'good',
-          isBlacklisted: false,
-          suspiciousIngredients: ['by-product meal', 'corn'],
-          lastAnalyzed: new Date(),
-        },
-        {
-          name: "Wellness Core Cat Food",
-          brand: "Wellness",
-          category: "pet-food",
-          description: "Grain-free, high-protein cat food with deboned turkey",
-          ingredients: "Deboned turkey, turkey meal, chicken meal, peas, potatoes",
-          barcode: "012345678908",
-          cosmicScore: 82,
-          cosmicClarity: 'blessed',
-          transparencyLevel: 'excellent',
-          isBlacklisted: false,
-          suspiciousIngredients: [],
-          lastAnalyzed: new Date(),
-        }
-      ];
-      
-      // Add products to database
-      for (const productData of mockApiProducts) {
-        try {
-          // Check if product already exists
-          const existing = await storage.getProductByBarcode(productData.barcode);
-          if (!existing) {
-            await storage.createProduct(productData);
-            syncedProducts++;
-          }
-        } catch (error) {
-          console.log(`Skipped product ${productData.name}: already exists or error`);
-        }
-      }
-      
-      res.json({
-        message: `Successfully synced ${syncedProducts} new products from cosmic APIs`,
-        syncedCount: syncedProducts,
-        totalProcessed: mockApiProducts.length,
-        timestamp: new Date().toISOString()
-      });
-      
-    } catch (error) {
-      console.error("Error syncing products:", error);
-      res.status(500).json({ message: "Failed to sync product database" });
-    }
-  });
-  
-  app.post('/api/admin/sync/recalls', isAdmin, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
-      }
-
-      let syncedRecalls = 0;
-      let processedRecalls = 0;
-      let source = 'mock';
-      
-      // Try FDA openFDA API for real recall data
-      try {
-        // Search for pet-related recalls from FDA
-        const petSearchTerms = [
-          'dog food', 'cat food', 'pet food', 'dog treats', 'cat treats', 
-          'pet treats', 'puppy food', 'kitten food', 'canine', 'feline'
-        ];
-        
-        const allFdaRecalls = [];
-        
-        for (const searchTerm of petSearchTerms) {
-          try {
-            const response = await fetch(
-              `https://api.fda.gov/food/enforcement.json?search=product_description:"${searchTerm}"&limit=20`
-            );
-            
-            if (response.ok) {
-              const data = await response.json();
-              if (data.results) {
-                allFdaRecalls.push(...data.results);
-              }
-            }
-          } catch (searchError) {
-            const error = searchError as Error;
-            console.log(`Failed to search FDA for "${searchTerm}":`, error.message);
-          }
-        }
-        
-        if (allFdaRecalls.length > 0) {
-          source = 'FDA';
-          
-          // Process FDA recalls
-          for (const fdaRecall of allFdaRecalls.slice(0, 10)) { // Limit to 10 most recent
-            try {
-              processedRecalls++;
-              
-              // Map FDA data to our schema
-              const recallNumber = fdaRecall.recall_number || `FDA-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-              const productName = fdaRecall.product_description || 'Unknown Pet Product';
-              const reason = fdaRecall.reason_for_recall || 'Safety concern identified';
-              
-              // Determine severity based on classification
-              let severity: 'low' | 'moderate' | 'high' | 'urgent' = 'moderate';
-              if (fdaRecall.classification === 'Class I') {
-                severity = 'urgent';
-              } else if (fdaRecall.classification === 'Class II') {
-                severity = 'high';
-              } else if (fdaRecall.classification === 'Class III') {
-                severity = 'moderate';
-              }
-              
-              // Parse recall date
-              const recallDate = fdaRecall.recall_initiation_date ? 
-                new Date(fdaRecall.recall_initiation_date) : 
-                new Date();
-              
-              // Check if we already have this recall
-              const existingRecalls = await storage.getActiveRecalls();
-              const exists = existingRecalls.some(recall => 
-                recall.recallNumber === recallNumber
-              );
-              
-              if (!exists) {
-                // Create or find a product for this recall
-                let productId = null;
-                
-                // Try to find existing product by name similarity
-                const products = await storage.getProducts(1000, 0);
-                const matchingProduct = products.find(product => 
-                  productName.toLowerCase().includes(product.name.toLowerCase()) ||
-                  product.name.toLowerCase().includes(productName.toLowerCase().split(' ')[0])
-                );
-                
-                if (matchingProduct) {
-                  productId = matchingProduct.id;
-                } else {
-                  // Create a new product for this recall
-                  try {
-                    const newProduct = await storage.createProduct({
-                      name: productName,
-                      brand: fdaRecall.recalling_firm || "Unknown Brand",
-                      category: productName.toLowerCase().includes('treat') ? 'pet-treats' : 'pet-food',
-                      description: `Product recalled by FDA: ${reason}`,
-                      ingredients: "Ingredients not specified in recall notice",
-                      barcode: `FDA-${recallNumber}`,
-                      cosmicScore: 20, // Low score for recalled products
-                      cosmicClarity: 'cursed',
-                      transparencyLevel: 'poor',
-                      isBlacklisted: true,
-                      suspiciousIngredients: [],
-                      lastAnalyzed: new Date(),
-                    });
-                    productId = newProduct.id;
-                  } catch (productError) {
-                    console.log(`Failed to create product for recall ${recallNumber}`);
-                  }
-                }
-                
-                if (productId) {
-                  await storage.createRecall({
-                    productId,
-                    recallNumber,
-                    reason,
-                    severity,
-                    recallDate,
-                    affectedBatches: fdaRecall.product_quantity ? [fdaRecall.product_quantity] : [],
-                    source: "FDA"
-                  });
-                  syncedRecalls++;
-                }
-              }
-            } catch (recallError) {
-              const error = recallError as Error;
-              console.log(`Failed to process FDA recall:`, error.message);
-            }
-          }
-        }
-      } catch (fdaError) {
-        const error = fdaError as Error;
-        console.error('FDA API error, falling back to mock data:', error.message);
-      }
-      
-      // Fall back to mock data if FDA API failed or returned no results
-      if (syncedRecalls === 0) {
-        source = 'mock';
-        
-        // Create some mock products for the recalls to reference
-        const mockProducts = [
-          {
-            name: "TastyBites Dog Treats",
-            brand: "PetSnacks Inc", 
-            category: "pet-treats",
-            description: "Chicken flavored dog treats",
-            ingredients: "Chicken, wheat flour, glycerin, salt",
-            barcode: "123456789012",
-          },
-          {
-            name: "FlexiLeash Retractable Leash",
-            brand: "WalkSafe",
-            category: "pet-accessories", 
-            description: "Retractable dog leash, 16ft length",
-            ingredients: "Nylon webbing, plastic handle, metal clasp",
-            barcode: "123456789013",
-          }
-        ];
-        
-        // Create products if they don't exist and get their IDs
-        const productIds: number[] = [];
-        for (const productData of mockProducts) {
-          try {
-            let existingProduct = await storage.getProductByBarcode(productData.barcode);
-            if (!existingProduct) {
-              existingProduct = await storage.createProduct(productData);
-            }
-            productIds.push(existingProduct.id);
-          } catch (error) {
-            console.log(`Failed to create/get product: ${productData.name}`);
-          }
-        }
-        
-        const mockRecallData = [
-          {
-            productId: productIds[0] || 1,
-            recallNumber: "RCL-2024-001",
-            reason: "Potential Salmonella contamination", 
-            severity: 'urgent' as const,
-            recallDate: new Date('2024-01-15'),
-            affectedBatches: ["Lot #TB2024001", "Lot #TB2024002"],
-            source: "FDA"
-          },
-          {
-            productId: productIds[1] || 2,
-            recallNumber: "RCL-2024-002", 
-            reason: "Mechanism failure causing sudden release",
-            severity: 'moderate' as const,
-            recallDate: new Date('2024-02-01'),
-            affectedBatches: ["Model FL-2023, Serial 50000-55000"],
-            source: "CPSC"
-          }
-        ];
-        
-        for (const recallData of mockRecallData) {
-          try {
-            const existingRecalls = await storage.getActiveRecalls();
-            const exists = existingRecalls.some(r => 
-              r.recallNumber === recallData.recallNumber
-            );
-            
-            if (!exists) {
-              await storage.createRecall(recallData);
-              syncedRecalls++;
-              processedRecalls++;
-            }
-          } catch (error) {
-            console.log(`Skipped recall ${recallData.recallNumber}: already exists or error`);
-          }
-        }
-      }
-      
-      res.json({
-        message: source === 'FDA' 
-          ? `Successfully synced ${syncedRecalls} new FDA pet product recalls`
-          : `Successfully synced ${syncedRecalls} new recall alerts`,
-        syncedCount: syncedRecalls,
-        totalProcessed: processedRecalls,
-        source,
-        timestamp: new Date().toISOString()
-      });
-      
-    } catch (error) {
-      console.error("Error syncing recalls:", error);
-      res.status(500).json({ message: "Failed to sync recall database" });
-    }
-  });
-  
-  app.post('/api/admin/sync/ingredients', isAdmin, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
-      }
-
-      // In production, sync with:
-      // - AAFCO ingredient safety database
-      // - FDA's list of prohibited substances
-      // - Veterinary toxicology databases
-      // - Research institutions' safety data
-      
-      let syncedIngredients = 0;
-      
-      const mockIngredientData = [
-        {
-          ingredientName: "Propylene Glycol",
-          reason: "Can cause anemia and other blood disorders in cats",
-          severity: 'high' as const
-        },
-        {
-          ingredientName: "Xylitol", 
-          reason: "Extremely toxic to dogs, causes rapid insulin release and hypoglycemia",
-          severity: 'high' as const
-        },
-        {
-          ingredientName: "BHA (Butylated Hydroxyanisole)",
-          reason: "Possible carcinogen, may cause liver and kidney problems", 
-          severity: 'medium' as const
-        },
-        {
-          ingredientName: "Red Dye #3",
-          reason: "Artificial coloring linked to hyperactivity and allergic reactions",
-          severity: 'low' as const
-        }
-      ];
-      
-      for (const ingredientData of mockIngredientData) {
-        try {
-          // Check if ingredient already blacklisted
-          const existing = await storage.getBlacklistedIngredients();
-          const exists = existing.some(i => 
-            i.ingredientName.toLowerCase() === ingredientData.ingredientName.toLowerCase()
-          );
-          
-          if (!exists) {
-            await storage.addIngredientToBlacklist(ingredientData);
-            syncedIngredients++;
-          }
-        } catch (error) {
-          console.log(`Skipped ingredient ${ingredientData.ingredientName}: already exists or error`);
-        }
-      }
-      
-      res.json({
-        message: `Successfully synced ${syncedIngredients} new blacklisted ingredients`,
-        syncedCount: syncedIngredients,
-        totalProcessed: mockIngredientData.length,
-        timestamp: new Date().toISOString()
-      });
-      
-    } catch (error) {
-      console.error("Error syncing ingredients:", error);
-      res.status(500).json({ message: "Failed to sync ingredient blacklist" });
-    }
-  });
-  
-  // Full database refresh endpoint
-  app.post('/api/admin/sync/all', isAdmin, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
-      }
-
-      const results = {
-        products: 0,
-        recalls: 0,
-        ingredients: 0,
-        errors: [] as string[]
-      };
-      
-      // Sync products
-      try {
-        const productRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/products`, {
-          method: 'POST',
-          headers: {
-            'Authorization': req.headers.authorization || '',
-            'Cookie': req.headers.cookie || ''
-          }
-        });
-        if (productRes.ok) {
-          const data = await productRes.json();
-          results.products = data.syncedCount;
-        }
-      } catch (error) {
-        results.errors.push('Failed to sync products');
-      }
-      
-      // Sync recalls
-      try {
-        const recallRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/recalls`, {
-          method: 'POST',
-          headers: {
-            'Authorization': req.headers.authorization || '',
-            'Cookie': req.headers.cookie || ''
-          }
-        });
-        if (recallRes.ok) {
-          const data = await recallRes.json();
-          results.recalls = data.syncedCount;
-        }
-      } catch (error) {
-        results.errors.push('Failed to sync recalls');
-      }
-      
-      // Sync ingredients
-      try {
-        const ingredientRes = await fetch(`${req.protocol}://${req.get('host')}/api/admin/sync/ingredients`, {
-          method: 'POST',
-          headers: {
-            'Authorization': req.headers.authorization || '',
-            'Cookie': req.headers.cookie || ''
-          }
-        });
-        if (ingredientRes.ok) {
-          const data = await ingredientRes.json();
-          results.ingredients = data.syncedCount;
-        }
-      } catch (error) {
-        results.errors.push('Failed to sync ingredients');
-      }
-      
-      res.json({
-        message: "Cosmic database synchronization complete",
-        results,
-        timestamp: new Date().toISOString()
-      });
-      
-    } catch (error) {
-      console.error("Error in full database sync:", error);
-      res.status(500).json({ message: "Failed to perform full database synchronization" });
-    }
-  });
-  
-  // Database status and last sync info
-  app.get('/api/admin/sync/status', isAdmin, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user?.isAdmin) {
-        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
-      }
-
-      const products = await storage.getProducts(1000, 0);
-      const recalls = await storage.getActiveRecalls();
-      const ingredients = await storage.getBlacklistedIngredients();
-      
-      // Find most recent entries to determine last sync times
-      const latestProduct = products.length > 0 ? 
-        products.reduce((latest, product) => 
-          (product.createdAt && latest.createdAt && product.createdAt > latest.createdAt) ? product : latest
-        ) : null;
-        
-      const latestRecall = recalls.length > 0 ?
-        recalls.reduce((latest, recall) => 
-          recall.recallDate > latest.recallDate ? recall : latest
-        ) : null;
-      
-      res.json({
-        database: {
-          products: {
-            count: products.length,
-            lastSync: latestProduct?.createdAt || null
-          },
-          recalls: {
-            count: recalls.length,
-            lastSync: latestRecall?.recallDate || null
-          },
-          ingredients: {
-            count: ingredients.length,
-            lastSync: null // We don't track creation dates for ingredients
-          }
-        },
-        health: "operational",
-        lastChecked: new Date().toISOString()
-      });
-      
-    } catch (error) {
-      console.error("Error getting sync status:", error);
-      res.status(500).json({ message: "Failed to get database sync status" });
-    }
-  });
-
-  // Pet Profile routes
-  app.get('/api/pets', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const pets = await storage.getUserPetProfiles(userId);
-      res.json(pets);
-    } catch (error) {
-      console.error("Error fetching pet profiles:", error);
-      res.status(500).json({ message: "Failed to fetch pet profiles" });
-    }
-  });
-
-  app.get('/api/pets/:id', isAuthenticated, async (req: any, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
-      const pet = await storage.getPetProfile(id);
-      
-      if (!pet) {
-        return res.status(404).json({ message: "Pet profile not found" });
-      }
-      
-      // Check if the pet belongs to the authenticated user
-      if (pet.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      
-      res.json(pet);
-    } catch (error) {
-      console.error("Error fetching pet profile:", error);
-      res.status(500).json({ message: "Failed to fetch pet profile" });
-    }
-  });
-
-  app.post('/api/pets', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const validatedData = insertPetProfileSchema.parse({
-        ...req.body,
-        userId
-      });
-      const pet = await storage.createPetProfile(validatedData);
-      res.status(201).json(pet);
-    } catch (error) {
-      console.error("Error creating pet profile:", error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to create pet profile" });
-    }
-  });
-
-  app.put('/api/pets/:id', isAuthenticated, async (req: any, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
-      
-      // Verify ownership
-      const existingPet = await storage.getPetProfile(id);
-      if (!existingPet || existingPet.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      
-      const updates = insertPetProfileSchema.partial().parse(req.body);
-      const pet = await storage.updatePetProfile(id, updates);
-      
-      if (!pet) {
-        return res.status(404).json({ message: "Pet profile not found" });
-      }
-      
-      res.json(pet);
-    } catch (error) {
-      console.error("Error updating pet profile:", error);
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
-      }
-      res.status(500).json({ message: "Failed to update pet profile" });
-    }
-  });
-
-  app.delete('/api/pets/:id', isAuthenticated, async (req: any, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const userId = req.user.claims.sub;
-      
-      const success = await storage.deletePetProfile(id, userId);
-      
-      if (!success) {
-        return res.status(404).json({ message: "Pet profile not found or access denied" });
-      }
-      
-      res.json({ message: "Pet profile deleted successfully" });
-    } catch (error) {
-      console.error("Error deleting pet profile:", error);
-      res.status(500).json({ message: "Failed to delete pet profile" });
-    }
-  });
-
-  // Saved Product routes
-  app.get('/api/pets/:petId/saved-products', isAuthenticated, async (req: any, res) => {
-    try {
-      const petId = parseInt(req.params.petId);
-      const userId = req.user.claims.sub;
-      
-      // Verify pet ownership
-      const pet = await storage.getPetProfile(petId);
-      if (!pet || pet.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      
-      const savedProducts = await storage.getPetSavedProducts(petId);
+      const savedProducts = await storage.getSavedProducts(userId);
       res.json(savedProducts);
     } catch (error) {
       console.error("Error fetching saved products:", error);
@@ -2312,41 +1789,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
+  app.post('/api/saved-products', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const savedProducts = await storage.getUserSavedProducts(userId);
-      res.json(savedProducts);
-    } catch (error) {
-      console.error("Error fetching user saved products:", error);
-      res.status(500).json({ message: "Failed to fetch saved products" });
-    }
-  });
-
-  app.post('/api/pets/:petId/saved-products', isAuthenticated, async (req: any, res) => {
-    try {
-      const petId = parseInt(req.params.petId);
-      const userId = req.user.claims.sub;
-      
-      // Verify pet ownership
-      const pet = await storage.getPetProfile(petId);
-      if (!pet || pet.userId !== userId) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      
-      const validatedData = insertSavedProductSchema.parse({
+      const productData = insertSavedProductSchema.parse({
         ...req.body,
         userId,
-        petId
       });
       
-      // Check if product is already saved for this pet
-      const existing = await storage.getSavedProduct(userId, petId, validatedData.productId);
-      if (existing) {
-        return res.status(409).json({ message: "Product already saved for this pet" });
-      }
-      
-      const savedProduct = await storage.saveProductForPet(validatedData);
+      const savedProduct = await storage.savePetProduct(productData);
       res.status(201).json(savedProduct);
     } catch (error) {
       console.error("Error saving product for pet:", error);
