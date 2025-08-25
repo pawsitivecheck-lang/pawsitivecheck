@@ -8,7 +8,9 @@ import {
   insertProductReviewSchema, 
   insertProductRecallSchema,
   insertIngredientBlacklistSchema,
-  insertScanHistorySchema 
+  insertScanHistorySchema,
+  insertPetProfileSchema,
+  insertSavedProductSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -1754,6 +1756,209 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error getting sync status:", error);
       res.status(500).json({ message: "Failed to get database sync status" });
+    }
+  });
+
+  // Pet Profile routes
+  app.get('/api/pets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const pets = await storage.getUserPetProfiles(userId);
+      res.json(pets);
+    } catch (error) {
+      console.error("Error fetching pet profiles:", error);
+      res.status(500).json({ message: "Failed to fetch pet profiles" });
+    }
+  });
+
+  app.get('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const pet = await storage.getPetProfile(id);
+      
+      if (!pet) {
+        return res.status(404).json({ message: "Pet profile not found" });
+      }
+      
+      // Check if the pet belongs to the authenticated user
+      if (pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      res.json(pet);
+    } catch (error) {
+      console.error("Error fetching pet profile:", error);
+      res.status(500).json({ message: "Failed to fetch pet profile" });
+    }
+  });
+
+  app.post('/api/pets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const validatedData = insertPetProfileSchema.parse({
+        ...req.body,
+        userId
+      });
+      const pet = await storage.createPetProfile(validatedData);
+      res.status(201).json(pet);
+    } catch (error) {
+      console.error("Error creating pet profile:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create pet profile" });
+    }
+  });
+
+  app.put('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify ownership
+      const existingPet = await storage.getPetProfile(id);
+      if (!existingPet || existingPet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const updates = insertPetProfileSchema.partial().parse(req.body);
+      const pet = await storage.updatePetProfile(id, updates);
+      
+      if (!pet) {
+        return res.status(404).json({ message: "Pet profile not found" });
+      }
+      
+      res.json(pet);
+    } catch (error) {
+      console.error("Error updating pet profile:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update pet profile" });
+    }
+  });
+
+  app.delete('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deletePetProfile(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Pet profile not found or access denied" });
+      }
+      
+      res.json({ message: "Pet profile deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting pet profile:", error);
+      res.status(500).json({ message: "Failed to delete pet profile" });
+    }
+  });
+
+  // Saved Product routes
+  app.get('/api/pets/:petId/saved-products', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.petId);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const savedProducts = await storage.getPetSavedProducts(petId);
+      res.json(savedProducts);
+    } catch (error) {
+      console.error("Error fetching saved products:", error);
+      res.status(500).json({ message: "Failed to fetch saved products" });
+    }
+  });
+
+  app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const savedProducts = await storage.getUserSavedProducts(userId);
+      res.json(savedProducts);
+    } catch (error) {
+      console.error("Error fetching user saved products:", error);
+      res.status(500).json({ message: "Failed to fetch saved products" });
+    }
+  });
+
+  app.post('/api/pets/:petId/saved-products', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.petId);
+      const userId = req.user.claims.sub;
+      
+      // Verify pet ownership
+      const pet = await storage.getPetProfile(petId);
+      if (!pet || pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      
+      const validatedData = insertSavedProductSchema.parse({
+        ...req.body,
+        userId,
+        petId
+      });
+      
+      // Check if product is already saved for this pet
+      const existing = await storage.getSavedProduct(userId, petId, validatedData.productId);
+      if (existing) {
+        return res.status(409).json({ message: "Product already saved for this pet" });
+      }
+      
+      const savedProduct = await storage.saveProductForPet(validatedData);
+      res.status(201).json(savedProduct);
+    } catch (error) {
+      console.error("Error saving product for pet:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid saved product data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to save product for pet" });
+    }
+  });
+
+  app.put('/api/saved-products/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const updates = insertSavedProductSchema.partial().parse(req.body);
+      const savedProduct = await storage.updateSavedProduct(id, updates);
+      
+      if (!savedProduct || savedProduct.userId !== userId) {
+        return res.status(404).json({ message: "Saved product not found or access denied" });
+      }
+      
+      res.json(savedProduct);
+    } catch (error) {
+      console.error("Error updating saved product:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid saved product data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update saved product" });
+    }
+  });
+
+  app.delete('/api/saved-products/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.removeSavedProduct(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Saved product not found or access denied" });
+      }
+      
+      res.json({ message: "Saved product removed successfully" });
+    } catch (error) {
+      console.error("Error removing saved product:", error);
+      res.status(500).json({ message: "Failed to remove saved product" });
     }
   });
 

@@ -5,6 +5,8 @@ import {
   productRecalls,
   ingredientBlacklist,
   scanHistory,
+  petProfiles,
+  savedProducts,
   type User,
   type UpsertUser,
   type Product,
@@ -17,6 +19,10 @@ import {
   type InsertIngredientBlacklist,
   type ScanHistory,
   type InsertScanHistory,
+  type PetProfile,
+  type InsertPetProfile,
+  type SavedProduct,
+  type InsertSavedProduct,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -61,6 +67,21 @@ export interface IStorage {
   // Scan history operations
   getUserScanHistory(userId: string): Promise<ScanHistory[]>;
   createScanHistory(scan: InsertScanHistory): Promise<ScanHistory>;
+  
+  // Pet profile operations
+  getUserPetProfiles(userId: string): Promise<PetProfile[]>;
+  getPetProfile(id: number): Promise<PetProfile | undefined>;
+  createPetProfile(pet: InsertPetProfile): Promise<PetProfile>;
+  updatePetProfile(id: number, updates: Partial<InsertPetProfile>): Promise<PetProfile | undefined>;
+  deletePetProfile(id: number, userId: string): Promise<boolean>;
+  
+  // Saved product operations
+  getUserSavedProducts(userId: string): Promise<SavedProduct[]>;
+  getPetSavedProducts(petId: number): Promise<SavedProduct[]>;
+  getSavedProduct(userId: string, petId: number, productId: number): Promise<SavedProduct | undefined>;
+  saveProductForPet(savedProduct: InsertSavedProduct): Promise<SavedProduct>;
+  updateSavedProduct(id: number, updates: Partial<InsertSavedProduct>): Promise<SavedProduct | undefined>;
+  removeSavedProduct(id: number, userId: string): Promise<boolean>;
   
   // Analytics for admin
   getAnalytics(): Promise<{
@@ -260,6 +281,94 @@ export class DatabaseStorage implements IStorage {
   async createScanHistory(scan: InsertScanHistory): Promise<ScanHistory> {
     const [newScan] = await db.insert(scanHistory).values(scan).returning();
     return newScan;
+  }
+
+  // Pet profile operations
+  async getUserPetProfiles(userId: string): Promise<PetProfile[]> {
+    return await db
+      .select()
+      .from(petProfiles)
+      .where(and(eq(petProfiles.userId, userId), eq(petProfiles.isActive, true)))
+      .orderBy(desc(petProfiles.createdAt));
+  }
+
+  async getPetProfile(id: number): Promise<PetProfile | undefined> {
+    const [pet] = await db.select().from(petProfiles).where(eq(petProfiles.id, id));
+    return pet;
+  }
+
+  async createPetProfile(pet: InsertPetProfile): Promise<PetProfile> {
+    const [newPet] = await db.insert(petProfiles).values(pet).returning();
+    return newPet;
+  }
+
+  async updatePetProfile(id: number, updates: Partial<InsertPetProfile>): Promise<PetProfile | undefined> {
+    const [pet] = await db
+      .update(petProfiles)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(petProfiles.id, id))
+      .returning();
+    return pet;
+  }
+
+  async deletePetProfile(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(petProfiles)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(petProfiles.id, id), eq(petProfiles.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Saved product operations
+  async getUserSavedProducts(userId: string): Promise<SavedProduct[]> {
+    return await db
+      .select()
+      .from(savedProducts)
+      .where(eq(savedProducts.userId, userId))
+      .orderBy(desc(savedProducts.createdAt));
+  }
+
+  async getPetSavedProducts(petId: number): Promise<SavedProduct[]> {
+    return await db
+      .select()
+      .from(savedProducts)
+      .where(eq(savedProducts.petId, petId))
+      .orderBy(desc(savedProducts.createdAt));
+  }
+
+  async getSavedProduct(userId: string, petId: number, productId: number): Promise<SavedProduct | undefined> {
+    const [saved] = await db
+      .select()
+      .from(savedProducts)
+      .where(
+        and(
+          eq(savedProducts.userId, userId),
+          eq(savedProducts.petId, petId),
+          eq(savedProducts.productId, productId)
+        )
+      );
+    return saved;
+  }
+
+  async saveProductForPet(savedProduct: InsertSavedProduct): Promise<SavedProduct> {
+    const [newSavedProduct] = await db.insert(savedProducts).values(savedProduct).returning();
+    return newSavedProduct;
+  }
+
+  async updateSavedProduct(id: number, updates: Partial<InsertSavedProduct>): Promise<SavedProduct | undefined> {
+    const [saved] = await db
+      .update(savedProducts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(savedProducts.id, id))
+      .returning();
+    return saved;
+  }
+
+  async removeSavedProduct(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .delete(savedProducts)
+      .where(and(eq(savedProducts.id, id), eq(savedProducts.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Analytics for admin

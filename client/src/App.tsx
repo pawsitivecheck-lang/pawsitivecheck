@@ -14,6 +14,7 @@ import Community from "@/pages/community";
 import VetFinder from "@/pages/vet-finder";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Profile from "@/pages/profile";
+import PetProfiles from "@/pages/pet-profiles";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import CookieConsent from "@/components/cookie-consent";
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/recalls" component={Recalls} />
           <Route path="/community" component={Community} />
           <Route path="/vets" component={VetFinder} />
+          <Route path="/pets" component={PetProfiles} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/profile" component={Profile} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />

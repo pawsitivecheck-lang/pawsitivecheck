@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SaveToPetButton } from "@/components/save-to-pet-button";
 import { CheckCircle, AlertTriangle, XCircle, Eye, Package, Star } from "lucide-react";
 
 interface ProductCardProps {
@@ -220,28 +221,42 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             </div>
           )}
 
-          {/* Action Button */}
-          <Button 
-            className={`w-full ${
-              product.cosmicClarity === 'blessed' 
-                ? 'bg-mystical-green/20 text-mystical-green hover:bg-mystical-green/30' :
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button 
+              className={`flex-1 ${
+                product.cosmicClarity === 'blessed' 
+                  ? 'bg-mystical-green/20 text-mystical-green hover:bg-mystical-green/30' :
+                product.cosmicClarity === 'cursed' 
+                  ? 'bg-mystical-red/20 text-mystical-red hover:bg-mystical-red/30' :
+                product.cosmicClarity === 'questionable'
+                  ? 'bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30' :
+                  'bg-cosmic-600/20 text-cosmic-300 hover:bg-cosmic-600/30'
+              }`}
+              data-testid="button-view-analysis"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick();
+              }}
+            >
+              {product.cosmicClarity === 'blessed' 
+                ? 'View Details' :
               product.cosmicClarity === 'cursed' 
-                ? 'bg-mystical-red/20 text-mystical-red hover:bg-mystical-red/30' :
+                ? 'View Concerns' :
               product.cosmicClarity === 'questionable'
-                ? 'bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30' :
-                'bg-cosmic-600/20 text-cosmic-300 hover:bg-cosmic-600/30'
-            }`}
-            data-testid="button-view-analysis"
-          >
-            {product.cosmicClarity === 'blessed' 
-              ? 'View Safety Details' :
-            product.cosmicClarity === 'cursed' 
-              ? 'View Safety Concerns' :
-            product.cosmicClarity === 'questionable'
-              ? 'View Full Analysis' :
-              'Analyze Product Safety'
-            }
-          </Button>
+                ? 'View Analysis' :
+                'Analyze Safety'
+              }
+            </Button>
+            
+            <SaveToPetButton 
+              productId={product.id}
+              productName={product.name}
+              size="default"
+              variant="outline"
+              className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border-blue-500/30"
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

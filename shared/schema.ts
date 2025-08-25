@@ -107,17 +107,53 @@ export const scanHistory = pgTable("scan_history", {
   scannedAt: timestamp("scanned_at").defaultNow(),
 });
 
+export const petProfiles = pgTable("pet_profiles", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  species: varchar("species", { length: 50 }).notNull(), // dog, cat, bird, etc.
+  breed: varchar("breed", { length: 100 }),
+  age: integer("age"), // in years
+  weight: decimal("weight", { precision: 5, scale: 2 }), // in pounds
+  weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"), // lbs, kg
+  gender: varchar("gender", { length: 10 }), // male, female, unknown
+  isSpayedNeutered: boolean("is_spayed_neutered"),
+  allergies: text("allergies").array(), // array of known allergies
+  medicalConditions: text("medical_conditions").array(), // array of medical conditions
+  dietaryRestrictions: text("dietary_restrictions").array(), // array of dietary restrictions
+  profileImageUrl: varchar("profile_image_url"),
+  notes: text("notes"), // additional notes about the pet
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const savedProducts = pgTable("saved_products", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  petId: integer("pet_id").references(() => petProfiles.id).notNull(),
+  productId: integer("product_id").references(() => products.id).notNull(),
+  notes: text("notes"), // user notes about this product for this pet
+  status: varchar("status", { length: 20 }).default("saved"), // saved, favorite, avoid, tried
+  lastUsed: timestamp("last_used"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   reviews: many(productReviews),
   scans: many(scanHistory),
   blacklistedIngredients: many(ingredientBlacklist),
+  petProfiles: many(petProfiles),
+  savedProducts: many(savedProducts),
 }));
 
 export const productsRelations = relations(products, ({ many }) => ({
   reviews: many(productReviews),
   recalls: many(productRecalls),
   scans: many(scanHistory),
+  savedProducts: many(savedProducts),
 }));
 
 export const productReviewsRelations = relations(productReviews, ({ one }) => ({
@@ -152,6 +188,29 @@ export const scanHistoryRelations = relations(scanHistory, ({ one }) => ({
   }),
   product: one(products, {
     fields: [scanHistory.productId],
+    references: [products.id],
+  }),
+}));
+
+export const petProfilesRelations = relations(petProfiles, ({ one, many }) => ({
+  user: one(users, {
+    fields: [petProfiles.userId],
+    references: [users.id],
+  }),
+  savedProducts: many(savedProducts),
+}));
+
+export const savedProductsRelations = relations(savedProducts, ({ one }) => ({
+  user: one(users, {
+    fields: [savedProducts.userId],
+    references: [users.id],
+  }),
+  pet: one(petProfiles, {
+    fields: [savedProducts.petId],
+    references: [petProfiles.id],
+  }),
+  product: one(products, {
+    fields: [savedProducts.productId],
     references: [products.id],
   }),
 }));
@@ -194,6 +253,21 @@ export const insertScanHistorySchema = createInsertSchema(scanHistory).omit({
   scannedAt: true,
 });
 
+export const insertPetProfileSchema = createInsertSchema(petProfiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  age: z.number().min(0).max(50).optional(),
+  weight: z.string().regex(/^\d+(\.\d{1,2})?$/).optional(), // decimal validation
+});
+
+export const insertSavedProductSchema = createInsertSchema(savedProducts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -207,3 +281,7 @@ export type IngredientBlacklist = typeof ingredientBlacklist.$inferSelect;
 export type InsertIngredientBlacklist = z.infer<typeof insertIngredientBlacklistSchema>;
 export type ScanHistory = typeof scanHistory.$inferSelect;
 export type InsertScanHistory = z.infer<typeof insertScanHistorySchema>;
+export type PetProfile = typeof petProfiles.$inferSelect;
+export type InsertPetProfile = z.infer<typeof insertPetProfileSchema>;
+export type SavedProduct = typeof savedProducts.$inferSelect;
+export type InsertSavedProduct = z.infer<typeof insertSavedProductSchema>;
