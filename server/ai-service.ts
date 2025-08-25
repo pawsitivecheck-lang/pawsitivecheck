@@ -64,7 +64,11 @@ Consider:
       messages: [{ role: 'user', content: prompt }]
     });
 
-    const analysis = JSON.parse(response.content[0].text);
+    const content = response.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Expected text content from Anthropic response');
+    }
+    const analysis = JSON.parse(content.text);
     
     return {
       cosmicScore: Math.max(0, Math.min(100, analysis.cosmicScore)),
@@ -111,7 +115,11 @@ Keep it clear, helpful, and not overly alarming.`;
       messages: [{ role: 'user', content: prompt }]
     });
 
-    return response.content[0].text;
+    const content = response.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Expected text content from Anthropic response');
+    }
+    return content.text;
   } catch (error) {
     console.error('Guidance generation failed:', error);
     return 'For specific guidance about this product, consult with your veterinarian who can provide personalized advice based on your pet\'s individual needs.';
@@ -149,7 +157,11 @@ Make it informative but not panic-inducing.`;
       messages: [{ role: 'user', content: prompt }]
     });
 
-    return JSON.parse(response.content[0].text);
+    const content = response.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Expected text content from Anthropic response');
+    }
+    return JSON.parse(content.text);
   } catch (error) {
     console.error('Recall enhancement failed:', error);
     return {
@@ -193,7 +205,11 @@ Keep instructions specific, practical, and safety-focused.`;
       messages: [{ role: 'user', content: prompt }]
     });
 
-    return response.content[0].text;
+    const content = response.content[0];
+    if (content.type !== 'text') {
+      throw new Error('Expected text content from Anthropic response');
+    }
+    return content.text;
   } catch (error) {
     console.error('Disposal instructions generation failed:', error);
     return 'Dispose of according to local waste management guidelines. Keep away from children and pets during disposal. Contact local environmental services for specific guidance.';
