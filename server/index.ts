@@ -6,6 +6,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Redirect .replit.app domain to custom domain
+app.use((req, res, next) => {
+  const host = req.get('host');
+  if (host && host.includes('.replit.app') && host !== 'pawsitivecheck.com') {
+    const redirectUrl = `https://pawsitivecheck.com${req.originalUrl}`;
+    return res.redirect(301, redirectUrl);
+  }
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
