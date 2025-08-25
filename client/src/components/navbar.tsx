@@ -136,10 +136,6 @@ export default function Navbar() {
                 <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                   Navigation
                 </div>
-                {/* Debug: Show navigation count */}
-                <div className="text-xs text-yellow-300 mb-2">
-                  {navigation.length} menu items available
-                </div>
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -211,10 +207,6 @@ export default function Navbar() {
               <HeaderSearch isMobile={true} />
             </div>
             <div className="space-y-2">
-              {/* Debug: Show navigation count */}
-              <div className="text-xs text-yellow-600 mb-2 px-4">
-                {navigation.length} menu items available (mobile)
-              </div>
               {navigation.map((item) => {
                 const Icon = item.icon;
                 return (
