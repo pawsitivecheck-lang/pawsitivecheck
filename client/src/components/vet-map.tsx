@@ -40,15 +40,39 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   const [mapError, setMapError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Set timeout for loading
+  useEffect(() => {
+    timeoutRef.current = setTimeout(() => {
+      if (isLoading) {
+        console.log('Map loading timeout, showing fallback');
+        setMapError('Map took too long to load');
+        setIsLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isLoading]);
 
   // Load Google Maps script
   useEffect(() => {
+    console.log('useEffect: Load Google Maps script', { 
+      scriptLoadedRef: scriptLoadedRef.current, 
+      hasGoogle: !!window.google 
+    });
+    
     if (scriptLoadedRef.current || window.google) {
-      // If script already loaded, initialize map
-      if (mapRef.current) {
-        initializeMap();
-        setIsLoading(false);
-      }
+      console.log('Google Maps already available');
+      scriptLoadedRef.current = true;
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        setScriptLoaded(true);
+      }, 100);
       return;
     }
 
@@ -91,6 +115,13 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Initialize map when both script and DOM are ready
   useEffect(() => {
+    console.log('useEffect: Initialize map check', { 
+      scriptLoaded, 
+      hasGoogle: !!window.google, 
+      hasMapRef: !!mapRef.current, 
+      hasMapInstance: !!mapInstanceRef.current 
+    });
+    
     if (scriptLoaded && window.google && mapRef.current && !mapInstanceRef.current) {
       console.log('Both script and DOM ready, initializing map...');
       try {
@@ -98,7 +129,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         setIsLoading(false);
       } catch (error) {
         console.error('Failed to initialize Google Maps:', error);
-        setMapError('Failed to initialize map');
+        setMapError(`Failed to initialize map: ${error.message}`);
         setIsLoading(false);
       }
     }
@@ -267,13 +298,21 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   if (isLoading) {
     return (
-      <div 
-        className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50 flex items-center justify-center"
-        data-testid="vet-map-loading"
-      >
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-starlight-400 mx-auto mb-2"></div>
-          <p className="text-cosmic-300">Loading Cosmic Map...</p>
+      <div className="relative">
+        <div 
+          ref={mapRef} 
+          className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50"
+          data-testid="vet-map"
+          style={{ minHeight: '384px' }}
+        />
+        <div 
+          className="absolute inset-0 bg-cosmic-900/50 flex items-center justify-center rounded-lg"
+          data-testid="vet-map-loading"
+        >
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-starlight-400 mx-auto mb-2"></div>
+            <p className="text-cosmic-300">Loading Cosmic Map...</p>
+          </div>
         </div>
       </div>
     );
@@ -287,8 +326,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       >
         <div className="text-center p-6">
           <div className="text-6xl mb-4">🗺️</div>
-          <h3 className="text-starlight-400 font-mystical text-xl mb-2">Map Temporarily Unavailable</h3>
-          <p className="text-cosmic-300 mb-4">The interactive map is currently offline, but you can still view all veterinary practices in the list below.</p>
+          <h3 className="text-starlight-400 font-mystical text-xl mb-2">Cosmic Map Loading...</h3>
+          <p className="text-cosmic-300 mb-4">The interactive map is initializing. All veterinary practice details are available in the detailed list below with exact distances and contact information.</p>
           <div className="bg-cosmic-800/50 rounded-lg p-4 border border-cosmic-700">
             <h4 className="text-starlight-400 font-medium mb-2">Quick Reference:</h4>
             <div className="text-sm text-cosmic-200 space-y-1">
