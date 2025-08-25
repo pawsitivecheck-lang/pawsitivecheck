@@ -79,19 +79,19 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
 
   return (
     <div className={`relative ${className}`} data-testid={`ad-${size}-${position}`}>
-      <Card className={`${sizeClasses[size]} bg-gradient-to-r from-blue-50 to-indigo-50 border border-gray-200 flex items-center justify-center relative overflow-hidden`}>
+      <Card className={`${sizeClasses[size]} bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-border flex items-center justify-center relative overflow-hidden`}>
         <button
           onClick={handleClose}
-          className="absolute top-1 right-1 p-1 text-gray-400 hover:text-gray-600 bg-white/80 rounded-full z-10"
+          className="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground bg-card/80 rounded-full z-10"
           data-testid="button-close-ad"
         >
           <X className="h-3 w-3" />
         </button>
         
         <div className="text-center p-4">
-          <div className="text-xs text-gray-500 mb-1">Sponsored</div>
-          <div className="text-sm font-medium text-gray-800">{adContent.content}</div>
-          <div className="text-xs text-blue-600 mt-1 cursor-pointer hover:underline">
+          <div className="text-xs text-muted-foreground mb-1">Sponsored</div>
+          <div className="text-sm font-medium text-foreground">{adContent.content}</div>
+          <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 cursor-pointer hover:underline">
             Learn More →
           </div>
         </div>

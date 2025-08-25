@@ -25,11 +25,11 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       {/* Top Banner Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-card dark:bg-card border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="home-header" />
         </div>
@@ -39,30 +39,30 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           {/* Welcome Section */}
           <div className="mb-12">
-            <div className="bg-white rounded-lg p-12 text-center border border-gray-200 shadow-sm">
+            <div className="bg-card dark:bg-card rounded-lg p-12 text-center border border-border shadow-sm">
               <div className="mb-8">
-                <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6 text-center tracking-tight" 
+                <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-center tracking-tight" 
                     data-testid="text-welcome-user">
                   Welcome back, {user?.firstName || 'Pet Parent'}
                 </h1>
-                <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
                   Your personalized pet product safety dashboard
                 </p>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                <div className="bg-blue-50 dark:bg-blue-950/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
                   <div className="w-12 h-12 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
                     <WandSparkles className="text-lg text-white" />
                   </div>
-                  <p className="text-blue-700 text-sm font-medium">Advanced AI analysis ready for your products</p>
-                  <p className="text-gray-500 text-xs mt-1">Safety Analysis Engine</p>
+                  <p className="text-blue-700 dark:text-blue-300 text-sm font-medium">Advanced AI analysis ready for your products</p>
+                  <p className="text-muted-foreground text-xs mt-1">Safety Analysis Engine</p>
                 </div>
-                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                <div className="bg-green-50 dark:bg-green-950/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
                   <div className="w-12 h-12 mx-auto bg-green-600 rounded-lg flex items-center justify-center mb-4">
                     <Shield className="text-lg text-white" />
                   </div>
-                  <p className="text-green-700 text-sm font-medium">Real-time safety monitoring active</p>
+                  <p className="text-green-700 dark:text-green-300 text-sm font-medium">Real-time safety monitoring active</p>
                   <p className="text-gray-500 text-xs mt-1">Protection System</p>
                 </div>
               </div>
@@ -71,7 +71,7 @@ export default function Home() {
 
           {/* Quick Actions */}
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-8">Quick Actions</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-8">Quick Actions</h2>
             
             {/* Mid-page Square Ad */}
             <div className="flex justify-center mb-8">
@@ -79,49 +79,49 @@ export default function Home() {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Link href="/scan">
-                <Card className="bg-white hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 hover:border-blue-300" data-testid="card-quick-scan">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-blue-300 dark:hover:border-blue-600" data-testid="card-quick-scan">
                   <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
                       <Camera className="text-blue-600 h-5 w-5" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Product Scanner</h3>
-                    <p className="text-gray-600 text-sm">Analyze products with barcode or image scanning</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Product Scanner</h3>
+                    <p className="text-muted-foreground text-sm">Analyze products with barcode or image scanning</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/database">
-                <Card className="bg-white hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 hover:border-purple-300" data-testid="card-database">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
                   <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
                       <Search className="text-purple-600 h-5 w-5" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Product Database</h3>
-                    <p className="text-gray-600 text-sm">Search and explore comprehensive product information</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Product Database</h3>
+                    <p className="text-muted-foreground text-sm">Search and explore comprehensive product information</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/recalls">
-                <Card className="bg-white hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 hover:border-red-300" data-testid="card-recalls">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-red-300 dark:hover:border-red-600" data-testid="card-recalls">
                   <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mb-4">
                       <Shield className="text-red-600 h-5 w-5" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Safety Recalls</h3>
-                    <p className="text-gray-600 text-sm">View active product recalls and safety alerts</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Safety Recalls</h3>
+                    <p className="text-muted-foreground text-sm">View active product recalls and safety alerts</p>
                   </CardContent>
                 </Card>
               </Link>
 
               <Link href="/community">
-                <Card className="bg-white hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 hover:border-green-300" data-testid="card-community">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-green-300 dark:hover:border-green-600" data-testid="card-community">
                   <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
                       <BarChart3 className="text-green-600 h-5 w-5" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Community</h3>
-                    <p className="text-gray-600 text-sm">Connect with other pet owners and share reviews</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Community</h3>
+                    <p className="text-muted-foreground text-sm">Connect with other pet owners and share reviews</p>
                   </CardContent>
                 </Card>
               </Link>
@@ -289,7 +289,7 @@ export default function Home() {
       </div>
       
       {/* Bottom Banner Ad */}
-      <div className="bg-white border-t border-gray-200 py-4">
+      <div className="bg-card border-t border-border py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="banner" position="home-footer" />
         </div>

@@ -28,7 +28,7 @@ export default function Navbar() {
   const isActivePage = (href: string) => location === href;
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <nav className="fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center">
           {/* Left Section - Logo */}
@@ -37,7 +37,7 @@ export default function Navbar() {
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                 <PawPrint className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-800 dark:text-white">PawsitiveCheck</h1>
+              <h1 className="text-2xl font-bold text-foreground">PawsitiveCheck</h1>
             </Link>
           </div>
           
@@ -59,7 +59,7 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-600 dark:text-gray-300 p-2 border border-gray-200 dark:border-gray-600"
+                className="text-muted-foreground p-2 border border-border"
                 onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
                 data-testid="nav-hamburger-menu"
               >
@@ -71,7 +71,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-gray-600 dark:text-gray-300 p-2 border border-gray-200 dark:border-gray-600"
+              className="md:hidden text-muted-foreground p-2 border border-border"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
             >
@@ -194,10 +194,10 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4" data-testid="nav-mobile-menu">
+          <div className="md:hidden border-t border-border py-4" data-testid="nav-mobile-menu">
             {/* Mobile Search */}
-            <div className="px-4 pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Search Products</div>
+            <div className="px-4 pb-4 border-b border-border mb-4">
+              <div className="text-sm text-muted-foreground mb-2">Search Products</div>
               <HeaderSearch isMobile={true} />
             </div>
             <div className="space-y-2">
@@ -208,8 +208,8 @@ export default function Navbar() {
                     <div 
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                         isActivePage(item.href) 
-                          ? 'text-blue-600 bg-blue-50' 
-                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950 dark:text-blue-400' 
+                          : 'text-muted-foreground hover:text-blue-600 hover:bg-muted'
                       }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid={`nav-mobile-${item.href.slice(1)}`}
@@ -223,9 +223,9 @@ export default function Navbar() {
               
               
               {/* Mobile Profile Section */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+              <div className="border-t border-border pt-4 mt-4">
                 <div className="px-4 pb-2">
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     {user?.profileImageUrl ? (
                       <img 
                         src={user.profileImageUrl} 

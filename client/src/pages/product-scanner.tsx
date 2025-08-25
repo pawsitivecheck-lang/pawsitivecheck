@@ -230,11 +230,11 @@ export default function ProductScanner() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-card border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="scanner-header" />
         </div>

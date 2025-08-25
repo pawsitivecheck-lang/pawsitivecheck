@@ -5,9 +5,9 @@ import { ArrowLeft, Shield, Eye, Database, Users } from "lucide-react";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen text-cosmic-100">
+    <div className="min-h-screen bg-background text-cosmic-100">
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-card border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="privacy-header" />
         </div>
