@@ -532,6 +532,32 @@ export default function CorporateAccountability() {
                   </div>
                   
                   <div>
+                    <strong>6.</strong> Michigan State University Center for Anti-Counterfeiting and Product Protection. 
+                    <em>Melamine Case Study: Corporate Accountability in Pet Food Supply Chains.</em> 
+                    <a href="https://a-capp.msu.edu/article/a-case-study-of-melamine-as-a-counterfeit-food-product-additive-in-chinese-human-and-animal-food-supply-chain-networks/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                      View Source ↗
+                    </a>
+                  </div>
+                  
+                  <div>
+                    <strong>7.</strong> Michigan State University College of Veterinary Medicine. 
+                    <em>Defining and Fighting Food Fraud: Corporate Accountability Framework.</em> 
+                    <a href="https://cvm.msu.edu/news/perspectives-magazine/perspectives-winter-2018/defining-and-fighting-food-fraud" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
+                      View Source ↗
+                    </a>
+                  </div>
+                  
+                  <div>
+                    <strong>Academic & Research Institutions:</strong>
+                    <ul className="mt-2 ml-4 space-y-1">
+                      <li>• <strong>Michigan State University</strong> - National Food Safety and Toxicology Center</li>
+                      <li>• MSU Food Fraud Initiative - Corporate Risk Management Framework</li>
+                      <li>• MSU Extension - Pet Food Safety Research Program</li>
+                      <li>• MSU College of Veterinary Medicine - Food Safety Studies</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
                     <strong>Additional 2025 Resources:</strong>
                     <ul className="mt-2 ml-4 space-y-1">
                       <li>• FDA CVM Warning Letters (17+ enforcement actions in 2025)</li>
