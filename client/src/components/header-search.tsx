@@ -44,7 +44,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     onError: () => {
       toast({
         title: "Search Failed",
-        description: "Unable to search cosmic database",
+        description: "Unable to search product database",
         variant: "destructive",
       });
       setSearchResults([]);
@@ -130,13 +130,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         toast({
           title: `Product Found!`,
           description: result.source === 'local' 
-            ? "Found in cosmic database" 
-            : "Discovered through internet divination",
+            ? "Found in product database" 
+            : "Discovered through internet search",
         });
       } else {
         toast({
           title: "Product Not Found",
-          description: "This product remains hidden from cosmic sight",
+          description: "Product not found in our database",
           variant: "destructive",
         });
       }
@@ -144,7 +144,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     onError: () => {
       toast({
         title: "Scan Failed",
-        description: "Unable to scan the cosmic essence",
+        description: "Unable to scan product barcode",
         variant: "destructive",
       });
     },
@@ -169,12 +169,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         setLocation('/scan');
         toast({
           title: "Product Identified!",
-          description: "Cosmic vision has revealed the product's identity",
+          description: "Product successfully identified from image",
         });
       } else {
         toast({
           title: "Product Not Recognized",
-          description: "The cosmic vision cannot identify this product",
+          description: "Unable to identify product from image",
           variant: "destructive",
         });
       }
@@ -182,7 +182,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     onError: () => {
       toast({
         title: "Image Analysis Failed",
-        description: "Unable to analyze the mystical essence",
+        description: "Unable to analyze product image",
         variant: "destructive",
       });
     },
@@ -328,7 +328,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       <div className={`relative ${isMobile ? 'w-full' : 'flex-1 max-w-md mx-4'}`}>
         <form onSubmit={handleSearch} className="relative">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-cosmic-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               ref={inputRef}
               type="text"
@@ -347,7 +347,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-cosmic-900/50 border border-cosmic-600 rounded-full px-10 pr-20 text-cosmic-100 placeholder-cosmic-400 focus:border-starlight-500 h-10"
+              className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full px-10 pr-20 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -357,7 +357,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={clearSearch}
                 variant="ghost"
                 size="sm"
-                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-cosmic-400 hover:text-cosmic-200"
+                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
@@ -369,7 +369,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               type="submit"
               variant="ghost"
               size="sm"
-              className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-starlight-500 hover:text-starlight-400 hover:bg-starlight-500/10 rounded-full"
+              className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
               disabled={!searchQuery.trim() || isLoading}
               data-testid="button-header-search"
             >
@@ -383,7 +383,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={() => setShowScannerMenu(!showScannerMenu)}
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 text-starlight-500 hover:text-starlight-400 hover:bg-starlight-500/10 rounded-full"
+                className="h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
                 disabled={isLoading}
                 data-testid="button-scanner-menu"
               >
@@ -399,7 +399,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Scanner Menu Dropdown */}
         {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-cosmic-800/95 backdrop-blur-md border border-cosmic-600 rounded-lg p-2 z-50 shadow-lg">
+          <div className="absolute right-0 top-12 w-48 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg p-2 z-50 shadow-lg">
             <div className="space-y-1">
               <Button
                 onClick={() => {
@@ -408,7 +408,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-700"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 data-testid="button-barcode-scanner"
               >
                 <Scan className="mr-2 h-4 w-4" />
@@ -421,7 +421,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-700"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 data-testid="button-image-scanner"
               >
                 <Image className="mr-2 h-4 w-4" />
@@ -434,7 +434,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-cosmic-200 hover:text-starlight-400 hover:bg-cosmic-700"
+                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 data-testid="button-advanced-scanner"
               >
                 <Globe className="mr-2 h-4 w-4" />
@@ -446,13 +446,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length < 2 && recentSearches.length > 0)) && (
-          <div className="absolute top-12 left-0 right-0 bg-cosmic-800/95 backdrop-blur-md border border-cosmic-600 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute top-12 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
             {searchQuery.length >= 2 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
-              <div className="p-2 border-b border-cosmic-600/30">
-                <div className="flex items-center gap-2 text-xs text-cosmic-400">
-                  <kbd className="px-1.5 py-0.5 text-[10px] bg-cosmic-700/50 border border-cosmic-600 rounded">Tab</kbd>
+              <div className="p-2 border-b border-gray-200 dark:border-gray-600/30">
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                  <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-100 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded">Tab</kbd>
                   <span>to autofill: "{getAutofillSuggestion()}"</span>
                 </div>
               </div>
@@ -461,7 +461,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Recent Searches (shown when query is short) */}
             {searchQuery.length < 2 && recentSearches.length > 0 && (
               <div className="p-2">
-                <p className="text-xs text-cosmic-400 mb-2 px-2">Recent Searches</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Recent Searches</p>
                 <div className="space-y-1">
                   {recentSearches.map((search, index) => (
                     <div
@@ -471,12 +471,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                         debouncedSearch(search);
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedIndex === index ? 'bg-cosmic-700' : 'hover:bg-cosmic-700/50'
+                        selectedIndex === index ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
                       }`}
                       data-testid={`recent-search-${index}`}
                     >
-                      <Clock className="h-4 w-4 text-cosmic-400" />
-                      <span className="text-cosmic-200 text-sm">{search}</span>
+                      <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                      <span className="text-gray-700 dark:text-gray-200 text-sm">{search}</span>
                     </div>
                   ))}
                 </div>
@@ -487,7 +487,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {searchResults.length > 0 && (
               <div className="p-2">
                 {recentSearches.length > 0 && searchQuery.length < 2 && (
-                  <p className="text-xs text-cosmic-400 mb-2 px-2 border-t border-cosmic-600 pt-2">Products</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2 border-t border-gray-200 dark:border-gray-600 pt-2">Products</p>
                 )}
                 <div className="space-y-1">
                   {searchResults.map((product, index) => {
@@ -497,13 +497,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                         key={product.id}
                         onClick={() => selectProduct(product)}
                         className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                          selectedIndex === adjustedIndex ? 'bg-cosmic-700' : 'hover:bg-cosmic-700/50'
+                          selectedIndex === adjustedIndex ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
                         }`}
                         data-testid={`search-result-${product.id}`}
                       >
                         <div className="flex-1 min-w-0">
-                          <p className="text-cosmic-100 text-sm font-medium truncate">{product.name}</p>
-                          <p className="text-cosmic-400 text-xs">{product.brand}</p>
+                          <p className="text-gray-900 dark:text-gray-100 text-sm font-medium truncate">{product.name}</p>
+                          <p className="text-gray-500 dark:text-gray-400 text-xs">{product.brand}</p>
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
                           {product.cosmicScore && (
@@ -525,17 +525,17 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Loading state */}
             {searchMutation.isPending && (
               <div className="p-4 text-center">
-                <Loader2 className="h-4 w-4 animate-spin mx-auto text-cosmic-400" />
-                <p className="text-xs text-cosmic-400 mt-2">Searching cosmic database...</p>
+                <Loader2 className="h-4 w-4 animate-spin mx-auto text-gray-400" />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Searching database...</p>
               </div>
             )}
 
             {/* No results state */}
             {!searchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
               <div className="p-4 text-center">
-                <Search className="h-8 w-8 mx-auto text-cosmic-400 mb-2" />
-                <p className="text-sm text-cosmic-300">No products found</p>
-                <p className="text-xs text-cosmic-400">Try a different search term</p>
+                <Search className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                <p className="text-sm text-gray-600 dark:text-gray-300">No products found</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Try a different search term</p>
               </div>
             )}
           </div>
