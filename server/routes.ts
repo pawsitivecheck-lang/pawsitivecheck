@@ -3821,6 +3821,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =========================== PET FEED TRACKING ROUTES ===========================
+
+  // Pet Feed Management Routes
+  app.get('/api/pets/:petId/feeds', isAuthenticated, async (req: any, res) => {
+    try {
+      const petId = parseInt(req.params.petId);
+      const userId = req.user.id;
+      const feeds = await storage.getPetFeedManagement(petId, userId);
+      res.json(feeds);
+    } catch (error) {
+      console.error("Error fetching pet feed records:", error);
+      res.status(500).json({ error: "Failed to fetch pet feed records" });
+    }
+  });
+
+  app.post('/api/pets/feeds', isAuthenticated, async (req: any, res) => {
+    try {
+      const feedData = {
+        ...req.body,
+        userId: req.user.id,
+      };
+
+      const feed = await storage.createPetFeedRecord(feedData);
+      res.status(201).json(feed);
+    } catch (error) {
+      console.error("Error creating pet feed record:", error);
+      res.status(500).json({ error: "Failed to create pet feed record" });
+    }
+  });
+
+  app.put('/api/pets/feeds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      const updates = req.body;
+
+      const feed = await storage.updatePetFeedRecord(id, updates, userId);
+      
+      if (!feed) {
+        return res.status(404).json({ error: "Pet feed record not found" });
+      }
+      
+      res.json(feed);
+    } catch (error) {
+      console.error("Error updating pet feed record:", error);
+      res.status(500).json({ error: "Failed to update pet feed record" });
+    }
+  });
+
+  app.delete('/api/pets/feeds/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.id;
+      
+      const success = await storage.deletePetFeedRecord(id, userId);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Pet feed record not found" });
+      }
+      
+      res.json({ message: "Pet feed record deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting pet feed record:", error);
+      res.status(500).json({ error: "Failed to delete pet feed record" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

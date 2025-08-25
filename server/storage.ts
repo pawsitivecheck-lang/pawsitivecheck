@@ -182,12 +182,18 @@ export interface IStorage {
   updateLivestockHerd(id: number, updates: Partial<InsertLivestockHerd>, userId: string): Promise<LivestockHerd | undefined>;
   deleteLivestockHerd(id: number, userId: string): Promise<boolean>;
 
-  // Feed management methods
+  // Feed management methods (for herds)
   getFeedManagement(herdId: number, userId: string): Promise<FeedManagement[]>;
   getFeedRecord(id: number, userId: string): Promise<FeedManagement | undefined>;
   createFeedRecord(feed: InsertFeedManagement): Promise<FeedManagement>;
   updateFeedRecord(id: number, updates: Partial<InsertFeedManagement>, userId: string): Promise<FeedManagement | undefined>;
   deleteFeedRecord(id: number, userId: string): Promise<boolean>;
+
+  // Pet feed management methods
+  getPetFeedManagement(petId: number, userId: string): Promise<FeedManagement[]>;
+  createPetFeedRecord(feed: InsertFeedManagement): Promise<FeedManagement>;
+  updatePetFeedRecord(id: number, updates: Partial<InsertFeedManagement>, userId: string): Promise<FeedManagement | undefined>;
+  deletePetFeedRecord(id: number, userId: string): Promise<boolean>;
 
   // Livestock health record methods
   getLivestockHealthRecords(herdId: number, userId: string): Promise<LivestockHealthRecord[]>;
@@ -934,6 +940,37 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(livestockHealthRecords)
       .where(and(eq(livestockHealthRecords.id, id), eq(livestockHealthRecords.userId, userId)));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  // Pet feed management methods
+  async getPetFeedManagement(petId: number, userId: string): Promise<FeedManagement[]> {
+    return await db
+      .select()
+      .from(feedManagement)
+      .where(and(eq(feedManagement.petId, petId), eq(feedManagement.userId, userId), eq(feedManagement.isActive, true)))
+      .orderBy(desc(feedManagement.createdAt));
+  }
+
+  async createPetFeedRecord(feed: InsertFeedManagement): Promise<FeedManagement> {
+    const [newFeed] = await db.insert(feedManagement).values(feed).returning();
+    return newFeed;
+  }
+
+  async updatePetFeedRecord(id: number, updates: Partial<InsertFeedManagement>, userId: string): Promise<FeedManagement | undefined> {
+    const [feed] = await db
+      .update(feedManagement)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId), eq(feedManagement.petId, updates.petId ?? -1)))
+      .returning();
+    return feed;
+  }
+
+  async deletePetFeedRecord(id: number, userId: string): Promise<boolean> {
+    const result = await db
+      .update(feedManagement)
+      .set({ isActive: false, updatedAt: new Date() })
+      .where(and(eq(feedManagement.id, id), eq(feedManagement.userId, userId)));
     return (result.rowCount ?? 0) > 0;
   }
 }

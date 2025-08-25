@@ -276,14 +276,15 @@ export const livestockHerds = pgTable("livestock_herds", {
 
 export const feedManagement = pgTable("feed_management", {
   id: serial("id").primaryKey(),
-  herdId: integer("herd_id").references(() => livestockHerds.id).notNull(),
+  herdId: integer("herd_id").references(() => livestockHerds.id), // for livestock herds
+  petId: integer("pet_id").references(() => petProfiles.id), // for individual pets/animals
   userId: varchar("user_id").references(() => users.id).notNull(),
   productId: integer("product_id").references(() => products.id), // reference to feed product
-  feedType: varchar("feed_type", { length: 100 }).notNull(), // grain, hay, silage, supplement
+  feedType: varchar("feed_type", { length: 100 }).notNull(), // grain, hay, silage, supplement, kibble, treats
   feedName: varchar("feed_name", { length: 255 }).notNull(),
   supplier: varchar("supplier", { length: 255 }),
   quantityPerFeeding: decimal("quantity_per_feeding", { precision: 10, scale: 2 }),
-  quantityUnit: varchar("quantity_unit", { length: 20 }).default("lbs"), // lbs, kg, bushels
+  quantityUnit: varchar("quantity_unit", { length: 20 }).default("lbs"), // lbs, kg, bushels, cups, oz
   feedingsPerDay: integer("feedings_per_day").default(2),
   costPerUnit: decimal("cost_per_unit", { precision: 10, scale: 2 }),
   lastPurchaseDate: timestamp("last_purchase_date"),
