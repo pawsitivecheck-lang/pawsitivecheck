@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface VetPractice {
   id: string;
@@ -37,6 +37,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const scriptLoadedRef = useRef(false);
+  const [mapError, setMapError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load Google Maps script
   useEffect(() => {
@@ -53,17 +55,28 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         
         script.onload = () => {
           scriptLoadedRef.current = true;
-          initializeMap();
+          try {
+            initializeMap();
+            setIsLoading(false);
+          } catch (error) {
+            console.error('Failed to initialize Google Maps:', error);
+            setMapError('Failed to initialize map');
+            setIsLoading(false);
+          }
         };
 
         script.onerror = () => {
           console.error('Failed to load Google Maps script');
+          setMapError('Failed to load Google Maps');
+          setIsLoading(false);
         };
 
         document.head.appendChild(script);
       })
       .catch(error => {
         console.error('Failed to get Google Maps API key:', error);
+        setMapError('Failed to load Google Maps API key');
+        setIsLoading(false);
       });
 
     return () => {
@@ -77,7 +90,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   const initializeMap = () => {
     if (!mapRef.current || !window.google) return;
 
-    // Initialize map
+    try {
+      // Initialize map
     mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
       center: { lat: center[0], lng: center[1] },
       zoom: zoom,
@@ -105,7 +119,11 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       ]
     });
 
-    updateMarkers();
+      updateMarkers();
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      setMapError('Map initialization failed');
+    }
   };
 
   const updateMarkers = () => {
@@ -222,6 +240,43 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       mapInstanceRef.current.setCenter({ lat: center[0], lng: center[1] });
     }
   }, [center]);
+
+  if (isLoading) {
+    return (
+      <div 
+        className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50 flex items-center justify-center"
+        data-testid="vet-map-loading"
+      >
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-starlight-400 mx-auto mb-2"></div>
+          <p className="text-cosmic-300">Loading Cosmic Map...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (mapError) {
+    return (
+      <div 
+        className="h-96 w-full rounded-lg border border-cosmic-600 bg-cosmic-900/50 flex items-center justify-center"
+        data-testid="vet-map-error"
+      >
+        <div className="text-center p-6">
+          <div className="text-6xl mb-4">🗺️</div>
+          <h3 className="text-starlight-400 font-mystical text-xl mb-2">Map Temporarily Unavailable</h3>
+          <p className="text-cosmic-300 mb-4">The interactive map is currently offline, but you can still view all veterinary practices in the list below.</p>
+          <div className="bg-cosmic-800/50 rounded-lg p-4 border border-cosmic-700">
+            <h4 className="text-starlight-400 font-medium mb-2">Quick Reference:</h4>
+            <div className="text-sm text-cosmic-200 space-y-1">
+              <p>🔴 Emergency Services Available</p>
+              <p>🔵 Regular Veterinary Care</p>
+              <p>📍 All practices show distance in the list</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
