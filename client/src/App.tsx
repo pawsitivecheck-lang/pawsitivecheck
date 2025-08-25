@@ -53,6 +53,7 @@ function Router() {
           <Route path="/recall-system-info" component={RecallSystemInfo} />
           <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
           <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
+          <Route path="/vet-finder" component={VetFinder} />
         </>
       ) : (
         <>
