@@ -27,10 +27,10 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
   if (!isVisible) return null;
 
   const adSlots = {
-    banner: "1234567890",
-    leaderboard: "0987654321", 
-    square: "1122334455",
-    sidebar: "6677889900"
+    banner: import.meta.env.VITE_ADSENSE_SLOT_BANNER || "1234567890",
+    leaderboard: import.meta.env.VITE_ADSENSE_SLOT_LEADERBOARD || "0987654321", 
+    square: import.meta.env.VITE_ADSENSE_SLOT_SQUARE || "1122334455",
+    sidebar: import.meta.env.VITE_ADSENSE_SLOT_SIDEBAR || "6677889900"
   };
 
   const sizeClasses = {
@@ -65,7 +65,7 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
           <ins
             className="adsbygoogle"
             style={adStyles[size]}
-            data-ad-client="ca-pub-2513342355355066"
+            data-ad-client={import.meta.env.VITE_ADSENSE_CLIENT_ID || "ca-pub-2513342355355066"}
             data-ad-slot={adSlots[size]}
             data-ad-format="auto"
             data-full-width-responsive="true"
