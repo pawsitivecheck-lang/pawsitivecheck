@@ -108,7 +108,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     saveRecentSearch(searchQuery.trim());
     
     // Navigate to database with search
-    setLocation(`/database?search=${encodeURIComponent(searchQuery.trim())}`);
+    setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
     clearSearch();
   };
 
@@ -183,7 +183,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             const selectedSearch = recentSearches[selectedIndex];
             setSearchQuery(selectedSearch);
             saveRecentSearch(selectedSearch);
-            setLocation(`/database?search=${encodeURIComponent(selectedSearch)}`);
+            setLocation(`/product-database?search=${encodeURIComponent(selectedSearch)}`);
             clearSearch();
           } else {
             // Product selected
@@ -219,7 +219,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     setShowResults(false);
     clearSearch();
     // Navigate to database with product search
-    setLocation(`/database?search=${encodeURIComponent(product.name)}`);
+    setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
   };
 
   const scanProductMutation = useMutation({
@@ -251,7 +251,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     onSuccess: (result) => {
       if (result?.product) {
         // Navigate to scanner page with product
-        setLocation('/scan');
+        setLocation('/product-scanner');
         toast({
           title: `Product Found!`,
           description: result.source === 'local' 
@@ -291,7 +291,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     },
     onSuccess: (result) => {
       if (result?.product) {
-        setLocation('/scan');
+        setLocation('/product-scanner');
         toast({
           title: "Product Identified!",
           description: "Product successfully identified from image",
@@ -433,7 +433,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               </Button>
               <Button
                 onClick={() => {
-                  setLocation('/scan');
+                  setLocation('/product-scanner');
                   setShowScannerMenu(false);
                 }}
                 variant="ghost"

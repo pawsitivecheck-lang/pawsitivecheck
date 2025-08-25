@@ -34,11 +34,11 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Home} />
-          <Route path="/scan" component={ProductScanner} />
-          <Route path="/database" component={ProductDatabase} />
+          <Route path="/product-scanner" component={ProductScanner} />
+          <Route path="/product-database" component={ProductDatabase} />
           <Route path="/recalls" component={Recalls} />
           <Route path="/community" component={Community} />
-          <Route path="/vets" component={VetFinder} />
+          <Route path="/vet-finder" component={VetFinder} />
           <Route path="/pets" component={PetProfiles} />
           <Route path="/profile" component={Profile} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />

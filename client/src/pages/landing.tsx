@@ -128,7 +128,7 @@ export default function Landing() {
                         </button>
                         <button 
                           onClick={() => {
-                            window.location.href = '/database';
+                            window.location.href = '/product-database';
                             setIsUserMenuOpen(false);
                           }}
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
@@ -401,7 +401,7 @@ export default function Landing() {
                   {/* Action Buttons */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <Button 
-                      onClick={() => window.location.href = '/database'}
+                      onClick={() => window.location.href = '/product-database'}
                       className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
                       data-testid="button-search-database"
                     >
@@ -410,7 +410,7 @@ export default function Landing() {
                     </Button>
                     
                     <Button 
-                      onClick={() => window.location.href = '/scan'}
+                      onClick={() => window.location.href = '/product-scanner'}
                       className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
                       data-testid="button-scan-barcode"
                     >
@@ -491,7 +491,7 @@ export default function Landing() {
               <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">📱 Product Scanner</h3>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Scan barcodes or take photos to check product safety instantly</p>
               <Button 
-                onClick={() => window.location.href = '/scan'}
+                onClick={() => window.location.href = '/product-scanner'}
                 className="bg-blue-600 hover:bg-blue-700 text-white text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
                 data-testid="button-scan-now"
               >

@@ -78,7 +78,7 @@ export default function Home() {
               <AdBanner size="square" position="home-mid" />
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Link href="/scan">
+              <Link href="/product-scanner">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-blue-300 dark:hover:border-blue-600" data-testid="card-quick-scan">
                   <CardContent className="p-6">
                     <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
@@ -90,7 +90,7 @@ export default function Home() {
                 </Card>
               </Link>
 
-              <Link href="/database">
+              <Link href="/product-database">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
                   <CardContent className="p-6">
                     <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
@@ -153,7 +153,7 @@ export default function Home() {
                 ) : (
                   <div className="text-center py-8">
                     <p className="text-cosmic-400" data-testid="text-no-scans">No mystical analyses yet</p>
-                    <Link href="/scan">
+                    <Link href="/product-scanner">
                       <Button className="mt-4 mystical-button" size="sm" data-testid="button-start-scanning">
                         Begin Your Journey
                       </Button>
@@ -255,7 +255,7 @@ export default function Home() {
                 ) : (
                   <div className="text-center py-8">
                     <p className="text-cosmic-400" data-testid="text-no-reviews">No mystical insights shared yet</p>
-                    <Link href="/database">
+                    <Link href="/product-database">
                       <Button className="mt-4 mystical-button" size="sm" data-testid="button-share-insights">
                         Share Your Wisdom
                       </Button>

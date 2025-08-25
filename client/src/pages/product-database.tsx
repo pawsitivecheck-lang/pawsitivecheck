@@ -93,9 +93,9 @@ export default function ProductDatabase() {
     setPage(0); // Reset to first page on new search
     // Update URL to reflect search
     if (searchTerm.trim()) {
-      setLocation(`/database?search=${encodeURIComponent(searchTerm.trim())}`);
+      setLocation(`/product-database?search=${encodeURIComponent(searchTerm.trim())}`);
     } else {
-      setLocation('/database');
+      setLocation('/product-database');
     }
   };
 
@@ -162,7 +162,7 @@ export default function ProductDatabase() {
                       size="sm"
                       onClick={() => {
                         setSearchTerm("");
-                        setLocation('/database');
+                        setLocation('/product-database');
                       }}
                       className="text-cosmic-400 hover:text-cosmic-200"
                       data-testid="button-clear-search"
@@ -545,7 +545,7 @@ export default function ProductDatabase() {
                       Clear All Filters
                     </Button>
                   )}
-                  <Link href="/scan">
+                  <Link href="/product-scanner">
                     <Button className="mystical-button" data-testid="button-scan-first-product">
                       Scan Your First Product
                     </Button>

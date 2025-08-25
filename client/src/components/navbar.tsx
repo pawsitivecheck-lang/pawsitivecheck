@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
-    { name: 'Vet Locator', href: '/vets', icon: Heart },
+    { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
     { name: 'Community', href: '/community', icon: Users },
   ];
 

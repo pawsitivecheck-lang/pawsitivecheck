@@ -10,12 +10,12 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-mission-title">Our Mission</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/scan" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                <a href="/product-scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
                 </a>
               </li>
               <li>
-                <a href="/database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                <a href="/product-database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
                   Ingredient Transparency
                 </a>
               </li>
@@ -25,7 +25,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/vets" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                <a href="/vet-finder" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
                   Pet Health Protection
                 </a>
               </li>
@@ -36,12 +36,12 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-features-title">Key Features</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/scan" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                <a href="/product-scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
                   Product Scanner
                 </a>
               </li>
               <li>
-                <a href="/database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                <a href="/product-database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
                   Safety Database
                 </a>
               </li>
