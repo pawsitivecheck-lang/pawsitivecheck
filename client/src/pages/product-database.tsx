@@ -555,6 +555,63 @@ export default function ProductDatabase() {
             </Card>
           )}
         </div>
+        
+        {/* Data Sources Section */}
+        <div className="mt-16 mb-8">
+          <Card className="cosmic-card" data-testid="card-data-sources">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center text-cosmic-100">
+                <Search className="w-5 h-5 mr-3" />
+                Product Data Sources
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6 text-sm">
+                <div>
+                  <h4 className="font-semibold text-cosmic-200 mb-3">Primary Data Sources</h4>
+                  <ul className="space-y-2 text-cosmic-300">
+                    <li className="flex items-start space-x-2">
+                      <span className="text-mystical-green">•</span>
+                      <span><strong>Open Pet Food Facts</strong> - Community-driven pet product database</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="text-mystical-green">•</span>
+                      <span><strong>UPC Database</strong> - Comprehensive barcode product information</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="text-mystical-green">•</span>
+                      <span><strong>Community Contributions</strong> - User-submitted product data and reviews</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-cosmic-200 mb-3">Research & Validation Sources</h4>
+                  <ul className="space-y-2 text-cosmic-300">
+                    <li className="flex items-start space-x-2">
+                      <span className="text-yellow-400">•</span>
+                      <span><strong>Michigan State University</strong> - Veterinary research and food safety analysis</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="text-yellow-400">•</span>
+                      <span><strong>FDA Recall Database</strong> - Official safety alerts and recalls</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="text-yellow-400">•</span>
+                      <span><strong>Veterinary Literature</strong> - Peer-reviewed safety research</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-3 bg-cosmic-700/30 rounded-lg border border-cosmic-600">
+                <p className="text-cosmic-300 text-xs text-center">
+                  🔬 Safety assessments are enhanced with academic research from Michigan State University's College of Veterinary Medicine and National Food Safety Center
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <Footer />
     </div>
