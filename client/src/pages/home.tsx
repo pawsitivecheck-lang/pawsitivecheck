@@ -78,18 +78,6 @@ export default function Home() {
               <AdBanner size="square" position="home-mid" />
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Link href="/product-scanner">
-                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-blue-300 dark:hover:border-blue-600" data-testid="card-quick-scan">
-                  <CardContent className="p-6">
-                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
-                      <Camera className="text-blue-600 h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-foreground mb-2">Product Scanner</h3>
-                    <p className="text-muted-foreground text-sm">Analyze products with barcode or image scanning</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
               <Link href="/product-database">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
                   <CardContent className="p-6">
