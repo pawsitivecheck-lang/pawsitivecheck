@@ -973,6 +973,105 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Pet profiles
+  app.get('/api/pets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const pets = await storage.getUserPetProfiles(userId);
+      res.json(pets);
+    } catch (error) {
+      console.error("Error fetching pet profiles:", error);
+      res.status(500).json({ message: "Failed to fetch pet profiles" });
+    }
+  });
+
+  app.get('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const pet = await storage.getPetProfile(id);
+      if (!pet) {
+        return res.status(404).json({ message: "Pet profile not found" });
+      }
+      
+      // Verify ownership
+      const userId = req.user.claims.sub;
+      if (pet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet profile" });
+      }
+      
+      res.json(pet);
+    } catch (error) {
+      console.error("Error fetching pet profile:", error);
+      res.status(500).json({ message: "Failed to fetch pet profile" });
+    }
+  });
+
+  app.post('/api/pets', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const petData = insertPetProfileSchema.parse({
+        ...req.body,
+        userId
+      });
+      const pet = await storage.createPetProfile(petData);
+      res.status(201).json(pet);
+    } catch (error) {
+      console.error("Error creating pet profile:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create pet profile" });
+    }
+  });
+
+  app.put('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      // Verify ownership first
+      const existingPet = await storage.getPetProfile(id);
+      if (!existingPet) {
+        return res.status(404).json({ message: "Pet profile not found" });
+      }
+      if (existingPet.userId !== userId) {
+        return res.status(403).json({ message: "Access denied to this pet profile" });
+      }
+      
+      const petData = insertPetProfileSchema.partial().parse(req.body);
+      const updatedPet = await storage.updatePetProfile(id, petData);
+      
+      if (!updatedPet) {
+        return res.status(404).json({ message: "Pet profile not found" });
+      }
+      
+      res.json(updatedPet);
+    } catch (error) {
+      console.error("Error updating pet profile:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid pet data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update pet profile" });
+    }
+  });
+
+  app.delete('/api/pets/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      
+      const success = await storage.deletePetProfile(id, userId);
+      if (!success) {
+        return res.status(404).json({ message: "Pet profile not found or access denied" });
+      }
+      
+      res.json({ message: "Pet profile deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting pet profile:", error);
+      res.status(500).json({ message: "Failed to delete pet profile" });
+    }
+  });
+
   // Admin analytics
   app.get('/api/admin/analytics', isAdmin, async (req: any, res) => {
     try {
