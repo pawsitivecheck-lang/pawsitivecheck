@@ -202,7 +202,7 @@ export default function PrivacyPolicy() {
               </div>
               
               <p className="text-sm text-cosmic-300 mt-4">
-                To exercise these rights, please contact us at privacy@pawsitivecheck.com
+                To exercise these rights, please contact us at pawsitivecheck@gmail.com
               </p>
             </CardContent>
           </Card>
@@ -232,11 +232,8 @@ export default function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="space-y-2">
-                <p>Email: privacy@pawsitivecheck.com</p>
-                <p>Support: support@pawsitivecheck.com</p>
-                <p>Phone: 1-800-PAWSITIVE (1-800-729-7484)</p>
-                <p>Address: 123 Pet Safety Drive, Austin, TX 78701</p>
-                <p>Business Hours: Monday-Friday, 9:00 AM - 6:00 PM CST</p>
+                <p>Email: pawsitivecheck@gmail.com</p>
+                <p>We typically respond within 24-48 hours</p>
               </div>
             </CardContent>
           </Card>
