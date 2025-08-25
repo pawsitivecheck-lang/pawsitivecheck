@@ -46,7 +46,7 @@ export default function Navbar() {
           {/* Center Section - Desktop Navigation + Search */}
           <div className="flex-1 flex items-center justify-center space-x-8">
             {/* Desktop Navigation Dropdown */}
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
