@@ -20,7 +20,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
+                <a href="/corporate-accountability" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
                   Corporate Accountability
                 </a>
               </li>
