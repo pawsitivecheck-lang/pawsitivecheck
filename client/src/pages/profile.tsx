@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserReview from "@/components/user-review";
 import { PetForm } from "@/components/pet-form";
 import { SavedProductsList } from "@/components/saved-products-list";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -279,6 +279,9 @@ export default function Profile() {
                       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Create Pet Profile</DialogTitle>
+                          <DialogDescription>
+                            Create a profile for your pet to track product safety and preferences.
+                          </DialogDescription>
                         </DialogHeader>
                         <PetForm 
                           onSubmit={createPetMutation.mutate}
@@ -479,6 +482,9 @@ export default function Profile() {
                       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Create Pet Profile</DialogTitle>
+                          <DialogDescription>
+                            Create a profile for your pet to track product safety and preferences.
+                          </DialogDescription>
                         </DialogHeader>
                         <PetForm 
                           onSubmit={createPetMutation.mutate}
