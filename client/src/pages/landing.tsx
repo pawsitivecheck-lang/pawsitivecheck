@@ -159,7 +159,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="mb-8">
-              <h2 className="font-sans text-6xl md:text-8xl font-bold text-starlight-500 mb-4 animate-float" data-testid="text-welcome-title">
+              <h2 className="text-6xl md:text-8xl font-bold text-starlight-500 mb-4 animate-float" data-testid="text-welcome-title">
                 ✨ Welcome, Fellow Seeker! ✨
               </h2>
               <div className="text-xl md:text-2xl text-cosmic-200 mb-6 animate-bounce">
