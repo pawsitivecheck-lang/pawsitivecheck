@@ -400,7 +400,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Scanner Menu Dropdown */}
         {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg p-2 z-50 shadow-lg">
+          <div className="absolute right-0 top-12 w-48 bg-gray-800/95 backdrop-blur-md border border-gray-600 rounded-lg p-2 z-50 shadow-lg">
             <div className="space-y-1">
               <Button
                 onClick={() => {
@@ -409,7 +409,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
                 data-testid="button-barcode-scanner"
               >
                 <Scan className="mr-2 h-4 w-4" />
@@ -422,7 +422,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
                 data-testid="button-image-scanner"
               >
                 <Image className="mr-2 h-4 w-4" />
@@ -435,7 +435,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
                 data-testid="button-advanced-scanner"
               >
                 <Globe className="mr-2 h-4 w-4" />
@@ -447,13 +447,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length < 2 && recentSearches.length > 0)) && (
-          <div className="absolute top-12 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute top-12 left-0 right-0 bg-gray-800/95 backdrop-blur-md border border-gray-600 rounded-lg p-1 z-40 shadow-lg max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
             {searchQuery.length >= 2 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
-              <div className="p-2 border-b border-gray-200 dark:border-gray-600/30">
-                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                  <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-100 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded">Tab</kbd>
+              <div className="p-2 border-b border-gray-600/30">
+                <div className="flex items-center gap-2 text-xs text-gray-300">
+                  <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-700/50 border border-gray-600 rounded text-gray-200">Tab</kbd>
                   <span>to autofill: "{getAutofillSuggestion()}"</span>
                 </div>
               </div>
@@ -462,7 +462,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Recent Searches (shown when query is short) */}
             {searchQuery.length < 2 && recentSearches.length > 0 && (
               <div className="p-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2">Recent Searches</p>
+                <p className="text-xs text-gray-300 mb-2 px-2">Recent Searches</p>
                 <div className="space-y-1">
                   {recentSearches.map((search, index) => (
                     <div
@@ -472,12 +472,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                         debouncedSearch(search);
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedIndex === index ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        selectedIndex === index ? 'bg-gray-700' : 'hover:bg-gray-700/50'
                       }`}
                       data-testid={`recent-search-${index}`}
                     >
-                      <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                      <span className="text-gray-700 dark:text-gray-200 text-sm">{search}</span>
+                      <Clock className="h-4 w-4 text-gray-400" />
+                      <span className="text-gray-200 text-sm">{search}</span>
                     </div>
                   ))}
                 </div>
@@ -488,7 +488,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {searchResults.length > 0 && (
               <div className="p-2">
                 {recentSearches.length > 0 && searchQuery.length < 2 && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-2 border-t border-gray-200 dark:border-gray-600 pt-2">Products</p>
+                  <p className="text-xs text-gray-300 mb-2 px-2 border-t border-gray-600 pt-2">Products</p>
                 )}
                 <div className="space-y-1">
                   {searchResults.map((product, index) => {
