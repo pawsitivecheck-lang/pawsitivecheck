@@ -741,7 +741,21 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 <div className="flex items-center gap-2 text-xs text-gray-300">
                   <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-700/50 border border-gray-600 rounded text-gray-200">Tab</kbd>
                   <span>to autofill: </span>
-                  <span className="text-blue-300 font-mono">"{getAutofillSuggestion()}"</span>
+                  <span 
+                    className="text-blue-300 font-mono cursor-pointer hover:text-blue-200 underline"
+                    onClick={() => {
+                      const suggestion = getAutofillSuggestion();
+                      if (suggestion) {
+                        setSearchQuery(suggestion);
+                        saveRecentSearch(suggestion);
+                        setLocation(`/product-database?search=${encodeURIComponent(suggestion)}`);
+                        clearSearch();
+                      }
+                    }}
+                    data-testid="autofill-suggestion-click"
+                  >
+                    "{getAutofillSuggestion()}"
+                  </span>
                 </div>
               </div>
             )}
@@ -756,7 +770,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       key={search}
                       onClick={() => {
                         setSearchQuery(search);
-                        debouncedSearch(search);
+                        saveRecentSearch(search);
+                        setLocation(`/product-database?search=${encodeURIComponent(search)}`);
+                        clearSearch();
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
                         selectedIndex === index ? 'bg-gray-700' : 'hover:bg-gray-700/50'
