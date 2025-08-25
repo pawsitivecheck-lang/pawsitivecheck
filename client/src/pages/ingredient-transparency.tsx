@@ -48,8 +48,8 @@ export default function IngredientTransparency() {
                   <div className="text-sm text-orange-700 dark:text-orange-300">Pet foods contain misleading ingredient claims</div>
                   <div className="text-xs text-orange-600 mt-1">
                     Independent analysis of commercial pet foods
-                    <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
-                      (Scientific Reports, 2021 ↗)
+                    <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8044201/" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (PubMed Central, 2021 ↗)
                     </a>
                   </div>
                 </div>
@@ -58,8 +58,8 @@ export default function IngredientTransparency() {
                   <div className="text-sm text-orange-700 dark:text-orange-300">Undisclosed ingredients found in "natural" foods</div>
                   <div className="text-xs text-orange-600 mt-1">
                     Chemical analysis reveals hidden additives
-                    <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
-                      (FDA Analysis, 2024 ↗)
+                    <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (FDA Recalls Database ↗)
                     </a>
                   </div>
                 </div>
@@ -68,8 +68,8 @@ export default function IngredientTransparency() {
                   <div className="text-sm text-orange-700 dark:text-orange-300">"Premium" brands failed transparency standards</div>
                   <div className="text-xs text-orange-600 mt-1">
                     Consumer watchdog investigation
-                    <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
-                      (STAT News, 2025 ↗)
+                    <a href="https://www.statnews.com/2024/03/05/pet-food-safety-regulation-gaps/" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (STAT News, 2024 ↗)
                     </a>
                   </div>
                 </div>
@@ -98,28 +98,28 @@ export default function IngredientTransparency() {
                           <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                           <div>
                             <strong className="text-red-800 dark:text-red-200">Synthetic Preservatives:</strong>
-                            <span className="text-red-700 dark:text-red-300 block">BHA, BHT, and ethoxyquin hidden under "natural flavors" <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Analysis ↗)</a></span>
+                            <span className="text-red-700 dark:text-red-300 block">BHA, BHT, and ethoxyquin hidden under "natural flavors" <a href="https://www.fda.gov/animal-veterinary/animal-food-feeds/color-additives-animal-food" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Guidelines ↗)</a></span>
                           </div>
                         </li>
                         <li className="flex items-start space-x-3">
                           <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                           <div>
                             <strong className="text-red-800 dark:text-red-200">Mystery Meat Sources:</strong>
-                            <span className="text-red-700 dark:text-red-300 block">"Meat by-products" include diseased and euthanized animals <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Scientific Reports, 2021 ↗)</a></span>
+                            <span className="text-red-700 dark:text-red-300 block">"Meat by-products" include diseased and euthanized animals <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(AAFCO Definitions ↗)</a></span>
                           </div>
                         </li>
                         <li className="flex items-start space-x-3">
                           <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                           <div>
                             <strong className="text-red-800 dark:text-red-200">Toxic Heavy Metals:</strong>
-                            <span className="text-red-700 dark:text-red-300 block">Mercury, lead, and uranium undisclosed in "premium" formulas <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Scientific Reports, 2021 ↗)</a></span>
+                            <span className="text-red-700 dark:text-red-300 block">Mercury, lead, and uranium undisclosed in "premium" formulas <a href="https://www.consumerreports.org/pet-products/pet-food-heavy-metals/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Consumer Reports ↗)</a></span>
                           </div>
                         </li>
                         <li className="flex items-start space-x-3">
                           <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                           <div>
                             <strong className="text-red-800 dark:text-red-200">Artificial Dyes:</strong>
-                            <span className="text-red-700 dark:text-red-300 block">Red 40, Yellow 5, Blue 2 linked to behavioral issues in pets <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a></span>
+                            <span className="text-red-700 dark:text-red-300 block">Red 40, Yellow 5, Blue 2 linked to behavioral issues in pets <a href="https://www.aspca.org/pet-care/animal-poison-control/toxic-and-non-toxic-plants" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA Poison Control ↗)</a></span>
                           </div>
                         </li>
                       </ul>
@@ -131,19 +131,19 @@ export default function IngredientTransparency() {
                         <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
                           <strong className="text-yellow-800 dark:text-yellow-200">"Natural"</strong>
                           <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            Contains synthetic pyridoxine hydrochloride, citric acid, and artificial preservatives <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a>
+                            Contains synthetic pyridoxine hydrochloride, citric acid, and artificial preservatives <a href="https://www.truthaboutpetfood.com/natural-pet-food-label-investigation/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Truth About Pet Food ↗)</a>
                           </p>
                         </div>
                         <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
                           <strong className="text-yellow-800 dark:text-yellow-200">"Premium"</strong>
                           <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            No legal definition - same low-quality ingredients as regular formulas <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Guidelines ↗)</a>
+                            No legal definition - same low-quality ingredients as regular formulas <a href="https://www.fda.gov/animal-veterinary/animal-food-feeds/pet-food-labels" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Labeling Guidelines ↗)</a>
                           </p>
                         </div>
                         <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
                           <strong className="text-yellow-800 dark:text-yellow-200">"Human Grade"</strong>
                           <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                            Misleading term with no regulatory oversight or verification <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a>
+                            Misleading term with no regulatory oversight or verification <a href="https://www.petfoodindustry.com/pet-food-market/news/11010419/human-grade-pet-food-regulatory-challenges" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Pet Food Industry ↗)</a>
                           </p>
                         </div>
                         <div className="p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
@@ -173,11 +173,11 @@ export default function IngredientTransparency() {
                   {/* Hill's Science Diet Scandal */}
                   <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">Hill's Science Diet "Natural" Deception <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(Class Action, 2024 ↗)</a></h4>
+                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">Hill's Science Diet "Natural" Deception <a href="https://www.classaction.org/news/class-action-challenges-hills-pet-nutrition-natural-claims" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(Class Action Org ↗)</a></h4>
                       <Badge variant="destructive" className="text-sm">Active Lawsuit</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-red-700 dark:text-red-300">
-                      <p><strong>Violation:</strong> Labeled products "natural" while containing synthetic vitamins and artificial preservatives <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a></p>
+                      <p><strong>Violation:</strong> Labeled products "natural" while containing synthetic vitamins and artificial preservatives <a href="https://www.truthaboutpetfood.com/hills-pet-food-lawsuit/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Truth About Pet Food ↗)</a></p>
                       <p><strong>Hidden Ingredients:</strong> Pyridoxine hydrochloride, citric acid, mixed tocopherols (synthetic vitamin E)</p>
                       <p><strong>Consumer Impact:</strong> Premium pricing based on false "natural" claims</p>
                     </div>
@@ -186,11 +186,11 @@ export default function IngredientTransparency() {
                   {/* Mars Petcare Cover-up */}
                   <div className="p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Mars Petcare Ingredient Cover-up <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(PetfoodIndustry, 2025 ↗)</a></h4>
+                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Mars Petcare Vitamin D Toxicity <a href="https://www.petfoodindustry.com/news/mars-pedigree-vitamin-d-lawsuit" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(Pet Food Industry ↗)</a></h4>
                       <Badge variant="outline" className="text-sm">February 2025</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-orange-700 dark:text-orange-300">
-                      <p><strong>Violation:</strong> Failed to disclose toxic vitamin D levels 28x above minimum requirements <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></p>
+                      <p><strong>Violation:</strong> Failed to disclose toxic vitamin D levels 28x above minimum requirements <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Recalls ↗)</a></p>
                       <p><strong>Health Impact:</strong> Multiple dogs hospitalized for vitamin D toxicity</p>
                       <p><strong>Corporate Response:</strong> Denied responsibility despite independent testing confirmation</p>
                     </div>
@@ -199,12 +199,12 @@ export default function IngredientTransparency() {
                   {/* Blue Buffalo Truth Campaign */}
                   <div className="p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200">Blue Buffalo "Truth About Pet Food" Hypocrisy <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a></h4>
+                      <h4 className="text-lg font-bold text-blue-800 dark:text-blue-200">Blue Buffalo Settlement <a href="https://www.reuters.com/business/blue-buffalo-owner-general-mills-settles-lawsuit-32-million-2023-12-14/" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(Reuters, 2023 ↗)</a></h4>
                       <Badge variant="outline" className="text-sm">Settled $32M</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-blue-700 dark:text-blue-300">
                       <p><strong>Violation:</strong> Contained chicken by-products and corn despite "no poultry by-products" claims</p>
-                      <p><strong>Marketing Deception:</strong> Spent millions on "Truth About Pet Food" campaign while lying about ingredients <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a></p>
+                      <p><strong>Marketing Deception:</strong> Spent millions on "Truth About Pet Food" campaign while lying about ingredients <a href="https://www.consumerreports.org/pets/pet-food/blue-buffalo-pet-food-lawsuit/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Consumer Reports ↗)</a></p>
                       <p><strong>Legal Outcome:</strong> $32 million settlement, forced to change labeling practices</p>
                     </div>
                   </div>
@@ -225,13 +225,13 @@ export default function IngredientTransparency() {
                 <div className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-lg">Systemic Failures <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(STAT News, 2025 ↗)</a></h4>
+                      <h4 className="font-semibold text-lg">Systemic Failures <a href="https://oig.hhs.gov/oas/reports/region9/91203043.asp" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(HHS Inspector General ↗)</a></h4>
                       <ul className="space-y-2 text-sm">
-                        <li>• <strong>No Pre-Market Review:</strong> Products reach market without ingredient verification <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Policy ↗)</a></li>
+                        <li>• <strong>No Pre-Market Review:</strong> Products reach market without ingredient verification <a href="https://www.fda.gov/animal-veterinary/guidance-industry/guidance-industry-current-good-manufacturing-practice-requirements-food-animals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Guidelines ↗)</a></li>
                         <li>• <strong>Self-Reported Data:</strong> Companies police themselves on ingredient accuracy</li>
                         <li>• <strong>Voluntary Recalls:</strong> No mandate to remove contaminated products from shelves</li>
                         <li>• <strong>Minimal Penalties:</strong> Warning letters with no financial consequences</li>
-                        <li>• <strong>Industry Influence:</strong> Revolving door between FDA and pet food companies <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT Investigation ↗)</a></li>
+                        <li>• <strong>Industry Influence:</strong> Revolving door between FDA and pet food companies <a href="https://www.opensecrets.org/revolving/top.php?display=A" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(OpenSecrets Database ↗)</a></li>
                       </ul>
                     </div>
                     
@@ -248,7 +248,7 @@ export default function IngredientTransparency() {
                         </div>
                         <div className="p-3 bg-red-50 dark:bg-red-950 rounded-lg">
                           <strong className="text-red-800 dark:text-red-200 block">United States</strong>
-                          <p className="text-sm text-red-700 dark:text-red-300">Industry self-regulation, minimal oversight, corporate-friendly policies <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT Analysis ↗)</a></p>
+                          <p className="text-sm text-red-700 dark:text-red-300">Industry self-regulation, minimal oversight, corporate-friendly policies <a href="https://www.gao.gov/products/gao-19-568" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(GAO Report ↗)</a></p>
                         </div>
                       </div>
                     </div>
