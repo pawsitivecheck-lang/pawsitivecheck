@@ -46,6 +46,7 @@ export default function VetFinder() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState(""); // For manual location entry
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [locationError, setLocationError] = useState("");
   const [vetPractices, setVetPractices] = useState<VetPractice[]>([]);
@@ -114,34 +115,34 @@ export default function VetFinder() {
     },
   });
 
-  const handleLocationSearch = () => {
+  const handleSearch = () => {
+    // If user has entered a location in the location field, include it in the search query
+    let fullQuery = searchQuery || "veterinarian";
+    if (locationQuery.trim()) {
+      fullQuery = `${fullQuery} ${locationQuery.trim()}`;
+    }
+
     if (userLocation) {
       searchVetsMutation.mutate({
-        query: searchQuery || "veterinarian",
+        query: fullQuery,
         location: userLocation
       });
     } else {
       searchVetsMutation.mutate({
-        query: searchQuery || "veterinarian"
+        query: fullQuery
       });
     }
   };
 
-  const handleManualSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) {
-      toast({
-        title: "Enter Location",
-        description: "Please enter a city, zip code, or address to search",
-        variant: "destructive",
-      });
-      return;
-    }
-    
+  // Auto-search when component loads to show some initial results
+  useEffect(() => {
+    // Default search with location hint
     searchVetsMutation.mutate({
-      query: `veterinarian ${searchQuery}`
+      query: "veterinarian"
     });
-  };
+  }, []);
+
+  // Remove handleManualSearch since we're using handleSearch now
 
   const formatDistance = (distance?: number) => {
     if (!distance) return "";
@@ -204,7 +205,7 @@ export default function VetFinder() {
                     
                     {userLocation && (
                       <Button
-                        onClick={handleLocationSearch}
+                        onClick={handleSearch}
                         disabled={searchVetsMutation.isPending}
                         className="mystical-button"
                         data-testid="button-search-nearby"
@@ -232,29 +233,40 @@ export default function VetFinder() {
 
                 {/* Manual Search */}
                 <div className="pt-4 border-t border-cosmic-700">
-                  <h3 className="text-cosmic-200 font-medium mb-3">Search by Location</h3>
-                  <form onSubmit={handleManualSearch} className="flex gap-3">
-                    <Input
-                      type="text"
-                      placeholder="Enter city, zip code, or address..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="flex-1 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100"
-                      data-testid="input-location-search"
-                    />
+                  <h3 className="text-cosmic-200 font-medium mb-3">Search by Location & Services</h3>
+                  <div className="space-y-3">
+                    <div className="flex gap-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter location (e.g., Lansing, MI)..."
+                        value={locationQuery}
+                        onChange={(e) => setLocationQuery(e.target.value)}
+                        className="flex-1 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100"
+                        data-testid="input-location-query"
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Services (e.g., emergency, dental)..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="flex-1 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100"
+                        data-testid="input-service-query"
+                      />
+                    </div>
                     <Button
-                      type="submit"
+                      onClick={handleSearch}
                       disabled={searchVetsMutation.isPending}
-                      className="mystical-button"
-                      data-testid="button-manual-search"
+                      className="mystical-button w-full"
+                      data-testid="button-combined-search"
                     >
                       {searchVetsMutation.isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : (
-                        <Search className="h-4 w-4" />
+                        <Search className="mr-2 h-4 w-4" />
                       )}
+                      Search Cosmic Healers
                     </Button>
-                  </form>
+                  </div>
                 </div>
               </CardContent>
             </Card>

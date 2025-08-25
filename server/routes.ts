@@ -995,16 +995,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { query, location } = req.body;
       
-      // Default search coordinates (Los Angeles area)
-      let lat = 34.0522;
-      let lng = -118.2437;
-      let searchRadius = 10000; // 10km
+      // Default search coordinates (Central US - Kansas City area)
+      let lat = 39.0997;  // Kansas City - more central for US searches
+      let lng = -94.5786;
+      let searchRadius = 50000; // 50km - wider default search
       
       // Use provided location if available
       if (location && location.lat && location.lng) {
         lat = location.lat;
         lng = location.lng;
-        searchRadius = 15000; // Expand radius for user-provided location
+        searchRadius = 25000; // Expand radius for user-provided location
+      }
+      
+      // Try to detect location from query string
+      if (!location && query) {
+        const queryLower = query.toLowerCase();
+        
+        // Lansing, MI detection
+        if (queryLower.includes('lansing') || queryLower.includes('michigan') || queryLower.includes(' mi')) {
+          lat = 42.3314;  // Lansing, MI
+          lng = -84.5467;
+          searchRadius = 30000;
+        }
+        // Add more city detection as needed
+        else if (queryLower.includes('chicago') || queryLower.includes('illinois')) {
+          lat = 41.8781;  // Chicago, IL
+          lng = -87.6298;
+          searchRadius = 30000;
+        }
+        else if (queryLower.includes('detroit')) {
+          lat = 42.3314;  // Detroit, MI
+          lng = -83.0458;
+          searchRadius = 30000;
+        }
+        else if (queryLower.includes('new york') || queryLower.includes('nyc')) {
+          lat = 40.7128;  // New York, NY
+          lng = -74.0060;
+          searchRadius = 30000;
+        }
       }
 
       // Build OpenStreetMap Overpass API query for veterinary services
