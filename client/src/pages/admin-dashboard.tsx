@@ -332,7 +332,7 @@ export default function AdminDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <Button 
                   className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
                   data-testid="button-enhance-analysis"
@@ -346,6 +346,14 @@ export default function AdminDashboard() {
                 >
                   <Package className="mr-2 h-4 w-4" />
                   Update Database
+                </Button>
+                <Button 
+                  className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
+                  onClick={() => window.location.href = "/admin/product-submissions"}
+                  data-testid="button-review-submissions"
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Review Submissions
                 </Button>
                 <Button 
                   className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"

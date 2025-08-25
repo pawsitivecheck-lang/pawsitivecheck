@@ -126,6 +126,45 @@ export default function Home() {
                 </Card>
               </Link>
             </div>
+
+            {/* Secondary Actions Row */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              <Link href="/submit-product-update">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-amber-300 dark:hover:border-amber-600" data-testid="card-submit-update">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900 rounded-lg flex items-center justify-center mb-4">
+                      <WandSparkles className="text-amber-600 h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Submit Product Update</h3>
+                    <p className="text-muted-foreground text-sm">Help improve our database with corrections and new info</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/pets">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-pink-300 dark:hover:border-pink-600" data-testid="card-pet-profiles">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-pink-100 dark:bg-pink-900 rounded-lg flex items-center justify-center mb-4">
+                      <PawPrint className="text-pink-600 h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Pet Profiles</h3>
+                    <p className="text-muted-foreground text-sm">Manage your pet's health information and preferences</p>
+                  </CardContent>
+                </Card>
+              </Link>
+
+              <Link href="/admin">
+                <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-indigo-300 dark:hover:border-indigo-600" data-testid="card-admin">
+                  <CardContent className="p-6">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mb-4">
+                      <Crown className="text-indigo-600 h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Admin Dashboard</h3>
+                    <p className="text-muted-foreground text-sm">Manage platform settings and moderate content</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
           </div>
 
           {/* Dashboard Grid */}

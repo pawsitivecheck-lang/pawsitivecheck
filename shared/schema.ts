@@ -167,6 +167,25 @@ export const veterinaryOffices = pgTable("veterinary_offices", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const productUpdateSubmissions = pgTable("product_update_submissions", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").references(() => products.id), // null for new product suggestions
+  submittedByUserId: varchar("submitted_by_user_id").references(() => users.id).notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // 'update', 'new_product', 'image_update', 'info_correction'
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  proposedChanges: jsonb("proposed_changes").notNull(), // JSON object with proposed changes
+  currentImageUrl: varchar("current_image_url"), // current product image for reference
+  submittedImageUrl: varchar("submitted_image_url"), // new/updated image submitted by user
+  status: varchar("status", { length: 20 }).default("pending"), // pending, approved, rejected, in_review
+  adminNotes: text("admin_notes"), // internal admin notes
+  reviewedByUserId: varchar("reviewed_by_user_id").references(() => users.id), // admin who reviewed
+  reviewedAt: timestamp("reviewed_at"),
+  appliedAt: timestamp("applied_at"), // when changes were applied to product
+  submittedAt: timestamp("submitted_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   reviews: many(productReviews),
@@ -175,6 +194,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   petProfiles: many(petProfiles),
   savedProducts: many(savedProducts),
   veterinaryOffices: many(veterinaryOffices),
+  productUpdateSubmissions: many(productUpdateSubmissions),
+  reviewedProductUpdates: many(productUpdateSubmissions, { relationName: "reviewedBy" }),
 }));
 
 export const productsRelations = relations(products, ({ many }) => ({
@@ -182,6 +203,7 @@ export const productsRelations = relations(products, ({ many }) => ({
   recalls: many(productRecalls),
   scans: many(scanHistory),
   savedProducts: many(savedProducts),
+  updateSubmissions: many(productUpdateSubmissions),
 }));
 
 export const productReviewsRelations = relations(productReviews, ({ one }) => ({
@@ -250,6 +272,22 @@ export const veterinaryOfficesRelations = relations(veterinaryOffices, ({ one })
   }),
 }));
 
+export const productUpdateSubmissionsRelations = relations(productUpdateSubmissions, ({ one }) => ({
+  product: one(products, {
+    fields: [productUpdateSubmissions.productId],
+    references: [products.id],
+  }),
+  submittedBy: one(users, {
+    fields: [productUpdateSubmissions.submittedByUserId],
+    references: [users.id],
+  }),
+  reviewedBy: one(users, {
+    fields: [productUpdateSubmissions.reviewedByUserId],
+    references: [users.id],
+    relationName: "reviewedBy",
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -309,6 +347,14 @@ export const insertVeterinaryOfficeSchema = createInsertSchema(veterinaryOffices
   updatedAt: true,
 });
 
+export const insertProductUpdateSubmissionSchema = createInsertSchema(productUpdateSubmissions).omit({
+  id: true,
+  submittedAt: true,
+  updatedAt: true,
+  reviewedAt: true,
+  appliedAt: true,
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -328,3 +374,5 @@ export type SavedProduct = typeof savedProducts.$inferSelect;
 export type InsertSavedProduct = z.infer<typeof insertSavedProductSchema>;
 export type VeterinaryOffice = typeof veterinaryOffices.$inferSelect;
 export type InsertVeterinaryOffice = z.infer<typeof insertVeterinaryOfficeSchema>;
+export type ProductUpdateSubmission = typeof productUpdateSubmissions.$inferSelect;
+export type InsertProductUpdateSubmission = z.infer<typeof insertProductUpdateSubmissionSchema>;

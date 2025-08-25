@@ -8,6 +8,7 @@ import {
   petProfiles,
   savedProducts,
   veterinaryOffices,
+  productUpdateSubmissions,
   type User,
   type UpsertUser,
   type Product,
@@ -26,6 +27,8 @@ import {
   type InsertSavedProduct,
   type VeterinaryOffice,
   type InsertVeterinaryOffice,
+  type ProductUpdateSubmission,
+  type InsertProductUpdateSubmission,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -92,6 +95,18 @@ export interface IStorage {
   createVeterinaryOffice(office: InsertVeterinaryOffice): Promise<VeterinaryOffice>;
   updateVeterinaryOffice(id: number, updates: Partial<InsertVeterinaryOffice>): Promise<VeterinaryOffice | undefined>;
   deleteVeterinaryOffice(id: number, userId: string): Promise<boolean>;
+  
+  // Product update submission operations
+  getUserProductUpdateSubmissions(userId: string): Promise<ProductUpdateSubmission[]>;
+  getAllProductUpdateSubmissions(status?: string): Promise<ProductUpdateSubmission[]>;
+  getProductUpdateSubmission(id: number): Promise<ProductUpdateSubmission | undefined>;
+  createProductUpdateSubmission(submission: InsertProductUpdateSubmission): Promise<ProductUpdateSubmission>;
+  updateProductUpdateSubmission(id: number, updates: Partial<InsertProductUpdateSubmission>): Promise<ProductUpdateSubmission | undefined>;
+  reviewProductUpdateSubmission(id: number, reviewData: {
+    status: string;
+    adminNotes?: string;
+    reviewedByUserId: string;
+  }): Promise<ProductUpdateSubmission | undefined>;
   
   // Analytics for admin
   getAnalytics(): Promise<{
@@ -461,6 +476,62 @@ export class DatabaseStorage implements IStorage {
     .leftJoin(veterinaryOffices, sql`true`);
 
     return analytics;
+  }
+  
+  // Product update submission operations
+  async getUserProductUpdateSubmissions(userId: string): Promise<ProductUpdateSubmission[]> {
+    return await db.select().from(productUpdateSubmissions)
+      .where(eq(productUpdateSubmissions.submittedByUserId, userId))
+      .orderBy(desc(productUpdateSubmissions.submittedAt));
+  }
+
+  async getAllProductUpdateSubmissions(status?: string): Promise<ProductUpdateSubmission[]> {
+    let query = db.select().from(productUpdateSubmissions);
+    
+    if (status) {
+      query = query.where(eq(productUpdateSubmissions.status, status)) as typeof query;
+    }
+    
+    return await query.orderBy(desc(productUpdateSubmissions.submittedAt));
+  }
+
+  async getProductUpdateSubmission(id: number): Promise<ProductUpdateSubmission | undefined> {
+    const [submission] = await db.select().from(productUpdateSubmissions)
+      .where(eq(productUpdateSubmissions.id, id));
+    return submission;
+  }
+
+  async createProductUpdateSubmission(submission: InsertProductUpdateSubmission): Promise<ProductUpdateSubmission> {
+    const [created] = await db.insert(productUpdateSubmissions)
+      .values(submission)
+      .returning();
+    return created;
+  }
+
+  async updateProductUpdateSubmission(id: number, updates: Partial<InsertProductUpdateSubmission>): Promise<ProductUpdateSubmission | undefined> {
+    const [updated] = await db.update(productUpdateSubmissions)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(productUpdateSubmissions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async reviewProductUpdateSubmission(id: number, reviewData: {
+    status: string;
+    adminNotes?: string;
+    reviewedByUserId: string;
+  }): Promise<ProductUpdateSubmission | undefined> {
+    const [reviewed] = await db.update(productUpdateSubmissions)
+      .set({
+        status: reviewData.status,
+        adminNotes: reviewData.adminNotes,
+        reviewedByUserId: reviewData.reviewedByUserId,
+        reviewedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(productUpdateSubmissions.id, id))
+      .returning();
+    return reviewed;
   }
 }
 

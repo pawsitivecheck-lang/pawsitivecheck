@@ -26,6 +26,8 @@ import SafetyDatabaseInfo from "@/pages/safety-database-info";
 import RecallSystemInfo from "@/pages/recall-system-info";
 import CommunityReviewsInfo from "@/pages/community-reviews-info";
 import ProductDetail from "@/pages/product-detail";
+import SubmitProductUpdate from "@/pages/submit-product-update";
+import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -66,11 +68,13 @@ function Router() {
           <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
+          <Route path="/submit-product-update" component={SubmitProductUpdate} />
         </>
       )}
       {/* Admin routes accessible to all - components handle auth checks */}
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/vets" component={VetAdmin} />
+      <Route path="/admin/product-submissions" component={AdminProductSubmissions} />
       <Route component={NotFound} />
     </Switch>
   );

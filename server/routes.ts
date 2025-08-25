@@ -10,8 +10,10 @@ import {
   insertIngredientBlacklistSchema,
   insertScanHistorySchema,
   insertPetProfileSchema,
-  insertSavedProductSchema
+  insertSavedProductSchema,
+  insertProductUpdateSubmissionSchema
 } from "@shared/schema";
+import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -2351,6 +2353,133 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error removing saved product:", error);
       res.status(500).json({ message: "Failed to remove saved product" });
+    }
+  });
+
+  // Product Update Submission Routes
+  
+  // Get upload URL for product update images
+  app.post("/api/objects/upload", isAuthenticated, async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error) {
+      console.error("Error getting upload URL:", error);
+      res.status(500).json({ error: "Failed to generate upload URL" });
+    }
+  });
+
+  // Serve private objects for authenticated users
+  app.get("/objects/:objectPath(*)", isAuthenticated, async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const objectFile = await objectStorageService.getObjectEntityFile(
+        req.path,
+      );
+      objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error accessing object:", error);
+      res.sendStatus(404);
+    }
+  });
+
+  // Create product update submission
+  app.post('/api/product-update-submissions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const submissionData = insertProductUpdateSubmissionSchema.parse({
+        ...req.body,
+        submittedByUserId: userId,
+      });
+
+      // If image was uploaded, set ACL policy
+      if (submissionData.submittedImageUrl) {
+        try {
+          const objectStorageService = new ObjectStorageService();
+          const normalizedPath = await objectStorageService.trySetObjectEntityAclPolicy(
+            submissionData.submittedImageUrl,
+            {
+              owner: userId,
+              visibility: "private", // Admin review images should be private
+            }
+          );
+          submissionData.submittedImageUrl = normalizedPath;
+        } catch (error) {
+          console.error("Error setting image ACL:", error);
+          // Continue without image if ACL fails
+          submissionData.submittedImageUrl = undefined;
+        }
+      }
+
+      const submission = await storage.createProductUpdateSubmission(submissionData);
+      res.status(201).json(submission);
+    } catch (error) {
+      console.error("Error creating product update submission:", error);
+      res.status(500).json({ error: "Failed to create submission" });
+    }
+  });
+
+  // Get user's product update submissions
+  app.get('/api/product-update-submissions/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const submissions = await storage.getUserProductUpdateSubmissions(userId);
+      res.json(submissions);
+    } catch (error) {
+      console.error("Error fetching user submissions:", error);
+      res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+  });
+
+  // Admin routes for reviewing product update submissions
+  app.get('/api/admin/product-update-submissions', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const status = req.query.status as string;
+      const submissions = await storage.getAllProductUpdateSubmissions(status);
+      res.json(submissions);
+    } catch (error) {
+      console.error("Error fetching submissions for admin:", error);
+      res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+  });
+
+  // Admin review product update submission
+  app.patch('/api/admin/product-update-submissions/:id/review', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const reviewData = {
+        status: req.body.status,
+        adminNotes: req.body.adminNotes,
+        reviewedByUserId: req.user.claims.sub,
+      };
+
+      const submission = await storage.reviewProductUpdateSubmission(id, reviewData);
+      
+      if (!submission) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+
+      // If approved, apply changes to the actual product
+      if (reviewData.status === 'approved' && submission.productId) {
+        try {
+          const proposedChanges = submission.proposedChanges as any;
+          await storage.updateProduct(submission.productId, proposedChanges);
+          
+          // Mark as applied
+          await storage.updateProductUpdateSubmission(id, {
+            appliedAt: new Date(),
+          });
+        } catch (error) {
+          console.error("Error applying product changes:", error);
+          // Keep submission as approved but log the error
+        }
+      }
+
+      res.json(submission);
+    } catch (error) {
+      console.error("Error reviewing submission:", error);
+      res.status(500).json({ error: "Failed to review submission" });
     }
   });
 
