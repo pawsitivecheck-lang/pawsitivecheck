@@ -792,30 +792,78 @@ export default function Landing() {
             <div className="text-center sm:text-left">
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-mission-title">Our Mission</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
-                <li data-testid="text-mission-analysis">Comprehensive Safety Analysis</li>
-                <li data-testid="text-mission-transparency">Ingredient Transparency</li>
-                <li data-testid="text-mission-truth">Corporate Accountability</li>
-                <li data-testid="text-mission-protection">Pet Health Protection</li>
+                <li>
+                  <a href="#scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                    Comprehensive Safety Analysis
+                  </a>
+                </li>
+                <li>
+                  <a href="#database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                    Ingredient Transparency
+                  </a>
+                </li>
+                <li>
+                  <a href="#recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
+                    Corporate Accountability
+                  </a>
+                </li>
+                <li>
+                  <a href="#vets" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                    Pet Health Protection
+                  </a>
+                </li>
               </ul>
             </div>
             
             <div className="text-center sm:text-left">
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-features-title">Key Features</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
-                <li data-testid="text-feature-scanner">Product Scanner</li>
-                <li data-testid="text-feature-database">Safety Database</li>
-                <li data-testid="text-feature-alerts">Recall Alerts</li>
-                <li data-testid="text-feature-community">Community Reviews</li>
+                <li>
+                  <a href="/scan" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                    Product Scanner
+                  </a>
+                </li>
+                <li>
+                  <a href="/database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                    Safety Database
+                  </a>
+                </li>
+                <li>
+                  <a href="/recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
+                    Recall Alerts
+                  </a>
+                </li>
+                <li>
+                  <a href="/community" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-community">
+                    Community Reviews
+                  </a>
+                </li>
               </ul>
             </div>
             
             <div className="text-center sm:text-left sm:col-span-2 lg:col-span-1">
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-contact-title">Contact Us</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
-                <li data-testid="text-contact-email">pawsitivecheck@gmail.com</li>
-                <li data-testid="text-contact-support">Customer Support</li>
-                <li data-testid="text-contact-feedback">Feedback Portal</li>
-                <li data-testid="text-contact-hotline">Safety Hotline</li>
+                <li>
+                  <a href="mailto:pawsitivecheck@gmail.com" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-email">
+                    pawsitivecheck@gmail.com
+                  </a>
+                </li>
+                <li>
+                  <a href="/help" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-support">
+                    Customer Support
+                  </a>
+                </li>
+                <li>
+                  <a href="/feedback" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-feedback">
+                    Feedback Portal
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:+1-800-PAWSAFE" className="hover:text-white transition-colors cursor-pointer" data-testid="link-contact-hotline">
+                    Safety Hotline
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
