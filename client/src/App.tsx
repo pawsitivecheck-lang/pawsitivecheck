@@ -20,6 +20,7 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import PetHealthProtection from "@/pages/pet-health-protection";
 import CorporateAccountability from "@/pages/corporate-accountability";
+import IngredientTransparency from "@/pages/ingredient-transparency";
 import ProductDetail from "@/pages/product-detail";
 import CookieConsent from "@/components/cookie-consent";
 
@@ -33,6 +34,9 @@ function Router() {
           <Route path="/" component={Landing} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
+          <Route path="/pet-health-protection" component={PetHealthProtection} />
+          <Route path="/corporate-accountability" component={CorporateAccountability} />
+          <Route path="/ingredient-transparency" component={IngredientTransparency} />
         </>
       ) : (
         <>
@@ -47,6 +51,7 @@ function Router() {
           <Route path="/profile" component={Profile} />
           <Route path="/pet-health-protection" component={PetHealthProtection} />
           <Route path="/corporate-accountability" component={CorporateAccountability} />
+          <Route path="/ingredient-transparency" component={IngredientTransparency} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
         </>
