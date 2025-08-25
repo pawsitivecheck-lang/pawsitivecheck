@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle, Image, Search, Globe } from "lucide-react";
+import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle, Image, Search, Globe, Loader2 } from "lucide-react";
 import { BarcodeScanner } from "@/components/barcode-scanner";
 import { ImageScanner } from "@/components/image-scanner";
 import type { Product } from "@shared/schema";
@@ -207,13 +207,13 @@ export default function ProductScanner() {
   const getSafetyScoreIcon = (clarity: string) => {
     switch (clarity) {
       case 'blessed':
-        return <CheckCircle className="text-green-600" />;
+        return <CheckCircle className="text-green-600 h-4 w-4" aria-label="Safe product" />;
       case 'questionable':
-        return <AlertTriangle className="text-yellow-500" />;
+        return <AlertTriangle className="text-yellow-500 h-4 w-4" aria-label="Proceed with caution" />;
       case 'cursed':
-        return <XCircle className="text-red-600" />;
+        return <XCircle className="text-red-600 h-4 w-4" aria-label="Unsafe product" />;
       default:
-        return <Eye className="text-blue-600" />;
+        return <Eye className="text-blue-600 h-4 w-4" aria-label="Unknown safety" />;
     }
   };
 
@@ -248,10 +248,10 @@ export default function ProductScanner() {
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
               <Camera className="text-3xl text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-scanner-title">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-scanner-title">
               Comprehensive Safety Analysis
             </h1>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto" data-testid="text-scanner-description">
+            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4" data-testid="text-scanner-description">
               Professional pet product safety evaluation using scientific research, veterinary expertise, and regulatory compliance data
             </p>
           </div>
@@ -369,8 +369,31 @@ export default function ProductScanner() {
             </CardContent>
           </Card>
 
+          {/* Loading State */}
+          {(isSearching || scanProductMutation.isPending || imageSearchMutation.isPending) && (
+            <Card className="mb-8 border-blue-200" data-testid="card-searching">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 animate-pulse">
+                  <Loader2 className="text-blue-600 h-8 w-8 animate-spin" />
+                </div>
+                <h3 className="text-xl font-semibold text-blue-600 mb-2" data-testid="text-searching-title">
+                  Analyzing Product...
+                </h3>
+                <p className="text-gray-600 mb-4" data-testid="text-searching-description">
+                  {scanProductMutation.isPending ? 'Searching product database...' : 
+                   imageSearchMutation.isPending ? 'Analyzing product image...' :
+                   'Processing your request...'}
+                </p>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                  <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
+                </div>
+                <p className="text-xs text-gray-500">This may take a few moments...</p>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Scanned Product */}
-          {scannedProduct && (
+          {scannedProduct && !isSearching && (
             <Card className=" mb-8" data-testid="card-scanned-product">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-blue-600">
@@ -455,8 +478,35 @@ export default function ProductScanner() {
             </Card>
           )}
 
+          {/* Analysis Loading */}
+          {analyzeProductMutation.isPending && (
+            <Card className="mb-8 border-purple-200" data-testid="card-analyzing">
+              <CardContent className="p-8 text-center">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                  <Eye className="text-purple-600 h-10 w-10 animate-pulse" />
+                </div>
+                <h3 className="text-2xl font-bold text-purple-600 mb-3" data-testid="text-analyzing-title">
+                  Cosmic Analysis in Progress...
+                </h3>
+                <p className="text-gray-600 mb-6" data-testid="text-analyzing-description">
+                  Our mystical algorithms are examining ingredient safety, recall history, and veterinary data
+                </p>
+                <div className="max-w-md mx-auto">
+                  <div className="flex justify-between text-xs text-gray-500 mb-2">
+                    <span>Ingredient Analysis</span>
+                    <span>Processing...</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full animate-pulse" style={{width: '75%'}}></div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">Analyzing against 50,000+ safety data points...</p>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Analysis Results */}
-          {analysisResult && (
+          {analysisResult && !analyzeProductMutation.isPending && (
             <Card className="" data-testid="card-analysis-results">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-blue-600">

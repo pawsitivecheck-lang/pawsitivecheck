@@ -119,9 +119,10 @@ export default function VetFinder() {
       });
     },
     onError: (error) => {
+      setVetPractices([]);
       toast({
         title: "Search Failed",
-        description: "Unable to locate cosmic veterinary guardians",
+        description: "Unable to locate cosmic veterinary guardians. Please try a different location or check your internet connection.",
         variant: "destructive",
       });
     },

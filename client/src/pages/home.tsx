@@ -12,17 +12,19 @@ import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 export default function Home() {
   const { user } = useAuth();
 
-  const { data: recentScans } = useQuery<ScanHistory[]>({
+  const { data: recentScans, isLoading: isLoadingScans } = useQuery<ScanHistory[]>({
     queryKey: ['/api/scans'],
   });
 
-  const { data: recentRecalls } = useQuery<ProductRecall[]>({
+  const { data: recentRecalls, isLoading: isLoadingRecalls } = useQuery<ProductRecall[]>({
     queryKey: ['/api/recalls'],
   });
 
-  const { data: userReviews } = useQuery<ProductReview[]>({
+  const { data: userReviews, isLoading: isLoadingReviews } = useQuery<ProductReview[]>({
     queryKey: ['/api/user/reviews'],
   });
+
+  const isLoading = isLoadingScans || isLoadingRecalls || isLoadingReviews;
 
   return (
     <div className="min-h-screen bg-background">
@@ -41,7 +43,7 @@ export default function Home() {
           <div className="mb-12">
             <div className="bg-card dark:bg-card rounded-lg p-12 text-center border border-border shadow-sm">
               <div className="mb-8">
-                <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-center tracking-tight" 
+                <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-foreground mb-6 text-center tracking-tight px-4" 
                     data-testid="text-welcome-user">
                   Welcome back, {user?.firstName || 'Pet Parent'}
                 </h1>
@@ -77,7 +79,7 @@ export default function Home() {
             <div className="flex justify-center mb-8">
               <AdBanner size="square" position="home-mid" />
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               <Link href="/product-database">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
                   <CardContent className="p-6">
@@ -116,7 +118,7 @@ export default function Home() {
             </div>
 
             {/* Secondary Actions Row */}
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
               <Link href="/pets">
                 <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-pink-300 dark:hover:border-pink-600" data-testid="card-pet-profiles">
                   <CardContent className="p-6">
@@ -144,7 +146,26 @@ export default function Home() {
           </div>
 
           {/* Dashboard Grid */}
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            {isLoading ? (
+              <>
+                {[...Array(3)].map((_, i) => (
+                  <Card key={i} className="cosmic-card animate-pulse" data-testid={`skeleton-dashboard-${i}`}>
+                    <CardHeader>
+                      <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="h-4 bg-gray-200 rounded"></div>
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </>
+            ) : (
+              <>
             {/* Active Recalls */}
             <Card className="cosmic-card" data-testid="card-active-recalls">
               <CardHeader>
@@ -154,7 +175,7 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {(recentRecalls?.length ?? 0) > 0 ? (
+                {!isLoading && (recentRecalls?.length ?? 0) > 0 ? (
                   <div className="space-y-3">
                     {recentRecalls?.slice(0, 2).map((recall: any) => (
                       <div key={recall.id} className="p-3 bg-mystical-red/10 border-l-2 border-mystical-red rounded-lg" data-testid={`recall-item-${recall.id}`}>
@@ -213,7 +234,7 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {(userReviews?.length ?? 0) > 0 ? (
+                {!isLoading && (userReviews?.length ?? 0) > 0 ? (
                   <div className="space-y-3">
                     {userReviews?.slice(0, 3).map((review: any) => (
                       <div key={review.id} className="p-3 bg-cosmic-800/30 rounded-lg" data-testid={`review-item-${review.id}`}>
@@ -246,6 +267,8 @@ export default function Home() {
                 )}
               </CardContent>
             </Card>
+              </>
+            )}
           </div>
 
           {/* Admin Access */}

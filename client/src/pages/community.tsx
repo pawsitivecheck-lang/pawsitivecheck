@@ -12,7 +12,7 @@ import UserReview from "@/components/user-review";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Crown, Eye, Star, MessageCircle, ThumbsUp, Search } from "lucide-react";
+import { Users, Crown, Eye, Star, MessageCircle, ThumbsUp, Search, Loader2 } from "lucide-react";
 
 export default function Community() {
   const { user } = useAuth();
@@ -20,11 +20,11 @@ export default function Community() {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: userReviews } = useQuery<any[]>({
+  const { data: userReviews, isLoading: isLoadingUserReviews } = useQuery<any[]>({
     queryKey: ['/api/user/reviews'],
   });
 
-  const { data: products } = useQuery({
+  const { data: products, isLoading: isLoadingProducts } = useQuery({
     queryKey: ['/api/products'],
     queryFn: async () => {
       const res = await fetch('/api/products?limit=100');
@@ -33,7 +33,7 @@ export default function Community() {
   });
 
   // Get all reviews by fetching product reviews
-  const { data: allReviews } = useQuery({
+  const { data: allReviews, isLoading: isLoadingAllReviews } = useQuery({
     queryKey: ['/api/community/reviews'],
     queryFn: async () => {
       if (!products) return [];
@@ -55,6 +55,8 @@ export default function Community() {
     },
     enabled: !!products,
   });
+
+  const isLoading = isLoadingUserReviews || isLoadingProducts || isLoadingAllReviews;
 
   const filteredReviews = allReviews?.filter((review: any) => {
     if (reviewFilter !== "all" && review.rating.toString() !== reviewFilter) return false;
@@ -225,7 +227,31 @@ export default function Community() {
             </CardContent>
           </Card>
 
+          {/* Loading State */}
+          {isLoading && (
+            <div className="space-y-6">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse" data-testid={`skeleton-review-${i}`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                      <div className="flex-1">
+                        <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
           {/* Community Reviews */}
+          {!isLoading && (
           <div className="space-y-6">
             {filteredReviews.length > 0 ? (
               filteredReviews.map((review: any) => (
@@ -327,6 +353,7 @@ export default function Community() {
               </Card>
             )}
           </div>
+          )}
 
           {/* Call to Action */}
           {user && (
