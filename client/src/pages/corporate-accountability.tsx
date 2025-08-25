@@ -52,17 +52,32 @@ export default function CorporateAccountability() {
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-lawsuit-amount">$6.375M</div>
                   <div className="text-sm text-red-700 dark:text-red-300">Largest settlement paid in 2024</div>
-                  <div className="text-xs text-red-600 mt-1">Midwestern Pet Foods contamination<button onClick={() => document.getElementById('source-1')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">¹</button></div>
+                  <div className="text-xs text-red-600 mt-1">
+                    Midwestern Pet Foods contamination
+                    <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (Top Class Actions, 2024 ↗)
+                    </a>
+                  </div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-recent-violations">17+</div>
                   <div className="text-sm text-red-700 dark:text-red-300">FDA warning letters issued 2025</div>
-                  <div className="text-xs text-red-600 mt-1">Including bird flu contamination<button onClick={() => document.getElementById('source-5')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁵</button></div>
+                  <div className="text-xs text-red-600 mt-1">
+                    Including bird flu contamination
+                    <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (PetfoodIndustry, 2025 ↗)
+                    </a>
+                  </div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-human-victims">7</div>
                   <div className="text-sm text-red-700 dark:text-red-300">Humans sickened by pet food</div>
-                  <div className="text-xs text-red-600 mt-1">6 were children under 1 year<button onClick={() => document.getElementById('source-6')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁶</button></div>
+                  <div className="text-xs text-red-600 mt-1">
+                    6 were children under 1 year
+                    <a href="https://a-capp.msu.edu/article/a-case-study-of-melamine-as-a-counterfeit-food-product-additive-in-chinese-human-and-animal-food-supply-chain-networks/" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (MSU Case Study ↗)
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -85,21 +100,21 @@ export default function CorporateAccountability() {
                       <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                       <div>
                         <strong className="text-red-800 dark:text-red-200">Pet Deaths Go Unaddressed:</strong>
-                        <span className="text-red-700 dark:text-red-300 block">103 pet deaths reported in January 2024 alone<button onClick={() => document.getElementById('source-4')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁴</button>, yet companies deny responsibility and continue operations unchanged.</span>
+                        <span className="text-red-700 dark:text-red-300 block">103 pet deaths reported in January 2024 alone <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News, 2025 ↗)</a>, yet companies deny responsibility and continue operations unchanged.</span>
                       </div>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                       <div>
                         <strong className="text-red-800 dark:text-red-200">Human Health Risks Multiply:</strong>
-                        <span className="text-red-700 dark:text-red-300 block">Contaminated pet food sickens entire families, with 6 infants under one year affected by a single company's failures<button onClick={() => document.getElementById('source-6')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁶</button>.</span>
+                        <span className="text-red-700 dark:text-red-300 block">Contaminated pet food sickens entire families, with 6 infants under one year affected by a single company's failures <a href="https://a-capp.msu.edu/article/a-case-study-of-melamine-as-a-counterfeit-food-product-additive-in-chinese-human-and-animal-food-supply-chain-networks/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(MSU Case Study ↗)</a>.</span>
                       </div>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></span>
                       <div>
                         <strong className="text-red-800 dark:text-red-200">Scientific Manipulation:</strong>
-                        <span className="text-red-700 dark:text-red-300 block">Companies fund fake research and coordinate with academia to create false health scares about competitors' products<button onClick={() => document.getElementById('source-7')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁷</button>.</span>
+                        <span className="text-red-700 dark:text-red-300 block">Companies fund fake research and coordinate with academia to create false health scares about competitors' products <a href="https://cvm.msu.edu/news/perspectives-magazine/perspectives-winter-2018/defining-and-fighting-food-fraud" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(MSU Veterinary Medicine ↗)</a>.</span>
                       </div>
                     </li>
                     <li className="flex items-start space-x-3">
@@ -119,7 +134,7 @@ export default function CorporateAccountability() {
                       <span className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></span>
                       <div>
                         <strong className="text-green-800 dark:text-green-200">Financial Consequences Drive Change:</strong>
-                        <span className="text-green-700 dark:text-green-300 block">Multi-million dollar lawsuits force companies to improve safety protocols and quality control systems<button onClick={() => document.getElementById('source-1')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">¹</button>.</span>
+                        <span className="text-green-700 dark:text-green-300 block">Multi-million dollar lawsuits force companies to improve safety protocols and quality control systems <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Top Class Actions ↗)</a>.</span>
                       </div>
                     </li>
                     <li className="flex items-start space-x-3">
@@ -174,12 +189,12 @@ export default function CorporateAccountability() {
                   {/* Bird Flu Pet Food Crisis */}
                   <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">H5N1 Bird Flu Pet Food Crisis<button onClick={() => document.getElementById('source-5')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁵</button></h4>
+                      <h4 className="text-lg font-bold text-red-800 dark:text-red-200">H5N1 Bird Flu Pet Food Crisis <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></h4>
                       <Badge variant="destructive" className="text-sm">2025 Outbreak</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-red-700 dark:text-red-300">
-                      <p><strong>Multiple Cat Deaths:</strong> Wild Coast, Northwest Naturals, Savage Pet raw foods contaminated with H5N1<button onClick={() => document.getElementById('source-5')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁵</button></p>
-                      <p><strong>Legal Action:</strong> Wild Coast Pet Foods sued after 4-year-old cat "Kira" died from H5N1 contamination<button onClick={() => document.getElementById('source-5')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁵</button></p>
+                      <p><strong>Multiple Cat Deaths:</strong> Wild Coast, Northwest Naturals, Savage Pet raw foods contaminated with H5N1 <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></p>
+                      <p><strong>Legal Action:</strong> Wild Coast Pet Foods sued after 4-year-old cat "Kira" died from H5N1 contamination <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></p>
                       <p><strong>Public Health Risk:</strong> Pet-to-human transmission concerns, especially dangerous for children</p>
                       <p><strong>Corporate Response:</strong> Delayed recalls and inadequate warnings about bird flu risks to consumers</p>
                     </div>
@@ -188,26 +203,26 @@ export default function CorporateAccountability() {
                   {/* Mars/Pedigree Vitamin D Poisoning */}
                   <div className="p-4 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Mars/Pedigree Vitamin D Toxicity<button onClick={() => document.getElementById('source-2')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">²</button></h4>
+                      <h4 className="text-lg font-bold text-orange-800 dark:text-orange-200">Mars/Pedigree Vitamin D Toxicity <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(PetfoodIndustry, 2025 ↗)</a></h4>
                       <Badge variant="outline" className="text-sm">2025 Lawsuit</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-orange-700 dark:text-orange-300">
-                      <p><strong>Toxic Levels:</strong> Independent testing found 28x minimum vitamin D requirements (5x safe maximum)<button onClick={() => document.getElementById('source-2')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">²</button></p>
+                      <p><strong>Toxic Levels:</strong> Independent testing found 28x minimum vitamin D requirements (5x safe maximum) <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></p>
                       <p><strong>Health Impact:</strong> Causing vomiting, weight loss, diarrhea, potential death in dogs</p>
                       <p><strong>Corporate Negligence:</strong> Products remained on market despite dangerous overdose levels</p>
-                      <p><strong>Legal Action:</strong> Class action filed February 2025 for New York General Business Law violations<button onClick={() => document.getElementById('source-2')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">²</button></p>
+                      <p><strong>Legal Action:</strong> Class action filed February 2025 for New York General Business Law violations <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a></p>
                     </div>
                   </div>
 
                   {/* Answers Pet Food FDA Defiance */}
                   <div className="p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-lg font-bold text-yellow-800 dark:text-yellow-200">Answers Pet Food vs FDA<button onClick={() => document.getElementById('source-3')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">³</button></h4>
+                      <h4 className="text-lg font-bold text-yellow-800 dark:text-yellow-200">Answers Pet Food vs FDA <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/lystn-llc-dba-answers-pet-food-694680-06182025" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(FDA Warning Letter, 2025 ↗)</a></h4>
                       <Badge variant="outline" className="text-sm">June 2025</Badge>
                     </div>
                     <div className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
                       <p><strong>Contamination Crisis:</strong> Salmonella and Listeria found in 4 product lots, facility surfaces contaminated</p>
-                      <p><strong>Corporate Defiance:</strong> Company sued FDA challenging zero-tolerance Salmonella policy as "unconstitutional"<button onClick={() => document.getElementById('source-3')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">³</button></p>
+                      <p><strong>Corporate Defiance:</strong> Company sued FDA challenging zero-tolerance Salmonella policy as "unconstitutional" <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/lystn-llc-dba-answers-pet-food-694680-06182025" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Warning Letter ↗)</a></p>
                       <p><strong>Regulatory Failure:</strong> Failed to implement preventive controls despite repeated violations</p>
                       <p><strong>Consumer Risk:</strong> 3 consumer complaints of dog illnesses triggered FDA emergency inspection</p>
                     </div>
@@ -237,7 +252,7 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-green-800 dark:text-green-200">Midwestern Pet Foods</span>
                           <Badge className="bg-green-600">$6.375M</Badge>
                         </div>
-                        <p className="text-sm text-green-700 dark:text-green-300">2024 settlement for aflatoxin contamination. Payments up to $128.65 reported by October 2024.</p>
+                        <p className="text-sm text-green-700 dark:text-green-300">2024 settlement for aflatoxin contamination <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Top Class Actions ↗)</a>. Payments up to $128.65 reported by October 2024.</p>
                       </div>
 
                       <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
@@ -245,7 +260,7 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-blue-800 dark:text-blue-200">ZuPreem Pet Foods</span>
                           <Badge className="bg-blue-600">March 2025</Badge>
                         </div>
-                        <p className="text-sm text-blue-700 dark:text-blue-300">Class action for false "natural" labeling despite synthetic pyridoxine hydrochloride, citric acid<button onClick={() => document.getElementById('source-4')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁴</button>.</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">Class action for false "natural" labeling despite synthetic pyridoxine hydrochloride, citric acid <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a>.</p>
                       </div>
 
                       <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800">
@@ -253,7 +268,7 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-purple-800 dark:text-purple-200">Multiple "Natural" Claims</span>
                           <Badge variant="outline">2025 Trend</Badge>
                         </div>
-                        <p className="text-sm text-purple-700 dark:text-purple-300">Merrick Pet Care, Wellness Pet Food, Mars Petcare facing similar "natural" labeling lawsuits<button onClick={() => document.getElementById('source-4')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁴</button>.</p>
+                        <p className="text-sm text-purple-700 dark:text-purple-300">Merrick Pet Care, Wellness Pet Food, Mars Petcare facing similar "natural" labeling lawsuits <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a>.</p>
                       </div>
                     </div>
                     
@@ -265,7 +280,7 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-red-800 dark:text-red-200">Blue Ridge Beef</span>
                           <Badge variant="destructive">2025 Recall</Badge>
                         </div>
-                        <p className="text-sm text-red-700 dark:text-red-300">Nearly 5 tons of puppy/kitten products recalled across 16 states for salmonella and listeria<button onClick={() => document.getElementById('source-3')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">³</button>.</p>
+                        <p className="text-sm text-red-700 dark:text-red-300">Nearly 5 tons of puppy/kitten products recalled across 16 states for salmonella and listeria <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/lystn-llc-dba-answers-pet-food-694680-06182025" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA Warning ↗)</a>.</p>
                       </div>
 
                       <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200 dark:border-orange-800">
@@ -273,7 +288,7 @@ export default function CorporateAccountability() {
                           <span className="font-semibold text-orange-800 dark:text-orange-200">Wild Coast Pet Foods</span>
                           <Badge variant="outline">H5N1 Lawsuit</Badge>
                         </div>
-                        <p className="text-sm text-orange-700 dark:text-orange-300">Sued after cat death from bird flu contamination in raw chicken food. Failure to warn consumers.</p>
+                        <p className="text-sm text-orange-700 dark:text-orange-300">Sued after cat death from bird flu contamination in raw chicken food <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a>. Failure to warn consumers.</p>
                       </div>
 
                       <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950 rounded-lg">
@@ -302,7 +317,7 @@ export default function CorporateAccountability() {
                     <div>
                       <h4 className="font-semibold text-lg mb-3 text-red-600">Limited FDA Authority</h4>
                       <ul className="space-y-2 text-sm">
-                        <li>• <strong>No Pre-Market Approval:</strong> Products need not be nutritionally sufficient to go to market<button onClick={() => document.getElementById('source-4')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁴</button></li>
+                        <li>• <strong>No Pre-Market Approval:</strong> Products need not be nutritionally sufficient to go to market <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a></li>
                         <li>• <strong>Labeling Only:</strong> FDA only ensures products are labeled truthfully and free of harmful substances</li>
                         <li>• <strong>No Quality Standards:</strong> High quality not required for market entry</li>
                         <li>• <strong>Third-Party Standards:</strong> AAFCO and WSAVA set nutritional standards, not FDA</li>
@@ -323,7 +338,7 @@ export default function CorporateAccountability() {
                   <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
                     <h4 className="font-semibold text-red-800 dark:text-red-200 mb-3">FDA Enforcement Surge (2025)⁴</h4>
                     <p className="text-sm text-red-700 dark:text-red-300">
-                      Despite mass layoffs at FDA's Center for Veterinary Medicine, enforcement actions increased dramatically in 2025<button onClick={() => document.getElementById('source-4')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁴</button>. New H5N1 bird flu guidance requires pet food companies to update safety plans, but many continue operating with contaminated products<button onClick={() => document.getElementById('source-5')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁵</button>.
+                      Despite mass layoffs at FDA's Center for Veterinary Medicine, enforcement actions increased dramatically in 2025 <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(STAT News ↗)</a>. New H5N1 bird flu guidance requires pet food companies to update safety plans, but many continue operating with contaminated products <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(PetfoodIndustry ↗)</a>.
                     </p>
                   </div>
 
@@ -364,7 +379,7 @@ export default function CorporateAccountability() {
                   <div className="space-y-3">
                     <h4 className="font-semibold text-lg text-orange-600">Scientific Manipulation</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• Fund biased research studies<button onClick={() => document.getElementById('source-7')?.scrollIntoView({ behavior: 'smooth' })} className="text-blue-600 hover:underline ml-1 font-bold cursor-pointer">⁷</button></li>
+                      <li>• Fund biased research studies <a href="https://cvm.msu.edu/news/perspectives-magazine/perspectives-winter-2018/defining-and-fighting-food-fraud" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(MSU Veterinary Medicine ↗)</a></li>
                       <li>• Coordinate with veterinary researchers</li>
                       <li>• Create false scientific consensus</li>
                       <li>• Suppress contradictory evidence</li>
@@ -481,102 +496,6 @@ export default function CorporateAccountability() {
               </CardContent>
             </Card>
 
-            {/* Scientific Citations */}
-            <Card className="border-gray-200 dark:border-gray-700" data-testid="card-citations">
-              <CardHeader>
-                <CardTitle className="text-xl flex items-center text-gray-800 dark:text-gray-200">
-                  <ExternalLink className="w-5 h-5 mr-3" />
-                  Legal & Regulatory Sources
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 text-sm">
-                  <div id="source-1">
-                    <strong>1.</strong> Top Class Actions. (2024). 
-                    <em>Midwestern Pet Foods $6.375M Class Action Settlement.</em> 
-                    <a href="https://topclassactions.com/lawsuit-settlements/closed-settlements/midwestern-pet-foods-aflatoxin-salmonella-contamination-6-375m-class-action-settlement/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-2">
-                    <strong>2.</strong> PetfoodIndustry. (2025). 
-                    <em>Mars faces lawsuit over excessive vitamin D in PEDIGREE dog food.</em> 
-                    <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15745632/mars-faces-lawsuit-over-excessive-vitamin-d-in-pedigree-dog-food" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-3">
-                    <strong>3.</strong> U.S. Food and Drug Administration. (2025). 
-                    <em>Warning Letter - Lystn LLC dba Answers Pet Food.</em> 
-                    <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/lystn-llc-dba-answers-pet-food-694680-06182025" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-4">
-                    <strong>4.</strong> STAT News. (2025). 
-                    <em>The FDA's hands-off approach to pet food nutrition.</em> 
-                    <a href="https://www.statnews.com/2025/04/04/pet-food-safety-fda-regulation-recalls/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-5">
-                    <strong>5.</strong> PetfoodIndustry. (2025). 
-                    <em>Raw pet food company sued after cat infected with bird flu.</em> 
-                    <a href="https://www.petfoodindustry.com/pet-food-lawsuits-litigation/news/15741551/raw-pet-food-company-sued-after-cat-infected-with-bird-flu" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-6">
-                    <strong>6.</strong> Michigan State University Center for Anti-Counterfeiting and Product Protection. 
-                    <em>Melamine Case Study: Corporate Accountability in Pet Food Supply Chains.</em> 
-                    <a href="https://a-capp.msu.edu/article/a-case-study-of-melamine-as-a-counterfeit-food-product-additive-in-chinese-human-and-animal-food-supply-chain-networks/" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-7">
-                    <strong>7.</strong> Michigan State University College of Veterinary Medicine. 
-                    <em>Defining and Fighting Food Fraud: Corporate Accountability Framework.</em> 
-                    <a href="https://cvm.msu.edu/news/perspectives-magazine/perspectives-winter-2018/defining-and-fighting-food-fraud" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div id="source-8">
-                    <strong>8.</strong> Michigan State University College of Veterinary Medicine Hospital. 
-                    <em>Veterinary Clinical Research and Pet Food Safety Analysis.</em> 
-                    <a href="https://cvm.msu.edu/hospital" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div>
-                    <strong>Academic & Research Institutions:</strong>
-                    <ul className="mt-2 ml-4 space-y-1">
-                      <li>• <strong>Michigan State University</strong> - National Food Safety and Toxicology Center</li>
-                      <li>• MSU Food Fraud Initiative - Corporate Risk Management Framework</li>
-                      <li>• MSU Extension - Pet Food Safety Research Program</li>
-                      <li>• MSU College of Veterinary Medicine - Food Safety Studies</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <strong>Additional 2025 Resources:</strong>
-                    <ul className="mt-2 ml-4 space-y-1">
-                      <li>• FDA CVM Warning Letters (17+ enforcement actions in 2025)</li>
-                      <li>• Top Class Actions - Pet Food Settlement Database</li>
-                      <li>• CNN Health - Bird Flu Pet Food Contamination Analysis</li>
-                      <li>• American Veterinary Medical Association - H5N1 Pet Deaths</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
           </div>
           
