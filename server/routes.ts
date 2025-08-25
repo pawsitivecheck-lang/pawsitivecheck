@@ -998,13 +998,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Default search coordinates (Central US - Kansas City area)
       let lat = 39.0997;  // Kansas City - more central for US searches
       let lng = -94.5786;
-      let searchRadius = 50000; // 50km - wider default search
+      let searchRadius = 50000; // ~30 miles - wider default search
       
       // Always prioritize GPS location when provided
       if (location && location.lat && location.lng) {
         lat = location.lat;
         lng = location.lng;
-        searchRadius = 25000; // Use actual user location
+        searchRadius = 25000; // ~15 miles - use actual user location
       }
       // Only try to detect location from query string if no GPS location provided
       else if (query) {
@@ -1078,7 +1078,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const elementLng = element.lon || (element.center ? element.center.lon : lng);
             
             // More accurate distance calculation using Haversine formula
-            const R = 6371; // Earth's radius in kilometers
+            const R = 3959; // Earth's radius in miles
             const dLat = (elementLat - lat) * Math.PI / 180;
             const dLng = (elementLng - lng) * Math.PI / 180;
             const a = 
@@ -1159,7 +1159,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               longitude: elementLng
             };
           })
-          .filter((practice: any) => practice.distance <= 50) // Filter out results too far away
+          .filter((practice: any) => practice.distance <= 30) // Filter out results too far away (30 miles)
           .slice(0, 20); // Limit to top 20 results
 
         // If no OpenStreetMap results, fall back to database
