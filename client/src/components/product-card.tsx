@@ -14,6 +14,7 @@ interface ProductCardProps {
     transparencyLevel?: string;
     isBlacklisted?: boolean;
     imageUrl?: string;
+    sourceUrl?: string;
     suspiciousIngredients?: string[];
   };
   onClick: () => void;
@@ -186,6 +187,25 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               </div>
             )}
           </div>
+
+          {/* Source Link */}
+          {product.sourceUrl && (
+            <div className="p-2 bg-starlight-500/5 rounded border border-starlight-500/20 mb-3">
+              <div className="flex items-center justify-between">
+                <span className="text-cosmic-400 text-xs">Official Source</span>
+                <a 
+                  href={product.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-starlight-400 hover:text-starlight-300 text-xs underline"
+                  data-testid={`product-source-link-${product.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  View Brand Info →
+                </a>
+              </div>
+            </div>
+          )}
 
           {/* Action Button */}
           <Button 
