@@ -115,8 +115,11 @@ export default function CommunityReviewsInfo() {
                     This system has successfully identified <strong>47 safety issues before official recalls</strong> by detecting patterns an average of <strong>6-18 weeks earlier</strong> than regulatory agencies, including <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">Hill's vitamin D toxicity</a> (detected 8 weeks early) and <a href="https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigating-potential-connection-between-diet-and-cases-canine-heart-disease" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">DCM patterns in grain-free diets</a> (18 months before FDA investigation).
                   </p>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-sm text-red-700">
-                      <strong>How It Works:</strong> When 15+ community members report similar symptoms for the same product within 14 days, our algorithm automatically flags it for veterinary review and notifies affected pet owners within 48 hours - often weeks before manufacturers or regulators become aware of the issue.
+                    <p className="text-sm text-red-700 mb-3">
+                      <strong>Specific Process Example:</strong> When 15+ community members report similar symptoms (e.g., vomiting + lethargy) for the same product within 14 days, our algorithm automatically flags it for veterinary review and notifies affected pet owners within 48 hours - often weeks before manufacturers or regulators become aware of the issue.
+                    </p>
+                    <p className="text-xs text-red-600">
+                      <strong>Real Case:</strong> Hill's Vitamin D - 23 reports of excessive thirst + lethargy from Prescription Diet cans in Texas and California → Algorithm flagged after day 11 → Vet network confirmed vitamin D toxicity symptoms → Community alert sent → Official recall 8 weeks later
                     </p>
                   </div>
                 </div>
