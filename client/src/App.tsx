@@ -29,6 +29,7 @@ import ProductDetail from "@/pages/product-detail";
 import ProductAnalysis from "@/pages/product-analysis";
 import SubmitProductUpdate from "@/pages/submit-product-update";
 import AdminProductSubmissions from "@/pages/admin-product-submissions";
+import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -48,6 +49,7 @@ function Router() {
           <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
           <Route path="/recall-system-info" component={RecallSystemInfo} />
           <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
+          <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
         </>
       ) : (
         <>
@@ -71,6 +73,7 @@ function Router() {
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route path="/submit-product-update" component={SubmitProductUpdate} />
+          <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
         </>
       )}
       {/* Admin routes accessible to all - components handle auth checks */}

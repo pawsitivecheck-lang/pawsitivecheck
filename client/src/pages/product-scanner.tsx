@@ -371,19 +371,7 @@ export default function ProductScanner() {
 
           {/* Product Analyzer */}
           <Card className="mb-8" data-testid="card-scanner-interface">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <CardTitle className="flex items-center gap-2 text-blue-600">
-                  <Search className="h-5 w-5" />
-                  Product Safety Analyzer
-                </CardTitle>
-                <HelpTooltip 
-                  content="Three scanning methods for comprehensive safety analysis: (1) Manual barcode entry or camera scanning for instant database lookup, (2) AI-powered image recognition to identify products from photos, (3) Product name search for discovering and analyzing new products. All methods provide immediate comprehensive safety assessment."
-                  side="right"
-                />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 pt-6">
               <div className="flex gap-4">
                 <Input
                   type="text"
