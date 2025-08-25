@@ -6,11 +6,22 @@ interface VetPractice {
   address: string;
   city: string;
   state: string;
+  zipCode?: string;
   phone: string;
   website?: string;
   rating: number;
   reviewCount: number;
   services: string[];
+  hours: {
+    Monday: string;
+    Tuesday: string;
+    Wednesday: string;
+    Thursday: string;
+    Friday: string;
+    Saturday: string;
+    Sunday: string;
+  };
+  specialties: string[];
   emergencyServices: boolean;
   distance?: number;
   latitude?: number;

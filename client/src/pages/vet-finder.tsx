@@ -31,18 +31,26 @@ interface VetPractice {
   address: string;
   city: string;
   state: string;
-  zipCode: string;
+  zipCode?: string;
   phone: string;
   website?: string;
   rating: number;
   reviewCount: number;
   services: string[];
   hours: {
-    [key: string]: string;
+    Monday: string;
+    Tuesday: string;
+    Wednesday: string;
+    Thursday: string;
+    Friday: string;
+    Saturday: string;
+    Sunday: string;
   };
   specialties: string[];
   emergencyServices: boolean;
   distance?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export default function VetFinder() {
@@ -160,6 +168,97 @@ export default function VetFinder() {
   const formatHours = (hours: { [key: string]: string }) => {
     const today = new Date().toLocaleDateString('en', { weekday: 'long' });
     return hours[today] || "Hours vary";
+  };
+
+  const getCurrentDay = () => {
+    return new Date().toLocaleDateString('en', { weekday: 'long' });
+  };
+
+  const HoursDisplay = ({ hours, vetId }: { hours: { [key: string]: string }, vetId: string }) => {
+    const currentDay = getCurrentDay();
+    const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    return (
+      <div className="space-y-1">
+        <h4 className="text-cosmic-200 font-medium mb-2">Daily Hours</h4>
+        {daysOrder.map((day) => {
+          const isToday = day === currentDay;
+          return (
+            <div 
+              key={day}
+              className={`flex justify-between items-center text-sm px-2 py-1 rounded ${
+                isToday 
+                  ? 'bg-starlight-500/10 text-starlight-400 font-medium border border-starlight-500/20' 
+                  : 'text-cosmic-300'
+              }`}
+              data-testid={`hours-${vetId}-${day.toLowerCase()}`}
+            >
+              <span className="font-medium">
+                {isToday ? `${day} (Today)` : day}
+              </span>
+              <span className={isToday ? 'text-starlight-300' : 'text-cosmic-400'}>
+                {hours[day] || 'Call for hours'}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const AnimalServicesDisplay = ({ specialties, services, vetId }: { specialties: string[], services: string[], vetId: string }) => {
+    const animalTypes = specialties.filter(specialty => 
+      specialty.toLowerCase().includes('animal') || 
+      specialty.toLowerCase().includes('pet') ||
+      specialty.toLowerCase().includes('care')
+    );
+    
+    const serviceTypes = services.filter(service => 
+      !service.toLowerCase().includes('general')
+    );
+
+    return (
+      <div className="space-y-4">
+        {animalTypes.length > 0 && (
+          <div>
+            <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+              🐾 Animals We Serve
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {animalTypes.map((type, index) => (
+                <Badge
+                  key={index}
+                  className="bg-mystical-purple/20 text-mystical-purple border-mystical-purple/30"
+                  data-testid={`animal-type-${vetId}-${index}`}
+                >
+                  {type}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {serviceTypes.length > 0 && (
+          <div>
+            <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+              ⚕️ Services Offered
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {serviceTypes.map((service, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className="border-cosmic-600 text-cosmic-300"
+                  data-testid={`service-type-${vetId}-${index}`}
+                >
+                  {service}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -367,8 +466,8 @@ export default function VetFinder() {
                             )}
                           </div>
 
-                          {/* Contact & Hours */}
-                          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                          {/* Contact Info */}
+                          <div className="grid gap-4 mb-6">
                             <div className="flex items-center gap-2 text-cosmic-300">
                               <Phone className="h-4 w-4" />
                               <a 
@@ -380,13 +479,8 @@ export default function VetFinder() {
                               </a>
                             </div>
                             
-                            <div className="flex items-center gap-2 text-cosmic-300">
-                              <Clock className="h-4 w-4" />
-                              <span className="text-sm">{formatHours(vet.hours)}</span>
-                            </div>
-                            
                             {vet.website && (
-                              <div className="flex items-center gap-2 text-cosmic-300 sm:col-span-2">
+                              <div className="flex items-center gap-2 text-cosmic-300">
                                 <Globe className="h-4 w-4" />
                                 <a 
                                   href={vet.website}
@@ -401,49 +495,37 @@ export default function VetFinder() {
                             )}
                           </div>
 
-                          {/* Services */}
-                          {vet.services.length > 0 && (
-                            <div className="mb-4">
-                              <h4 className="text-cosmic-200 font-medium mb-2">Services</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {vet.services.map((service, index) => (
-                                  <Badge
-                                    key={index}
-                                    variant="outline"
-                                    className="border-cosmic-600 text-cosmic-300"
-                                    data-testid={`service-${vet.id}-${index}`}
-                                  >
-                                    {service}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                          {/* Animal Services */}
+                          <div className="mb-6">
+                            <AnimalServicesDisplay 
+                              specialties={vet.specialties} 
+                              services={vet.services} 
+                              vetId={vet.id}
+                            />
+                          </div>
 
-                          {/* Specialties */}
-                          {vet.specialties.length > 0 && (
-                            <div>
-                              <h4 className="text-cosmic-200 font-medium mb-2">Specialties</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {vet.specialties.map((specialty, index) => (
-                                  <Badge
-                                    key={index}
-                                    className="bg-mystical-purple/20 text-mystical-purple border-mystical-purple/30"
-                                    data-testid={`specialty-${vet.id}-${index}`}
-                                  >
-                                    {specialty}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                          {/* Hours Display */}
+                          <div className="mb-4">
+                            <HoursDisplay hours={vet.hours} vetId={vet.id} />
+                          </div>
                         </div>
 
                         {/* Action Panel */}
                         <div className="space-y-4">
+                          {/* Current Status */}
+                          <div className="bg-cosmic-800/30 rounded-lg p-4 border border-cosmic-700">
+                            <div className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+                              <Clock className="h-4 w-4" />
+                              Today's Hours
+                            </div>
+                            <div className="text-starlight-400 font-medium">
+                              {formatHours(vet.hours)}
+                            </div>
+                          </div>
+
                           {vet.emergencyServices && (
-                            <Badge className="bg-mystical-red/20 text-mystical-red border-mystical-red/30 w-full justify-center">
-                              🚨 Emergency Services
+                            <Badge className="bg-mystical-red/20 text-mystical-red border-mystical-red/30 w-full justify-center py-2">
+                              🚨 Emergency Services Available
                             </Badge>
                           )}
                           
