@@ -15,14 +15,14 @@ import type { PetProfile } from "@shared/schema";
 const petFormSchema = z.object({
   name: z.string().min(1, "Pet name is required").max(100, "Name too long"),
   species: z.string().min(1, "Species is required"),
-  breed: z.string().optional(),
-  age: z.number().min(0).max(50).optional(),
-  weight: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid weight format").optional(),
+  breed: z.string(),
+  age: z.number().min(0).max(50),
+  weight: z.string(),
   weightUnit: z.string().default("lbs"),
-  gender: z.enum(["male", "female", "unknown"]).optional(),
-  isSpayedNeutered: z.boolean().optional(),
-  profileImageUrl: z.string().url().optional().or(z.literal("")),
-  notes: z.string().optional(),
+  gender: z.enum(["male", "female", "unknown"]),
+  isSpayedNeutered: z.boolean(),
+  profileImageUrl: z.string(),
+  notes: z.string(),
 });
 
 type PetFormData = z.infer<typeof petFormSchema>;
@@ -44,29 +44,30 @@ export function PetForm({ initialData, onSubmit, isLoading }: PetFormProps) {
   const form = useForm<PetFormData>({
     resolver: zodResolver(petFormSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      species: initialData?.species || "",
-      breed: initialData?.breed || "",
-      age: initialData?.age || undefined,
-      weight: initialData?.weight?.toString() || "",
-      weightUnit: initialData?.weightUnit || "lbs",
-      gender: initialData?.gender as "male" | "female" | "unknown" | undefined,
-      isSpayedNeutered: initialData?.isSpayedNeutered || false,
-      profileImageUrl: initialData?.profileImageUrl || "",
-      notes: initialData?.notes || "",
+      name: initialData?.name ?? "",
+      species: initialData?.species ?? "",
+      breed: initialData?.breed ?? "",
+      age: initialData?.age ?? 0,
+      weight: initialData?.weight?.toString() ?? "",
+      weightUnit: initialData?.weightUnit ?? "lbs",
+      gender: (initialData?.gender as "male" | "female" | "unknown") ?? "unknown",
+      isSpayedNeutered: initialData?.isSpayedNeutered ?? false,
+      profileImageUrl: initialData?.profileImageUrl ?? "",
+      notes: initialData?.notes ?? "",
     },
   });
 
   const handleSubmit = (data: PetFormData) => {
     const formData = {
       ...data,
-      age: data.age ? Number(data.age) : null,
-      weight: data.weight ? data.weight : null,
+      age: data.age > 0 ? Number(data.age) : null,
+      weight: data.weight?.trim() ? data.weight.trim() : null,
+      breed: data.breed?.trim() ? data.breed.trim() : null,
       allergies: allergies.length > 0 ? allergies : null,
       medicalConditions: medicalConditions.length > 0 ? medicalConditions : null,
       dietaryRestrictions: dietaryRestrictions.length > 0 ? dietaryRestrictions : null,
-      profileImageUrl: data.profileImageUrl || null,
-      notes: data.notes || null,
+      profileImageUrl: data.profileImageUrl?.trim() ? data.profileImageUrl.trim() : null,
+      notes: data.notes?.trim() ? data.notes.trim() : null,
     };
     onSubmit(formData);
   };
