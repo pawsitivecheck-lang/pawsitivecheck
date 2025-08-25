@@ -39,6 +39,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
   const scriptLoadedRef = useRef(false);
   const [mapError, setMapError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   // Load Google Maps script
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         script.onload = () => {
           console.log('Google Maps script loaded successfully');
           scriptLoadedRef.current = true;
+          setScriptLoaded(true);
         };
 
         script.onerror = () => {
@@ -89,7 +91,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Initialize map when both script and DOM are ready
   useEffect(() => {
-    if (scriptLoadedRef.current && window.google && mapRef.current && !mapInstanceRef.current) {
+    if (scriptLoaded && window.google && mapRef.current && !mapInstanceRef.current) {
       console.log('Both script and DOM ready, initializing map...');
       try {
         initializeMap();
@@ -100,7 +102,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         setIsLoading(false);
       }
     }
-  }, [scriptLoadedRef.current, mapRef.current]);
+  }, [scriptLoaded]);
 
   const initializeMap = () => {
     console.log('Attempting to initialize map...', { hasMapRef: !!mapRef.current, hasGoogle: !!window.google });
