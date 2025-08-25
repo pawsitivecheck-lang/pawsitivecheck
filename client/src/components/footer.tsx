@@ -83,11 +83,11 @@ export default function Footer() {
               </li>
               <li>
                 <div className="space-y-1">
-                  <a href="tel:+1-800-PAWSAFE" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-hotline">
-                    📞 1-800-PAWSAFE
+                  <a href="tel:+1-888-426-4435" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-poison-control">
+                    📞 1-888-426-4435
                   </a>
                   <div className="text-xs text-gray-400 ml-4">
-                    Emergency pet product safety hotline
+                    ASPCA Pet Poison Control Center
                   </div>
                 </div>
               </li>
