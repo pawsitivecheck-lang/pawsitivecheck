@@ -26,8 +26,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showImageScanner, setShowImageScanner] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
-  const [showInternetSearch, setShowInternetSearch] = useState(false);
-  const [internetSearchQuery, setInternetSearchQuery] = useState("");
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,32 +55,40 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
   const internetSearchMutation = useMutation({
     mutationFn: async (query: string) => {
-      return await apiRequest('/api/products/internet-search', {
-        type: 'text', 
-        query: query.trim()
+      const response = await fetch('/api/products/internet-search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'text', 
+          query: query.trim()
+        }),
       });
+      if (!response.ok) throw new Error('Internet search failed');
+      return await response.json();
     },
     onSuccess: (result: any) => {
       if (result.product) {
         toast({
-          title: "Product Found!",
+          title: "Product Found Online!",
           description: `Found "${result.product.name}" from ${result.source}`,
         });
         setLocation(`/product-analysis?name=${encodeURIComponent(result.product.name)}&brand=${encodeURIComponent(result.product.brand)}&ingredients=${encodeURIComponent(result.product.ingredients)}`);
+        setShowResults(false);
+        setSearchQuery("");
       } else {
         toast({
-          title: "No Results",
-          description: "No products found on the internet for this search",
+          title: "No Results Found",
+          description: "Product not found in database or online sources",
           variant: "destructive",
         });
       }
-      setShowInternetSearch(false);
-      setInternetSearchQuery("");
     },
     onError: () => {
       toast({
         title: "Search Failed",
-        description: "Unable to search the internet for products",
+        description: "Unable to search for products",
         variant: "destructive",
       });
     },
@@ -488,19 +494,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 <Image className="mr-2 h-4 w-4" />
                 Image Scanner
               </Button>
-              <Button
-                onClick={() => {
-                  setShowInternetSearch(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
-                data-testid="button-advanced-scanner"
-              >
-                <Globe className="mr-2 h-4 w-4" />
-                Internet Search
-              </Button>
             </div>
           </div>
         )}
@@ -585,19 +578,35 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             )}
 
             {/* Loading state */}
-            {searchMutation.isPending && (
+            {(searchMutation.isPending || internetSearchMutation.isPending) && (
               <div className="p-4 text-center">
                 <Loader2 className="h-4 w-4 animate-spin mx-auto text-gray-400" />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Searching database...</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  {searchMutation.isPending ? 'Searching database...' : 'Searching online...'}
+                </p>
               </div>
             )}
 
-            {/* No results state */}
-            {!searchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
-              <div className="p-4 text-center">
-                <Search className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-                <p className="text-sm text-gray-600 dark:text-gray-300">No products found</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Try a different search term</p>
+            {/* No results state with internet search option */}
+            {!searchMutation.isPending && !internetSearchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
+              <div className="p-4 text-center space-y-3">
+                <div>
+                  <Search className="h-8 w-8 mx-auto text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600 dark:text-gray-300">No products found in database</p>
+                </div>
+                <div className="border-t border-gray-600 pt-3">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Search online for this product?</p>
+                  <Button
+                    onClick={() => internetSearchMutation.mutate(searchQuery)}
+                    disabled={internetSearchMutation.isPending}
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    data-testid="button-search-internet-inline"
+                  >
+                    <Globe className="mr-2 h-3 w-3" />
+                    Search Internet
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -617,86 +626,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         onClose={() => setShowImageScanner(false)}
       />
 
-      {/* Internet Search Modal */}
-      {showInternetSearch && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Globe className="h-5 w-5 text-blue-400" />
-                Internet Product Search
-              </h3>
-              <Button
-                onClick={() => setShowInternetSearch(false)}
-                variant="ghost"
-                size="sm"
-                className="text-gray-400 hover:text-white"
-                data-testid="button-close-internet-search"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Search for a product online:
-                </label>
-                <Input
-                  value={internetSearchQuery}
-                  onChange={(e) => setInternetSearchQuery(e.target.value)}
-                  placeholder="e.g., Blue Buffalo chicken dog food"
-                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                  data-testid="input-internet-search"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && internetSearchQuery.trim()) {
-                      internetSearchMutation.mutate(internetSearchQuery);
-                    }
-                  }}
-                />
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => {
-                    if (internetSearchQuery.trim()) {
-                      internetSearchMutation.mutate(internetSearchQuery);
-                    }
-                  }}
-                  disabled={!internetSearchQuery.trim() || internetSearchMutation.isPending}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  data-testid="button-search-internet"
-                >
-                  {internetSearchMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Searching...
-                    </>
-                  ) : (
-                    <>
-                      <Search className="mr-2 h-4 w-4" />
-                      Search Internet
-                    </>
-                  )}
-                </Button>
-                
-                <Button
-                  onClick={() => setShowInternetSearch(false)}
-                  variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                  data-testid="button-cancel-internet-search"
-                >
-                  Cancel
-                </Button>
-              </div>
-              
-              <p className="text-xs text-gray-400">
-                This will search online databases for product information and safety data.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
