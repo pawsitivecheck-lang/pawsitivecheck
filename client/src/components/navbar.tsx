@@ -65,7 +65,7 @@ export default function Navbar() {
             </div>
             
             {/* Header Search - Center on desktop */}
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               <HeaderSearch />
             </div>
           </div>
