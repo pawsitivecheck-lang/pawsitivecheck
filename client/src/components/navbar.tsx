@@ -129,7 +129,7 @@ export default function Navbar() {
               </div>
 
               {/* Navigation Items */}
-              <div className="p-4 space-y-2">
+              <div className="p-4 space-y-2 bg-gray-900">
                 <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                   Navigation
                 </div>
@@ -155,7 +155,7 @@ export default function Navbar() {
               </div>
 
               {/* Profile Items */}
-              <div className="p-4 border-t border-gray-600">
+              <div className="p-4 border-t border-gray-600 bg-gray-900">
                 <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                   Account
                 </div>
