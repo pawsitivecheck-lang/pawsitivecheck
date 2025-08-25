@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import AdBanner from "@/components/ad-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
@@ -26,6 +27,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      
+      {/* Top Banner Ad */}
+      <div className="bg-white border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="home-header" />
+        </div>
+      </div>
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -64,6 +72,11 @@ export default function Home() {
           {/* Quick Actions */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-8">Quick Actions</h2>
+            
+            {/* Mid-page Square Ad */}
+            <div className="flex justify-center mb-8">
+              <AdBanner size="square" position="home-mid" />
+            </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Link href="/scan">
                 <Card className="bg-white hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200 hover:border-blue-300" data-testid="card-quick-scan">
@@ -274,6 +287,14 @@ export default function Home() {
           )}
         </div>
       </div>
+      
+      {/* Bottom Banner Ad */}
+      <div className="bg-white border-t border-gray-200 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="banner" position="home-footer" />
+        </div>
+      </div>
+      
       <Footer />
     </div>
   );
