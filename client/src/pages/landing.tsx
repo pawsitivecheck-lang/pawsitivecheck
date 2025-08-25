@@ -7,6 +7,7 @@ import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import CookieConsent from "@/components/cookie-consent";
+import AdBanner from "@/components/ad-banner";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
@@ -55,6 +56,13 @@ export default function Landing() {
         <span className="block sm:inline">🚨 ALERT: New product recalls updated</span>
         <span className="hidden sm:inline"> • </span>
         <span className="block sm:inline">Check your pet's products now →</span>
+      </div>
+
+      {/* Top Leaderboard Ad */}
+      <div className="bg-gray-50 border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="header" />
+        </div>
       </div>
       
       {/* Navigation */}
@@ -449,6 +457,13 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Mid-page Banner Ad */}
+      <div className="bg-gray-50 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="banner" position="mid-page" />
+        </div>
+      </div>
+
       {/* Service Cards */}
       <section className="py-12 sm:py-16 bg-white" id="scanner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -511,6 +526,11 @@ export default function Landing() {
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 sm:mb-4" data-testid="text-featured-title">Recently Analyzed Products</h2>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto" data-testid="text-featured-description">See safety scores and detailed analysis from our community</p>
+          </div>
+          
+          {/* Square Ad - Featured Products Section */}
+          <div className="flex justify-center mb-8">
+            <AdBanner size="square" position="featured-products" />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -742,6 +762,13 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Pre-footer Ad */}
+      <div className="bg-white py-6 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center">
+          <AdBanner size="leaderboard" position="pre-footer" />
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
         <div className="max-w-6xl mx-auto">
@@ -755,6 +782,9 @@ export default function Landing() {
             <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" data-testid="text-footer-mission">
               Empowering pet parents with transparent safety analysis and 
               comprehensive product information for healthier pets.
+            </p>
+            <p className="text-gray-400 text-sm mt-3">
+              This free service is supported by advertising revenue. Thank you for helping us keep pet safety accessible to everyone.
             </p>
           </div>
           

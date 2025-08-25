@@ -263,10 +263,10 @@ export default function CookieConsent() {
                 </div>
                 <p className="text-sm text-gray-600">
                   These cookies are used to deliver personalized advertisements and measure the effectiveness 
-                  of advertising campaigns across different platforms.
+                  of advertising campaigns. This helps support our free pet safety platform.
                 </p>
                 <div className="mt-2 text-xs text-gray-500">
-                  Used for: Personalized ads, campaign tracking, social media integration
+                  Used for: Ad personalization, campaign tracking, revenue to support free platform
                 </div>
               </CardContent>
             </Card>
