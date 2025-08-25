@@ -46,17 +46,32 @@ export default function PetHealthProtection() {
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-poison-calls">451,000</div>
                   <div className="text-sm text-red-700 dark:text-red-300">Poison control calls in 2024</div>
-                  <div className="text-xs text-red-600 mt-1">4% increase from 2023¹</div>
+                  <div className="text-xs text-red-600 mt-1">
+                    4% increase from 2023
+                    <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (ASPCA, 2024 ↗)
+                    </a>
+                  </div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-food-recalls">17</div>
                   <div className="text-sm text-red-700 dark:text-red-300">Pet food recalls in 2024</div>
-                  <div className="text-xs text-red-600 mt-1">46,090 pounds recalled²</div>
+                  <div className="text-xs text-red-600 mt-1">
+                    46,090 pounds recalled
+                    <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (FDA, 2024 ↗)
+                    </a>
+                  </div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-red-600" data-testid="stat-toxic-metals">100%</div>
                   <div className="text-sm text-red-700 dark:text-red-300">Commercial pet foods exceeded mercury limits</div>
-                  <div className="text-xs text-red-600 mt-1">Scientific study of 100 brands³</div>
+                  <div className="text-xs text-red-600 mt-1">
+                    Scientific study of 100 brands
+                    <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      (Scientific Reports, 2021 ↗)
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -70,7 +85,7 @@ export default function PetHealthProtection() {
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center text-orange-800 dark:text-orange-200">
                   <AlertTriangle className="w-6 h-6 mr-3" />
-                  Top 10 Pet Toxins of 2024¹
+                  Top 10 Pet Toxins of 2024 <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -123,9 +138,9 @@ export default function PetHealthProtection() {
                 <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
                   <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Emerging Threats:</h4>
                   <ul className="text-sm space-y-1 text-blue-700 dark:text-blue-300">
-                    <li>• <strong>Hallucinogenic mushrooms:</strong> 74% increase in exposure calls</li>
-                    <li>• <strong>Flavored veterinary chewables:</strong> Pets consuming entire packages</li>
-                    <li>• <strong>Xylitol in protein products:</strong> Sugar-free gums, energy bars, vitamins</li>
+                    <li>• <strong>Hallucinogenic mushrooms:</strong> 74% increase in exposure calls <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a></li>
+                    <li>• <strong>Flavored veterinary chewables:</strong> Pets consuming entire packages <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a></li>
+                    <li>• <strong>Xylitol in protein products:</strong> Sugar-free gums, energy bars, vitamins <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a></li>
                   </ul>
                 </div>
               </CardContent>
@@ -143,7 +158,7 @@ export default function PetHealthProtection() {
                 <div className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-lg">2024 Recall Statistics²</h4>
+                      <h4 className="font-semibold text-lg">2024 Recall Statistics <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(FDA, 2024 ↗)</a></h4>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-center justify-between">
                           <span>• Total recalls:</span>
@@ -166,16 +181,16 @@ export default function PetHealthProtection() {
                       <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
                         <h5 className="font-semibold text-yellow-800 dark:text-yellow-200">Major 2024 Recalls:</h5>
                         <ul className="text-sm text-yellow-700 dark:text-yellow-300 mt-2 space-y-1">
-                          <li>• Mid America Pet Food (Salmonella)</li>
-                          <li>• Mars Petcare Pedigree (Metal pieces)</li>
-                          <li>• ANSWERS Pet Food (Salmonella/Listeria)</li>
-                          <li>• Darwin's Natural (Salmonella/Listeria)</li>
+                          <li>• Mid America Pet Food (Salmonella) <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
+                          <li>• Mars Petcare Pedigree (Metal pieces) <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
+                          <li>• ANSWERS Pet Food (Salmonella/Listeria) <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
+                          <li>• Darwin's Natural (Salmonella/Listeria) <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
                         </ul>
                       </div>
                     </div>
                     
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-lg">Toxic Heavy Metal Contamination³</h4>
+                      <h4 className="font-semibold text-lg">Toxic Heavy Metal Contamination <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(Scientific Reports, 2021 ↗)</a></h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex items-center justify-between p-2 bg-red-50 dark:bg-red-950 rounded">
                           <span>Mercury (all pet foods):</span>
@@ -201,7 +216,7 @@ export default function PetHealthProtection() {
                       
                       <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 rounded-lg">
                         <p className="text-sm text-red-700 dark:text-red-300">
-                          <strong>Scientific study of 100 commercial pet foods</strong> found that virtually all exceeded FDA maximum tolerable levels for toxic heavy metals.
+                          <strong>Scientific study of 100 commercial pet foods</strong> <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(Scientific Reports, 2021 ↗)</a> found that virtually all exceeded FDA maximum tolerable levels for toxic heavy metals.
                         </p>
                       </div>
                     </div>
@@ -223,8 +238,8 @@ export default function PetHealthProtection() {
                   <div>
                     <h4 className="font-semibold text-lg mb-3 text-red-600">Toxic Preservatives</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• <strong>BHA/BHT:</strong> Carcinogenic</li>
-                      <li>• <strong>Ethoxyquin:</strong> Banned in Europe</li>
+                      <li>• <strong>BHA/BHT:</strong> Carcinogenic <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
+                      <li>• <strong>Ethoxyquin:</strong> Banned in Europe <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(FDA ↗)</a></li>
                       <li>• <strong>Propylene Glycol:</strong> Toxic to cats</li>
                       <li>• <strong>Sodium Metabisulfite:</strong> Nervous system damage</li>
                     </ul>
@@ -233,7 +248,7 @@ export default function PetHealthProtection() {
                   <div>
                     <h4 className="font-semibold text-lg mb-3 text-orange-600">Deadly Sweeteners</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• <strong>Xylitol:</strong> Fatal to dogs</li>
+                      <li>• <strong>Xylitol:</strong> Fatal to dogs <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">(ASPCA ↗)</a></li>
                       <li>• <strong>High fructose corn syrup:</strong> Diabetes risk</li>
                       <li>• <strong>Artificial dyes:</strong> Blue 2, Red 40, Yellow 5 & 6</li>
                       <li>• <strong>MSG:</strong> Hidden as "natural flavors"</li>
@@ -362,52 +377,6 @@ export default function PetHealthProtection() {
               </CardContent>
             </Card>
 
-            {/* Scientific Citations */}
-            <Card className="border-gray-200 dark:border-gray-700" data-testid="card-citations">
-              <CardHeader>
-                <CardTitle className="text-xl flex items-center text-gray-800 dark:text-gray-200">
-                  <ExternalLink className="w-5 h-5 mr-3" />
-                  Scientific Citations & Sources
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <strong>1.</strong> ASPCA Animal Poison Control Center. (2024). 
-                    <em>The Official Top 10 Pet Toxins of 2024.</em> 
-                    <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div>
-                    <strong>2.</strong> U.S. Food and Drug Administration. (2024). 
-                    <em>Pet Food Recalls, Market Withdrawals & Safety Alerts.</em> 
-                    <a href="https://www.fda.gov/animal-veterinary/safety-health/recalls-withdrawals" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div>
-                    <strong>3.</strong> Pešková, L., Cavoura, O., et al. (2021). 
-                    <em>Toxic element levels in ingredients and commercial pet foods.</em> 
-                    Scientific Reports, 11, 21176.
-                    <a href="https://www.nature.com/articles/s41598-021-00467-4" className="text-blue-600 hover:underline ml-2" target="_blank" rel="noopener noreferrer">
-                      View Source ↗
-                    </a>
-                  </div>
-                  
-                  <div>
-                    <strong>Additional Resources:</strong>
-                    <ul className="mt-2 ml-4 space-y-1">
-                      <li>• American Veterinary Medical Association - Household Hazards</li>
-                      <li>• FDA Center for Veterinary Medicine - Pet Food Safety</li>
-                      <li>• AVMA Pet Food Safety Guidelines</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
           </div>
           
