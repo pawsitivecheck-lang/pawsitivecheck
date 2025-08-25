@@ -96,7 +96,7 @@ export default function Navbar() {
             {/* Sidebar */}
             <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-600">
+              <div className="flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
                 <div className="flex items-center space-x-3">
                   {user?.profileImageUrl ? (
                     <img 
