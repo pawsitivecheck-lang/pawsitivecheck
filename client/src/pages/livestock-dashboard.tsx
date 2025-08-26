@@ -108,13 +108,13 @@ export default function LivestockDashboard() {
         </div>
         {hasOperations && (
           <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock/operations/new") : window.location.href = "/api/login"}
+            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
             className="flex items-center gap-2"
             data-testid="button-add-operation"
             variant={isAuthenticated ? "default" : "outline"}
           >
             {isAuthenticated ? <PlusIcon className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
-            {isAuthenticated ? "New Operation" : "Sign In to Add Operations"}
+            {isAuthenticated ? "Manage Operations" : "Sign In to Add Operations"}
           </Button>
         )}
       </div>
@@ -133,14 +133,14 @@ export default function LivestockDashboard() {
             }
           </p>
           <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock/operations/new") : window.location.href = "/api/login"}
+            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
             size="lg"
             className="flex items-center gap-2"
             variant={isAuthenticated ? "default" : "outline"}
             data-testid="button-create-first-operation"
           >
             {isAuthenticated ? <PlusIcon className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
-            {isAuthenticated ? "Create Your First Operation" : "Sign In to Get Started"}
+            {isAuthenticated ? "Get Started with Livestock" : "Sign In to Get Started"}
           </Button>
         </div>
       ) : (
