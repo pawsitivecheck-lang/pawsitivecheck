@@ -80,120 +80,6 @@ export default function Landing() {
             
             
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* User Menu Dropdown */}
-              <div className="relative" ref={userMenuRef}>
-                <button 
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-1 sm:space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] border border-gray-200"
-                  data-testid="button-user-menu"
-                >
-                  {isAuthenticated ? (
-                    <>
-                      {user?.profileImageUrl ? (
-                        <img 
-                          src={user.profileImageUrl} 
-                          alt="Profile" 
-                          className="w-5 h-5 rounded-full"
-                        />
-                      ) : (
-                        <UserCheck className="h-5 w-5 text-blue-600" />
-                      )}
-                      <span className="hidden sm:inline font-medium text-gray-700">{user?.firstName || 'Account'}</span>
-                    </>
-                  ) : (
-                    <>
-                      <UserCheck className="h-5 w-5 text-gray-600" />
-                      <span className="hidden sm:inline font-medium text-gray-700">Account</span>
-                    </>
-                  )}
-                  <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                {/* Dropdown Menu */}
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    {isAuthenticated ? (
-                      <>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/pets';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-pet-profiles-dropdown"
-                        >
-                          <PawPrint className="mr-3 h-4 w-4" />
-                          Pet Profiles
-                        </button>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/product-database';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-database-dropdown"
-                        >
-                          <Database className="mr-3 h-4 w-4" />
-                          Safety Database
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/api/logout';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-logout-dropdown"
-                        >
-                          <svg className="mr-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                          </svg>
-                          Sign Out
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/api/login';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-sign-in-dropdown"
-                        >
-                          <UserCheck className="mr-3 h-4 w-4" />
-                          Sign In
-                        </button>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/api/register';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-register-dropdown"
-                        >
-                          <Users className="mr-3 h-4 w-4" />
-                          Create Account
-                        </button>
-                        <div className="border-t border-gray-100 my-1"></div>
-                        <button 
-                          onClick={() => {
-                            window.location.href = '/vet-finder';
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
-                          data-testid="button-help-dropdown"
-                        >
-                          <Heart className="mr-3 h-4 w-4" />
-                          Help & Support
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
               
               {/* Mobile menu button */}
               <button 
@@ -214,62 +100,13 @@ export default function Landing() {
         {/* Category Navigation Bar - Hidden on mobile */}
         <div className="hidden lg:block bg-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between py-3">
-              <div className="flex items-center space-x-8">
-                <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</a>
-                <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</a>
-                <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</a>
-                <a href="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</a>
-                <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
-                <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
-              </div>
-              <div className="flex items-center space-x-4">
-                {isAuthenticated ? (
-                  <>
-                    <a 
-                      href="/pets" 
-                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
-                      data-testid="nav-desktop-pet-profiles"
-                    >
-                      Pet Profiles
-                    </a>
-                    <a 
-                      href="/product-database" 
-                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
-                      data-testid="nav-desktop-database"
-                    >
-                      Safety Database
-                    </a>
-                    <span className="text-white text-sm px-2">
-                      {user?.firstName || 'User'}
-                    </span>
-                    <a 
-                      href="/api/logout" 
-                      className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
-                      data-testid="nav-desktop-sign-out"
-                    >
-                      Sign Out
-                    </a>
-                  </>
-                ) : (
-                  <>
-                    <a 
-                      href="/api/login" 
-                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
-                      data-testid="nav-desktop-sign-in"
-                    >
-                      Sign In
-                    </a>
-                    <a 
-                      href="/api/login" 
-                      className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
-                      data-testid="nav-desktop-create-account"
-                    >
-                      Create Account
-                    </a>
-                  </>
-                )}
-              </div>
+            <div className="flex items-center justify-center space-x-8 py-3">
+              <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</a>
+              <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</a>
+              <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</a>
+              <a href="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</a>
+              <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
+              <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
             </div>
           </div>
         </div>
