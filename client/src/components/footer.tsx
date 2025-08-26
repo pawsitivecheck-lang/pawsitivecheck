@@ -1,4 +1,5 @@
 import { PawPrint } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Footer() {
   return (
@@ -10,24 +11,24 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-mission-title">Our Mission</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/comprehensive-safety-analysis" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                <Link to="/comprehensive-safety-analysis" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/ingredient-transparency" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                <Link to="/ingredient-transparency" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
                   Ingredient Transparency
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/corporate-accountability" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
+                <Link to="/corporate-accountability" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
                   Corporate Accountability
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/pet-health-protection" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                <Link to="/pet-health-protection" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
                   Pet Health Protection
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -36,19 +37,19 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-features-title">Key Features</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                <Link to="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
                   Product Scanner
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/safety-database-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                <Link to="/safety-database-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
                   Safety Database
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/recall-system-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
+                <Link to="/recall-system-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
                   Recall Alerts
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -68,9 +69,9 @@ export default function Footer() {
               </li>
               <li>
                 <div className="space-y-1">
-                  <a href="/community-reviews-info" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
+                  <Link to="/community-reviews-info" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
                     💬 Community Portal
-                  </a>
+                  </Link>
                   <div className="text-xs text-gray-400 ml-4">
                     Reviews, discussions & product insights
                   </div>
@@ -93,27 +94,27 @@ export default function Footer() {
         {/* Legal Links */}
         <div className="border-t border-gray-600 pt-6">
           <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
-            <a 
-              href="/admin" 
+            <Link 
+              to="/admin" 
               className="text-gray-400 hover:text-white text-sm transition-colors"
               data-testid="link-footer-admin"
             >
               Admin
-            </a>
-            <a 
-              href="/privacy-policy" 
+            </Link>
+            <Link 
+              to="/privacy-policy" 
               className="text-gray-400 hover:text-white text-sm transition-colors"
               data-testid="link-footer-privacy-policy"
             >
               Privacy Policy
-            </a>
-            <a 
-              href="/terms-of-service" 
+            </Link>
+            <Link 
+              to="/terms-of-service" 
               className="text-gray-400 hover:text-white text-sm transition-colors"
               data-testid="link-footer-terms-service"
             >
               Terms of Service
-            </a>
+            </Link>
             <button 
               onClick={() => {
                 // Re-show cookie consent by clearing stored consent
