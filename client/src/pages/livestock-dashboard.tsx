@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useLocation, useRouter } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,8 +36,7 @@ interface LivestockHerd {
 }
 
 export default function LivestockDashboard() {
-  const router = useRouter();
-  const navigate = router.navigate;
+  const [, setLocation] = useLocation();
   const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
   const { isAuthenticated, isLoading: authLoading } = useAuth();
 
@@ -109,7 +108,7 @@ export default function LivestockDashboard() {
         </div>
         {hasOperations && (
           <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
+            onClick={() => isAuthenticated ? setLocation("/livestock") : window.location.href = "/api/login"}
             className="flex items-center gap-2"
             data-testid="button-add-operation"
             variant={isAuthenticated ? "default" : "outline"}
@@ -134,7 +133,7 @@ export default function LivestockDashboard() {
             }
           </p>
           <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
+            onClick={() => isAuthenticated ? setLocation("/livestock") : window.location.href = "/api/login"}
             size="lg"
             className="flex items-center gap-2"
             variant={isAuthenticated ? "default" : "outline"}
@@ -279,7 +278,7 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Herds</h3>
                     <Button 
-                      onClick={() => navigate(`/livestock`)}
+                      onClick={() => setLocation(`/livestock`)}
                       size="sm"
                       data-testid="button-add-herd"
                     >
@@ -298,7 +297,7 @@ export default function LivestockDashboard() {
                         <Card 
                           key={herd.id} 
                           className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                          onClick={() => navigate(`/livestock/herds/${herd.id}`)}
+                          onClick={() => setLocation(`/livestock/herds/${herd.id}`)}
                           data-testid={`card-herd-${herd.id}`}
                         >
                           <CardHeader>
@@ -348,7 +347,7 @@ export default function LivestockDashboard() {
                       <p className="text-gray-500 dark:text-gray-400">No herds found for this operation.</p>
                       <Button 
                         className="mt-4" 
-                        onClick={() => navigate(`/livestock`)}
+                        onClick={() => setLocation(`/livestock`)}
                         data-testid="button-create-first-herd"
                       >
                         Go to Livestock Management
@@ -374,7 +373,7 @@ export default function LivestockDashboard() {
                       </p>
                     </div>
                     <Button 
-                      onClick={() => navigate(`/livestock/feed`)}
+                      onClick={() => setLocation(`/livestock/feed`)}
                       data-testid="button-add-feed-record"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
@@ -391,7 +390,7 @@ export default function LivestockDashboard() {
                         Track feed types, quantities, costs, and nutrition for each herd
                       </p>
                       <Button 
-                        onClick={() => navigate(`/livestock/feed`)}
+                        onClick={() => setLocation(`/livestock/feed`)}
                         data-testid="button-start-feed-tracking"
                       >
                         Go to Feed Tracking
@@ -412,7 +411,7 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Health Records</h3>
                     <Button 
-                      onClick={() => navigate(`/livestock`)}
+                      onClick={() => setLocation(`/livestock`)}
                       size="sm"
                       data-testid="button-add-health-record"
                     >
@@ -429,7 +428,7 @@ export default function LivestockDashboard() {
                         Track veterinary visits, treatments, and health events
                       </p>
                       <Button 
-                        onClick={() => navigate(`/livestock`)}
+                        onClick={() => setLocation(`/livestock`)}
                         data-testid="button-start-health-tracking"
                       >
                         Go to Livestock Management
