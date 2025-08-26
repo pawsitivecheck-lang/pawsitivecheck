@@ -80,6 +80,8 @@ export default function Landing() {
             
             
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Theme Toggle - Always visible */}
+              <ThemeToggle />
               
               {/* Mobile menu button */}
               <button 
@@ -175,6 +177,12 @@ export default function Landing() {
                 <BarChart3 className="mr-3 h-5 w-5" />
                 Livestock Management Preview
               </button>
+              
+              {/* Theme Toggle in Mobile */}
+              <div className="flex items-center py-3 px-3">
+                <span className="mr-3 text-gray-700 dark:text-gray-300 font-medium">Theme:</span>
+                <ThemeToggle />
+              </div>
               
               {/* Account Section in Mobile */}
               <div className="border-t border-gray-200 pt-4 mt-4">

@@ -35,9 +35,9 @@ export default function ThemeToggle() {
       data-testid="button-theme-toggle"
     >
       {isDark ? (
-        <Sun className="h-4 w-4" title="Switch to light mode" />
+        <Sun className="h-4 w-4" />
       ) : (
-        <Moon className="h-4 w-4" title="Switch to dark mode" />
+        <Moon className="h-4 w-4" />
       )}
     </Button>
   );
