@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="fixed top-0 w-full z-50 bg-white dark:bg-gray-900 border-b shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
@@ -33,7 +33,7 @@ export default function Navbar() {
         <div className="fixed inset-0 z-50">
           <div className="fixed inset-0 bg-black/50" onClick={() => setIsOpen(false)}></div>
           
-          <div className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl">
+          <div className="fixed top-0 right-0 h-full w-full max-w-80 sm:w-80 bg-white dark:bg-gray-900 shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">Menu</h2>
               <button onClick={() => setIsOpen(false)} className="p-2">
