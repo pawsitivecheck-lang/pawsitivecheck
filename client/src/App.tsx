@@ -1,109 +1,99 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/useAuth";
-import NotFound from "@/pages/not-found";
-import Landing from "@/pages/landing";
-import Home from "@/pages/home";
-import ProductScanner from "@/pages/product-scanner";
-import ProductDatabase from "@/pages/product-database";
-import Recalls from "@/pages/recalls";
-import Community from "@/pages/community";
-import VetFinder from "@/pages/vet-finder";
-import VetAdmin from "@/pages/vet-admin";
-import AdminDashboard from "@/pages/admin-dashboard";
-import Profile from "@/pages/profile";
-import PetProfiles from "@/pages/pet-profiles";
-import PrivacyPolicy from "@/pages/privacy-policy";
-import TermsOfService from "@/pages/terms-of-service";
-import PetHealthProtection from "@/pages/pet-health-protection";
-import CorporateAccountability from "@/pages/corporate-accountability";
-import IngredientTransparency from "@/pages/ingredient-transparency";
-import ScannerTechnology from "@/pages/scanner-technology";
-import SafetyDatabaseInfo from "@/pages/safety-database-info";
-import RecallSystemInfo from "@/pages/recall-system-info";
-import CommunityReviewsInfo from "@/pages/community-reviews-info";
-import ProductDetail from "@/pages/product-detail";
-import ProductAnalysis from "@/pages/product-analysis";
-import SubmitProductUpdate from "@/pages/submit-product-update";
-import AdminProductSubmissions from "@/pages/admin-product-submissions";
-import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
-import LivestockDashboard from "@/pages/livestock-dashboard";
-import FeedTracking from "@/pages/feed-tracking";
-import HerdProfile from "@/pages/herd-profile";
-import CookieConsent from "@/components/cookie-consent";
+import { useState } from "react";
 
-function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
+// Minimal test app to verify React rendering works
+function App() {
+  const [count, setCount] = useState(0);
 
   return (
-    <Switch>
-      {isLoading || !isAuthenticated ? (
-        <>
-          <Route path="/" component={Landing} />
-          <Route path="/privacy-policy" component={PrivacyPolicy} />
-          <Route path="/terms-of-service" component={TermsOfService} />
-          <Route path="/pet-health-protection" component={PetHealthProtection} />
-          <Route path="/corporate-accountability" component={CorporateAccountability} />
-          <Route path="/ingredient-transparency" component={IngredientTransparency} />
-          <Route path="/scanner-technology" component={ScannerTechnology} />
-          <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
-          <Route path="/recall-system-info" component={RecallSystemInfo} />
-          <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
-          <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
-          <Route path="/vet-finder" component={VetFinder} />
-          <Route path="/livestock" component={LivestockDashboard} />
-          <Route path="/livestock/feed" component={FeedTracking} />
-          <Route path="/livestock/herds/:id" component={HerdProfile} />
-        </>
-      ) : (
-        <>
-          <Route path="/" component={Home} />
-          <Route path="/product-scanner" component={ProductScanner} />
-          <Route path="/product-database" component={ProductDatabase} />
-          <Route path="/product/:id" component={ProductDetail} />
-          <Route path="/product/:id/analysis" component={ProductAnalysis} />
-          <Route path="/recalls" component={Recalls} />
-          <Route path="/community" component={Community} />
-          <Route path="/vet-finder" component={VetFinder} />
-          <Route path="/pets" component={PetProfiles} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/pet-health-protection" component={PetHealthProtection} />
-          <Route path="/corporate-accountability" component={CorporateAccountability} />
-          <Route path="/ingredient-transparency" component={IngredientTransparency} />
-          <Route path="/scanner-technology" component={ScannerTechnology} />
-          <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
-          <Route path="/recall-system-info" component={RecallSystemInfo} />
-          <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
-          <Route path="/privacy-policy" component={PrivacyPolicy} />
-          <Route path="/terms-of-service" component={TermsOfService} />
-          <Route path="/submit-product-update" component={SubmitProductUpdate} />
-          <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
-          <Route path="/livestock" component={LivestockDashboard} />
-          <Route path="/livestock/feed" component={FeedTracking} />
-          <Route path="/livestock/herds/:id" component={HerdProfile} />
-        </>
-      )}
-      {/* Admin routes accessible to all - components handle auth checks */}
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/vets" component={VetAdmin} />
-      <Route path="/admin/product-submissions" component={AdminProductSubmissions} />
-      <Route component={NotFound} />
-    </Switch>
+    <div style={{ 
+      padding: '20px', 
+      fontFamily: 'system-ui, sans-serif',
+      maxWidth: '600px',
+      margin: '0 auto'
+    }}>
+      <h1 style={{ color: '#2563eb' }}>🐾 PawsitiveCheck</h1>
+      <p>Pet Product Safety Analysis Platform</p>
+      
+      <div style={{ 
+        background: '#f3f4f6', 
+        padding: '20px', 
+        borderRadius: '8px', 
+        marginTop: '20px' 
+      }}>
+        <h2>System Status Check</h2>
+        <p>✅ React is rendering correctly</p>
+        <p>✅ Basic JavaScript functionality works</p>
+        
+        <button 
+          onClick={() => setCount(count + 1)}
+          style={{
+            background: '#2563eb',
+            color: 'white',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            marginTop: '10px'
+          }}
+        >
+          Test Counter: {count}
+        </button>
+      </div>
+
+      <div style={{ 
+        background: '#dcfce7', 
+        padding: '20px', 
+        borderRadius: '8px', 
+        marginTop: '20px' 
+      }}>
+        <h2>Next Steps</h2>
+        <p>1. Verify this basic app loads properly</p>
+        <p>2. Test API connectivity below</p>
+        <p>3. Gradually restore full functionality</p>
+        
+        <TestAPIButton />
+      </div>
+    </div>
   );
 }
 
-function App() {
+function TestAPIButton() {
+  const [apiResult, setApiResult] = useState<string>("Click to test");
+  const [loading, setLoading] = useState(false);
+
+  const testAPI = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/products?limit=1');
+      const data = await response.json();
+      setApiResult(`✅ API works: ${data[0]?.name || 'No products found'}`);
+    } catch (error) {
+      setApiResult(`❌ API error: ${error}`);
+    }
+    setLoading(false);
+  };
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-        <CookieConsent />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <div style={{ marginTop: '15px' }}>
+      <button
+        onClick={testAPI}
+        disabled={loading}
+        style={{
+          background: '#16a34a',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '6px',
+          cursor: loading ? 'wait' : 'pointer',
+          fontSize: '16px',
+          opacity: loading ? 0.7 : 1
+        }}
+      >
+        {loading ? 'Testing...' : 'Test API Connection'}
+      </button>
+      <p style={{ marginTop: '10px', fontWeight: 'bold' }}>{apiResult}</p>
+    </div>
   );
 }
 
