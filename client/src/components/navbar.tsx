@@ -64,7 +64,10 @@ export default function Navbar() {
               variant="ghost"
               size="sm"
               className="text-muted-foreground p-2 border border-border"
-              onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
+              onClick={() => {
+                console.log('Hamburger clicked, current state:', isHamburgerMenuOpen);
+                setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
+              }}
               data-testid="nav-hamburger-menu"
             >
               {isHamburgerMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -83,7 +86,7 @@ export default function Navbar() {
             />
             
             {/* Sidebar - Responsive width */}
-            <div className="fixed top-0 right-0 h-full w-full sm:w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300 flex flex-col overflow-hidden">
+            <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300 flex flex-col overflow-hidden">
               {/* Header - Fixed */}
               <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
                 <div className="flex items-center space-x-3">
