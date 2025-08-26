@@ -2,11 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
-import { Eye, Shield, Users, Database, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
+import { Eye, Shield, Users, Database, CheckCircle, AlertTriangle, TrendingUp, Sparkles, Zap, Star } from "lucide-react";
 
 export default function ComprehensiveSafetyAnalysis() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-mystical-purple text-cosmic-100">
       <Navbar />
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
@@ -15,29 +15,32 @@ export default function ComprehensiveSafetyAnalysis() {
           
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
-              <Shield className="text-3xl text-white" />
+            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-starlight-400 to-mystical-purple rounded-full flex items-center justify-center mb-6 relative">
+              <Shield className="text-3xl text-cosmic-900" />
+              <div className="absolute -top-1 -right-1">
+                <Sparkles className="h-6 w-6 text-yellow-400 animate-pulse" />
+              </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-starlight-400 mb-4 font-header">
               Comprehensive Safety Analysis
             </h1>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-cosmic-200 text-lg max-w-2xl mx-auto">
               Professional pet product safety evaluation using scientific research, veterinary expertise, and regulatory compliance data
             </p>
           </div>
 
           {/* Why It Matters */}
-          <Card className="mb-8">
+          <Card className="cosmic-card mb-8">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-600">
+              <CardTitle className="flex items-center gap-2 text-starlight-400">
                 <Eye className="h-5 w-5" />
                 Why Comprehensive Safety Analysis Matters
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-gray-700">
+              <div className="text-cosmic-200">
                 <p className="text-lg mb-6">
-                  Pet product safety has become increasingly critical as <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA recalls increased 300% over the past decade</a>, affecting millions of pets. Comprehensive safety analysis helps identify potential hazards before they reach your beloved companions.
+                  Pet product safety has become increasingly critical as <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-starlight-400 hover:text-starlight-300 underline">FDA recalls increased 300% over the past decade</a>, affecting millions of pets. Comprehensive safety analysis helps identify potential hazards before they reach your beloved companions.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
