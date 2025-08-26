@@ -7,6 +7,7 @@ import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
 
+// Force rebuild
 export default function Navbar() {
   const { user } = useAuth();
   const [location] = useLocation();
