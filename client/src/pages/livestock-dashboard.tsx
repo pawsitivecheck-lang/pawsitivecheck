@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useRouter } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +36,8 @@ interface LivestockHerd {
 }
 
 export default function LivestockDashboard() {
-  const [, navigate] = useLocation();
+  const router = useRouter();
+  const navigate = router.navigate;
   const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
   const { isAuthenticated, isLoading: authLoading } = useAuth();
 
