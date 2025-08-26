@@ -214,13 +214,33 @@ export default function Landing() {
         {/* Category Navigation Bar - Hidden on mobile */}
         <div className="hidden lg:block bg-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-center space-x-8 py-3">
-              <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</a>
-              <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</a>
-              <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</a>
-              <a href="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</a>
-              <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
-              <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
+            <div className="flex items-center justify-between py-3">
+              <div className="flex items-center space-x-8">
+                <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</a>
+                <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</a>
+                <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</a>
+                <a href="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</a>
+                <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
+                <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
+              </div>
+              {!isAuthenticated && (
+                <div className="flex items-center space-x-4">
+                  <a 
+                    href="/api/login" 
+                    className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
+                    data-testid="nav-desktop-sign-in"
+                  >
+                    Sign In
+                  </a>
+                  <a 
+                    href="/api/login" 
+                    className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
+                    data-testid="nav-desktop-create-account"
+                  >
+                    Create Account
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
