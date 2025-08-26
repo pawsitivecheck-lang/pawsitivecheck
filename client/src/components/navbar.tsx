@@ -2,20 +2,13 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat } from "lucide-react";
+import { Menu, X, Crown, Shield, Users, Heart, PawPrint, LogOut, Tractor } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [location] = useLocation();
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
@@ -26,7 +19,6 @@ export default function Navbar() {
     { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
     { name: 'Livestock Management', href: '/livestock', icon: Tractor },
   ];
-
 
   const isActivePage = (href: string) => location === href;
 
@@ -46,7 +38,6 @@ export default function Navbar() {
           
           {/* Center Section - Search */}
           <div className="flex-1 flex items-center justify-center">
-            {/* Header Search - Center on desktop */}
             <div className="hidden md:block">
               <HeaderSearch />
             </div>
@@ -54,13 +45,10 @@ export default function Navbar() {
           
           {/* Right Section - User Menu */}
           <div className="flex items-center space-x-4">
-            {/* PWA Install Button */}
             <PWAInstallButton />
-            
-            {/* Theme Toggle */}
             <ThemeToggle />
             
-            {/* Hamburger Menu Button - Available on All Screen Sizes */}
+            {/* Hamburger Menu Button */}
             <Button
               variant="ghost"
               size="sm"
@@ -73,7 +61,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Hamburger Sidebar - Available on All Screen Sizes */}
+        {/* Hamburger Sidebar */}
         {isHamburgerMenuOpen && (
           <>
             {/* Backdrop */}
@@ -83,10 +71,10 @@ export default function Navbar() {
               data-testid="hamburger-backdrop"
             />
             
-            {/* Sidebar - Responsive width */}
-            <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300 flex flex-col overflow-hidden">
-              {/* Header - Fixed */}
-              <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
+            {/* Sidebar */}
+            <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-xl z-50 flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-600">
                 <div className="flex items-center space-x-3">
                   {user?.profileImageUrl ? (
                     <img 
@@ -118,10 +106,10 @@ export default function Navbar() {
                 </Button>
               </div>
 
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto min-h-0">
-                {/* Mobile Search Section - Only shown on small screens */}
-                <div className="p-4 border-b border-gray-600 bg-gray-900 sm:hidden">
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Mobile Search */}
+                <div className="p-4 border-b border-gray-600 sm:hidden">
                   <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                     Search Products
                   </div>
@@ -129,7 +117,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Navigation Items */}
-                <div className="p-3 space-y-1 bg-gray-900">
+                <div className="p-3 space-y-1">
                   <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
                     Navigation
                   </div>
@@ -154,8 +142,8 @@ export default function Navbar() {
                   })}
                 </div>
 
-                {/* Profile Items */}
-                <div className="p-3 border-t border-gray-600 bg-gray-900">
+                {/* Account Items */}
+                <div className="p-3 border-t border-gray-600">
                   <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
                     Account
                   </div>
@@ -195,7 +183,6 @@ export default function Navbar() {
             </div>
           </>
         )}
-
       </div>
     </nav>
   );
