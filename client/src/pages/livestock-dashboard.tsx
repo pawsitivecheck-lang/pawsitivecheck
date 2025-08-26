@@ -5,7 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlusIcon, Home, Users, Activity, TrendingUp } from "lucide-react";
+import { PlusIcon, Home, Users, Activity, TrendingUp, Eye, LogIn } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface LivestockOperation {
   id: number;
@@ -36,23 +38,33 @@ interface LivestockHerd {
 export default function LivestockDashboard() {
   const [, navigate] = useLocation();
   const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+
+  // Use preview endpoints for non-authenticated users
+  const operationsEndpoint = isAuthenticated ? '/api/livestock/operations' : '/api/preview/livestock/operations';
+  const herdsEndpoint = isAuthenticated 
+    ? `/api/livestock/operations/${selectedOperation}/herds`
+    : `/api/preview/livestock/operations/${selectedOperation}/herds`;
 
   const { data: operations, isLoading: operationsLoading } = useQuery<LivestockOperation[]>({
-    queryKey: ['/api/livestock/operations'],
+    queryKey: [operationsEndpoint],
+    enabled: !authLoading, // Don't fetch until we know auth status
   });
 
   const { data: herds, isLoading: herdsLoading } = useQuery<LivestockHerd[]>({
-    queryKey: ['/api/livestock/operations', selectedOperation, 'herds'],
-    enabled: !!selectedOperation,
+    queryKey: [herdsEndpoint],
+    enabled: !!selectedOperation && !authLoading,
   });
 
-  if (operationsLoading) {
+  if (operationsLoading || authLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading livestock operations...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
+              Loading livestock operations...
+            </p>
           </div>
         </div>
       </div>
@@ -63,24 +75,46 @@ export default function LivestockDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Preview Mode Alert */}
+      {!isAuthenticated && (
+        <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950" data-testid="preview-mode-alert">
+          <Eye className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-800 dark:text-blue-200">
+            <strong>Preview Mode:</strong> You're viewing sample data. 
+            <Button 
+              variant="link" 
+              className="ml-2 p-0 h-auto text-blue-700 dark:text-blue-300 underline"
+              onClick={() => window.location.href = "/api/login"}
+              data-testid="button-login-preview"
+            >
+              Sign in to manage your own livestock operations
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            🐄 Livestock Management
+            🐄 Livestock Management {!isAuthenticated && <span className="text-lg text-blue-600 dark:text-blue-400 font-normal">(Preview)</span>}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Manage your farm operations, herds, feed, and health records
+            {isAuthenticated 
+              ? "Manage your farm operations, herds, feed, and health records"
+              : "Explore livestock management features with sample data"
+            }
           </p>
         </div>
         {hasOperations && (
           <Button 
-            onClick={() => navigate("/livestock/operations/new")}
+            onClick={() => isAuthenticated ? navigate("/livestock/operations/new") : window.location.href = "/api/login"}
             className="flex items-center gap-2"
             data-testid="button-add-operation"
+            variant={isAuthenticated ? "default" : "outline"}
           >
-            <PlusIcon className="h-4 w-4" />
-            New Operation
+            {isAuthenticated ? <PlusIcon className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+            {isAuthenticated ? "New Operation" : "Sign In to Add Operations"}
           </Button>
         )}
       </div>
@@ -90,20 +124,23 @@ export default function LivestockDashboard() {
         <div className="text-center py-12">
           <Home className="h-24 w-24 text-gray-400 mx-auto mb-6" />
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Welcome to Livestock Management
+            {isAuthenticated ? "Welcome to Livestock Management" : "Livestock Management Preview"}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-            Get started by setting up your first livestock operation. 
-            Track herds, manage feed, monitor health, and ensure product safety.
+            {isAuthenticated 
+              ? "Get started by setting up your first livestock operation. Track herds, manage feed, monitor health, and ensure product safety."
+              : "This feature allows farmers to track their operations, herds, feed management, and health records. Sign in to start managing your own livestock operation."
+            }
           </p>
           <Button 
-            onClick={() => navigate("/livestock/operations/new")}
+            onClick={() => isAuthenticated ? navigate("/livestock/operations/new") : window.location.href = "/api/login"}
             size="lg"
             className="flex items-center gap-2"
+            variant={isAuthenticated ? "default" : "outline"}
             data-testid="button-create-first-operation"
           >
-            <PlusIcon className="h-5 w-5" />
-            Create Your First Operation
+            {isAuthenticated ? <PlusIcon className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
+            {isAuthenticated ? "Create Your First Operation" : "Sign In to Get Started"}
           </Button>
         </div>
       ) : (
