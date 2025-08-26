@@ -2,31 +2,24 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Shield, Users, Heart, PawPrint, LogOut, Tractor } from "lucide-react";
+import { Menu, X, Shield, Users, Heart, PawPrint, LogOut, Tractor } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
 
 export default function Navbar() {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [location] = useLocation();
-  const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Recall Alerts', href: '/recalls', icon: Shield },
-    { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
-    { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
-    { name: 'Livestock Management', href: '/livestock', icon: Tractor },
-  ];
-
-  const isActivePage = (href: string) => location === href;
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center">
-          {/* Left Section - Logo */}
+          {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
@@ -36,152 +29,113 @@ export default function Navbar() {
             </Link>
           </div>
           
-          {/* Center Section - Search */}
+          {/* Center Search */}
           <div className="flex-1 flex items-center justify-center">
             <div className="hidden md:block">
               <HeaderSearch />
             </div>
           </div>
           
-          {/* Right Section - User Menu */}
+          {/* Right Section */}
           <div className="flex items-center space-x-4">
             <PWAInstallButton />
             <ThemeToggle />
             
-            {/* Hamburger Menu Button */}
+            {/* Hamburger Button */}
             <Button
               variant="ghost"
               size="sm"
-              className="text-muted-foreground p-2 border border-border"
-              onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
+              onClick={toggleMenu}
+              className="p-2 border"
               data-testid="nav-hamburger-menu"
             >
-              {isHamburgerMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Hamburger Sidebar */}
-        {isHamburgerMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <div 
-              className="fixed inset-0 bg-black/50 z-40"
-              onClick={() => setIsHamburgerMenuOpen(false)}
-              data-testid="hamburger-backdrop"
-            />
-            
-            {/* Sidebar */}
-            <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-xl z-50 flex flex-col">
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-600">
-                <div className="flex items-center space-x-3">
-                  {user?.profileImageUrl ? (
-                    <img 
-                      src={user.profileImageUrl} 
-                      alt="Profile" 
-                      className="w-8 h-8 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="font-medium text-white">
-                      {user?.firstName || 'User'}
-                    </h3>
-                    <p className="text-sm text-gray-300">
-                      {user?.email}
-                    </p>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsHamburgerMenuOpen(false)}
-                  className="text-gray-300 hover:text-white"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto">
-                {/* Mobile Search */}
-                <div className="p-4 border-b border-gray-600 sm:hidden">
-                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
-                    Search Products
-                  </div>
-                  <HeaderSearch isMobile={true} />
-                </div>
-
-                {/* Navigation Items */}
-                <div className="p-3 space-y-1">
-                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
-                    Navigation
-                  </div>
-                  {navigation.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link key={item.name} href={item.href}>
-                        <div 
-                          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                            isActivePage(item.href) 
-                              ? 'text-blue-400 bg-blue-900/30' 
-                              : 'text-gray-200 hover:text-blue-400 hover:bg-gray-700'
-                          }`}
-                          onClick={() => setIsHamburgerMenuOpen(false)}
-                          data-testid={`hamburger-${item.href.slice(1)}`}
-                        >
-                          <Icon className="h-5 w-5" />
-                          <span className="font-medium">{item.name}</span>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-
-                {/* Account Items */}
-                <div className="p-3 border-t border-gray-600">
-                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
-                    Account
-                  </div>
-                  <div className="space-y-1">
-                    <Link href="/profile">
-                      <div 
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
-                        onClick={() => setIsHamburgerMenuOpen(false)}
-                      >
-                        <Users className="h-5 w-5" />
-                        <span className="font-medium">Profile</span>
-                      </div>
-                    </Link>
-                    
-                    {user?.isAdmin && (
-                      <Link href="/admin">
-                        <div 
-                          className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
-                          onClick={() => setIsHamburgerMenuOpen(false)}
-                        >
-                          <Crown className="h-5 w-5" />
-                          <span className="font-medium">Admin Dashboard</span>
-                        </div>
-                      </Link>
-                    )}
-                    
-                    <div 
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
-                      onClick={() => window.location.href = '/api/logout'}
-                    >
-                      <LogOut className="h-5 w-5" />
-                      <span className="font-medium">Sign Out</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {/* Simple Dropdown Menu */}
+        {isMenuOpen && (
+          <div className="absolute right-4 top-16 w-64 bg-white dark:bg-gray-900 border rounded-lg shadow-lg z-50">
+            {/* Mobile Search */}
+            <div className="p-4 border-b md:hidden">
+              <HeaderSearch isMobile={true} />
             </div>
-          </>
+            
+            {/* Navigation Links */}
+            <div className="p-2">
+              <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 px-3">
+                Navigation
+              </div>
+              
+              <Link href="/recalls" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Shield className="h-4 w-4" />
+                  <span>Recall Alerts</span>
+                </div>
+              </Link>
+              
+              <Link href="/vet-finder" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Heart className="h-4 w-4" />
+                  <span>Vet Locator</span>
+                </div>
+              </Link>
+              
+              <Link href="/community" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Users className="h-4 w-4" />
+                  <span>Community</span>
+                </div>
+              </Link>
+              
+              <Link href="/pets" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <PawPrint className="h-4 w-4" />
+                  <span>Pet Profiles</span>
+                </div>
+              </Link>
+              
+              <Link href="/livestock" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Tractor className="h-4 w-4" />
+                  <span>Livestock Management</span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Account Section */}
+            {user && (
+              <div className="border-t p-2">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 px-3">
+                  Account
+                </div>
+                
+                <Link href="/profile" onClick={closeMenu}>
+                  <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <Users className="h-4 w-4" />
+                    <span>Profile</span>
+                  </div>
+                </Link>
+                
+                <div 
+                  className="flex items-center gap-3 px-3 py-2 rounded hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 cursor-pointer"
+                  onClick={() => window.location.href = '/api/logout'}
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Backdrop */}
+        {isMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-transparent z-40"
+            onClick={closeMenu}
+          />
         )}
       </div>
     </nav>
