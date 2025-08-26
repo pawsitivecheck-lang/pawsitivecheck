@@ -101,25 +101,43 @@ export default function Navbar() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
                 <div className="flex items-center space-x-3">
-                  {user?.profileImageUrl ? (
-                    <img 
-                      src={user.profileImageUrl} 
-                      alt="Profile" 
-                      className="w-8 h-8 rounded-full"
-                    />
+                  {user ? (
+                    <>
+                      {user?.profileImageUrl ? (
+                        <img 
+                          src={user.profileImageUrl} 
+                          alt="Profile" 
+                          className="w-8 h-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-medium text-white">
+                          {user?.firstName || 'User'}
+                        </h3>
+                        <p className="text-sm text-gray-300">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </>
                   ) : (
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                      <Users className="w-4 h-4 text-white" />
-                    </div>
+                    <>
+                      <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                        <Users className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-white">
+                          Guest User
+                        </h3>
+                        <p className="text-sm text-gray-300">
+                          Not signed in
+                        </p>
+                      </div>
+                    </>
                   )}
-                  <div>
-                    <h3 className="font-medium text-white">
-                      {user?.firstName || 'User'}
-                    </h3>
-                    <p className="text-sm text-gray-300">
-                      {user?.email}
-                    </p>
-                  </div>
                 </div>
                 <Button
                   variant="ghost"
@@ -163,35 +181,65 @@ export default function Navbar() {
                   Account
                 </div>
                 <div className="space-y-2">
-                  <Link href="/profile">
-                    <div 
-                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsHamburgerMenuOpen(false)}
-                    >
-                      <Users className="h-5 w-5" />
-                      <span className="font-medium">Profile</span>
-                    </div>
-                  </Link>
-                  
-                  {user?.isAdmin && (
-                    <Link href="/admin">
+                  {user ? (
+                    <>
+                      <Link href="/profile">
+                        <div 
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                          onClick={() => setIsHamburgerMenuOpen(false)}
+                        >
+                          <Users className="h-5 w-5" />
+                          <span className="font-medium">Profile</span>
+                        </div>
+                      </Link>
+                      
+                      {user?.isAdmin && (
+                        <Link href="/admin">
+                          <div 
+                            className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                            onClick={() => setIsHamburgerMenuOpen(false)}
+                          >
+                            <Crown className="h-5 w-5" />
+                            <span className="font-medium">Admin Dashboard</span>
+                          </div>
+                        </Link>
+                      )}
+                      
                       <div 
-                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
-                        onClick={() => setIsHamburgerMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
+                        onClick={() => window.location.href = '/api/logout'}
                       >
-                        <Crown className="h-5 w-5" />
-                        <span className="font-medium">Admin Dashboard</span>
+                        <LogOut className="h-5 w-5" />
+                        <span className="font-medium">Sign Out</span>
                       </div>
-                    </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div 
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setIsHamburgerMenuOpen(false);
+                          window.location.href = '/api/login';
+                        }}
+                        data-testid="hamburger-sign-in"
+                      >
+                        <Users className="h-5 w-5" />
+                        <span className="font-medium">Sign In</span>
+                      </div>
+                      
+                      <div 
+                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setIsHamburgerMenuOpen(false);
+                          window.location.href = '/api/login';
+                        }}
+                        data-testid="hamburger-create-account"
+                      >
+                        <Users className="h-5 w-5" />
+                        <span className="font-medium">Create Account</span>
+                      </div>
+                    </>
                   )}
-                  
-                  <div 
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
-                    onClick={() => window.location.href = '/api/logout'}
-                  >
-                    <LogOut className="h-5 w-5" />
-                    <span className="font-medium">Sign Out</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -241,53 +289,83 @@ export default function Navbar() {
                     ) : (
                       <Users className="h-4 w-4" />
                     )}
-                    <span>{user?.firstName || 'Profile'}</span>
+                    <span>{user?.firstName || (user ? 'Profile' : 'Account')}</span>
                   </div>
                 </div>
                 
-                <Link href="/profile">
-                  <div 
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
-                      isActivePage('/profile') 
-                        ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    data-testid="nav-mobile-profile"
-                  >
-                    <Users className="h-5 w-5" />
-                    <span>Profile</span>
-                  </div>
-                </Link>
+                {user ? (
+                  <>
+                    <Link href="/profile">
+                      <div 
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
+                          isActivePage('/profile') 
+                            ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
+                            : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                        }`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        data-testid="nav-mobile-profile"
+                      >
+                        <Users className="h-5 w-5" />
+                        <span>Profile</span>
+                      </div>
+                    </Link>
 
-                {user?.isAdmin && (
-                  <Link href="/admin">
+                    {user?.isAdmin && (
+                      <Link href="/admin">
+                        <div 
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
+                            isActivePage('/admin') 
+                              ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
+                              : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                          }`}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          data-testid="nav-mobile-admin"
+                        >
+                          <Crown className="h-5 w-5" />
+                          <span>Admin Dashboard</span>
+                        </div>
+                      </Link>
+                    )}
+                    
                     <div 
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
-                        isActivePage('/admin') 
-                          ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
-                          : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
-                      }`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      data-testid="nav-mobile-admin"
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 cursor-pointer mx-0"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.location.href = '/api/logout';
+                      }}
+                      data-testid="nav-mobile-logout"
                     >
-                      <Crown className="h-5 w-5" />
-                      <span>Admin Dashboard</span>
+                      <LogOut className="h-5 w-5" />
+                      <span>Sign Out</span>
                     </div>
-                  </Link>
+                  </>
+                ) : (
+                  <>
+                    <div 
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800 cursor-pointer mx-0"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.location.href = '/api/login';
+                      }}
+                      data-testid="nav-mobile-sign-in"
+                    >
+                      <Users className="h-5 w-5" />
+                      <span>Sign In</span>
+                    </div>
+                    
+                    <div 
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-blue-600 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 cursor-pointer mx-0"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.location.href = '/api/login';
+                      }}
+                      data-testid="nav-mobile-create-account"
+                    >
+                      <Users className="h-5 w-5" />
+                      <span>Create Account</span>
+                    </div>
+                  </>
                 )}
-                
-                <div 
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 cursor-pointer mx-0"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    window.location.href = '/api/logout';
-                  }}
-                  data-testid="nav-mobile-logout"
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Sign Out</span>
-                </div>
               </div>
             </div>
           </div>
