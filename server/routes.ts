@@ -11,7 +11,8 @@ import {
   insertScanHistorySchema,
   insertPetProfileSchema,
   insertSavedProductSchema,
-  insertProductUpdateSubmissionSchema
+  insertProductUpdateSubmissionSchema,
+  insertVeterinaryOfficeSchema
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
@@ -2519,7 +2520,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await new Promise(resolve => setTimeout(resolve, 200));
             
           } catch (error) {
-            console.warn(`Search query failed:`, error.message);
+            console.warn(`Search query failed:`, error instanceof Error ? error.message : String(error));
             continue;
           }
         }
@@ -2536,7 +2537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive API calls
         
         for (let i = 0; i < maxResults; i++) {
-          const place = searchData.results[i];
+          const place = searchData.results[i] as any;
           
           try {
             // Get place details including phone, website, hours, etc.
@@ -3032,11 +3033,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
               if (office.latitude && office.longitude) {
                 // Calculate distance using Haversine formula
                 const R = 3959; // Earth's radius in miles
-                const dLat = (office.latitude - lat) * Math.PI / 180;
-                const dLng = (office.longitude - lng) * Math.PI / 180;
+                const dLat = (Number(office.latitude) - lat) * Math.PI / 180;
+                const dLng = (Number(office.longitude) - lng) * Math.PI / 180;
                 const a = 
                   Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
+                  Math.cos(lat * Math.PI / 180) * Math.cos(Number(office.latitude) * Math.PI / 180) * 
                   Math.sin(dLng/2) * Math.sin(dLng/2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
                 const distance = R * c;
@@ -3291,7 +3292,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.parse(req.body);
       
-      const newOffice = await storage.addVeterinaryOffice({
+      const newOffice = await storage.createVeterinaryOffice({
         ...officeData,
         createdBy: userId,
       });
