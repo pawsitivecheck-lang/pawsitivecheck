@@ -11,8 +11,7 @@ import {
   insertScanHistorySchema,
   insertPetProfileSchema,
   insertSavedProductSchema,
-  insertProductUpdateSubmissionSchema,
-  insertVeterinaryOfficeSchema
+  insertProductUpdateSubmissionSchema
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
@@ -24,10 +23,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const user = req.user as any;
-      const userId = user.claims.sub;
-      const userData = await storage.getUser(userId);
-      res.json(userData);
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -2429,8 +2427,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/products/:productId/tags', isAuthenticated, async (req, res) => {
     try {
-      const user = req.user as any;
-      const userId = user?.claims?.sub;
+      const userId = req.user?.claims?.sub;
       const productId = parseInt(req.params.productId);
       const { tagIds, relevanceScores } = req.body;
       
@@ -2520,7 +2517,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await new Promise(resolve => setTimeout(resolve, 200));
             
           } catch (error) {
-            console.warn(`Search query failed:`, error instanceof Error ? error.message : String(error));
+            console.warn(`Search query failed:`, error.message);
             continue;
           }
         }
@@ -2537,7 +2534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive API calls
         
         for (let i = 0; i < maxResults; i++) {
-          const place = searchData.results[i] as any;
+          const place = searchData.results[i];
           
           try {
             // Get place details including phone, website, hours, etc.
@@ -3033,11 +3030,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
               if (office.latitude && office.longitude) {
                 // Calculate distance using Haversine formula
                 const R = 3959; // Earth's radius in miles
-                const dLat = (Number(office.latitude) - lat) * Math.PI / 180;
-                const dLng = (Number(office.longitude) - lng) * Math.PI / 180;
+                const dLat = (office.latitude - lat) * Math.PI / 180;
+                const dLng = (office.longitude - lng) * Math.PI / 180;
                 const a = 
                   Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat * Math.PI / 180) * Math.cos(Number(office.latitude) * Math.PI / 180) * 
+                  Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
                   Math.sin(dLng/2) * Math.sin(dLng/2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
                 const distance = R * c;
@@ -3278,8 +3275,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         practices: [],
         total: 0,
-        searchQuery: (req.query.query as string) || 'veterinarian',
-        location: (req.query.location as string) || null,
+        searchQuery: query || 'veterinarian',
+        location: location || null,
         source: 'Error',
         message: 'Search service temporarily unavailable. Please try again.'
       });
@@ -3292,7 +3289,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.parse(req.body);
       
-      const newOffice = await storage.createVeterinaryOffice({
+      const newOffice = await storage.addVeterinaryOffice({
         ...officeData,
         createdBy: userId,
       });
@@ -3325,7 +3322,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.partial().parse(req.body);
       
-      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData);
+      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData, userId);
       
       if (!updatedOffice) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3347,7 +3344,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
       
-      const success = await storage.deleteVeterinaryOffice(id, userId);
+      const success = await storage.removeVeterinaryOffice(id, userId);
       
       if (!success) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3364,7 +3361,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const savedProducts = await storage.getUserSavedProducts(userId);
+      const savedProducts = await storage.getSavedProducts(userId);
       res.json(savedProducts);
     } catch (error) {
       console.error("Error fetching saved products:", error);
@@ -3380,7 +3377,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
       });
       
-      const savedProduct = await storage.saveProductForPet(productData);
+      const savedProduct = await storage.savePetProduct(productData);
       res.status(201).json(savedProduct);
     } catch (error) {
       console.error("Error saving product for pet:", error);
@@ -3568,7 +3565,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Mark as applied
           await storage.updateProductUpdateSubmission(id, {
-            adminNotes: reviewData.adminNotes || 'Applied successfully',
+            appliedAt: new Date(),
           });
         } catch (error) {
           console.error("Error applying product changes:", error);
@@ -3922,6 +3919,370 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error deleting livestock health record:", error);
       res.status(500).json({ error: "Failed to delete livestock health record" });
     }
+  });
+
+  // =========================== LIVESTOCK PREVIEW ROUTES (NO AUTH REQUIRED) ===========================
+  
+  // Sample data for preview mode
+  const sampleOperations = [
+    {
+      id: 1,
+      userId: "preview-user",
+      operationName: "Sunny Valley Farm",
+      operationType: "dairy",
+      address: "123 Farm Road",
+      city: "Farmville",
+      state: "Wisconsin",
+      zipCode: "53001",
+      totalHeadCount: 85,
+      primarySpecies: ["cattle"],
+      certifications: ["organic", "pasture-raised"],
+      contactPhone: "(555) 123-4567",
+      contactEmail: "info@sunnyvalleyfarm.com",
+      notes: "Family-owned dairy operation specializing in organic milk production",
+      isActive: true,
+      createdAt: "2023-01-15T00:00:00Z",
+      updatedAt: "2024-03-20T00:00:00Z"
+    },
+    {
+      id: 2,
+      userId: "preview-user",
+      operationName: "Prairie Poultry Co.",
+      operationType: "poultry",
+      address: "456 Chicken Lane",
+      city: "Eggtown",
+      state: "Iowa",
+      zipCode: "50001",
+      totalHeadCount: 2500,
+      primarySpecies: ["chickens"],
+      certifications: ["free-range", "cage-free"],
+      contactPhone: "(555) 987-6543",
+      contactEmail: "contact@prairiepoultry.com",
+      notes: "Free-range egg production with sustainable farming practices",
+      isActive: true,
+      createdAt: "2022-08-20T00:00:00Z",
+      updatedAt: "2024-02-10T00:00:00Z"
+    }
+  ];
+
+  const sampleHerds = [
+    {
+      id: 1,
+      operationId: 1,
+      userId: "preview-user",
+      herdName: "Main Dairy Herd",
+      species: "cattle",
+      breed: "Holstein",
+      headCount: 45,
+      averageWeight: "1200",
+      weightUnit: "lbs",
+      ageRange: "2-6 years",
+      purpose: "dairy",
+      housingType: "free_stall_barn",
+      feedingSchedule: { 
+        morning: "6:00 AM", 
+        afternoon: "2:00 PM", 
+        evening: "8:00 PM" 
+      },
+      healthProtocol: "Monthly vet checkups, vaccination schedule per dairy standards",
+      notes: "Primary milking herd with excellent production records",
+      isActive: true,
+      createdAt: "2023-01-20T00:00:00Z",
+      updatedAt: "2024-03-15T00:00:00Z"
+    },
+    {
+      id: 2,
+      operationId: 1,
+      userId: "preview-user",
+      herdName: "Young Stock",
+      species: "cattle",
+      breed: "Holstein",
+      headCount: 25,
+      averageWeight: "600",
+      weightUnit: "lbs",
+      ageRange: "6 months - 2 years",
+      purpose: "breeding",
+      housingType: "pasture",
+      feedingSchedule: { 
+        morning: "7:00 AM", 
+        evening: "6:00 PM" 
+      },
+      healthProtocol: "Growth monitoring, deworming schedule, breeding prep",
+      notes: "Future replacement heifers for the dairy operation",
+      isActive: true,
+      createdAt: "2023-02-01T00:00:00Z",
+      updatedAt: "2024-03-10T00:00:00Z"
+    },
+    {
+      id: 3,
+      operationId: 2,
+      userId: "preview-user", 
+      herdName: "Layer Flock A",
+      species: "poultry",
+      breed: "Rhode Island Red",
+      headCount: 1250,
+      averageWeight: "4.5",
+      weightUnit: "lbs",
+      ageRange: "1-3 years",
+      purpose: "egg_production",
+      housingType: "free_range",
+      feedingSchedule: { 
+        morning: "6:30 AM", 
+        afternoon: "1:00 PM", 
+        evening: "7:30 PM" 
+      },
+      healthProtocol: "Weekly health checks, organic feed only, natural pest control",
+      notes: "High-producing layer flock with consistent egg quality",
+      isActive: true,
+      createdAt: "2022-09-01T00:00:00Z",
+      updatedAt: "2024-01-25T00:00:00Z"
+    }
+  ];
+
+  const sampleFeedRecords = [
+    {
+      id: 1,
+      herdId: 1,
+      userId: "preview-user",
+      feedType: "grain",
+      feedName: "Organic Dairy Grain Mix",
+      supplier: "Premium Feed Co.",
+      quantityPerFeeding: "15.0",
+      quantityUnit: "lbs",
+      feedingsPerDay: 3,
+      costPerUnit: "0.45",
+      lastPurchaseDate: "2024-03-15T00:00:00Z",
+      currentStock: "500.0",
+      stockUnit: "lbs",
+      nutritionAnalysis: {
+        protein: 18,
+        fat: 4.5,
+        fiber: 12,
+        moisture: 10
+      },
+      medications: [],
+      withdrawalPeriod: 0,
+      notes: "High-protein organic grain mix for lactating cows",
+      isActive: true,
+      createdAt: "2023-06-01T00:00:00Z"
+    },
+    {
+      id: 2,
+      herdId: 1,
+      userId: "preview-user",
+      feedType: "hay",
+      feedName: "Premium Alfalfa Hay",
+      supplier: "Local Hay Growers",
+      quantityPerFeeding: "25.0",
+      quantityUnit: "lbs",
+      feedingsPerDay: 2,
+      costPerUnit: "0.15",
+      lastPurchaseDate: "2024-03-10T00:00:00Z",
+      currentStock: "1200.0",
+      stockUnit: "lbs",
+      nutritionAnalysis: {
+        protein: 19,
+        fat: 2.2,
+        fiber: 30,
+        moisture: 12
+      },
+      medications: [],
+      withdrawalPeriod: 0,
+      notes: "High-quality alfalfa for dairy cattle",
+      isActive: true,
+      createdAt: "2023-06-01T00:00:00Z"
+    },
+    {
+      id: 3,
+      herdId: 3,
+      userId: "preview-user",
+      feedType: "grain",
+      feedName: "Layer Feed Pellets",
+      supplier: "Organic Poultry Feeds Inc.",
+      quantityPerFeeding: "80.0",
+      quantityUnit: "lbs",
+      feedingsPerDay: 2,
+      costPerUnit: "0.32",
+      lastPurchaseDate: "2024-03-12T00:00:00Z",
+      currentStock: "800.0",
+      stockUnit: "lbs",
+      nutritionAnalysis: {
+        protein: 16,
+        fat: 3.5,
+        fiber: 8,
+        calcium: 4.2
+      },
+      medications: [],
+      withdrawalPeriod: 0,
+      notes: "Complete layer feed for egg production",
+      isActive: true,
+      createdAt: "2022-10-01T00:00:00Z"
+    }
+  ];
+
+  const sampleAnimals = [
+    {
+      id: 1,
+      herdId: 1,
+      userId: "preview-user",
+      tagNumber: "001",
+      name: "Bessie",
+      species: "cattle",
+      breed: "Holstein",
+      sex: "female",
+      birthDate: "2020-03-15T00:00:00Z",
+      currentWeight: "1350",
+      weightUnit: "lbs",
+      healthStatus: "healthy",
+      reproductiveStatus: "lactating",
+      notes: "Top milk producer in the herd",
+      isActive: true,
+      createdAt: "2020-03-15T00:00:00Z",
+      updatedAt: "2024-03-20T00:00:00Z"
+    },
+    {
+      id: 2,
+      herdId: 1,
+      userId: "preview-user",
+      tagNumber: "002",
+      name: "Daisy",
+      species: "cattle",
+      breed: "Holstein",
+      sex: "female",
+      birthDate: "2019-08-20T00:00:00Z",
+      currentWeight: "1280",
+      weightUnit: "lbs",
+      healthStatus: "healthy",
+      reproductiveStatus: "pregnant",
+      notes: "Due to calve in 2 months",
+      isActive: true,
+      createdAt: "2019-08-20T00:00:00Z",
+      updatedAt: "2024-03-18T00:00:00Z"
+    }
+  ];
+
+  // Preview livestock operations
+  app.get('/api/preview/livestock/operations', async (req, res) => {
+    res.json(sampleOperations);
+  });
+
+  app.get('/api/preview/livestock/operations/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const operation = sampleOperations.find(op => op.id === id);
+    
+    if (!operation) {
+      return res.status(404).json({ error: "Operation not found" });
+    }
+    
+    res.json(operation);
+  });
+
+  // Preview herds for operations
+  app.get('/api/preview/livestock/operations/:operationId/herds', async (req, res) => {
+    const operationId = parseInt(req.params.operationId);
+    const herds = sampleHerds.filter(herd => herd.operationId === operationId);
+    res.json(herds);
+  });
+
+  // Preview individual herd
+  app.get('/api/preview/livestock/herds/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const herd = sampleHerds.find(h => h.id === id);
+    
+    if (!herd) {
+      return res.status(404).json({ error: "Herd not found" });
+    }
+    
+    res.json(herd);
+  });
+
+  // Preview animals in a herd
+  app.get('/api/preview/livestock/herds/:id/animals', async (req, res) => {
+    const herdId = parseInt(req.params.id);
+    const animals = sampleAnimals.filter(animal => animal.herdId === herdId);
+    res.json(animals);
+  });
+
+  // Preview feed records for a herd
+  app.get('/api/preview/livestock/herds/:herdId/feeds', async (req, res) => {
+    const herdId = parseInt(req.params.herdId);
+    const feeds = sampleFeedRecords.filter(feed => feed.herdId === herdId);
+    res.json(feeds);
+  });
+
+  // Preview health records (empty for demo)
+  app.get('/api/preview/livestock/health-records', async (req, res) => {
+    res.json([]);
+  });
+
+  // Mock POST/PUT/DELETE endpoints for preview mode - they don't actually save data
+  app.post('/api/preview/livestock/operations', async (req, res) => {
+    res.status(201).json({ 
+      id: Date.now(), 
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.post('/api/preview/livestock/herds', async (req, res) => {
+    res.status(201).json({ 
+      id: Date.now(), 
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.post('/api/preview/livestock/feeds', async (req, res) => {
+    res.status(201).json({ 
+      id: Date.now(), 
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.put('/api/preview/livestock/operations/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    res.json({ 
+      id,
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.put('/api/preview/livestock/herds/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    res.json({ 
+      id,
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.put('/api/preview/livestock/feeds/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    res.json({ 
+      id,
+      ...req.body, 
+      userId: "preview-user",
+      message: "Preview mode: Data not saved" 
+    });
+  });
+
+  app.delete('/api/preview/livestock/operations/:id', async (req, res) => {
+    res.json({ message: "Preview mode: Operation not actually deleted" });
+  });
+
+  app.delete('/api/preview/livestock/herds/:id', async (req, res) => {
+    res.json({ message: "Preview mode: Herd not actually deleted" });
+  });
+
+  app.delete('/api/preview/livestock/feeds/:id', async (req, res) => {
+    res.json({ message: "Preview mode: Feed record not actually deleted" });
   });
 
   // =========================== PET FEED TRACKING ROUTES ===========================
