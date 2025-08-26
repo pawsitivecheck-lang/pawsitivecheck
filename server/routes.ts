@@ -1236,6 +1236,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public reviews endpoint for landing page
+  app.get('/api/reviews', async (req, res) => {
+    try {
+      const reviews = await storage.getReviews(10, 0);
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json([]);
+    }
+  });
+
+  // Public analytics dashboard for landing page
+  app.get('/api/analytics/dashboard', async (req, res) => {
+    try {
+      const analytics = await storage.getAnalytics();
+      // Return basic metrics for public consumption
+      res.json({
+        productsAnalyzed: analytics.productsAnalyzed || 0,
+        activeUsers: analytics.activeUsers || 0,
+        safetyAlerts: analytics.safetyAlerts || 0
+      });
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({ 
+        productsAnalyzed: 0,
+        activeUsers: 0,
+        safetyAlerts: 0
+      });
+    }
+  });
+
   // Admin analytics
   app.get('/api/admin/analytics', isAdmin, async (req: any, res) => {
     try {
