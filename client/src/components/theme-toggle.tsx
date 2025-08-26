@@ -33,11 +33,12 @@ export default function ThemeToggle() {
       size="sm"
       className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20"
       data-testid="button-theme-toggle"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       {isDark ? (
-        <Sun className="h-4 w-4" title="Switch to light mode" />
+        <Sun className="h-4 w-4" />
       ) : (
-        <Moon className="h-4 w-4" title="Switch to dark mode" />
+        <Moon className="h-4 w-4" />
       )}
     </Button>
   );
