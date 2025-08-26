@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { X, Cookie, Settings, Shield, BarChart3, Target } from "lucide-react";
+import { storage, detectDNT } from "@/utils/browser-compat";
 
 interface CookiePreferences {
   essential: boolean;
@@ -27,19 +28,8 @@ export default function CookieConsent() {
   const [isDNTEnabled, setIsDNTEnabled] = useState(false);
 
   useEffect(() => {
-    // Check for DNT (Do Not Track) setting
-    const checkDNT = () => {
-      // Check server-injected DNT status
-      const serverDNT = (window as any).__DNT_ENABLED__;
-      // Check navigator DNT property
-      const navigatorDNT = navigator.doNotTrack === '1' || navigator.doNotTrack === 'yes';
-      // Check for other DNT indicators
-      const msDNT = (navigator as any).msDoNotTrack === '1';
-      
-      return serverDNT || navigatorDNT || msDNT;
-    };
-    
-    const isDNT = checkDNT();
+    // Check for DNT (Do Not Track) setting with cross-browser compatibility
+    const isDNT = detectDNT();
     setIsDNTEnabled(isDNT);
     
     if (isDNT) {
@@ -51,17 +41,17 @@ export default function CookieConsent() {
         marketing: false,
       };
       
-      // Save DNT preferences and don't show banner
-      localStorage.setItem('cookie-consent', JSON.stringify(dntPreferences));
-      localStorage.setItem('cookie-consent-dnt', 'true');
-      localStorage.setItem('cookie-consent-timestamp', Date.now().toString());
+      // Save DNT preferences and don't show banner using cross-browser storage
+      storage.set('cookie-consent', JSON.stringify(dntPreferences));
+      storage.set('cookie-consent-dnt', 'true');
+      storage.set('cookie-consent-timestamp', Date.now().toString());
       setPreferences(dntPreferences);
       applyCookiePreferences(dntPreferences);
       return;
     }
     
-    // Check if user has already made a choice
-    const consentGiven = localStorage.getItem('cookie-consent');
+    // Check if user has already made a choice using cross-browser storage
+    const consentGiven = storage.get('cookie-consent');
     if (!consentGiven) {
       // Show banner after a short delay
       const timer = setTimeout(() => setIsVisible(true), 2000);
@@ -97,12 +87,13 @@ export default function CookieConsent() {
   };
 
   const savePreferences = (prefs: CookiePreferences) => {
-    localStorage.setItem('cookie-consent', JSON.stringify(prefs));
-    localStorage.setItem('cookie-consent-timestamp', Date.now().toString());
+    // Use cross-browser compatible storage
+    storage.set('cookie-consent', JSON.stringify(prefs));
+    storage.set('cookie-consent-timestamp', Date.now().toString());
     
     // Mark if this was set due to DNT
     if (isDNTEnabled) {
-      localStorage.setItem('cookie-consent-dnt', 'true');
+      storage.set('cookie-consent-dnt', 'true');
     }
     
     setIsVisible(false);

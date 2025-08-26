@@ -1,23 +1,14 @@
 import { useState, useEffect } from "react";
 import { Shield, Info } from "lucide-react";
+import { detectDNT } from "@/utils/browser-compat";
 
 export default function DNTIndicator() {
   const [isDNTEnabled, setIsDNTEnabled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
-    const checkDNT = () => {
-      // Check server-injected DNT status
-      const serverDNT = (window as any).__DNT_ENABLED__;
-      // Check navigator DNT property
-      const navigatorDNT = navigator.doNotTrack === '1' || navigator.doNotTrack === 'yes';
-      // Check for other DNT indicators
-      const msDNT = (navigator as any).msDoNotTrack === '1';
-      
-      return serverDNT || navigatorDNT || msDNT;
-    };
-    
-    setIsDNTEnabled(checkDNT());
+    // Use cross-browser DNT detection utility
+    setIsDNTEnabled(detectDNT());
   }, []);
 
   if (!isDNTEnabled) return null;
