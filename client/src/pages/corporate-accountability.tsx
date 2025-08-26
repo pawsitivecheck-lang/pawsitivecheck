@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { Scale, AlertTriangle, TrendingDown, DollarSign, ExternalLink, Search, Camera, Bell } from "lucide-react";
+import { Scale, AlertTriangle, TrendingDown, DollarSign, ExternalLink, Search, Camera, Bell, Sparkles } from "lucide-react";
 
 export default function CorporateAccountability() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-mystical-purple text-cosmic-100">
       <Navbar />
       
       {/* Top Banner Ad */}
@@ -28,11 +28,14 @@ export default function CorporateAccountability() {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <div className="mb-6">
-              <Scale className="w-16 h-16 text-red-600 mx-auto mb-4" />
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-hero-title">
+              <div className="relative inline-block">
+                <Scale className="w-16 h-16 text-starlight-400 mx-auto mb-4" />
+                <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-starlight-400 mb-4 font-header" data-testid="text-hero-title">
                 Corporate Accountability
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6" data-testid="text-hero-subtitle">
+              <p className="text-xl text-cosmic-200 max-w-3xl mx-auto mb-6" data-testid="text-hero-subtitle">
                 Exposing regulatory failures, corporate cover-ups, and the urgent need for transparency in the pet industry
               </p>
               <div className="bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900 dark:to-orange-900 rounded-lg p-6 max-w-4xl mx-auto">
@@ -43,10 +46,10 @@ export default function CorporateAccountability() {
               </div>
             </div>
             
-            <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8">
+            <div className="bg-gradient-to-r from-red-900/30 to-orange-900/30 border border-red-500/30 rounded-lg p-6 mb-8 backdrop-blur-sm">
               <div className="flex items-center justify-center mb-4">
-                <AlertTriangle className="w-8 h-8 text-red-600 mr-3" />
-                <h2 className="text-2xl font-bold text-red-800 dark:text-red-200">Industry Crisis Numbers</h2>
+                <AlertTriangle className="w-8 h-8 text-red-400 mr-3" />
+                <h2 className="text-2xl font-bold text-red-300">Industry Crisis Numbers</h2>
               </div>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
