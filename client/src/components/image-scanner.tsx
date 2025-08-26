@@ -29,7 +29,12 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        setCapturedImage(result);
+        if (result) {
+          setCapturedImage(result);
+        }
+      };
+      reader.onerror = () => {
+        console.error('Error reading file');
       };
       reader.readAsDataURL(file);
     }

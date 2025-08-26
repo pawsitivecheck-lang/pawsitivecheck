@@ -121,7 +121,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         initializeMap();
         setIsLoading(false);
       } catch (error) {
-        setMapError(`Failed to initialize map: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setMapError(`Failed to initialize map: ${errorMessage}`);
         setIsLoading(false);
       }
     }
@@ -170,7 +171,8 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         }
       }, 100);
     } catch (error) {
-      setMapError(`Map initialization failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      setMapError(`Map initialization failed: ${errorMessage}`);
     }
   };
 

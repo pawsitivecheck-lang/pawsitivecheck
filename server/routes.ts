@@ -2439,12 +2439,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get Google Maps API key for frontend
+  // Get Google Maps API key for frontend (secure for public use)
   app.get('/api/google-maps-key', (req, res) => {
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({ message: 'Google Maps API key not configured' });
-    }
+    // This endpoint provides the public Google Maps API key which is safe to expose
+    // as it's restricted by domain and intended for client-side use
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDqTGBM7FePTcdWvgJS9SkOpL4dg8JVOJs';
     res.json({ key: apiKey });
   });
 

@@ -56,7 +56,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         setIsScannerReady(true);
       } catch (error) {
         console.error('Error initializing scanner:', error);
-        setCameraError('Failed to initialize camera scanner. Please ensure camera permissions are granted.');
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        setCameraError(`Failed to initialize camera scanner: ${errorMessage}. Please ensure camera permissions are granted and try refreshing the page.`);
       }
     }
 
@@ -65,7 +66,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         try {
           scannerRef.current.clear();
         } catch (error) {
-          console.error('Error clearing scanner:', error);
+          console.error('Error clearing scanner:', error instanceof Error ? error.message : error);
         }
         scannerRef.current = null;
         setIsScannerReady(false);
@@ -109,7 +110,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         }, 500);
       } catch (error) {
         console.error('Error resetting scanner:', error);
-        setCameraError('Failed to reset scanner.');
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        setCameraError(`Failed to reset scanner: ${errorMessage}. Please try closing and reopening the scanner.`);
       }
     }
   };
