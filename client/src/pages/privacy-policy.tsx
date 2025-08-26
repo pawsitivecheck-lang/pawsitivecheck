@@ -228,6 +228,64 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
+          {/* Do Not Track */}
+          <Card className="cosmic-card" data-testid="card-dnt">
+            <CardHeader>
+              <CardTitle className="flex items-center text-starlight-400">
+                <Shield className="mr-3 h-5 w-5" />
+                Do Not Track (DNT) Support
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-cosmic-200">
+              <div>
+                <h3 className="font-semibold text-mystical-purple mb-2">Automatic DNT Detection</h3>
+                <p className="mb-3">
+                  We fully respect "Do Not Track" (DNT) browser settings and automatically detect when you have enabled DNT in your browser.
+                </p>
+                <ul className="space-y-1 ml-4">
+                  <li>• <strong>Server-side detection:</strong> Our servers check for DNT headers (DNT: 1) in all requests</li>
+                  <li>• <strong>Client-side detection:</strong> We also check browser DNT settings via JavaScript</li>
+                  <li>• <strong>Automatic compliance:</strong> When DNT is detected, we automatically disable all non-essential tracking</li>
+                  <li>• <strong>No consent banner:</strong> DNT users skip cookie consent and get minimal tracking by default</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold text-mystical-purple mb-2">What We Don't Track with DNT</h3>
+                <ul className="space-y-1 ml-4">
+                  <li>• Analytics cookies (_ga, _gid, analytics-session)</li>
+                  <li>• Marketing cookies (ad-preferences, campaign-data)</li>
+                  <li>• Functional cookies (user-preferences, ui-settings)</li>
+                  <li>• Cross-site tracking or data sharing</li>
+                  <li>• Behavioral analytics or user profiling</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold text-mystical-purple mb-2">Essential Functions Still Work</h3>
+                <p className="mb-3">
+                  Even with DNT enabled, all core PawsitiveCheck features remain fully functional:
+                </p>
+                <ul className="space-y-1 ml-4">
+                  <li>• Product safety scanning and analysis</li>
+                  <li>• Pet profile management and health tracking</li>
+                  <li>• Safety database searches and recall alerts</li>
+                  <li>• Account authentication and session management</li>
+                  <li>• Offline PWA functionality and data sync</li>
+                </ul>
+              </div>
+              
+              <div className="bg-cosmic-800 border border-mystical-purple rounded-lg p-4">
+                <h4 className="font-semibold text-yellow-400 mb-2">💡 How to Enable DNT</h4>
+                <div className="text-sm space-y-2">
+                  <p><strong>Chrome/Edge:</strong> Settings → Privacy and security → Send "Do not track" request</p>
+                  <p><strong>Firefox:</strong> Settings → Privacy & Security → Send websites "Do Not Track" signal</p>
+                  <p><strong>Safari:</strong> Preferences → Privacy → Prevent cross-site tracking</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Cookies */}
           <Card className="cosmic-card" data-testid="card-cookies">
             <CardHeader>
@@ -236,6 +294,9 @@ export default function PrivacyPolicy() {
             <CardContent className="text-cosmic-200">
               <p className="mb-4">
                 We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. Our Progressive Web App (PWA) also stores data locally for offline functionality.
+              </p>
+              <p className="mb-4">
+                <strong>DNT Users:</strong> If you have "Do Not Track" enabled, we automatically disable all non-essential cookies and tracking without requiring manual consent.
               </p>
               <p>
                 For detailed information about the cookies we use, please see our Cookie Policy accessible through the cookie consent banner.

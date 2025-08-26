@@ -24,8 +24,42 @@ export default function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>(defaultPreferences);
+  const [isDNTEnabled, setIsDNTEnabled] = useState(false);
 
   useEffect(() => {
+    // Check for DNT (Do Not Track) setting
+    const checkDNT = () => {
+      // Check server-injected DNT status
+      const serverDNT = (window as any).__DNT_ENABLED__;
+      // Check navigator DNT property
+      const navigatorDNT = navigator.doNotTrack === '1' || navigator.doNotTrack === 'yes';
+      // Check for other DNT indicators
+      const msDNT = (navigator as any).msDoNotTrack === '1';
+      
+      return serverDNT || navigatorDNT || msDNT;
+    };
+    
+    const isDNT = checkDNT();
+    setIsDNTEnabled(isDNT);
+    
+    if (isDNT) {
+      // For DNT users, automatically set minimal tracking preferences
+      const dntPreferences: CookiePreferences = {
+        essential: true,
+        functional: false,
+        analytics: false,
+        marketing: false,
+      };
+      
+      // Save DNT preferences and don't show banner
+      localStorage.setItem('cookie-consent', JSON.stringify(dntPreferences));
+      localStorage.setItem('cookie-consent-dnt', 'true');
+      localStorage.setItem('cookie-consent-timestamp', Date.now().toString());
+      setPreferences(dntPreferences);
+      applyCookiePreferences(dntPreferences);
+      return;
+    }
+    
     // Check if user has already made a choice
     const consentGiven = localStorage.getItem('cookie-consent');
     if (!consentGiven) {
@@ -65,6 +99,12 @@ export default function CookieConsent() {
   const savePreferences = (prefs: CookiePreferences) => {
     localStorage.setItem('cookie-consent', JSON.stringify(prefs));
     localStorage.setItem('cookie-consent-timestamp', Date.now().toString());
+    
+    // Mark if this was set due to DNT
+    if (isDNTEnabled) {
+      localStorage.setItem('cookie-consent-dnt', 'true');
+    }
+    
     setIsVisible(false);
     
     // Apply cookie preferences

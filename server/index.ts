@@ -16,6 +16,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// DNT (Do Not Track) detection middleware
+app.use((req, res, next) => {
+  const dntHeader = req.get('DNT') || req.get('dnt');
+  const isDNT = dntHeader === '1';
+  
+  // Inject DNT status into HTML for frontend access
+  res.locals.isDNT = isDNT;
+  
+  // Add DNT response header
+  if (isDNT) {
+    res.set('Tk', 'N'); // Tracking Status: Not tracking
+  } else {
+    res.set('Tk', 'T'); // Tracking Status: Tracking with consent
+  }
+  
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;

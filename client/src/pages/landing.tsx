@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import CookieConsent from "@/components/cookie-consent";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
+import DNTIndicator from "@/components/dnt-indicator";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
@@ -80,6 +81,9 @@ export default function Landing() {
             
             
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* DNT Indicator */}
+              <DNTIndicator />
+              
               {/* Theme Toggle - Always visible */}
               <ThemeToggle />
               
