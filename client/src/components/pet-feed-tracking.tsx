@@ -138,7 +138,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
 
   const getDefaultUnits = (species: string) => {
     if (['dog', 'cat', 'bird', 'rabbit', 'guinea_pig', 'hamster'].includes(species.toLowerCase())) {
-      return ['cups', 'oz', 'grams', 'pieces'];
+      return ['cups', 'oz', 'grams', 'pieces', 'tray', 'half_tray'];
     } else if (['fish'].includes(species.toLowerCase())) {
       return ['pinches', 'grams', 'pieces'];
     } else {
