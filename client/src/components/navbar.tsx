@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Shield, Users, Heart, PawPrint, LogOut, Tractor } from "lucide-react";
+import { Menu, X, Shield, Users, Heart, PawPrint, LogOut, Tractor, Camera } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
@@ -67,6 +67,13 @@ export default function Navbar() {
               <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2 px-3">
                 Navigation
               </div>
+              
+              <Link href="/product-scanner" onClick={closeMenu}>
+                <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <Camera className="h-4 w-4" />
+                  <span>Product Scanner</span>
+                </div>
+              </Link>
               
               <Link href="/recalls" onClick={closeMenu}>
                 <div className="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800">
