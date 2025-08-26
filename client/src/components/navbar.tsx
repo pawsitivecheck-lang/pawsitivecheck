@@ -23,9 +23,9 @@ export default function Navbar() {
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
     { name: 'Community', href: '/community', icon: Users },
-    ...(isAuthenticated ? [{ name: 'Pet Profiles', href: '/pets', icon: PawPrint }] : []),
+    { name: 'Pet Profiles', href: '/pets', icon: PawPrint, requiresAuth: true },
     { name: 'Livestock Management', href: '/livestock', icon: Tractor },
-  ];
+  ].filter(item => !item.requiresAuth || isAuthenticated);
 
   const isActivePage = (href: string) => location === href;
 
