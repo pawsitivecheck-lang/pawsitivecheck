@@ -52,6 +52,23 @@ export default function Landing() {
     },
   });
 
+  // Real data queries to replace mock data
+  const { data: communityReviews, isLoading: reviewsLoading } = useQuery({
+    queryKey: ['/api/reviews'],
+    queryFn: async () => {
+      const res = await fetch('/api/reviews?limit=3&featured=true');
+      return await res.json();
+    },
+  });
+
+  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+    queryKey: ['/api/analytics'],
+    queryFn: async () => {
+      const res = await fetch('/api/analytics/dashboard');
+      return await res.json();
+    },
+  });
+
   return (
     <div className="min-h-screen bg-white">
       {/* Safety Alert Banner */}
@@ -541,62 +558,44 @@ export default function Landing() {
       {/* Community Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white" id="community">
         <div className="max-w-7xl mx-auto">
-          {/* Mystical Message */}
-          <div className="mb-12 sm:mb-16">
-            <div className="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 text-center border border-purple-500 shadow-2xl">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-yellow-400 mb-4 sm:mb-6 flex items-center justify-center gap-2">
-                <span>🌟</span> Their Mystical Message <span>🌟</span>
-              </h3>
-              <div className="text-sm sm:text-base lg:text-lg text-gray-200 mb-4 space-y-3 sm:space-y-4">
-                <p>
-                  "Greetings, dear human! 🐱 We are <span className="text-purple-400 font-bold">Aleister</span> 🧙‍♂️ and <span className="text-white font-bold">Severus</span> 🛡️, your mystical 
-                  feline guardians from the legendary <span className="text-yellow-400 font-bold">Audit Syndicate!</span> ✨
-                </p>
-                <p>
-                  Through <span className="text-purple-400">cosmic divination</span> 🌙 and <span className="text-yellow-400">ancient wisdom</span> 📚, we'll help you pierce the veil 
-                  of corporate deception and discover the <span className="text-green-400 font-bold">TRUE ESSENCE</span> 💎 of every pet product!
-                </p>
-                <p>
-                  Join our purr-fectly magical mission of transparency and protection! 🐾❤️"
-                </p>
-              </div>
-              <div className="flex justify-center space-x-3 sm:space-x-4 text-xl sm:text-2xl">
-                <span>🐱</span><span>✨</span><span>🧙‍♂️</span><span>🛡️</span><span>🌟</span><span>🐾</span>
-              </div>
-            </div>
-          </div>
           
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 sm:mb-4" data-testid="text-community-title">Safety Community</h2>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto" data-testid="text-community-description">Pet parents sharing their safety experiences and product reviews</p>
           </div>
           
+          {/* Community Reviews - Real Data */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {/* Mock community reviews for landing page */}
-            <UserReview 
-              username="Sarah_PetMom"
-              userType="Verified Pet Parent"
-              content="The ingredient scanner helped me identify artificial preservatives in my cat's food that were causing digestive issues. Switched to a cleaner formula and saw immediate improvement!"
-              rating={5}
-              timeAgo="2 days ago"
-              icon={<Search className="text-xs" />}
-            />
-            <UserReview 
-              username="VetTechMike"
-              userType="Veterinary Professional"
-              content="The detailed safety analysis is incredibly thorough. I recommend this tool to all my clients - it provides transparency that's often missing from product marketing."
-              rating={5}
-              timeAgo="1 week ago"
-              icon={<Shield className="text-xs" />}
-            />
-            <UserReview 
-              username="DogDad_Alex"
-              userType="Safety Advocate"
-              content="The recall alert system saved my dog from a contaminated batch of treats. The real-time notifications are a lifesaver for busy pet parents like me."
-              rating={5}
-              timeAgo="3 days ago"
-              icon={<TriangleAlert className="text-xs" />}
-            />
+            {reviewsLoading ? (
+              // Loading state
+              [...Array(3)].map((_, i) => (
+                <div key={i} className="bg-white border border-gray-200 rounded-lg p-6 animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ))
+            ) : communityReviews?.length > 0 ? (
+              // Real reviews data
+              communityReviews.map((review: any) => (
+                <UserReview 
+                  key={review.id}
+                  username={review.username}
+                  userType={review.userType}
+                  content={review.content}
+                  rating={review.rating}
+                  timeAgo={review.timeAgo}
+                  icon={<Star className="text-xs" />}
+                />
+              ))
+            ) : (
+              // Empty state
+              <div className="col-span-full text-center py-8">
+                <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 text-sm sm:text-base">Community reviews will appear here</p>
+                <p className="text-gray-400 text-xs sm:text-sm mt-1">Join our community to share your safety experiences</p>
+              </div>
+            )}
           </div>
           
           <div className="text-center mt-8 sm:mt-12">
@@ -634,15 +633,21 @@ export default function Landing() {
                 <div className="space-y-2 sm:space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Products Analyzed:</span>
-                    <span className="text-green-600 font-bold text-sm sm:text-base" data-testid="text-products-analyzed">12,847</span>
+                    <span className="text-green-600 font-bold text-sm sm:text-base" data-testid="text-products-analyzed">
+                      {analyticsLoading ? 'Loading...' : (analytics?.productsAnalyzed?.toLocaleString() || '0')}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Active Users:</span>
-                    <span className="text-blue-600 font-bold text-sm sm:text-base" data-testid="text-active-users">8,432</span>
+                    <span className="text-blue-600 font-bold text-sm sm:text-base" data-testid="text-active-users">
+                      {analyticsLoading ? 'Loading...' : (analytics?.activeUsers?.toLocaleString() || '0')}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Safety Alerts:</span>
-                    <span className="text-red-600 font-bold text-sm sm:text-base" data-testid="text-safety-alerts">23</span>
+                    <span className="text-red-600 font-bold text-sm sm:text-base" data-testid="text-safety-alerts">
+                      {analyticsLoading ? 'Loading...' : (analytics?.safetyAlerts?.toString() || '0')}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -656,7 +661,9 @@ export default function Landing() {
                 <div className="space-y-2 sm:space-y-3">
                   <div className="bg-white rounded-lg p-2 sm:p-3 border">
                     <div className="text-xs text-gray-500 mb-1">Latest Recall:</div>
-                    <div className="text-sm text-red-600 font-medium" data-testid="text-latest-recall">Pet Food Brand XYZ</div>
+                    <div className="text-sm text-red-600 font-medium" data-testid="text-latest-recall">
+                      {recalls?.length > 0 ? recalls[0].productName : 'No active recalls'}
+                    </div>
                   </div>
                   <Button 
                     variant="outline" 
