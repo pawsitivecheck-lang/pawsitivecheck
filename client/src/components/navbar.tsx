@@ -118,9 +118,9 @@ export default function Navbar() {
               </div>
 
               {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto min-h-0">
                 {/* Mobile Search Section - Only shown on small screens */}
-                <div className="p-4 border-b border-gray-600 bg-gray-900 md:hidden">
+                <div className="p-4 border-b border-gray-600 bg-gray-900 sm:hidden">
                   <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
                     Search Products
                   </div>
@@ -128,8 +128,8 @@ export default function Navbar() {
                 </div>
 
                 {/* Navigation Items */}
-                <div className="p-4 space-y-2 bg-gray-900">
-                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
+                <div className="p-3 space-y-1 bg-gray-900">
+                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
                     Navigation
                   </div>
                   {navigation.map((item) => {
@@ -137,7 +137,7 @@ export default function Navbar() {
                     return (
                       <Link key={item.name} href={item.href}>
                         <div 
-                          className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                             isActivePage(item.href) 
                               ? 'text-blue-400 bg-blue-900/30' 
                               : 'text-gray-200 hover:text-blue-400 hover:bg-gray-700'
@@ -154,14 +154,14 @@ export default function Navbar() {
                 </div>
 
                 {/* Profile Items */}
-                <div className="p-4 border-t border-gray-600 bg-gray-900">
-                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
+                <div className="p-3 border-t border-gray-600 bg-gray-900">
+                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
                     Account
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Link href="/profile">
                       <div 
-                        className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
                         onClick={() => setIsHamburgerMenuOpen(false)}
                       >
                         <Users className="h-5 w-5" />
@@ -172,7 +172,7 @@ export default function Navbar() {
                     {user?.isAdmin && (
                       <Link href="/admin">
                         <div 
-                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
                           onClick={() => setIsHamburgerMenuOpen(false)}
                         >
                           <Crown className="h-5 w-5" />
@@ -182,7 +182,7 @@ export default function Navbar() {
                     )}
                     
                     <div 
-                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
                       onClick={() => window.location.href = '/api/logout'}
                     >
                       <LogOut className="h-5 w-5" />
