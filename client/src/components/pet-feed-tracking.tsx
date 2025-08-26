@@ -239,7 +239,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
                     <SelectContent>
                       {defaultUnits.map(unit => (
                         <SelectItem key={unit} value={unit}>
-                          {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                          {unit === 'half_tray' ? 'Half Tray' : unit.charAt(0).toUpperCase() + unit.slice(1)}
                         </SelectItem>
                       ))}
                     </SelectContent>
