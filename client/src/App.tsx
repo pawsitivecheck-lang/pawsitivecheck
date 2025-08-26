@@ -55,8 +55,15 @@ function Router() {
           <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
           <Route path="/vet-finder" component={VetFinder} />
           <Route path="/livestock" component={LivestockDashboard} />
+          <Route path="/livestock-preview" component={LivestockDashboard} />
           <Route path="/livestock/feed" component={FeedTracking} />
           <Route path="/livestock/herds/:id" component={HerdProfile} />
+          <Route path="/product-scanner" component={ProductScanner} />
+          <Route path="/product-database" component={ProductDatabase} />
+          <Route path="/recalls" component={Recalls} />
+          <Route path="/community" component={Community} />
+          <Route path="/product/:id" component={ProductDetail} />
+          <Route path="/product/:id/analysis" component={ProductAnalysis} />
         </>
       ) : (
         <>
