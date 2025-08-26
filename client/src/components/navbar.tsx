@@ -83,9 +83,9 @@ export default function Navbar() {
             />
             
             {/* Sidebar - Responsive width */}
-            <div className="fixed top-0 right-0 h-full w-full sm:w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300">
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
+            <div className="fixed top-0 right-0 h-full w-full sm:w-80 bg-gray-900 shadow-xl z-50 transform translate-x-0 transition-transform duration-300 flex flex-col overflow-hidden">
+              {/* Header - Fixed */}
+              <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-600 bg-gray-900">
                 <div className="flex items-center space-x-3">
                   {user?.profileImageUrl ? (
                     <img 
@@ -117,74 +117,77 @@ export default function Navbar() {
                 </Button>
               </div>
 
-              {/* Mobile Search Section - Only shown on small screens */}
-              <div className="p-4 border-b border-gray-600 bg-gray-900 md:hidden">
-                <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
-                  Search Products
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Mobile Search Section - Only shown on small screens */}
+                <div className="p-4 border-b border-gray-600 bg-gray-900 md:hidden">
+                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
+                    Search Products
+                  </div>
+                  <HeaderSearch isMobile={true} />
                 </div>
-                <HeaderSearch isMobile={true} />
-              </div>
 
-              {/* Navigation Items */}
-              <div className="p-4 space-y-2 bg-gray-900">
-                <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
-                  Navigation
+                {/* Navigation Items */}
+                <div className="p-4 space-y-2 bg-gray-900">
+                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
+                    Navigation
+                  </div>
+                  {navigation.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link key={item.name} href={item.href}>
+                        <div 
+                          className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                            isActivePage(item.href) 
+                              ? 'text-blue-400 bg-blue-900/30' 
+                              : 'text-gray-200 hover:text-blue-400 hover:bg-gray-700'
+                          }`}
+                          onClick={() => setIsHamburgerMenuOpen(false)}
+                          data-testid={`hamburger-${item.href.slice(1)}`}
+                        >
+                          <Icon className="h-5 w-5" />
+                          <span className="font-medium">{item.name}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link key={item.name} href={item.href}>
-                      <div 
-                        className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
-                          isActivePage(item.href) 
-                            ? 'text-blue-400 bg-blue-900/30' 
-                            : 'text-gray-200 hover:text-blue-400 hover:bg-gray-700'
-                        }`}
-                        onClick={() => setIsHamburgerMenuOpen(false)}
-                        data-testid={`hamburger-${item.href.slice(1)}`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        <span className="font-medium">{item.name}</span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
 
-              {/* Profile Items */}
-              <div className="p-4 border-t border-gray-600 bg-gray-900">
-                <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
-                  Account
-                </div>
-                <div className="space-y-2">
-                  <Link href="/profile">
-                    <div 
-                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
-                      onClick={() => setIsHamburgerMenuOpen(false)}
-                    >
-                      <Users className="h-5 w-5" />
-                      <span className="font-medium">Profile</span>
-                    </div>
-                  </Link>
-                  
-                  {user?.isAdmin && (
-                    <Link href="/admin">
+                {/* Profile Items */}
+                <div className="p-4 border-t border-gray-600 bg-gray-900">
+                  <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-3">
+                    Account
+                  </div>
+                  <div className="space-y-2">
+                    <Link href="/profile">
                       <div 
                         className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
                         onClick={() => setIsHamburgerMenuOpen(false)}
                       >
-                        <Crown className="h-5 w-5" />
-                        <span className="font-medium">Admin Dashboard</span>
+                        <Users className="h-5 w-5" />
+                        <span className="font-medium">Profile</span>
                       </div>
                     </Link>
-                  )}
-                  
-                  <div 
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
-                    onClick={() => window.location.href = '/api/logout'}
-                  >
-                    <LogOut className="h-5 w-5" />
-                    <span className="font-medium">Sign Out</span>
+                    
+                    {user?.isAdmin && (
+                      <Link href="/admin">
+                        <div 
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                          onClick={() => setIsHamburgerMenuOpen(false)}
+                        >
+                          <Crown className="h-5 w-5" />
+                          <span className="font-medium">Admin Dashboard</span>
+                        </div>
+                      </Link>
+                    )}
+                    
+                    <div 
+                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors cursor-pointer"
+                      onClick={() => window.location.href = '/api/logout'}
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span className="font-medium">Sign Out</span>
+                    </div>
                   </div>
                 </div>
               </div>
