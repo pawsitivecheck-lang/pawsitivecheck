@@ -163,6 +163,19 @@ export default function Landing() {
                 Community Reviews
               </a>
               
+              {/* Livestock Management Preview */}
+              <button 
+                onClick={() => {
+                  window.location.href = '/livestock-preview';
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                data-testid="mobile-nav-livestock-preview"
+              >
+                <BarChart3 className="mr-3 h-5 w-5" />
+                Livestock Management Preview
+              </button>
+              
               {/* Account Section in Mobile */}
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</div>
@@ -246,18 +259,6 @@ export default function Landing() {
                     >
                       <Users className="mr-3 h-5 w-5" />
                       Create Account
-                    </button>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/livestock-preview';
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                      data-testid="mobile-nav-livestock-preview"
-                    >
-                      <BarChart3 className="mr-3 h-5 w-5" />
-                      Livestock Management Preview
                     </button>
                   </>
                 )}
