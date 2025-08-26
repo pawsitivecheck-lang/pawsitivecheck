@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import ThemeToggle from "@/components/theme-toggle";
 import { 
   ArrowLeft, PlusCircle, Users, Heart, Baby, TrendingUp, DollarSign, 
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
@@ -207,7 +208,12 @@ export default function HerdProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">

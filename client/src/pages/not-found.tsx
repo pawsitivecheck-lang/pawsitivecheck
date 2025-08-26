@@ -1,10 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
+import ThemeToggle from "@/components/theme-toggle";
 import Footer from "@/components/footer";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen w-full bg-background">
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      
       <div className="flex-1 flex items-center justify-center px-4">
         <Card className="w-full max-w-md mx-4">
           <CardContent className="pt-6">
