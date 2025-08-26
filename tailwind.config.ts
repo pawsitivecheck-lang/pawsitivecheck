@@ -82,10 +82,11 @@ export default {
         },
       },
       fontFamily: {
-        mystical: ["var(--font-mystical)"],
-        cosmic: ["var(--font-cosmic)"],
+        mystical: ["var(--font-mystical)", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+        cosmic: ["var(--font-cosmic)", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
         sans: ["var(--font-cosmic)", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
         serif: ["ui-serif", "Georgia", "Cambria", "Times New Roman", "Times", "serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
       },
       keyframes: {
         "accordion-down": {

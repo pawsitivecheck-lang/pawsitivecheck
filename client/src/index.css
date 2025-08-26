@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap&subset=latin');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -39,8 +39,8 @@
   --pet-green: hsl(120, 60%, 45%);
   --pet-red: hsl(0, 70%, 55%);
   
-  --font-header: 'Nunito', system-ui, -apple-system, sans-serif;
-  --font-body: 'Open Sans', system-ui, -apple-system, sans-serif;
+  --font-header: 'Nunito', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  --font-body: 'Open Sans', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
 .dark {
@@ -117,6 +117,9 @@
   textarea:focus {
     border-color: hsl(258, 80%, 55%);
     box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    -webkit-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    -moz-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    outline: none;
   }
   
   /* Dark mode input visibility */
@@ -135,6 +138,9 @@
   .dark textarea:focus {
     border-color: var(--ring);
     box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
+    -webkit-box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
+    -moz-box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
+    outline: none;
   }
   
   /* Light mode text colors */
@@ -159,14 +165,18 @@
   /* Light mode navigation */
   nav {
     background: rgba(255, 255, 255, 0.90);
+    background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90));
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid hsl(258, 20%, 90%);
   }
   
   /* Dark mode navigation */
   .dark nav {
     background: rgba(13, 9, 48, 0.95);
+    background: -webkit-linear-gradient(rgba(13, 9, 48, 0.95), rgba(13, 9, 48, 0.95));
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid hsl(253, 36%, 25%);
   }
   
@@ -190,20 +200,45 @@
   
   .animate-float {
     animation: float 6s ease-in-out infinite;
+    -webkit-animation: float 6s ease-in-out infinite;
   }
   
   .animate-twinkle {
     animation: twinkle 2s linear infinite;
+    -webkit-animation: twinkle 2s linear infinite;
   }
   
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
+    -webkit-animation: glow 2s ease-in-out infinite alternate;
+  }
+}
+
+@-webkit-keyframes float {
+  0%, 100% { 
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-10px);
+    -webkit-transform: translateY(-10px);
   }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { 
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-10px);
+    -webkit-transform: translateY(-10px);
+  }
+}
+
+@-webkit-keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 @keyframes twinkle {
@@ -211,9 +246,26 @@
   50% { opacity: 1; }
 }
 
+@-webkit-keyframes glow {
+  from { 
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    -webkit-box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  to { 
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    -webkit-box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+  }
+}
+
 @keyframes glow {
-  from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-  to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+  from { 
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    -webkit-box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  to { 
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    -webkit-box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+  }
 }
 
 /* Professional card styling */
@@ -227,6 +279,15 @@
 
 .mystical-button {
   @apply bg-gradient-to-r from-yellow-500 to-purple-600 text-white font-semibold px-6 py-3 rounded-full hover:from-yellow-400 hover:to-purple-500 transition-all shadow-md;
+  /* Fallback for older browsers */
+  background: #f59e0b;
+  background: -webkit-linear-gradient(left, #f59e0b, #9333ea);
+  background: linear-gradient(to right, #f59e0b, #9333ea);
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 
@@ -312,6 +373,128 @@
 
 .font-body {
   font-family: var(--font-body);
+}
+
+/* Additional browser compatibility improvements */
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: transparent;
+}
+
+/* Fix for Safari button rendering */
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling for older browsers */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Better link styling across browsers */
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Image rendering improvements */
+img {
+  max-width: 100%;
+  height: auto;
+  -ms-interpolation-mode: bicubic;
+  border: 0;
+}
+
+/* Fix for IE grid support */
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
+/* Flexbox fixes for IE */
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.items-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.justify-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+/* Transform fixes for older browsers */
+.transform {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Transition improvements */
+.transition-all {
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+}
+
+/* Focus improvements for accessibility */
+:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a, a:visited {
+    text-decoration: underline;
+  }
+  
+  img {
+    max-width: 100% !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
 }
 
 /* Additional dark mode contrast improvements */
