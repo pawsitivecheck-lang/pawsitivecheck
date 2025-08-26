@@ -374,6 +374,8 @@ export default function FeedTracking() {
                               <SelectItem value="kg">Kilograms (kg)</SelectItem>
                               <SelectItem value="bushels">Bushels</SelectItem>
                               <SelectItem value="tons">Tons</SelectItem>
+                              <SelectItem value="tray">Tray</SelectItem>
+                              <SelectItem value="half_tray">Half Tray</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
