@@ -278,12 +278,12 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Herds</h3>
                     <Button 
-                      onClick={() => navigate(`/livestock/herds/new?operation=${selectedOperation}`)}
+                      onClick={() => navigate(`/livestock`)}
                       size="sm"
                       data-testid="button-add-herd"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      Add Herd
+                      Manage Herds
                     </Button>
                   </div>
                   
@@ -347,10 +347,10 @@ export default function LivestockDashboard() {
                       <p className="text-gray-500 dark:text-gray-400">No herds found for this operation.</p>
                       <Button 
                         className="mt-4" 
-                        onClick={() => navigate(`/livestock/herds/new?operation=${selectedOperation}`)}
+                        onClick={() => navigate(`/livestock`)}
                         data-testid="button-create-first-herd"
                       >
-                        Create First Herd
+                        Go to Livestock Management
                       </Button>
                     </div>
                   )}
@@ -373,11 +373,11 @@ export default function LivestockDashboard() {
                       </p>
                     </div>
                     <Button 
-                      onClick={() => navigate(`/livestock/feed/new?operation=${selectedOperation}`)}
+                      onClick={() => navigate(`/livestock/feed`)}
                       data-testid="button-add-feed-record"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      Add Feed Record
+                      Go to Feed Tracking
                     </Button>
                   </div>
 
@@ -390,10 +390,10 @@ export default function LivestockDashboard() {
                         Track feed types, quantities, costs, and nutrition for each herd
                       </p>
                       <Button 
-                        onClick={() => navigate(`/livestock/feed/new?operation=${selectedOperation}`)}
+                        onClick={() => navigate(`/livestock/feed`)}
                         data-testid="button-start-feed-tracking"
                       >
-                        Start Feed Tracking
+                        Go to Feed Tracking
                       </Button>
                     </CardContent>
                   </Card>
@@ -411,12 +411,12 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Health Records</h3>
                     <Button 
-                      onClick={() => navigate(`/livestock/health/new?operation=${selectedOperation}`)}
+                      onClick={() => navigate(`/livestock`)}
                       size="sm"
                       data-testid="button-add-health-record"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      Add Health Record
+                      Manage Health
                     </Button>
                   </div>
                   
@@ -428,10 +428,10 @@ export default function LivestockDashboard() {
                         Track veterinary visits, treatments, and health events
                       </p>
                       <Button 
-                        onClick={() => navigate(`/livestock/health/new?operation=${selectedOperation}`)}
+                        onClick={() => navigate(`/livestock`)}
                         data-testid="button-start-health-tracking"
                       >
-                        Start Health Tracking
+                        Go to Livestock Management
                       </Button>
                     </CardContent>
                   </Card>
