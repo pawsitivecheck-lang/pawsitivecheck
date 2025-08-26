@@ -7,13 +7,12 @@ import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
 
-// Force rebuild
 export default function Navbar() {
   const { user } = useAuth();
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const navItems = [
+  const menuItems = [
     { href: '/product-scanner', label: 'Product Scanner', icon: Camera },
     { href: '/recalls', label: 'Recall Alerts', icon: Shield },
     { href: '/vet-finder', label: 'Vet Locator', icon: Heart },
@@ -93,7 +92,7 @@ export default function Navbar() {
                 Navigation
               </h3>
               <div className="space-y-1">
-                {navItems.map((item) => {
+                {menuItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location === item.href;
                   return (
