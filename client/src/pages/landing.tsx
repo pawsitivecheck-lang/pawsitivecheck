@@ -223,24 +223,53 @@ export default function Landing() {
                 <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
                 <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
               </div>
-              {!isAuthenticated && (
-                <div className="flex items-center space-x-4">
-                  <a 
-                    href="/api/login" 
-                    className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
-                    data-testid="nav-desktop-sign-in"
-                  >
-                    Sign In
-                  </a>
-                  <a 
-                    href="/api/login" 
-                    className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
-                    data-testid="nav-desktop-create-account"
-                  >
-                    Create Account
-                  </a>
-                </div>
-              )}
+              <div className="flex items-center space-x-4">
+                {isAuthenticated ? (
+                  <>
+                    <a 
+                      href="/pets" 
+                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
+                      data-testid="nav-desktop-pet-profiles"
+                    >
+                      Pet Profiles
+                    </a>
+                    <a 
+                      href="/product-database" 
+                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
+                      data-testid="nav-desktop-database"
+                    >
+                      Safety Database
+                    </a>
+                    <span className="text-white text-sm px-2">
+                      {user?.firstName || 'User'}
+                    </span>
+                    <a 
+                      href="/api/logout" 
+                      className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
+                      data-testid="nav-desktop-sign-out"
+                    >
+                      Sign Out
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <a 
+                      href="/api/login" 
+                      className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center"
+                      data-testid="nav-desktop-sign-in"
+                    >
+                      Sign In
+                    </a>
+                    <a 
+                      href="/api/login" 
+                      className="bg-blue-800 hover:bg-blue-900 px-4 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center border border-blue-700"
+                      data-testid="nav-desktop-create-account"
+                    >
+                      Create Account
+                    </a>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
