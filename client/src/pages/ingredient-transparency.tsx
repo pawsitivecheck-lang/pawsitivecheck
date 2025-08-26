@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { Eye, AlertTriangle, Shield, Search, ExternalLink, Camera } from "lucide-react";
+import { Eye, AlertTriangle, Shield, Search, ExternalLink, Camera, Sparkles } from "lucide-react";
 
 export default function IngredientTransparency() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-mystical-purple text-cosmic-100">
       <Navbar />
       
       {/* Top Banner Ad */}
@@ -28,19 +28,22 @@ export default function IngredientTransparency() {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <div className="mb-6">
-              <Eye className="w-16 h-16 text-purple-600 mx-auto mb-4" />
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-hero-title">
+              <div className="relative inline-block">
+                <Eye className="w-16 h-16 text-starlight-400 mx-auto mb-4" />
+                <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-starlight-400 mb-4 font-header" data-testid="text-hero-title">
                 Ingredient Transparency
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-hero-subtitle">
+              <p className="text-xl text-cosmic-200 max-w-3xl mx-auto" data-testid="text-hero-subtitle">
                 Uncovering the truth behind pet food ingredients and demanding corporate accountability in labeling practices
               </p>
             </div>
             
-            <div className="bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg p-6 mb-8">
+            <div className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-500/30 rounded-lg p-6 mb-8 backdrop-blur-sm">
               <div className="flex items-center justify-center mb-4">
-                <AlertTriangle className="w-8 h-8 text-orange-600 mr-3" />
-                <h2 className="text-2xl font-bold text-orange-800 dark:text-orange-200">Industry Deception</h2>
+                <AlertTriangle className="w-8 h-8 text-orange-400 mr-3" />
+                <h2 className="text-2xl font-bold text-orange-300">Industry Deception</h2>
               </div>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
