@@ -247,6 +247,18 @@ export default function Landing() {
                       <Users className="mr-3 h-5 w-5" />
                       Create Account
                     </button>
+                    <div className="border-t border-gray-100 my-1"></div>
+                    <button 
+                      onClick={() => {
+                        window.location.href = '/livestock-preview';
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      data-testid="mobile-nav-livestock-preview"
+                    >
+                      <BarChart3 className="mr-3 h-5 w-5" />
+                      Livestock Management Preview
+                    </button>
                   </>
                 )}
               </div>
