@@ -6,13 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { Shield, AlertTriangle, Heart, TrendingUp, ExternalLink, Phone, Search, Camera } from "lucide-react";
+import { Shield, AlertTriangle, Heart, TrendingUp, ExternalLink, Phone, Search, Camera, Sparkles } from "lucide-react";
 
 export default function PetHealthProtection() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-mystical-purple text-cosmic-100">
       <Navbar />
       
       {/* Top Banner Ad */}
@@ -28,27 +28,30 @@ export default function PetHealthProtection() {
           {/* Hero Section */}
           <div className="text-center mb-12">
             <div className="mb-6">
-              <Shield className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4" data-testid="text-hero-title">
+              <div className="relative inline-block">
+                <Shield className="w-16 h-16 text-starlight-400 mx-auto mb-4" />
+                <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-starlight-400 mb-4 font-header" data-testid="text-hero-title">
                 Pet Health Protection
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto" data-testid="text-hero-subtitle">
+              <p className="text-xl text-cosmic-200 max-w-3xl mx-auto" data-testid="text-hero-subtitle">
                 Understanding the critical importance of safeguarding your pet from hidden dangers in everyday products
               </p>
             </div>
             
-            <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8">
+            <div className="bg-gradient-to-r from-red-900/30 to-orange-900/30 border border-red-500/30 rounded-lg p-6 mb-8 backdrop-blur-sm">
               <div className="flex items-center justify-center mb-4">
-                <AlertTriangle className="w-8 h-8 text-red-600 mr-3" />
-                <h2 className="text-2xl font-bold text-red-800 dark:text-red-200">Critical Statistics</h2>
+                <AlertTriangle className="w-8 h-8 text-red-400 mr-3" />
+                <h2 className="text-2xl font-bold text-red-300">Critical Statistics</h2>
               </div>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-red-600" data-testid="stat-poison-calls">451,000</div>
-                  <div className="text-sm text-red-700 dark:text-red-300">Poison control calls in 2024</div>
-                  <div className="text-xs text-red-600 mt-1">
+                  <div className="text-3xl font-bold text-starlight-400" data-testid="stat-poison-calls">451,000</div>
+                  <div className="text-sm text-cosmic-200">Poison control calls in 2024</div>
+                  <div className="text-xs text-cosmic-300 mt-1">
                     4% increase from 2023
-                    <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-starlight-400 hover:text-starlight-300 underline ml-1" target="_blank" rel="noopener noreferrer">
                       (ASPCA, 2024 ↗)
                     </a>
                   </div>
@@ -81,11 +84,11 @@ export default function PetHealthProtection() {
           <div className="space-y-12">
             
             {/* Top Toxic Threats */}
-            <Card className="border-orange-200 dark:border-orange-800" data-testid="card-toxic-threats">
+            <Card className="cosmic-card" data-testid="card-toxic-threats">
               <CardHeader>
-                <CardTitle className="text-2xl flex items-center text-orange-800 dark:text-orange-200">
+                <CardTitle className="text-2xl flex items-center text-starlight-400">
                   <AlertTriangle className="w-6 h-6 mr-3" />
-                  Top 10 Pet Toxins of 2024 <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-blue-600 hover:underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a>
+                  Top 10 Pet Toxins of 2024 <a href="https://www.aspca.org/news/official-top-10-toxins-2024" className="text-starlight-400 hover:text-starlight-300 underline text-sm font-normal" target="_blank" rel="noopener noreferrer">(ASPCA, 2024 ↗)</a>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
