@@ -708,7 +708,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(healthRecords)
       .where(and(eq(healthRecords.id, id), eq(healthRecords.userId, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Medical event operations
@@ -743,7 +743,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(medicalEvents)
       .where(and(eq(medicalEvents.id, id), eq(medicalEvents.userId, userId)));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Animal tag operations
@@ -831,7 +831,7 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(productTags)
       .where(and(eq(productTags.productId, productId), eq(productTags.tagId, tagId)));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Analytics for admin

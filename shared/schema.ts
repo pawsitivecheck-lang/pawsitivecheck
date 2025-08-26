@@ -288,7 +288,7 @@ export const feedManagement = pgTable("feed_management", {
   feedingsPerDay: integer("feedings_per_day").default(2),
   costPerUnit: decimal("cost_per_unit", { precision: 10, scale: 2 }),
   lastPurchaseDate: timestamp("last_purchase_date"),
-  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default(0),
+  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default("0"),
   stockUnit: varchar("stock_unit", { length: 20 }).default("lbs"),
   nutritionAnalysis: jsonb("nutrition_analysis"), // protein, fat, fiber content
   medications: text("medications").array(), // any medications in the feed
@@ -334,8 +334,8 @@ export const farmAnimals = pgTable("farm_animals", {
   birthWeight: decimal("birth_weight", { precision: 8, scale: 2 }),
   currentWeight: decimal("current_weight", { precision: 8, scale: 2 }),
   weightUnit: varchar("weight_unit", { length: 10 }).default("lbs"),
-  damId: integer("dam_id").references(() => farmAnimals.id), // mother reference
-  sireId: integer("sire_id").references(() => farmAnimals.id), // father reference
+  damId: integer("dam_id"), // mother reference
+  sireId: integer("sire_id"), // father reference
   generation: integer("generation").default(1), // breeding generation
   purpose: varchar("purpose", { length: 50 }), // breeding, dairy, meat, show, working
   acquisitionDate: timestamp("acquisition_date"),
@@ -537,7 +537,7 @@ export const animalTags = pgTable("animal_tags", {
   name: varchar("name", { length: 100 }).notNull(),
   type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'
   animalCategory: varchar("animal_category", { length: 20 }).default('pet'), // pet, livestock, mixed
-  parentId: integer("parent_id").references(() => animalTags.id), // for hierarchical relationships (breed -> species)
+  parentId: integer("parent_id"), // for hierarchical relationships (breed -> species)
   description: text("description"),
   aliases: text("aliases").array(), // alternative names for the same tag
   isActive: boolean("is_active").default(true),

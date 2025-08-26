@@ -23,9 +23,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      const user = req.user as any;
+      const userId = user.claims.sub;
+      const userData = await storage.getUser(userId);
+      res.json(userData);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -2427,7 +2428,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/products/:productId/tags', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const user = req.user as any;
+      const userId = user?.claims?.sub;
       const productId = parseInt(req.params.productId);
       const { tagIds, relevanceScores } = req.body;
       
