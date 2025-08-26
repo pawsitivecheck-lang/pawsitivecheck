@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [location] = useLocation();
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
@@ -23,7 +23,7 @@ export default function Navbar() {
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
     { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
     { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
+    ...(isAuthenticated ? [{ name: 'Pet Profiles', href: '/pets', icon: PawPrint }] : []),
     { name: 'Livestock Management', href: '/livestock', icon: Tractor },
   ];
 
