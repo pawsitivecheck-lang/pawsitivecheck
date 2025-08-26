@@ -729,7 +729,7 @@ export default function Landing() {
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-mission-title">Our Mission</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
                 <li>
-                  <a href="#scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                  <a href="/comprehensive-safety-analysis" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
                     Comprehensive Safety Analysis
                   </a>
                 </li>
