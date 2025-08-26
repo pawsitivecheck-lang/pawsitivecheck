@@ -734,7 +734,7 @@ export default function Landing() {
                   </a>
                 </li>
                 <li>
-                  <a href="#database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                  <a href="/ingredient-transparency" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
                     Ingredient Transparency
                   </a>
                 </li>
