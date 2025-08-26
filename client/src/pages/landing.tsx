@@ -180,7 +180,7 @@ export default function Landing() {
                         <div className="border-t border-gray-100 my-1"></div>
                         <button 
                           onClick={() => {
-                            window.location.href = '/help';
+                            window.location.href = '/vet-finder';
                             setIsUserMenuOpen(false);
                           }}
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center min-h-[44px]"
@@ -313,7 +313,7 @@ export default function Landing() {
                     
                     <button 
                       onClick={() => {
-                        window.location.href = '/database';
+                        window.location.href = '/product-database';
                         setIsMobileMenuOpen(false);
                       }}
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
