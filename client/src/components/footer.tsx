@@ -10,7 +10,7 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-white mb-3" data-testid="text-mission-title">Our Mission</h4>
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>
-                <a href="/product-scanner" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                <a href="/comprehensive-safety-analysis" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
                 </a>
               </li>
