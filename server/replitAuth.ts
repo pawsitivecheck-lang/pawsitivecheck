@@ -102,18 +102,24 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    // Use the first domain from REPLIT_DOMAINS for strategy lookup
-    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
-    passport.authenticate(`replitauth:${domain}`, {
+    // Use the request host to determine the appropriate domain strategy
+    const requestHost = req.get('host') || 'localhost:5000';
+    const domains = process.env.REPLIT_DOMAINS!.split(",");
+    const matchingDomain = domains.find(domain => requestHost.includes(domain.replace('https://', ''))) || domains[0];
+    
+    passport.authenticate(`replitauth:${matchingDomain}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    // Use the first domain from REPLIT_DOMAINS for strategy lookup
-    const domain = process.env.REPLIT_DOMAINS!.split(",")[0];
-    passport.authenticate(`replitauth:${domain}`, {
+    // Use the request host to determine the appropriate domain strategy
+    const requestHost = req.get('host') || 'localhost:5000';
+    const domains = process.env.REPLIT_DOMAINS!.split(",");
+    const matchingDomain = domains.find(domain => requestHost.includes(domain.replace('https://', ''))) || domains[0];
+    
+    passport.authenticate(`replitauth:${matchingDomain}`, {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
     })(req, res, next);

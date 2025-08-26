@@ -6,14 +6,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Redirect specific .replit.app domain to custom domain
+// CORS and cross-device compatibility
 app.use((req, res, next) => {
-  const host = req.get('host');
-  if (host === 'pawsitive-check-leirsteinv.replit.app') {
-    const redirectUrl = `https://pawsitivecheck.com${req.originalUrl}`;
-    return res.redirect(301, redirectUrl);
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
   }
-  next();
 });
 
 app.use((req, res, next) => {
