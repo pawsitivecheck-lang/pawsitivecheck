@@ -15,26 +15,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "wouter";
 
 export default function Landing() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
-  
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setIsUserMenuOpen(false);
-      }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  // Smooth scroll to section function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId.replace('#', ''));
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMobileMenuOpen(false);
+  };
   
   const { data: featuredProducts } = useQuery({
     queryKey: ['/api/products'],
@@ -53,20 +47,24 @@ export default function Landing() {
   });
 
   // Real data queries to replace mock data
-  const { data: communityReviews, isLoading: reviewsLoading } = useQuery({
+  const { data: communityReviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
     queryKey: ['/api/reviews'],
     queryFn: async () => {
       const res = await fetch('/api/reviews?limit=3&featured=true');
+      if (!res.ok) throw new Error('Failed to fetch reviews');
       return await res.json();
     },
+    retry: 1,
   });
 
-  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading, error: analyticsError } = useQuery({
     queryKey: ['/api/analytics'],
     queryFn: async () => {
       const res = await fetch('/api/analytics/dashboard');
+      if (!res.ok) throw new Error('Failed to fetch analytics');
       return await res.json();
     },
+    retry: 1,
   });
 
   return (
@@ -125,12 +123,12 @@ export default function Landing() {
         <div className="hidden lg:block bg-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-center space-x-8 py-3">
-              <a href="#scanner" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</a>
-              <a href="#database" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</a>
-              <a href="#recalls" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</a>
-              <a href="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</a>
-              <a href="#community" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</a>
-              <a href="#resources" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</a>
+              <button onClick={() => scrollToSection('scanner')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</button>
+              <button onClick={() => scrollToSection('database')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</button>
+              <button onClick={() => scrollToSection('recalls')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</button>
+              <Link to="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</Link>
+              <button onClick={() => scrollToSection('community')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</button>
+              <button onClick={() => scrollToSection('resources')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</button>
             </div>
           </div>
         </div>
@@ -141,64 +139,58 @@ export default function Landing() {
             
             {/* Navigation Links */}
             <div className="px-4 py-4 space-y-2">
-              <a 
-                href="#scanner" 
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <button 
+                onClick={() => scrollToSection('scanner')}
+                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-scan"
               >
                 <Camera className="mr-3 h-5 w-5" />
                 Product Scanner
-              </a>
-              <a 
-                href="#database" 
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
+              </button>
+              <button 
+                onClick={() => scrollToSection('database')}
+                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-database"
               >
                 <Database className="mr-3 h-5 w-5" />
                 Safety Database
-              </a>
-              <a 
-                href="#recalls" 
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
+              </button>
+              <button 
+                onClick={() => scrollToSection('recalls')}
+                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-recalls"
               >
                 <AlertTriangle className="mr-3 h-5 w-5" />
                 Recall Alerts
-              </a>
-              <a 
-                href="/vet-finder" 
+              </button>
+              <Link 
+                to="/vet-finder" 
                 className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-vets"
               >
                 <Heart className="mr-3 h-5 w-5" />
                 Veterinary Network
-              </a>
-              <a 
-                href="#community" 
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
+              </Link>
+              <button 
+                onClick={() => scrollToSection('community')}
+                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-community"
               >
                 <Users className="mr-3 h-5 w-5" />
                 Community Reviews
-              </a>
+              </button>
               
               {/* Livestock Management Preview */}
-              <button 
-                onClick={() => {
-                  window.location.href = '/livestock-preview';
-                  setIsMobileMenuOpen(false);
-                }}
+              <Link 
+                to="/livestock-preview"
                 className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-livestock-preview"
               >
                 <BarChart3 className="mr-3 h-5 w-5" />
                 Livestock Management Preview
-              </button>
+              </Link>
               
               {/* Theme Toggle in Mobile */}
               <div className="flex items-center py-3 px-3">
@@ -228,68 +220,58 @@ export default function Landing() {
                       </div>
                     </div>
                     
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/pets';
-                        setIsMobileMenuOpen(false);
-                      }}
+                    <Link 
+                      to="/pets"
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-pet-profiles"
                     >
                       <PawPrint className="mr-3 h-5 w-5" />
                       Pet Profiles
-                    </button>
+                    </Link>
                     
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/product-database';
-                        setIsMobileMenuOpen(false);
-                      }}
+                    <Link 
+                      to="/product-database"
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-database"
                     >
                       <Database className="mr-3 h-5 w-5" />
                       Safety Database
-                    </button>
+                    </Link>
                     
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/api/logout';
-                        setIsMobileMenuOpen(false);
-                      }}
+                    <a 
+                      href="/api/logout"
                       className="flex items-center w-full py-3 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-logout"
                     >
                       <svg className="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                       </svg>
                       Sign Out
-                    </button>
+                    </a>
                   </>
                 ) : (
                   <>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/api/login';
-                        setIsMobileMenuOpen(false);
-                      }}
+                    <a 
+                      href="/api/login"
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-sign-in"
                     >
                       <UserCheck className="mr-3 h-5 w-5" />
                       Sign In
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/api/register';
-                        setIsMobileMenuOpen(false);
-                      }}
+                    </a>
+                    <a 
+                      href="/api/register"
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-register"
                     >
                       <Users className="mr-3 h-5 w-5" />
                       Create Account
-                    </button>
+                    </a>
                   </>
                 )}
               </div>
@@ -331,31 +313,37 @@ export default function Landing() {
                   {/* Action Buttons */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <Button 
-                      onClick={() => window.location.href = '/product-database'}
+                      asChild
                       className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
                       data-testid="button-search-database"
                     >
-                      <Search className="mr-2 h-5 w-5" />
-                      Search Database
+                      <Link to="/product-database">
+                        <Search className="mr-2 h-5 w-5" />
+                        Search Database
+                      </Link>
                     </Button>
                     
                     <Button 
-                      onClick={() => window.location.href = '/product-scanner'}
+                      asChild
                       className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
                       data-testid="button-scan-barcode"
                     >
-                      <Camera className="mr-2 h-5 w-5" />
-                      Scan Barcode
+                      <Link to="/product-scanner">
+                        <Camera className="mr-2 h-5 w-5" />
+                        Scan Barcode
+                      </Link>
                     </Button>
                     
                     <Button 
-                      onClick={() => window.location.href = '/recalls'}
+                      asChild
                       variant="outline"
                       className="border-2 border-red-500 text-red-600 hover:bg-red-50 font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105"
                       data-testid="button-check-recalls"
                     >
-                      <AlertTriangle className="mr-2 h-5 w-5" />
-                      Check Recalls
+                      <Link to="/recalls">
+                        <AlertTriangle className="mr-2 h-5 w-5" />
+                        Check Recalls
+                      </Link>
                     </Button>
                   </div>
                   
@@ -439,12 +427,14 @@ export default function Landing() {
               </div>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Scan barcodes or take photos to check product safety instantly</p>
               <Button 
-                onClick={() => window.location.href = '/product-scanner'}
+                asChild
                 className="bg-blue-600 hover:bg-blue-700 text-white text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
                 data-testid="button-scan-now"
               >
-                <Camera className="mr-2 h-4 w-4" />
-                Scan Now
+                <Link to="/product-scanner">
+                  <Camera className="mr-2 h-4 w-4" />
+                  Scan Now
+                </Link>
               </Button>
             </Card>
             
@@ -455,13 +445,15 @@ export default function Landing() {
               <h3 className="font-semibold text-gray-800 mb-2 text-sm sm:text-base">🚨 Real-time Alerts</h3>
               <p className="text-xs sm:text-sm text-gray-600 mb-4">Get instant notifications about product recalls and safety issues</p>
               <Button 
-                onClick={() => window.location.href = '/recalls'}
+                asChild
                 variant="outline"
                 className="border-2 border-red-600 text-red-600 hover:bg-red-50 text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
                 data-testid="button-view-alerts"
               >
-                <AlertTriangle className="mr-2 h-4 w-4" />
-                View Alerts
+                <Link to="/recalls">
+                  <AlertTriangle className="mr-2 h-4 w-4" />
+                  View Alerts
+                </Link>
               </Button>
             </Card>
           </div>
@@ -489,11 +481,11 @@ export default function Landing() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {featuredProducts?.slice(0, 3).map((product: any) => (
-              <ProductCard 
-                key={product.id}
-                product={product}
-                onClick={() => window.location.href = `/product/${product.id}`}
-              />
+              <Link to={`/product/${product.id}`} key={product.id}>
+                <ProductCard 
+                  product={product}
+                />
+              </Link>
             )) || (
               // Empty state
               [...Array(3)].map((_, i) => (
@@ -543,12 +535,14 @@ export default function Landing() {
             
             <div className="text-center mt-6 sm:mt-8">
               <Button 
-                onClick={() => window.location.href = '/api/login'}
+                asChild
                 className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
                 data-testid="button-view-warnings"
               >
-                <Shield className="mr-2 h-4 w-4" />
-                View All Safety Alerts
+                <a href="/api/login">
+                  <Shield className="mr-2 h-4 w-4" />
+                  View All Safety Alerts
+                </a>
               </Button>
             </div>
           </div>
@@ -575,6 +569,13 @@ export default function Landing() {
                   <div className="h-4 bg-gray-200 rounded w-1/2"></div>
                 </div>
               ))
+            ) : reviewsError ? (
+              // Error state
+              <div className="col-span-full text-center py-8">
+                <AlertTriangle className="h-12 w-12 text-red-300 mx-auto mb-3" />
+                <p className="text-red-500 text-sm sm:text-base">Unable to load community reviews</p>
+                <p className="text-red-400 text-xs sm:text-sm mt-1">Please try again later</p>
+              </div>
             ) : communityReviews?.length > 0 ? (
               // Real reviews data
               communityReviews.map((review: any) => (
@@ -600,19 +601,63 @@ export default function Landing() {
           
           <div className="text-center mt-8 sm:mt-12">
             <Button 
-              onClick={() => window.location.href = '/api/login'}
+              asChild
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
               data-testid="button-join-community"
             >
-              <Users className="mr-2 h-4 w-4" />
-              Join Safety Community
+              <a href="/api/login">
+                <Users className="mr-2 h-4 w-4" />
+                Join Safety Community
+              </a>
             </Button>
           </div>
         </div>
       </section>
 
+      {/* Safety Resources Section */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-blue-50" id="resources">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-4 sm:mb-6" data-testid="icon-resources">
+              <Shield className="text-xl sm:text-2xl text-white" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 sm:mb-4" data-testid="text-resources-title">Safety Resources</h2>
+            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto" data-testid="text-resources-description">Access comprehensive pet safety information and emergency contacts</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="p-6 text-center border border-blue-200 hover:shadow-lg transition-all duration-300">
+              <Heart className="h-12 w-12 mx-auto text-red-500 mb-4" />
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Emergency Contacts</h3>
+              <p className="text-gray-600 text-sm mb-4">24/7 pet poison control and emergency veterinary services</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/vet-finder">Find Emergency Vets</Link>
+              </Button>
+            </Card>
+            
+            <Card className="p-6 text-center border border-blue-200 hover:shadow-lg transition-all duration-300">
+              <Search className="h-12 w-12 mx-auto text-blue-500 mb-4" />
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Safety Guides</h3>
+              <p className="text-gray-600 text-sm mb-4">Learn about ingredient safety and product evaluation</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/ingredient-transparency">View Guides</Link>
+              </Button>
+            </Card>
+            
+            <Card className="p-6 text-center border border-blue-200 hover:shadow-lg transition-all duration-300">
+              <AlertTriangle className="h-12 w-12 mx-auto text-orange-500 mb-4" />
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Recall Alerts</h3>
+              <p className="text-gray-600 text-sm mb-4">Stay updated on the latest product recalls and safety warnings</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/recalls">View Recalls</Link>
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Admin Dashboard Preview */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50" id="admin">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-4 sm:mb-6" data-testid="icon-admin">
@@ -634,19 +679,19 @@ export default function Landing() {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Products Analyzed:</span>
                     <span className="text-green-600 font-bold text-sm sm:text-base" data-testid="text-products-analyzed">
-                      {analyticsLoading ? 'Loading...' : (analytics?.productsAnalyzed?.toLocaleString() || '0')}
+                      {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.productsAnalyzed?.toLocaleString() || '0')}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Active Users:</span>
                     <span className="text-blue-600 font-bold text-sm sm:text-base" data-testid="text-active-users">
-                      {analyticsLoading ? 'Loading...' : (analytics?.activeUsers?.toLocaleString() || '0')}
+                      {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.activeUsers?.toLocaleString() || '0')}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 text-sm sm:text-base">Safety Alerts:</span>
                     <span className="text-red-600 font-bold text-sm sm:text-base" data-testid="text-safety-alerts">
-                      {analyticsLoading ? 'Loading...' : (analytics?.safetyAlerts?.toString() || '0')}
+                      {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.safetyAlerts?.toString() || '0')}
                     </span>
                   </div>
                 </div>
