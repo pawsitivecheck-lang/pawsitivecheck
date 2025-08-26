@@ -133,57 +133,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  console.log('PWA: Background sync triggered:', event.tag);
-  
-  if (event.tag === 'sync-reviews') {
-    event.waitUntil(syncPendingReviews());
-  } else if (event.tag === 'sync-scans') {
-    event.waitUntil(syncPendingScans());
-  }
-});
-
-// Push notifications
-self.addEventListener('push', (event) => {
-  if (!event.data) return;
-
-  const data = event.data.json();
-  const options = {
-    body: data.body || 'New notification from PawsitiveCheck',
-    icon: '/icon-192.png',
-    badge: '/icon-192.png',
-    vibrate: [100, 50, 100],
-    data: data.data,
-    actions: [
-      {
-        action: 'view',
-        title: 'View Details',
-        icon: '/icon-192.png'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss'
-      }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'PawsitiveCheck', options)
-  );
-});
-
-// Notification click handler
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  if (event.action === 'view') {
-    const urlToOpen = event.notification.data?.url || '/';
-    event.waitUntil(
-      clients.openWindow(urlToOpen)
-    );
-  }
-});
+// Simplified for mobile compatibility - complex features disabled
 
 // Helper functions
 async function syncPendingReviews() {
