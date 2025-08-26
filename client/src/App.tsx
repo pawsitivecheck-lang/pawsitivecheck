@@ -4,7 +4,39 @@ import { queryClient } from "./lib/queryClient";
 import { useAuth } from "./hooks/useAuth";
 import ProductList from "./components/ProductList";
 
-// Start with minimal working pages
+function Navigation() {
+  const { user, isAuthenticated } = useAuth();
+  
+  return (
+    <nav className="bg-white rounded-lg shadow mb-6 p-4">
+      <div className="flex justify-between items-center">
+        <a href="/" className="text-xl font-bold text-blue-600">🐾 PawsitiveCheck</a>
+        
+        <div className="flex items-center gap-4">
+          <a href="/" className="text-gray-600 hover:text-blue-600">Home</a>
+          <a href="/products" className="text-gray-600 hover:text-blue-600">Products</a>
+          <a href="/scanner" className="text-gray-600 hover:text-blue-600">Scanner</a>
+          <a href="/recalls" className="text-gray-600 hover:text-blue-600">Recalls</a>
+          <a href="/community" className="text-gray-600 hover:text-blue-600">Community</a>
+          
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2 ml-4 pl-4 border-l">
+              <span className="text-sm text-gray-600">Hello, {user?.firstName || 'User'}</span>
+              <a href="/api/auth/logout" className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded">
+                Logout
+              </a>
+            </div>
+          ) : (
+            <a href="/api/auth/login" className="ml-4 pl-4 border-l bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              Login
+            </a>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -47,7 +79,7 @@ function HomePage() {
           <ProductList limit={3} />
         </div>
 
-        <TestAPI />
+        <SystemStatus />
       </div>
     </div>
   );
@@ -70,7 +102,7 @@ function FeatureCard({ title, description, href, icon }: {
   );
 }
 
-function TestAPI() {
+function SystemStatus() {
   return (
     <div className="mt-8 p-4 bg-white rounded-lg shadow">
       <h3 className="font-semibold mb-2">System Status</h3>
@@ -152,39 +184,6 @@ function CommunityPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-function Navigation() {
-  const { user, isAuthenticated } = useAuth();
-  
-  return (
-    <nav className="bg-white rounded-lg shadow mb-6 p-4">
-      <div className="flex justify-between items-center">
-        <a href="/" className="text-xl font-bold text-blue-600">🐾 PawsitiveCheck</a>
-        
-        <div className="flex items-center gap-4">
-          <a href="/" className="text-gray-600 hover:text-blue-600">Home</a>
-          <a href="/products" className="text-gray-600 hover:text-blue-600">Products</a>
-          <a href="/scanner" className="text-gray-600 hover:text-blue-600">Scanner</a>
-          <a href="/recalls" className="text-gray-600 hover:text-blue-600">Recalls</a>
-          <a href="/community" className="text-gray-600 hover:text-blue-600">Community</a>
-          
-          {isAuthenticated ? (
-            <div className="flex items-center gap-2 ml-4 pl-4 border-l">
-              <span className="text-sm text-gray-600">Hello, {user?.name || 'User'}</span>
-              <a href="/api/auth/logout" className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded">
-                Logout
-              </a>
-            </div>
-          ) : (
-            <a href="/api/auth/login" className="ml-4 pl-4 border-l bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Login
-            </a>
-          )}
-        </div>
-      </div>
-    </nav>
   );
 }
 
