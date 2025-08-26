@@ -739,12 +739,12 @@ export default function Landing() {
                   </a>
                 </li>
                 <li>
-                  <a href="#recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
+                  <a href="/corporate-accountability" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
                     Corporate Accountability
                   </a>
                 </li>
                 <li>
-                  <a href="#vets" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                  <a href="/pet-health-protection" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
                     Pet Health Protection
                   </a>
                 </li>
@@ -755,17 +755,17 @@ export default function Landing() {
               <h4 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4" data-testid="text-features-title">Key Features</h4>
               <ul className="space-y-2 text-gray-300 text-sm sm:text-base">
                 <li>
-                  <a href="/scan" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                  <a href="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
                     Product Scanner
                   </a>
                 </li>
                 <li>
-                  <a href="/database" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                  <a href="/safety-database-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
                     Safety Database
                   </a>
                 </li>
                 <li>
-                  <a href="/recalls" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
+                  <a href="/recall-system-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
                     Recall Alerts
                   </a>
                 </li>
