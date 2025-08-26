@@ -1,0 +1,177 @@
+i18next: languageChanged en-US
+contentScript.js:2 i18next: initialized Object
+23The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+23The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+23The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+/~:1  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+/~:1  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+/~:1  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+_app-780a303ea8ee8835.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-780a303ea8ee8835.js:38 [LaunchDarkly] LaunchDarkly client initialized
+22Tracking Prevention blocked access to storage for <URL>.
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+chrome-extension://invalid/:1   Failed to load resource: net::ERR_FAILED
+analytics.tiktok.com/i18n/pixel/events.js?sdkid=D004GE3C77U8PIVDSDJG&lib=ttq:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+www.google-analytics.com/analytics.js:1   Failed to load resource: net::ERR_UNSAFE_REDIRECT
+www.googletagmanager.com/gtag/js?id=AW-11411994397:1   Failed to load resource: net::ERR_UNSAFE_REDIRECT
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+client.d8e976cc.js:2  Uncaught DataCloneError: Failed to execute 'postMessage' on 'Window': Port at index 0 is already neutered.
+    at o (client.d8e976cc.js:2:1601117)
+stallwart.build.js:1 stallwart: failed ping 1
+8The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+3contentScript.js:2  Error when handling getFlag for "allowedOriginsToCommunicateWith": A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+(anonymous) @ contentScript.js:2
+3contentScript.js:2  Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'includes')
+    at contentScript.js:2:1061966
+_app-780a303ea8ee8835.js:38 Adding extension: Javascript Commands Object
+12Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'battery'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'layout-animations'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'navigation-override'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'oversized-images'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'publickey-credentials'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'speaker-selection'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'unoptimized-images'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'unsized-media'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Unrecognized feature: 'pointer-lock'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-5a7bf03c79ed7039.js:1
+framework-5a7bf03c79ed7039.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-5a7bf03c79ed7039.js:1
+_app-780a303ea8ee8835.js:38  Command: javascript-root-command has unrecognized contributions: commandbar. Valid contributions are commandbar,filetree-context-menu,sidebar-search,editor-context-menu Object
+(anonymous) @ _app-780a303ea8ee8835.js:38
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+contentScript.js:2  Error when handling getFlag for "allowedOriginsToCommunicateWith": A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+(anonymous) @ contentScript.js:2
+contentScript.js:2  Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'includes')
+    at contentScript.js:2:1061966
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+sp.replit.com/v1/t:1   Failed to load resource: the server responded with a status of 400 ()
+sp.replit.com/v1/t:1   Failed to load resource: the server responded with a status of 400 ()
+prod-website-gateway.fetch.com/web-extension/offers:1   Failed to load resource: the server responded with a status of 401 ()
+7_app-780a303ea8ee8835.js:38  An aria-label or aria-labelledby prop is required for accessibility.
+(anonymous) @ _app-780a303ea8ee8835.js:38
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Arn6%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+client:802  WebSocket connection to 'wss://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/?token=LznF7HJDQye_' failed: 
+createConnection @ client:802
+2react.development.js:209  Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+printWarning @ react.development.js:209
+react.development.js:1630  Uncaught TypeError: Cannot read properties of null (reading 'useRef')
+    at Object.useRef (react.development.js:1630:21)
+    at TooltipProvider (tooltip.tsx:74:34)
+    at renderWithHooks (react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (react-dom.development.js:20103:13)
+    at beginWork (react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback2 (react-dom.development.js:4164:14)
+    at Object.invokeGuardedCallbackDev (react-dom.development.js:4213:16)
+    at invokeGuardedCallback (react-dom.development.js:4277:31)
+    at beginWork$1 (react-dom.development.js:27490:7)
+    at performUnitOfWork (react-dom.development.js:26596:12)
+2react.development.js:209  Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+printWarning @ react.development.js:209
+react.development.js:1630  Uncaught TypeError: Cannot read properties of null (reading 'useRef')
+    at Object.useRef (react.development.js:1630:21)
+    at TooltipProvider (tooltip.tsx:74:34)
+    at renderWithHooks (react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (react-dom.development.js:20103:13)
+    at beginWork (react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback2 (react-dom.development.js:4164:14)
+    at Object.invokeGuardedCallbackDev (react-dom.development.js:4213:16)
+    at invokeGuardedCallback (react-dom.development.js:4277:31)
+    at beginWork$1 (react-dom.development.js:27490:7)
+    at performUnitOfWork (react-dom.development.js:26596:12)
+react-dom.development.js:18704  The above error occurred in the <TooltipProvider> component:
+
+    at TooltipProvider (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=780c3efc:65:5)
+    at QueryClientProvider (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=567600be:2934:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ react-dom.development.js:18704
+react-dom.development.js:26962  Uncaught TypeError: Cannot read properties of null (reading 'useRef')
+    at Object.useRef (react.development.js:1630:21)
+    at TooltipProvider (tooltip.tsx:74:34)
+    at renderWithHooks (react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (react-dom.development.js:20103:13)
+    at beginWork (react-dom.development.js:21626:16)
+    at beginWork$1 (react-dom.development.js:27465:14)
+    at performUnitOfWork (react-dom.development.js:26596:12)
+    at workLoopSync (react-dom.development.js:26505:5)
+    at renderRootSync (react-dom.development.js:26473:7)
+    at recoverFromConcurrentError (react-dom.development.js:25889:20)
+main.tsx:11 PWA: Service Worker registered successfully: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+client:815  WebSocket connection to 'wss://localhost:5173/?token=LznF7HJDQye_' failed: 
+createConnection @ client:815
+client:830  [vite] failed to connect to websocket.
+your current setup:
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:830
+3client:882  [vite] TypeError: Cannot read properties of undefined (reading 'send')
+    at Object.send (client:483:10)
+    at Object.send (client:849:21)
+    at Object.send (client:326:24)
+    at Object.send (client:417:33)
+error @ client:882
