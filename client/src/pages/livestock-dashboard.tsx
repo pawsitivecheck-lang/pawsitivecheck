@@ -331,7 +331,7 @@ export default function LivestockDashboard() {
                                 className="w-full"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  navigate(`/livestock/herds/${herd.id}`);
+                                  setLocation(`/livestock/herds/${herd.id}`);
                                 }}
                                 data-testid={`button-manage-herd-${herd.id}`}
                               >
