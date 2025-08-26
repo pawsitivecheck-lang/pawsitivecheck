@@ -288,7 +288,7 @@ export const feedManagement = pgTable("feed_management", {
   feedingsPerDay: integer("feedings_per_day").default(2),
   costPerUnit: decimal("cost_per_unit", { precision: 10, scale: 2 }),
   lastPurchaseDate: timestamp("last_purchase_date"),
-  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default("0"),
+  currentStock: decimal("current_stock", { precision: 10, scale: 2 }).default(0),
   stockUnit: varchar("stock_unit", { length: 20 }).default("lbs"),
   nutritionAnalysis: jsonb("nutrition_analysis"), // protein, fat, fiber content
   medications: text("medications").array(), // any medications in the feed
@@ -319,8 +319,8 @@ export const livestockHealthRecords = pgTable("livestock_health_records", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Individual farm animals - distinct from pet profiles for livestock tracking  
-export const farmAnimals: any = pgTable("farm_animals", {
+// Individual farm animals - distinct from pet profiles for livestock tracking
+export const farmAnimals = pgTable("farm_animals", {
   id: serial("id").primaryKey(),
   herdId: integer("herd_id").references(() => livestockHerds.id).notNull(),
   userId: varchar("user_id").references(() => users.id).notNull(),
@@ -532,7 +532,7 @@ export const farmProductReviews = pgTable("farm_product_reviews", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const animalTags: any = pgTable("animal_tags", {
+export const animalTags = pgTable("animal_tags", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   type: varchar("type", { length: 20 }).notNull(), // 'species', 'breed', 'subspecies', 'size', 'age_group'

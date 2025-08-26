@@ -15,36 +15,6 @@ import { BarcodeScanner } from "@/components/barcode-scanner";
 import { ImageScanner } from "@/components/image-scanner";
 import type { Product } from "@shared/schema";
 
-const getCosmicClarityColor = (clarity: string) => {
-  switch (clarity.toLowerCase()) {
-    case 'pure':
-      return 'text-green-600 bg-green-50 border-green-200';
-    case 'mystical':
-      return 'text-blue-600 bg-blue-50 border-blue-200';
-    case 'caution':
-      return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-    case 'forbidden':
-      return 'text-red-600 bg-red-50 border-red-200';
-    default:
-      return 'text-gray-600 bg-gray-50 border-gray-200';
-  }
-};
-
-const getCosmicClarityIcon = (clarity: string) => {
-  switch (clarity.toLowerCase()) {
-    case 'pure':
-      return <CheckCircle className="h-5 w-5" />;
-    case 'mystical':
-      return <Eye className="h-5 w-5" />;
-    case 'caution':
-      return <AlertTriangle className="h-5 w-5" />;
-    case 'forbidden':
-      return <XCircle className="h-5 w-5" />;
-    default:
-      return <Eye className="h-5 w-5" />;
-  }
-};
-
 export default function ProductScanner() {
   const { user } = useAuth();
   const { toast } = useToast();
