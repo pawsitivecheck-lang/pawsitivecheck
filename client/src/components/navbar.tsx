@@ -19,15 +19,25 @@ export default function Navbar() {
   const [location] = useLocation();
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Recall Alerts', href: '/recalls', icon: Shield },
-    { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
-    { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
-    { name: 'Livestock Management', href: '/livestock', icon: Tractor },
+  const navigationItems = [
+    { name: 'Recall Alerts', href: '/recalls', icon: 'Shield' },
+    { name: 'Vet Locator', href: '/vet-finder', icon: 'Heart' },
+    { name: 'Community', href: '/community', icon: 'Users' },
+    { name: 'Pet Profiles', href: '/pets', icon: 'PawPrint' },
+    { name: 'Livestock Management', href: '/livestock', icon: 'Tractor' },
   ];
 
-  console.log('Navigation debug:', { navigation, isAuthenticated, isLoading, user: !!user });
+  const getIcon = (iconName: string) => {
+    const iconMap = {
+      Shield: Shield,
+      Heart: Heart,
+      Users: Users,
+      PawPrint: PawPrint,
+      Tractor: Tractor,
+    };
+    return iconMap[iconName as keyof typeof iconMap];
+  };
+
 
   const isActivePage = (href: string) => location === href;
 
@@ -66,10 +76,7 @@ export default function Navbar() {
               variant="ghost"
               size="sm"
               className="text-muted-foreground p-2 border border-border"
-              onClick={() => {
-                console.log('Hamburger clicked, current state:', isHamburgerMenuOpen);
-                setIsHamburgerMenuOpen(!isHamburgerMenuOpen);
-              }}
+              onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
               data-testid="nav-hamburger-menu"
             >
               {isHamburgerMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -137,8 +144,8 @@ export default function Navbar() {
                   <div className="text-xs font-medium text-gray-300 uppercase tracking-wider mb-2">
                     Navigation
                   </div>
-                  {navigation.map((item) => {
-                    const Icon = item.icon;
+                  {navigationItems.map((item) => {
+                    const Icon = getIcon(item.icon);
                     return (
                       <Link key={item.name} href={item.href}>
                         <div 
@@ -150,7 +157,7 @@ export default function Navbar() {
                           onClick={() => setIsHamburgerMenuOpen(false)}
                           data-testid={`hamburger-${item.href.slice(1)}`}
                         >
-                          <Icon className="h-5 w-5" />
+                          {Icon && <Icon className="h-5 w-5" />}
                           <span className="font-medium">{item.name}</span>
                         </div>
                       </Link>
