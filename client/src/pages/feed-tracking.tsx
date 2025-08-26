@@ -10,10 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, PlusIcon, Edit2, Trash2, TrendingUp, DollarSign, Wheat, Eye, LogIn } from "lucide-react";
+import { ArrowLeft, PlusIcon, Edit2, Trash2, TrendingUp, DollarSign, Wheat } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import { useAuth } from "@/hooks/useAuth";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface FeedRecord {
   id: number;
@@ -50,43 +48,30 @@ export default function FeedTracking() {
   const [selectedHerd, setSelectedHerd] = useState<number | null>(null);
   const [isAddingFeed, setIsAddingFeed] = useState(false);
   const [editingFeed, setEditingFeed] = useState<FeedRecord | null>(null);
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   // Get operation ID from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const operationId = urlParams.get('operation');
 
-  // Use preview endpoints for non-authenticated users
-  const herdsEndpoint = isAuthenticated 
-    ? `/api/livestock/operations/${operationId}/herds`
-    : `/api/preview/livestock/operations/${operationId}/herds`;
-  const feedsEndpoint = isAuthenticated
-    ? `/api/livestock/herds/${selectedHerd}/feeds`
-    : `/api/preview/livestock/herds/${selectedHerd}/feeds`;
-
   const { data: herds } = useQuery<LivestockHerd[]>({
-    queryKey: [herdsEndpoint],
-    enabled: !!operationId && !authLoading,
+    queryKey: ['/api/livestock/operations', operationId, 'herds'],
+    enabled: !!operationId,
   });
 
   const { data: feedRecords, isLoading: feedsLoading } = useQuery<FeedRecord[]>({
-    queryKey: [feedsEndpoint],
-    enabled: !!selectedHerd && !authLoading,
+    queryKey: ['/api/livestock/herds', selectedHerd, 'feeds'],
+    enabled: !!selectedHerd,
   });
 
   const createFeedMutation = useMutation({
-    mutationFn: (feedData: any) => {
-      const endpoint = isAuthenticated ? '/api/livestock/feeds' : '/api/preview/livestock/feeds';
-      return apiRequest(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(feedData),
-      });
-    },
+    mutationFn: (feedData: any) => apiRequest('/api/livestock/feeds', {
+      method: 'POST',
+      body: JSON.stringify(feedData),
+    }),
     onSuccess: () => {
-      const message = isAuthenticated ? "Feed record created successfully" : "Preview mode: Feed record not actually saved";
-      toast({ title: message });
+      toast({ title: "Feed record created successfully" });
       setIsAddingFeed(false);
-      queryClient.invalidateQueries({ queryKey: [feedsEndpoint] });
+      queryClient.invalidateQueries({ queryKey: ['/api/livestock/herds', selectedHerd, 'feeds'] });
     },
     onError: () => {
       toast({ title: "Failed to create feed record", variant: "destructive" });
@@ -94,18 +79,14 @@ export default function FeedTracking() {
   });
 
   const updateFeedMutation = useMutation({
-    mutationFn: ({ id, ...feedData }: any) => {
-      const endpoint = isAuthenticated ? `/api/livestock/feeds/${id}` : `/api/preview/livestock/feeds/${id}`;
-      return apiRequest(endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(feedData),
-      });
-    },
+    mutationFn: ({ id, ...feedData }: any) => apiRequest(`/api/livestock/feeds/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(feedData),
+    }),
     onSuccess: () => {
-      const message = isAuthenticated ? "Feed record updated successfully" : "Preview mode: Changes not actually saved";
-      toast({ title: message });
+      toast({ title: "Feed record updated successfully" });
       setEditingFeed(null);
-      queryClient.invalidateQueries({ queryKey: [feedsEndpoint] });
+      queryClient.invalidateQueries({ queryKey: ['/api/livestock/herds', selectedHerd, 'feeds'] });
     },
     onError: () => {
       toast({ title: "Failed to update feed record", variant: "destructive" });
@@ -113,16 +94,12 @@ export default function FeedTracking() {
   });
 
   const deleteFeedMutation = useMutation({
-    mutationFn: (feedId: number) => {
-      const endpoint = isAuthenticated ? `/api/livestock/feeds/${feedId}` : `/api/preview/livestock/feeds/${feedId}`;
-      return apiRequest(endpoint, {
-        method: 'DELETE',
-      });
-    },
+    mutationFn: (feedId: number) => apiRequest(`/api/livestock/feeds/${feedId}`, {
+      method: 'DELETE',
+    }),
     onSuccess: () => {
-      const message = isAuthenticated ? "Feed record deleted successfully" : "Preview mode: Record not actually deleted";
-      toast({ title: message });
-      queryClient.invalidateQueries({ queryKey: [feedsEndpoint] });
+      toast({ title: "Feed record deleted successfully" });
+      queryClient.invalidateQueries({ queryKey: ['/api/livestock/herds', selectedHerd, 'feeds'] });
     },
     onError: () => {
       toast({ title: "Failed to delete feed record", variant: "destructive" });
@@ -178,24 +155,6 @@ export default function FeedTracking() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Preview Mode Alert */}
-      {!isAuthenticated && (
-        <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950" data-testid="preview-mode-alert">
-          <Eye className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-blue-800 dark:text-blue-200">
-            <strong>Preview Mode:</strong> You're viewing sample feed tracking data. 
-            <Button 
-              variant="link" 
-              className="ml-2 p-0 h-auto text-blue-700 dark:text-blue-300 underline"
-              onClick={() => window.location.href = "/api/login"}
-              data-testid="button-login-preview"
-            >
-              Sign in to manage your own feed tracking
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
-
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Button 
@@ -208,13 +167,10 @@ export default function FeedTracking() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            🌾 Feed Tracking {!isAuthenticated && <span className="text-lg text-blue-600 dark:text-blue-400 font-normal">(Preview)</span>}
+            🌾 Feed Tracking
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            {isAuthenticated 
-              ? "Monitor feed consumption, costs, and nutrition"
-              : "Explore feed tracking features with sample data"
-            }
+            Monitor feed consumption, costs, and nutrition
           </p>
         </div>
       </div>
@@ -374,8 +330,6 @@ export default function FeedTracking() {
                               <SelectItem value="kg">Kilograms (kg)</SelectItem>
                               <SelectItem value="bushels">Bushels</SelectItem>
                               <SelectItem value="tons">Tons</SelectItem>
-                              <SelectItem value="tray">Tray</SelectItem>
-                              <SelectItem value="half_tray">Half Tray</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>

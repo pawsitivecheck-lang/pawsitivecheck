@@ -137,8 +137,8 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
   };
 
   const getDefaultUnits = (species: string) => {
-    if (['dog', 'cat', 'bird', 'rabbit', 'guinea_pig', 'hamster', 'ferret'].includes(species.toLowerCase())) {
-      return ['cups', 'oz', 'grams', 'pieces', 'tray', 'half_tray'];
+    if (['dog', 'cat', 'bird', 'rabbit', 'guinea_pig', 'hamster'].includes(species.toLowerCase())) {
+      return ['cups', 'oz', 'grams', 'pieces'];
     } else if (['fish'].includes(species.toLowerCase())) {
       return ['pinches', 'grams', 'pieces'];
     } else {
@@ -239,7 +239,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
                     <SelectContent>
                       {defaultUnits.map(unit => (
                         <SelectItem key={unit} value={unit}>
-                          {unit === 'half_tray' ? 'Half Tray' : unit.charAt(0).toUpperCase() + unit.slice(1)}
+                          {unit.charAt(0).toUpperCase() + unit.slice(1)}
                         </SelectItem>
                       ))}
                     </SelectContent>
