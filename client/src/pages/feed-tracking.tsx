@@ -78,10 +78,7 @@ export default function FeedTracking() {
   const createFeedMutation = useMutation({
     mutationFn: (feedData: any) => {
       const endpoint = isAuthenticated ? '/api/livestock/feeds' : '/api/preview/livestock/feeds';
-      return apiRequest(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(feedData),
-      });
+      return apiRequest('POST', endpoint, feedData);
     },
     onSuccess: () => {
       const message = isAuthenticated ? "Feed record created successfully" : "Preview mode: Feed record not actually saved";
@@ -97,10 +94,7 @@ export default function FeedTracking() {
   const updateFeedMutation = useMutation({
     mutationFn: ({ id, ...feedData }: any) => {
       const endpoint = isAuthenticated ? `/api/livestock/feeds/${id}` : `/api/preview/livestock/feeds/${id}`;
-      return apiRequest(endpoint, {
-        method: 'PUT',
-        body: JSON.stringify(feedData),
-      });
+      return apiRequest('PUT', endpoint, feedData);
     },
     onSuccess: () => {
       const message = isAuthenticated ? "Feed record updated successfully" : "Preview mode: Changes not actually saved";
@@ -116,9 +110,7 @@ export default function FeedTracking() {
   const deleteFeedMutation = useMutation({
     mutationFn: (feedId: number) => {
       const endpoint = isAuthenticated ? `/api/livestock/feeds/${feedId}` : `/api/preview/livestock/feeds/${feedId}`;
-      return apiRequest(endpoint, {
-        method: 'DELETE',
-      });
+      return apiRequest('DELETE', endpoint);
     },
     onSuccess: () => {
       const message = isAuthenticated ? "Feed record deleted successfully" : "Preview mode: Record not actually deleted";

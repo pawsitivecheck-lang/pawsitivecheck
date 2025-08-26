@@ -20,7 +20,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import { 
   ArrowLeft, PlusCircle, Users, Heart, Baby, TrendingUp, DollarSign, 
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
-  Egg, ShoppingCart, FileText, Search
+  Egg, ShoppingCart, FileText, Search, Stethoscope
 } from "lucide-react";
 import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement } from "@shared/schema";
 
