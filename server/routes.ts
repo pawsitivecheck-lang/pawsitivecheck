@@ -3278,8 +3278,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         practices: [],
         total: 0,
-        searchQuery: query || 'veterinarian',
-        location: location || null,
+        searchQuery: (req.query.query as string) || 'veterinarian',
+        location: (req.query.location as string) || null,
         source: 'Error',
         message: 'Search service temporarily unavailable. Please try again.'
       });
@@ -3325,7 +3325,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.partial().parse(req.body);
       
-      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData, userId);
+      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData);
       
       if (!updatedOffice) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3347,7 +3347,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
       
-      const success = await storage.removeVeterinaryOffice(id, userId);
+      const success = await storage.deleteVeterinaryOffice(id, userId);
       
       if (!success) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3364,7 +3364,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const savedProducts = await storage.getSavedProducts(userId);
+      const savedProducts = await storage.getUserSavedProducts(userId);
       res.json(savedProducts);
     } catch (error) {
       console.error("Error fetching saved products:", error);
@@ -3380,7 +3380,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
       });
       
-      const savedProduct = await storage.savePetProduct(productData);
+      const savedProduct = await storage.saveProductForPet(productData);
       res.status(201).json(savedProduct);
     } catch (error) {
       console.error("Error saving product for pet:", error);
@@ -3568,7 +3568,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           // Mark as applied
           await storage.updateProductUpdateSubmission(id, {
-            appliedAt: new Date(),
+            adminNotes: reviewData.adminNotes || 'Applied successfully',
           });
         } catch (error) {
           console.error("Error applying product changes:", error);
