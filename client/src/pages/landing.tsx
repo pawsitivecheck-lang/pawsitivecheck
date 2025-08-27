@@ -68,7 +68,7 @@ export default function Landing() {
   });
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
       {/* Safety Alert Banner */}
       <div className="bg-red-600 text-white py-3 px-4 text-center text-sm md:text-base font-medium">
         <span className="block sm:inline">🚨 ALERT: New product recalls updated</span>
