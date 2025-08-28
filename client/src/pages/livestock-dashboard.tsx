@@ -43,6 +43,7 @@ interface LivestockHerd {
 
 export default function LivestockDashboard() {
   const [, navigate] = useLocation();
+  // Fixed selectedOperation reference issue
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({
     operationName: "",
