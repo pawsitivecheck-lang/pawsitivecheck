@@ -1,13 +1,19 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PlusIcon, Home, Users, Activity, TrendingUp, Eye, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface LivestockOperation {
   id: number;
@@ -38,7 +44,18 @@ interface LivestockHerd {
 export default function LivestockDashboard() {
   const [, navigate] = useLocation();
   const [selectedOperation, setSelectedOperation] = useState<number | null>(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [formData, setFormData] = useState({
+    operationName: "",
+    operationType: "",
+    city: "",
+    state: "",
+    totalHeadCount: "",
+    primarySpecies: [] as string[]
+  });
   const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Use preview endpoints for non-authenticated users
   const operationsEndpoint = isAuthenticated ? '/api/livestock/operations' : '/api/preview/livestock/operations';
@@ -55,6 +72,47 @@ export default function LivestockDashboard() {
     queryKey: [herdsEndpoint],
     enabled: !!selectedOperation && !authLoading,
   });
+
+  const createOperationMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return apiRequest('/api/livestock/operations', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [operationsEndpoint] });
+      setShowCreateForm(false);
+      setFormData({
+        operationName: "",
+        operationType: "",
+        city: "",
+        state: "",
+        totalHeadCount: "",
+        primarySpecies: []
+      });
+      toast({
+        title: "Success!",
+        description: "Livestock operation created successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to create livestock operation. Please try again.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  const handleCreateOperation = (e: React.FormEvent) => {
+    e.preventDefault();
+    createOperationMutation.mutate({
+      ...formData,
+      totalHeadCount: parseInt(formData.totalHeadCount) || 0,
+    });
+  };
 
   if (operationsLoading || authLoading) {
     return (
@@ -132,16 +190,121 @@ export default function LivestockDashboard() {
               : "This feature allows farmers to track their operations, herds, feed management, and health records. Sign in to start managing your own livestock operation."
             }
           </p>
-          <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
-            size="lg"
-            className="flex items-center gap-2"
-            variant={isAuthenticated ? "default" : "outline"}
-            data-testid="button-create-first-operation"
-          >
-            {isAuthenticated ? <PlusIcon className="h-5 w-5" /> : <LogIn className="h-5 w-5" />}
-            {isAuthenticated ? "Get Started with Livestock" : "Sign In to Get Started"}
-          </Button>
+          {isAuthenticated ? (
+            <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
+              <DialogTrigger asChild>
+                <Button 
+                  size="lg"
+                  className="flex items-center gap-2"
+                  data-testid="button-create-first-operation"
+                >
+                  <PlusIcon className="h-5 w-5" />
+                  Get Started with Livestock
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Create Livestock Operation</DialogTitle>
+                  <DialogDescription>
+                    Set up your first livestock operation to start tracking herds, feed, and health records.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleCreateOperation} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="operationName">Operation Name</Label>
+                    <Input
+                      id="operationName"
+                      value={formData.operationName}
+                      onChange={(e) => setFormData({...formData, operationName: e.target.value})}
+                      placeholder="My Farm"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="operationType">Operation Type</Label>
+                    <Select value={formData.operationType} onValueChange={(value) => setFormData({...formData, operationType: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="beef-cattle">Beef Cattle</SelectItem>
+                        <SelectItem value="dairy-cattle">Dairy Cattle</SelectItem>
+                        <SelectItem value="swine">Swine</SelectItem>
+                        <SelectItem value="poultry">Poultry</SelectItem>
+                        <SelectItem value="sheep-goat">Sheep & Goat</SelectItem>
+                        <SelectItem value="mixed">Mixed Operation</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input
+                        id="city"
+                        value={formData.city}
+                        onChange={(e) => setFormData({...formData, city: e.target.value})}
+                        placeholder="City"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state">State</Label>
+                      <Input
+                        id="state"
+                        value={formData.state}
+                        onChange={(e) => setFormData({...formData, state: e.target.value})}
+                        placeholder="State"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="totalHeadCount">Total Head Count</Label>
+                    <Input
+                      id="totalHeadCount"
+                      type="number"
+                      value={formData.totalHeadCount}
+                      onChange={(e) => setFormData({...formData, totalHeadCount: e.target.value})}
+                      placeholder="0"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="flex justify-end space-x-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setShowCreateForm(false)}
+                      disabled={createOperationMutation.isPending}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      disabled={createOperationMutation.isPending}
+                    >
+                      {createOperationMutation.isPending ? "Creating..." : "Create Operation"}
+                    </Button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <Button 
+              onClick={() => window.location.href = "/api/login"}
+              size="lg"
+              className="flex items-center gap-2"
+              variant="outline"
+              data-testid="button-create-first-operation"
+            >
+              <LogIn className="h-5 w-5" />
+              Sign In to Get Started
+            </Button>
+          )}
         </div>
       ) : (
         // Main Dashboard
