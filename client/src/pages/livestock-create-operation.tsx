@@ -31,7 +31,7 @@ export default function LivestockCreateOperation() {
       
       try {
         console.log("📡 Calling apiRequest...");
-        const response = await apiRequest("/api/livestock/operations", "POST", data);
+        const response = await apiRequest("POST", "/api/livestock/operations", data);
         console.log("✅ API request successful, response:", response);
         return response.json();
       } catch (error) {
