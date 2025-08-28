@@ -125,9 +125,15 @@ export default function LivestockDashboard() {
     e.preventDefault();
     
     console.log("Form submitted with data:", formData);
+    console.log("Form validation check:");
+    console.log("- operationName:", formData.operationName);
+    console.log("- operationType:", formData.operationType); 
+    console.log("- city:", formData.city);
+    console.log("- state:", formData.state);
     
     // Validate required fields
     if (!formData.operationName || !formData.operationType || !formData.city || !formData.state) {
+      console.log("Validation failed - missing required fields");
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
@@ -135,6 +141,8 @@ export default function LivestockDashboard() {
       });
       return;
     }
+    
+    console.log("Validation passed, proceeding with mutation...");
     
     // Get species based on operation type
     const getSpeciesForOperationType = (operationType: string): string[] => {

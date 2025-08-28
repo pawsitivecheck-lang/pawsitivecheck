@@ -3653,6 +3653,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("User ID from claims:", req.user?.claims?.sub);
       console.log("Final userId:", userId);
       
+      console.log("Request headers:", req.headers);
+      console.log("Content-Type:", req.headers['content-type']);
+      
       if (!userId) {
         console.error("No user ID available");
         return res.status(401).json({ error: "User not authenticated" });
