@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Crown, ChartLine, Ban, Shield, Users, Package, AlertTriangle, Eye, TrendingUp, Database, FileText, RefreshCw } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database } from "lucide-react";
 import DatabaseSync from "@/components/database-sync";
-import { apiRequest } from "@/lib/queryClient";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isAdmin, isLoading } = useAuth();
   const { toast } = useToast();
-  const [isUpdatingLegal, setIsUpdatingLegal] = useState(false);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -69,33 +66,6 @@ export default function AdminDashboard() {
     enabled: !!isAdmin,
   });
 
-  const updateLegalDocuments = useMutation({
-    mutationFn: async () => {
-      return apiRequest("/api/admin/update-legal", {
-        method: "POST",
-      });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Legal Documents Updated",
-        description: "Privacy Policy, Terms of Service, and Cookie Policy have been updated with current 2025 regulations.",
-      });
-      setIsUpdatingLegal(false);
-    },
-    onError: (error) => {
-      toast({
-        title: "Update Failed",
-        description: "Could not update legal documents. Please try again.",
-        variant: "destructive",
-      });
-      setIsUpdatingLegal(false);
-    },
-  });
-
-  const handleUpdateLegal = () => {
-    setIsUpdatingLegal(true);
-    updateLegalDocuments.mutate();
-  };
 
   if (isLoading) {
     return (
@@ -353,68 +323,6 @@ export default function AdminDashboard() {
             </Card>
           </div>
 
-          {/* Admin Powers */}
-          <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-admin-powers">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-600">
-                <Eye className="h-5 w-5" />
-                Admin Tools
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-4">
-                <Button 
-                  className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
-                  data-testid="button-enhance-analysis"
-                >
-                  <ChartLine className="mr-2 h-4 w-4" />
-                  Enhance Analysis
-                </Button>
-                <Button 
-                  className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
-                  data-testid="button-update-database"
-                >
-                  <Package className="mr-2 h-4 w-4" />
-                  Update Database
-                </Button>
-                <Button 
-                  className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
-                  onClick={() => window.location.href = "/admin/product-submissions"}
-                  data-testid="button-review-submissions"
-                >
-                  <Eye className="mr-2 h-4 w-4" />
-                  Review Submissions
-                </Button>
-                <Button 
-                  className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
-                  data-testid="button-issue-recall"
-                >
-                  <AlertTriangle className="mr-2 h-4 w-4" />
-                  Issue Recall
-                </Button>
-                <Button 
-                  className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
-                  data-testid="button-approve-product"
-                >
-                  <Shield className="mr-2 h-4 w-4" />
-                  Approve Product
-                </Button>
-                <Button 
-                  className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
-                  onClick={handleUpdateLegal}
-                  disabled={isUpdatingLegal}
-                  data-testid="button-update-legal"
-                >
-                  {isUpdatingLegal ? (
-                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <FileText className="mr-2 h-4 w-4" />
-                  )}
-                  {isUpdatingLegal ? "Updating..." : "Update Legal Docs"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
           
           {/* Database Synchronization Section */}
           <div className="space-y-6 mt-12">

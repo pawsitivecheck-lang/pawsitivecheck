@@ -549,6 +549,13 @@ export default function DatabaseSync() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Button 
               className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
+              data-testid="button-enhance-analysis"
+            >
+              <ChartLine className="mr-2 h-4 w-4" />
+              Enhance Analysis
+            </Button>
+            <Button 
+              className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
               data-testid="button-update-database"
             >
               <Package className="mr-2 h-4 w-4" />
