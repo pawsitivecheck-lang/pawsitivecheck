@@ -95,7 +95,7 @@ export default function OperationProfile() {
     mutationFn: async (herdData: any) => {
       console.log("Frontend: Starting herd creation with data:", herdData);
       try {
-        const result = await apiRequest("/api/livestock/herds", "POST", herdData);
+        const result = await apiRequest("POST", "/api/livestock/herds", herdData);
         console.log("Frontend: Herd creation successful:", result);
         return result;
       } catch (error) {
