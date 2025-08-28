@@ -75,11 +75,19 @@ export default function LivestockDashboard() {
 
   const createOperationMutation = useMutation({
     mutationFn: async (data: any) => {
-      return apiRequest('/api/livestock/operations', {
+      const response = await fetch('/api/livestock/operations', {
         method: 'POST',
         body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
       });
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to create operation: ${errorData}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [operationsEndpoint] });
@@ -108,9 +116,30 @@ export default function LivestockDashboard() {
 
   const handleCreateOperation = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Get species based on operation type
+    const getSpeciesForOperationType = (operationType: string): string[] => {
+      switch (operationType) {
+        case 'beef-cattle':
+        case 'dairy-cattle':
+          return ['cattle'];
+        case 'swine':
+          return ['pigs'];
+        case 'poultry':
+          return ['chickens'];
+        case 'sheep-goat':
+          return ['sheep', 'goats'];
+        case 'mixed':
+          return ['cattle', 'pigs', 'chickens'];
+        default:
+          return ['cattle'];
+      }
+    };
+    
     createOperationMutation.mutate({
       ...formData,
       totalHeadCount: parseInt(formData.totalHeadCount) || 0,
+      primarySpecies: getSpeciesForOperationType(formData.operationType),
     });
   };
 
