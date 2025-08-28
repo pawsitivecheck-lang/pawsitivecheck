@@ -251,108 +251,15 @@ export default function LivestockDashboard() {
             }
           </p>
           {isAuthenticated ? (
-            <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
-              <DialogTrigger asChild>
-                <Button 
-                  size="lg"
-                  className="flex items-center gap-2"
-                  data-testid="button-create-first-operation"
-                >
-                  <PlusIcon className="h-5 w-5" />
-                  Get Started with Livestock
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Create Livestock Operation</DialogTitle>
-                  <DialogDescription>
-                    Set up your first livestock operation to start tracking herds, feed, and health records.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleCreateOperation} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="operationName">Operation Name</Label>
-                    <Input
-                      id="operationName"
-                      value={formData.operationName}
-                      onChange={(e) => setFormData({...formData, operationName: e.target.value})}
-                      placeholder="My Farm"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="operationType">Operation Type</Label>
-                    <Select value={formData.operationType} onValueChange={(value) => setFormData({...formData, operationType: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beef-cattle">Beef Cattle</SelectItem>
-                        <SelectItem value="dairy-cattle">Dairy Cattle</SelectItem>
-                        <SelectItem value="swine">Swine</SelectItem>
-                        <SelectItem value="poultry">Poultry</SelectItem>
-                        <SelectItem value="sheep-goat">Sheep & Goat</SelectItem>
-                        <SelectItem value="mixed">Mixed Operation</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input
-                        id="city"
-                        value={formData.city}
-                        onChange={(e) => setFormData({...formData, city: e.target.value})}
-                        placeholder="City"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state">State</Label>
-                      <Input
-                        id="state"
-                        value={formData.state}
-                        onChange={(e) => setFormData({...formData, state: e.target.value})}
-                        placeholder="State"
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="totalHeadCount">Total Head Count</Label>
-                    <Input
-                      id="totalHeadCount"
-                      type="number"
-                      value={formData.totalHeadCount}
-                      onChange={(e) => setFormData({...formData, totalHeadCount: e.target.value})}
-                      placeholder="0"
-                      min="0"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="flex justify-end space-x-2">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={() => setShowCreateForm(false)}
-                      disabled={createOperationMutation.isPending}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      type="submit" 
-                      disabled={createOperationMutation.isPending}
-                    >
-                      {createOperationMutation.isPending ? "Creating..." : "Create Operation"}
-                    </Button>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
+            <Button 
+              onClick={() => navigate("/livestock/create")}
+              size="lg"
+              className="flex items-center gap-2"
+              data-testid="button-create-first-operation"
+            >
+              <PlusIcon className="h-5 w-5" />
+              Get Started with Livestock
+            </Button>
           ) : (
             <Button 
               onClick={() => window.location.href = "/api/login"}

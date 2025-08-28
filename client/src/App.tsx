@@ -31,6 +31,7 @@ import SubmitProductUpdate from "@/pages/submit-product-update";
 import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
 import LivestockDashboard from "@/pages/livestock-dashboard";
+import LivestockCreateOperation from "@/pages/livestock-create-operation";
 import FeedTracking from "@/pages/feed-tracking";
 import HerdProfile from "@/pages/herd-profile";
 import CookieConsent from "@/components/cookie-consent";
@@ -86,6 +87,7 @@ function Router() {
           <Route path="/submit-product-update" component={SubmitProductUpdate} />
           <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
           <Route path="/livestock" component={LivestockDashboard} />
+          <Route path="/livestock/create" component={LivestockCreateOperation} />
           <Route path="/livestock/feed" component={FeedTracking} />
           <Route path="/livestock/herds/:id" component={HerdProfile} />
         </>
