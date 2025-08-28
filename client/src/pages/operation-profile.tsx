@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation, Link } from "wouter";
+import { useLocation, Link, useParams } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -65,7 +65,8 @@ export default function OperationProfile() {
   const [isAddHerdDialogOpen, setIsAddHerdDialogOpen] = useState(false);
   
   // Get operation ID from URL
-  const operationId = window.location.pathname.split('/').pop();
+  const params = useParams();
+  const operationId = params.id;
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {

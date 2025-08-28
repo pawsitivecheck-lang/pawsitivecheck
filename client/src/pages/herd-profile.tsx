@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation, Link } from "wouter";
+import { useLocation, Link, useParams } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -39,7 +39,8 @@ export default function HerdProfile() {
   const [activeTab, setActiveTab] = useState("overview");
   
   // Get herd ID from URL
-  const herdId = window.location.pathname.split('/').pop();
+  const params = useParams();
+  const herdId = params.id;
 
   // Redirect if not authenticated
   if (!authLoading && !isAuthenticated) {
