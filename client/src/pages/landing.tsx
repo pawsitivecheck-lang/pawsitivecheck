@@ -68,7 +68,7 @@ export default function Landing() {
   });
 
   return (
-    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+    <div className="min-h-screen bg-background w-full overflow-x-hidden">
       {/* Safety Alert Banner */}
       <div className="bg-red-600 text-white py-3 px-4 text-center text-sm md:text-base font-medium">
         <span className="block sm:inline">🚨 ALERT: New product recalls updated</span>
@@ -77,14 +77,14 @@ export default function Landing() {
       </div>
 
       {/* Top Leaderboard Ad */}
-      <div className="bg-gray-50 border-b border-gray-200 py-3">
+      <div className="bg-muted border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="header" />
         </div>
       </div>
       
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <nav className="bg-card border-b border-border sticky top-0 z-50">
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -92,7 +92,7 @@ export default function Landing() {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                 <PawPrint className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600">PawsitiveCheck</h1>
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">PawsitiveCheck</h1>
             </div>
             
             
@@ -106,13 +106,13 @@ export default function Landing() {
               {/* Mobile menu button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-3 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="lg:hidden p-3 rounded-lg hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 data-testid="button-mobile-menu"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-6 w-6 text-gray-700" />
+                  <X className="h-6 w-6 text-foreground" />
                 ) : (
-                  <Menu className="h-6 w-6 text-gray-700" />
+                  <Menu className="h-6 w-6 text-foreground" />
                 )}
               </button>
             </div>
@@ -135,13 +135,13 @@ export default function Landing() {
         
         {/* Enhanced Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-gray-200 shadow-lg">
+          <div className="lg:hidden bg-card border-b border-border shadow-lg">
             
             {/* Navigation Links */}
             <div className="px-4 py-4 space-y-2">
               <button 
                 onClick={() => scrollToSection('scanner')}
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-scan"
               >
                 <Camera className="mr-3 h-5 w-5" />
@@ -149,7 +149,7 @@ export default function Landing() {
               </button>
               <button 
                 onClick={() => scrollToSection('database')}
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-database"
               >
                 <Database className="mr-3 h-5 w-5" />
@@ -157,7 +157,7 @@ export default function Landing() {
               </button>
               <button 
                 onClick={() => scrollToSection('recalls')}
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-recalls"
               >
                 <AlertTriangle className="mr-3 h-5 w-5" />
@@ -165,7 +165,7 @@ export default function Landing() {
               </button>
               <Link 
                 to="/vet-finder" 
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-vets"
               >
@@ -174,7 +174,7 @@ export default function Landing() {
               </Link>
               <button 
                 onClick={() => scrollToSection('community')}
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
                 data-testid="mobile-nav-community"
               >
                 <Users className="mr-3 h-5 w-5" />
@@ -184,7 +184,7 @@ export default function Landing() {
               {/* Livestock Management Preview */}
               <Link 
                 to="/livestock-preview"
-                className="flex items-center py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
                 onClick={() => setIsMobileMenuOpen(false)}
                 data-testid="mobile-nav-livestock-preview"
               >
@@ -194,7 +194,7 @@ export default function Landing() {
               
               {/* Theme Toggle in Mobile */}
               <div className="flex items-center py-3 px-3">
-                <span className="mr-3 text-gray-700 dark:text-gray-300 font-medium">Theme:</span>
+                <span className="mr-3 text-foreground font-medium">Theme:</span>
                 <ThemeToggle />
               </div>
               
