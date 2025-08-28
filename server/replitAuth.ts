@@ -49,6 +49,7 @@ function updateUserSession(
   tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers
 ) {
   user.claims = tokens.claims();
+  user.id = user.claims?.sub; // Set the user ID from claims for API routes
   user.access_token = tokens.access_token;
   user.refresh_token = tokens.refresh_token;
   user.expires_at = user.claims?.exp;
