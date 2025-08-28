@@ -13,6 +13,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle, Image, Search, Globe, Loader2 } from "lucide-react";
 import { BarcodeScanner } from "@/components/barcode-scanner";
 import { ImageScanner } from "@/components/image-scanner";
+import { getCosmicClarityIcon, getCosmicClarityColor } from "@/utils/cosmic-clarity";
 import type { Product } from "@shared/schema";
 
 export default function ProductScanner() {

@@ -1253,9 +1253,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const analytics = await storage.getAnalytics();
       // Return basic metrics for public consumption
       res.json({
-        productsAnalyzed: analytics.productsAnalyzed || 0,
-        activeUsers: analytics.activeUsers || 0,
-        safetyAlerts: analytics.safetyAlerts || 0
+        productsAnalyzed: analytics.totalProducts || 0,
+        activeUsers: analytics.totalUsers || 0,
+        safetyAlerts: analytics.activeRecalls || 0
       });
     } catch (error) {
       console.error("Error fetching analytics:", error);

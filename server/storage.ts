@@ -101,6 +101,7 @@ export interface IStorage {
   }): Promise<Product | undefined>;
   
   // Review operations
+  getReviews(limit?: number, offset?: number): Promise<ProductReview[]>;
   getProductReviews(productId: number): Promise<ProductReview[]>;
   getUserReviews(userId: string): Promise<ProductReview[]>;
   createReview(review: InsertProductReview): Promise<ProductReview>;
@@ -373,6 +374,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Review operations
+  async getReviews(limit: number = 10, offset: number = 0): Promise<ProductReview[]> {
+    return await db
+      .select()
+      .from(productReviews)
+      .orderBy(desc(productReviews.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
   async getProductReviews(productId: number): Promise<ProductReview[]> {
     return await db
       .select()
