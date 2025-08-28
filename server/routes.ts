@@ -3749,15 +3749,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "User ID not found" });
       }
 
+      console.log("Creating herd with data:", JSON.stringify(req.body, null, 2));
+      console.log("User ID:", userId);
+
       const herdData = {
         ...req.body,
         userId,
       };
 
+      console.log("Final herd data to insert:", JSON.stringify(herdData, null, 2));
+
+      // Validate required fields
+      if (!herdData.operationId || !herdData.herdName || !herdData.species) {
+        return res.status(400).json({ 
+          error: "Missing required fields: operationId, herdName, and species are required" 
+        });
+      }
+
       const herd = await storage.createLivestockHerd(herdData);
       res.status(201).json(herd);
     } catch (error) {
       console.error("Error creating livestock herd:", error);
+      console.error("Error details:", error.message);
+      console.error("Stack trace:", error.stack);
       res.status(500).json({ error: "Failed to create livestock herd" });
     }
   });
