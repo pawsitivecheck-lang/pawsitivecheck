@@ -626,7 +626,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Continue to try other sources
         }
 
-        // Try UPC Database API as fallback
+        // Try UPC Database API as fallback - temporarily disabled due to syntax issues
+        /*
         if (!productData && process.env.UPC_DATABASE_API_KEY) {
           try {
             const response = await fetch(`https://api.upcdatabase.org/product/${query}`, {
@@ -692,6 +693,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('UPC Database API error:', error);
           // Fall back to mock data
         }
+        }
+        */
 
         // Fall back to mock data if API failed or no API key
         if (!productData) {
