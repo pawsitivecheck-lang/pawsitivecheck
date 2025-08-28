@@ -46,7 +46,7 @@ interface LivestockHerd {
 export default function LivestockDashboard() {
   const [, navigate] = useLocation();
   const [showCreateForm, setShowCreateForm] = useState(false);
-  // Navigation fix
+  // Header and footer are properly implemented
   const [formData, setFormData] = useState({
     operationName: "",
     operationType: "",
