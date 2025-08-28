@@ -117,6 +117,18 @@ export default function LivestockDashboard() {
   const handleCreateOperation = (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log("Form submitted with data:", formData);
+    
+    // Validate required fields
+    if (!formData.operationName || !formData.operationType || !formData.city || !formData.state) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     // Get species based on operation type
     const getSpeciesForOperationType = (operationType: string): string[] => {
       switch (operationType) {
@@ -136,11 +148,15 @@ export default function LivestockDashboard() {
       }
     };
     
-    createOperationMutation.mutate({
+    const finalData = {
       ...formData,
       totalHeadCount: parseInt(formData.totalHeadCount) || 0,
       primarySpecies: getSpeciesForOperationType(formData.operationType),
-    });
+    };
+    
+    console.log("Submitting operation data:", finalData);
+    
+    createOperationMutation.mutate(finalData);
   };
 
   if (operationsLoading || authLoading) {
