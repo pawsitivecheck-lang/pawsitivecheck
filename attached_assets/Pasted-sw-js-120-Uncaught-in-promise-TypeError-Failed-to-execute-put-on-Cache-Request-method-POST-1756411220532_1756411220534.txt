@@ -1,0 +1,33 @@
+sw.js:120  Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request method 'POST' is unsupported
+    at sw.js:120:23
+(anonymous) @ sw.js:120
+Promise.then
+(anonymous) @ sw.js:119
+Promise.then
+(anonymous) @ sw.js:110
+Promise.then
+(anonymous) @ sw.js:104
+pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+6:1  Tracking Prevention blocked a Script resource from loading https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066.
+client:802  WebSocket connection to 'wss://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/?token=bXkLMfCm9Rjc' failed: Error during WebSocket handshake: Unexpected response code: 400
+createConnection @ client:802
+connect @ client:437
+connect @ client:811
+connect @ client:290
+connect @ client:383
+(anonymous) @ client:908
+react-dom.development.js:29895 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+main.tsx:11 PWA: Service Worker registered successfully: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+6:1  Error while trying to use the following icon from the Manifest: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/icon-192.png (Download error or resource isn't a valid image)
+client:815  WebSocket connection to 'wss://localhost:5173/?token=bXkLMfCm9Rjc' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+createConnection @ client:815
+connect @ client:437
+connect @ client:822
+client:830  [vite] failed to connect to websocket.
+your current setup:
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:830
+dialog.tsx:543  Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ dialog.tsx:543

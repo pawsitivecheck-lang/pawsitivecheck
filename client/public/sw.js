@@ -68,8 +68,8 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache successful API responses
-          if (response.ok && API_CACHE_PATTERNS.some(pattern => url.pathname.startsWith(pattern))) {
+          // Cache successful API responses (only GET requests)
+          if (response.ok && request.method === 'GET' && API_CACHE_PATTERNS.some(pattern => url.pathname.startsWith(pattern))) {
             const responseClone = response.clone();
             caches.open(DYNAMIC_CACHE)
               .then((cache) => {

@@ -8,7 +8,7 @@ import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -326,6 +326,9 @@ export default function PetProfiles() {
                     </Avatar>
                     <div>
                       <DialogTitle className="text-2xl">{selectedPet.name}</DialogTitle>
+                      <DialogDescription>
+                        View and manage {selectedPet.name}'s complete profile, health records, and saved products.
+                      </DialogDescription>
                       <Badge className={getSpeciesBadgeColor(selectedPet.species)}>
                         <div className="flex items-center gap-1">
                           {getSpeciesIcon(selectedPet.species)}
