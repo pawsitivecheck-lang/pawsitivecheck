@@ -27,13 +27,7 @@ export default function LivestockCreateOperation() {
     mutationFn: async (data: any) => {
       console.log("Making API request with data:", data);
       try {
-        const response = await apiRequest("/api/livestock/operations", {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await apiRequest("/api/livestock/operations", "POST", data);
         console.log("API request successful, response:", response);
         return response;
       } catch (error) {
