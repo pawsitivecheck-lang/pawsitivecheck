@@ -1,0 +1,42 @@
+pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/:1  Tracking Prevention blocked a Script resource from loading https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066.
+react-dom.development.js:29895 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+client:802  WebSocket connection to 'wss://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/?token=bXkLMfCm9Rjc' failed: Error during WebSocket handshake: Unexpected response code: 400
+createConnection @ client:802
+main.tsx:11 PWA: Service Worker registered successfully: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/:1  Error while trying to use the following icon from the Manifest: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/icon-192.png (Download error or resource isn't a valid image)
+react-dom.development.js:86  Warning: validateDOMNesting(...): <a> cannot appear as a descendant of <a>.
+    at a
+    at div
+    at div
+    at div
+    at div
+    at _c9 (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/components/ui/card.tsx:20:11)
+    at ProductCard (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/components/product-card.tsx:22:39)
+    at a
+    at https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c8c6167f:220:18
+    at div
+    at div
+    at section
+    at div
+    at Landing (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/pages/landing.tsx:37:48)
+    at Route (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c8c6167f:206:16)
+    at Switch (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c8c6167f:262:17)
+    at Router (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/App.tsx?t=1756410051844&v=swKSZCukNqMJwTKoEIykX:58:42)
+    at div
+    at QueryClientProvider (https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c8c6167f:2934:3)
+    at App
+printWarning @ react-dom.development.js:86
+/api/analytics/dashboard:1   Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+client:815  WebSocket connection to 'wss://localhost:5173/?token=bXkLMfCm9Rjc' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+createConnection @ client:815
+client:830  [vite] failed to connect to websocket.
+your current setup:
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:830
+dialog.tsx:543  Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ dialog.tsx:543

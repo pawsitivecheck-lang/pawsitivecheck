@@ -861,7 +861,7 @@ export class DatabaseStorage implements IStorage {
       blessedProducts,
       activeRecalls,
       blacklistedIngredients,
-      veterinaryOffices,
+      veterinaryOfficesCount,
     ] = await Promise.all([
       db.select({ count: sql`count(*)` }).from(products),
       db.select({ count: sql`count(*)` }).from(users),
@@ -879,7 +879,7 @@ export class DatabaseStorage implements IStorage {
       blessedProducts: Number(blessedProducts[0].count),
       activeRecalls: Number(activeRecalls[0].count),
       blacklistedIngredients: Number(blacklistedIngredients[0].count),
-      veterinaryOffices: Number(veterinaryOffices[0].count),
+      veterinaryOffices: Number(veterinaryOfficesCount[0].count),
     };
   }
 
