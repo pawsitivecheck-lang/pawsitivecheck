@@ -408,12 +408,12 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Herds</h3>
                     <Button 
-                      onClick={() => isAuthenticated ? navigate(`/livestock`) : window.location.href = "/api/login"}
+                      onClick={() => isAuthenticated ? navigate(`/livestock/create`) : window.location.href = "/api/login"}
                       size="sm"
                       data-testid="button-add-herd"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      {isAuthenticated ? "Manage Herds" : "Sign In to Manage"}
+                      {isAuthenticated ? "Add New Herd" : "Sign In to Manage"}
                     </Button>
                   </div>
                   
@@ -477,10 +477,10 @@ export default function LivestockDashboard() {
                       <p className="text-gray-500 dark:text-gray-400">No herds found for this operation.</p>
                       <Button 
                         className="mt-4" 
-                        onClick={() => isAuthenticated ? navigate(`/livestock`) : window.location.href = "/api/login"}
+                        onClick={() => isAuthenticated ? navigate(`/livestock/create`) : window.location.href = "/api/login"}
                         data-testid="button-create-first-herd"
                       >
-                        {isAuthenticated ? "Go to Livestock Management" : "Sign In to Manage"}
+                        {isAuthenticated ? "Create Operation & Herds" : "Sign In to Manage"}
                       </Button>
                     </div>
                   )}
@@ -541,12 +541,12 @@ export default function LivestockDashboard() {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Health Records</h3>
                     <Button 
-                      onClick={() => isAuthenticated ? navigate(`/livestock`) : window.location.href = "/api/login"}
+                      onClick={() => isAuthenticated ? navigate(`/livestock/create`) : window.location.href = "/api/login"}
                       size="sm"
                       data-testid="button-add-health-record"
                     >
                       <PlusIcon className="h-4 w-4 mr-2" />
-                      {isAuthenticated ? "Manage Health" : "Sign In to Manage"}
+                      {isAuthenticated ? "Add Health Record" : "Sign In to Manage"}
                     </Button>
                   </div>
                   
@@ -558,10 +558,10 @@ export default function LivestockDashboard() {
                         Track veterinary visits, treatments, and health events
                       </p>
                       <Button 
-                        onClick={() => isAuthenticated ? navigate(`/livestock`) : window.location.href = "/api/login"}
+                        onClick={() => isAuthenticated ? navigate(`/livestock/create`) : window.location.href = "/api/login"}
                         data-testid="button-start-health-tracking"
                       >
-                        {isAuthenticated ? "Go to Livestock Management" : "Sign In to Manage"}
+                        {isAuthenticated ? "Set Up Health Tracking" : "Sign In to Manage"}
                       </Button>
                     </CardContent>
                   </Card>
