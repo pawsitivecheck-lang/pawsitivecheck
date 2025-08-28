@@ -51,10 +51,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
   });
 
   const createFeedMutation = useMutation({
-    mutationFn: (feedData: any) => apiRequest('/api/pets/feeds', {
-      method: 'POST',
-      body: JSON.stringify(feedData),
-    }),
+    mutationFn: (feedData: any) => apiRequest('/api/pets/feeds', 'POST', feedData),
     onSuccess: () => {
       toast({ title: "Feed record created successfully" });
       setIsAddingFeed(false);
@@ -66,10 +63,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
   });
 
   const updateFeedMutation = useMutation({
-    mutationFn: ({ id, ...feedData }: any) => apiRequest(`/api/pets/feeds/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(feedData),
-    }),
+    mutationFn: ({ id, ...feedData }: any) => apiRequest(`/api/pets/feeds/${id}`, 'PUT', feedData),
     onSuccess: () => {
       toast({ title: "Feed record updated successfully" });
       setEditingFeed(null);
@@ -81,9 +75,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
   });
 
   const deleteFeedMutation = useMutation({
-    mutationFn: (feedId: number) => apiRequest(`/api/pets/feeds/${feedId}`, {
-      method: 'DELETE',
-    }),
+    mutationFn: (feedId: number) => apiRequest(`/api/pets/feeds/${feedId}`, 'DELETE'),
     onSuccess: () => {
       toast({ title: "Feed record deleted successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/pets', petId, 'feeds'] });

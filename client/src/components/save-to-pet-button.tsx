@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
@@ -35,22 +35,24 @@ export function SaveToPetButton({
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<"saved" | "favorite" | "avoid" | "tried">("saved");
 
-  const { data: pets = [] } = useQuery({
+  const { data: pets = [], error } = useQuery<PetProfile[]>({
     queryKey: ["/api/pets"],
     enabled: isAuthenticated,
-    onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-      }
-    },
   });
+
+  // Handle errors from the query
+  React.useEffect(() => {
+    if (error && isUnauthorizedError(error as Error)) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+    }
+  }, [error, toast]);
 
   const saveProductMutation = useMutation({
     mutationFn: async (data: { petId: number; productId: number; notes?: string; status: string }) => {
