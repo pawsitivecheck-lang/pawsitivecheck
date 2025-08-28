@@ -81,7 +81,7 @@ export default function OperationProfile() {
   }
 
   const { data: operation, isLoading: operationLoading } = useQuery<LivestockOperation>({
-    queryKey: ["/api/livestock/operations", operationId],
+    queryKey: [`/api/livestock/operations/${operationId}`],
     enabled: !!operationId && isAuthenticated,
   });
 
