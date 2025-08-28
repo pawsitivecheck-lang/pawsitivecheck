@@ -34,6 +34,7 @@ import LivestockDashboard from "@/pages/livestock-dashboard";
 import LivestockCreateOperation from "@/pages/livestock-create-operation";
 import FeedTracking from "@/pages/feed-tracking";
 import HerdProfile from "@/pages/herd-profile";
+import OperationProfile from "@/pages/operation-profile";
 import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
@@ -89,6 +90,7 @@ function Router() {
           <Route path="/livestock" component={LivestockDashboard} />
           <Route path="/livestock/create" component={LivestockCreateOperation} />
           <Route path="/livestock/feed" component={FeedTracking} />
+          <Route path="/livestock/operations/:id" component={OperationProfile} />
           <Route path="/livestock/herds/:id" component={HerdProfile} />
         </>
       )}
