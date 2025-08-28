@@ -75,6 +75,8 @@ export default function LivestockDashboard() {
 
   const createOperationMutation = useMutation({
     mutationFn: async (data: any) => {
+      console.log("Mutation called with data:", data);
+      
       const response = await fetch('/api/livestock/operations', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -82,12 +84,17 @@ export default function LivestockDashboard() {
         credentials: 'include'
       });
       
+      console.log("Response status:", response.status);
+      
       if (!response.ok) {
         const errorData = await response.text();
+        console.error("Response error:", errorData);
         throw new Error(`Failed to create operation: ${errorData}`);
       }
       
-      return response.json();
+      const result = await response.json();
+      console.log("Success result:", result);
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [operationsEndpoint] });
