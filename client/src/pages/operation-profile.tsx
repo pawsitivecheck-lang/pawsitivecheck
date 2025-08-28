@@ -93,9 +93,18 @@ export default function OperationProfile() {
 
   const createHerdMutation = useMutation({
     mutationFn: async (herdData: any) => {
-      return await apiRequest("/api/livestock/herds", "POST", herdData);
+      console.log("Frontend: Starting herd creation with data:", herdData);
+      try {
+        const result = await apiRequest("/api/livestock/herds", "POST", herdData);
+        console.log("Frontend: Herd creation successful:", result);
+        return result;
+      } catch (error) {
+        console.error("Frontend: Herd creation failed:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
+      console.log("Frontend: Mutation success callback triggered");
       queryClient.invalidateQueries({ queryKey: [`/api/livestock/operations/${operationId}/herds`] });
       setIsAddHerdDialogOpen(false);
       toast({
@@ -104,6 +113,7 @@ export default function OperationProfile() {
       });
     },
     onError: (error: Error) => {
+      console.error("Frontend: Mutation error callback triggered:", error);
       if (isUnauthorizedError(error)) {
         toast({
           title: "Unauthorized",
@@ -140,6 +150,13 @@ export default function OperationProfile() {
       ageRange: formData.get('ageRange') || undefined,
       notes: formData.get('notes') || undefined,
     };
+
+    console.log("Frontend: Form submitted with data:", herdData);
+    console.log("Frontend: Mutation status:", {
+      isLoading: createHerdMutation.isPending,
+      isError: createHerdMutation.isError,
+      error: createHerdMutation.error
+    });
 
     createHerdMutation.mutate(herdData);
   };
