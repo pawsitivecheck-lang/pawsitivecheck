@@ -2458,7 +2458,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/products/:productId/tags', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const productId = parseInt(req.params.productId);
       const { tagIds, relevanceScores } = req.body;
       
@@ -3615,7 +3615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Livestock Operations Routes
   app.get('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const operations = await storage.getLivestockOperations(userId);
       res.json(operations);
     } catch (error) {
@@ -3627,7 +3627,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const operation = await storage.getLivestockOperation(id, userId);
       
       if (!operation) {
@@ -3666,7 +3666,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const operation = await storage.updateLivestockOperation(id, updates, userId);
@@ -3685,7 +3685,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/livestock/operations/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteLivestockOperation(id, userId);
       
@@ -3704,7 +3704,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/operations/:operationId/herds', isAuthenticated, async (req: any, res) => {
     try {
       const operationId = parseInt(req.params.operationId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const herds = await storage.getLivestockHerds(operationId, userId);
       res.json(herds);
     } catch (error) {
@@ -3716,7 +3716,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const herd = await storage.getLivestockHerd(id, userId);
       
       if (!herd) {
@@ -3733,7 +3733,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/herds/:id/animals', isAuthenticated, async (req: any, res) => {
     try {
       const herdId = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const animals = await storage.getFarmAnimals(herdId, userId);
       res.json(animals);
     } catch (error) {
@@ -3744,7 +3744,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/livestock/herds', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       if (!userId) {
         return res.status(401).json({ error: "User ID not found" });
       }
@@ -3765,7 +3765,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const herd = await storage.updateLivestockHerd(id, updates, userId);
@@ -3784,7 +3784,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/livestock/herds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteLivestockHerd(id, userId);
       
@@ -3803,7 +3803,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/herds/:herdId/feeds', isAuthenticated, async (req: any, res) => {
     try {
       const herdId = parseInt(req.params.herdId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const feeds = await storage.getFeedManagement(herdId, userId);
       res.json(feeds);
     } catch (error) {
@@ -3815,7 +3815,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const feed = await storage.getFeedRecord(id, userId);
       
       if (!feed) {
@@ -3847,7 +3847,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const feed = await storage.updateFeedRecord(id, updates, userId);
@@ -3866,7 +3866,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/livestock/feeds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteFeedRecord(id, userId);
       
@@ -3885,7 +3885,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/herds/:herdId/health-records', isAuthenticated, async (req: any, res) => {
     try {
       const herdId = parseInt(req.params.herdId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const records = await storage.getLivestockHealthRecords(herdId, userId);
       res.json(records);
     } catch (error) {
@@ -3897,7 +3897,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const record = await storage.getLivestockHealthRecord(id, userId);
       
       if (!record) {
@@ -3929,7 +3929,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const record = await storage.updateLivestockHealthRecord(id, updates, userId);
@@ -3948,7 +3948,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/livestock/health-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteLivestockHealthRecord(id, userId);
       
@@ -4333,7 +4333,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/pets/:petId/feeds', isAuthenticated, async (req: any, res) => {
     try {
       const petId = parseInt(req.params.petId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const feeds = await storage.getPetFeedManagement(petId, userId);
       res.json(feeds);
     } catch (error) {
@@ -4360,7 +4360,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/pets/feeds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const feed = await storage.updatePetFeedRecord(id, updates, userId);
@@ -4379,7 +4379,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/pets/feeds/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deletePetFeedRecord(id, userId);
       
@@ -4400,7 +4400,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/livestock/herds/:herdId/animals', isAuthenticated, async (req: any, res) => {
     try {
       const herdId = parseInt(req.params.herdId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const animals = await storage.getFarmAnimals(herdId, userId);
       res.json(animals);
     } catch (error) {
@@ -4411,7 +4411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/farm-animals', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const animals = await storage.getAllFarmAnimals(userId);
       res.json(animals);
     } catch (error) {
@@ -4423,7 +4423,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const animal = await storage.getFarmAnimal(id, userId);
       
       if (!animal) {
@@ -4455,7 +4455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const animal = await storage.updateFarmAnimal(id, updates, userId);
@@ -4474,7 +4474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/farm-animals/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteFarmAnimal(id, userId);
       
@@ -4492,7 +4492,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Breeding Record Routes
   app.get('/api/breeding-records', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const animalId = req.query.animalId ? parseInt(req.query.animalId as string) : undefined;
       const records = await storage.getBreedingRecords(userId, animalId);
       res.json(records);
@@ -4505,7 +4505,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const record = await storage.getBreedingRecord(id, userId);
       
       if (!record) {
@@ -4537,7 +4537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const record = await storage.updateBreedingRecord(id, updates, userId);
@@ -4556,7 +4556,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/breeding-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteBreedingRecord(id, userId);
       
@@ -4575,7 +4575,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/farm-animals/:animalId/production-records', isAuthenticated, async (req: any, res) => {
     try {
       const animalId = parseInt(req.params.animalId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const records = await storage.getProductionRecords(animalId, userId);
       res.json(records);
     } catch (error) {
@@ -4587,7 +4587,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const record = await storage.getProductionRecord(id, userId);
       
       if (!record) {
@@ -4619,7 +4619,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const record = await storage.updateProductionRecord(id, updates, userId);
@@ -4638,7 +4638,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/production-records/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteProductionRecord(id, userId);
       
@@ -4657,7 +4657,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/farm-animals/:animalId/movements', isAuthenticated, async (req: any, res) => {
     try {
       const animalId = parseInt(req.params.animalId);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const movements = await storage.getAnimalMovements(animalId, userId);
       res.json(movements);
     } catch (error) {
@@ -4669,7 +4669,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const movement = await storage.getAnimalMovement(id, userId);
       
       if (!movement) {
@@ -4701,7 +4701,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const movement = await storage.updateAnimalMovement(id, updates, userId);
@@ -4720,7 +4720,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/animal-movements/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteAnimalMovement(id, userId);
       
@@ -4740,7 +4740,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Farm Animal Product Routes
   app.get('/api/farm-animal-products', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const filters = {
         productType: req.query.productType as string,
         targetSpecies: req.query.targetSpecies as string,
@@ -4758,7 +4758,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const product = await storage.getFarmAnimalProduct(id, userId);
       
       if (!product) {
@@ -4790,7 +4790,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const product = await storage.updateFarmAnimalProduct(id, updates, userId);
@@ -4809,7 +4809,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/farm-animal-products/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteFarmAnimalProduct(id, userId);
       
@@ -4904,7 +4904,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Informational Resource Routes
   app.get('/api/informational-resources', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const filters = {
         resourceType: req.query.resourceType as string,
         category: req.query.category as string,
@@ -4923,7 +4923,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const resource = await storage.getInformationalResource(id, userId);
       
       if (!resource) {
@@ -4958,7 +4958,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const resource = await storage.updateInformationalResource(id, updates, userId);
@@ -4977,7 +4977,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/informational-resources/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteInformationalResource(id, userId);
       
@@ -4995,7 +4995,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/informational-resources/:id/favorite', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const { isFavorite } = req.body;
       
       const success = await storage.markResourceAsFavorite(id, userId, isFavorite);
@@ -5025,7 +5025,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/user/farm-product-reviews', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const reviews = await storage.getUserFarmProductReviews(userId);
       res.json(reviews);
     } catch (error) {
@@ -5068,7 +5068,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/farm-product-reviews/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       const updates = req.body;
 
       const review = await storage.updateFarmProductReview(id, updates, userId);
@@ -5087,7 +5087,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/farm-product-reviews/:id', isAuthenticated, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const userId = req.user?.claims?.sub;
+      const userId = (req as any).user?.claims?.sub;
       
       const success = await storage.deleteFarmProductReview(id, userId);
       

@@ -758,21 +758,25 @@ export class DatabaseStorage implements IStorage {
 
   // Animal tag operations
   async getAnimalTags(filters?: { type?: string; parentId?: number }): Promise<AnimalTag[]> {
-    let query = db.select().from(animalTags).where(eq(animalTags.isActive, true));
+    let conditions = [eq(animalTags.isActive, true)];
     
     if (filters?.type) {
-      query = query.where(eq(animalTags.type, filters.type));
+      conditions.push(eq(animalTags.type, filters.type));
     }
     
     if (filters?.parentId !== undefined) {
       if (filters.parentId === null) {
-        query = query.where(sql`${animalTags.parentId} IS NULL`);
+        conditions.push(sql`${animalTags.parentId} IS NULL`);
       } else {
-        query = query.where(eq(animalTags.parentId, filters.parentId));
+        conditions.push(eq(animalTags.parentId, filters.parentId));
       }
     }
     
-    return await query.orderBy(animalTags.name);
+    return await db
+      .select()
+      .from(animalTags)
+      .where(and(...conditions))
+      .orderBy(animalTags.name);
   }
 
   async getAnimalTag(id: number): Promise<AnimalTag | undefined> {
