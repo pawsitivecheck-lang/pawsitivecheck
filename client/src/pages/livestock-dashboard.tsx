@@ -171,29 +171,32 @@ export default function LivestockDashboard() {
 
   if (operationsLoading || authLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <>
         <Navbar />
-        <div className="container mx-auto px-4 py-8 pt-20">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">
-                Loading livestock operations...
-              </p>
+        <div className="min-h-screen bg-background">
+          <div className="container mx-auto px-4 py-8 pt-20">
+            <div className="flex items-center justify-center min-h-[400px]">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">
+                  Loading livestock operations...
+                </p>
+              </div>
             </div>
           </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   const hasOperations = operations && operations.length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <Navbar />
-      <div className="container mx-auto px-4 py-8 pt-20">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8 pt-20">
       {/* Preview Mode Alert */}
       {!isAuthenticated && (
         <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950" data-testid="preview-mode-alert">
@@ -397,8 +400,9 @@ export default function LivestockDashboard() {
           </Tabs>
         </div>
       )}
+        </div>
       </div>
       <Footer />
-    </div>
+    </>
   );
 }
