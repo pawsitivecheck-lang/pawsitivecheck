@@ -25,21 +25,8 @@ export default function LivestockCreateOperation() {
 
   const createOperationMutation = useMutation({
     mutationFn: async (data: any) => {
-      console.log("🚀 Starting API request with data:", data);
-      console.log("🔍 Data type:", typeof data);
-      console.log("🔍 Data keys:", Object.keys(data));
-      
-      try {
-        console.log("📡 Calling apiRequest...");
-        const response = await apiRequest("POST", "/api/livestock/operations", data);
-        console.log("✅ API request successful, response:", response);
-        return response.json();
-      } catch (error) {
-        console.error("❌ API request failed:", error);
-        console.error("❌ Error type:", typeof error);
-        console.error("❌ Error details:", error);
-        throw error;
-      }
+      const response = await apiRequest("POST", "/api/livestock/operations", data);
+      return response.json();
     },
     onSuccess: (operation) => {
       console.log("Operation created successfully:", operation);
@@ -63,16 +50,8 @@ export default function LivestockCreateOperation() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("Form submitted with data:", formData);
-    console.log("Form validation check:");
-    console.log("- operationName:", formData.operationName);
-    console.log("- operationType:", formData.operationType); 
-    console.log("- city:", formData.city);
-    console.log("- state:", formData.state);
-    
     // Validate required fields
     if (!formData.operationName || !formData.operationType || !formData.city || !formData.state) {
-      console.log("Validation failed - missing required fields");
       toast({
         title: "Validation Error",
         description: "Please fill in all required fields.",
@@ -80,8 +59,6 @@ export default function LivestockCreateOperation() {
       });
       return;
     }
-    
-    console.log("Validation passed, proceeding with mutation...");
     
     // Get species based on operation type
     const getSpeciesForOperationType = (operationType: string): string[] => {
@@ -108,17 +85,7 @@ export default function LivestockCreateOperation() {
       primarySpecies: getSpeciesForOperationType(formData.operationType),
     };
     
-    console.log("🎯 Final data to submit:", finalData);
-    console.log("🎯 Final data stringify:", JSON.stringify(finalData, null, 2));
-    console.log("📤 About to call createOperationMutation.mutate...");
-    
-    try {
-      console.log("🔄 Calling mutation...");
-      createOperationMutation.mutate(finalData);
-      console.log("✅ Mutation called successfully");
-    } catch (error) {
-      console.error("❌ Error calling mutation:", error);
-    }
+    createOperationMutation.mutate(finalData);
   };
 
   return (

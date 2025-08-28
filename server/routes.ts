@@ -3643,11 +3643,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
     try {
-      console.log("Creating livestock operation with data:", req.body);
-      
-      // Get user ID (authentication is now working properly)
       const userId = req.user?.id;
-      console.log("User ID:", userId);
       
       if (!userId) {
         console.error("No user ID available");
@@ -3659,9 +3655,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: userId,
       };
 
-      console.log("Final operation data:", operationData);
       const operation = await storage.createLivestockOperation(operationData);
-      console.log("Created operation:", operation);
       res.status(201).json(operation);
     } catch (error) {
       console.error("Error creating livestock operation:", error);

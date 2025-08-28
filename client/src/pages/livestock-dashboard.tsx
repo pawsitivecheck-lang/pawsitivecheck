@@ -226,13 +226,13 @@ export default function LivestockDashboard() {
         </div>
         {hasOperations && (
           <Button 
-            onClick={() => isAuthenticated ? navigate("/livestock") : window.location.href = "/api/login"}
+            onClick={() => isAuthenticated ? navigate("/livestock/create") : window.location.href = "/api/login"}
             className="flex items-center gap-2"
             data-testid="button-add-operation"
             variant={isAuthenticated ? "default" : "outline"}
           >
             {isAuthenticated ? <PlusIcon className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
-            {isAuthenticated ? "Manage Operations" : "Sign In to Add Operations"}
+            {isAuthenticated ? "Add New Operation" : "Sign In to Add Operations"}
           </Button>
         )}
       </div>
