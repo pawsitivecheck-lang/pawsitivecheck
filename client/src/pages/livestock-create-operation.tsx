@@ -26,10 +26,20 @@ export default function LivestockCreateOperation() {
   const createOperationMutation = useMutation({
     mutationFn: async (data: any) => {
       console.log("Making API request with data:", data);
-      return apiRequest("/api/livestock/operations", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      try {
+        const response = await apiRequest("/api/livestock/operations", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("API request successful, response:", response);
+        return response;
+      } catch (error) {
+        console.error("API request failed:", error);
+        throw error;
+      }
     },
     onSuccess: (operation) => {
       console.log("Operation created successfully:", operation);
@@ -99,8 +109,14 @@ export default function LivestockCreateOperation() {
     };
     
     console.log("Submitting operation data:", finalData);
+    console.log("About to call createOperationMutation.mutate...");
     
-    createOperationMutation.mutate(finalData);
+    try {
+      createOperationMutation.mutate(finalData);
+      console.log("Mutation called successfully");
+    } catch (error) {
+      console.error("Error calling mutation:", error);
+    }
   };
 
   return (
