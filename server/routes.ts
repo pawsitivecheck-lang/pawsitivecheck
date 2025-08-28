@@ -11,7 +11,8 @@ import {
   insertScanHistorySchema,
   insertPetProfileSchema,
   insertSavedProductSchema,
-  insertProductUpdateSubmissionSchema
+  insertProductUpdateSubmissionSchema,
+  insertVeterinaryOfficeSchema // Import the schema for veterinary offices
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
@@ -123,7 +124,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         parseInt(offset as string),
         search as string
       );
-      
+
       // If searching and we have few results, supplement with Open Pet Food Facts
       if (search && typeof search === 'string' && search.trim().length >= 2 && products.length < 10) {
         try {
@@ -132,10 +133,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
               'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
             }
           });
-          
+
           if (response.ok) {
             const data = await response.json();
-            
+
             if (data.products && data.products.length > 0) {
               // Convert Open Pet Food Facts products to our format
               const openFoodFactsProducts = await Promise.all(
@@ -145,18 +146,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   if (product.code) {
                     existingProduct = await storage.getProductByBarcode(product.code);
                   }
-                  
+
                   if (existingProduct) {
                     return existingProduct; // Return existing product instead of creating duplicate
                   }
-                  
+
                   // Calculate cosmic score based on available data quality
                   let cosmicScore = 60;
                   if (product.ingredients_text) cosmicScore += 15;
                   if (product.nutriments && Object.keys(product.nutriments).length > 5) cosmicScore += 10;
                   if (product.labels_tags && product.labels_tags.length > 0) cosmicScore += 10;
                   if (product.image_url) cosmicScore += 5;
-                  
+
                   // Determine category
                   let category = 'pet-food';
                   const categories = product.categories_tags || [];
@@ -165,20 +166,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   } else if (categories.some((cat: string) => cat.includes('toy'))) {
                     category = 'pet-toys';
                   }
-                  
+
                   // Check for suspicious ingredients
                   const suspiciousIngredients = [];
                   const ingredients = product.ingredients_text?.toLowerCase() || '';
                   if (ingredients.includes('by-product')) suspiciousIngredients.push('by-product meal');
                   if (ingredients.includes('corn syrup')) suspiciousIngredients.push('corn syrup');
                   if (ingredients.includes('artificial')) suspiciousIngredients.push('artificial additives');
-                  
+
                   const productData = {
                     name: product.product_name || product.generic_name || `Pet Product ${product.code || 'Unknown'}`,
                     brand: product.brands || "Unknown Brand",
                     category,
                     description: product.ingredients_text ? 
-                      `Pet food from Open Pet Food Facts with detailed ingredient analysis` : 
+                      `Pet food with detailed ingredient analysis from Open Pet Food Facts` : 
                       `Pet product from Open Pet Food Facts database`,
                     ingredients: product.ingredients_text || "Ingredients not specified",
                     imageUrl: product.image_url || null,
@@ -191,7 +192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     suspiciousIngredients,
                     lastAnalyzed: new Date(),
                   };
-                  
+
                   // Add to our database for future searches
                   try {
                     return await storage.createProduct(productData);
@@ -201,13 +202,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   }
                 })
               );
-              
+
               // Add Open Pet Food Facts products to results (avoid duplicates)
               const existingBarcodes = new Set(products.map(p => p.barcode));
               const newProducts = openFoodFactsProducts.filter(p => 
                 p && !existingBarcodes.has(p.barcode)
               );
-              
+
               products = [...products, ...newProducts];
             }
           }
@@ -216,7 +217,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Continue with local results only
         }
       }
-      
+
       // Auto-populate database with sample products if empty
       if (products.length === 0 && !search) {
         const sampleProducts = [
@@ -481,7 +482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           search as string
         );
       }
-      
+
       res.json(products);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -553,12 +554,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/products/internet-search', isAuthenticated, async (req: any, res) => {
     try {
       const { type, query } = req.body;
-      
+
       if (type === 'barcode') {
         let productData = null;
         let source = 'mock';
         let message = 'Product discovered through cosmic internet divination';
-        
+
         // Try Open Pet Food Facts API first (pet-specific database)
         try {
           const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/product/${query}.json`, {
@@ -566,20 +567,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
               'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
             }
           });
-          
+
           if (response.ok) {
             const data = await response.json();
-            
+
             if (data.status === 1 && data.product) {
               const product = data.product;
-              
+
               // Calculate cosmic score based on available data quality
               let cosmicScore = 60;
               if (product.ingredients_text) cosmicScore += 15;
               if (product.nutriments && Object.keys(product.nutriments).length > 5) cosmicScore += 10;
               if (product.labels_tags && product.labels_tags.length > 0) cosmicScore += 10;
               if (product.image_url) cosmicScore += 5;
-              
+
               // Determine category
               let category = 'pet-food';
               const categories = product.categories_tags || [];
@@ -590,14 +591,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               } else if (categories.some((cat: string) => cat.includes('accessory'))) {
                 category = 'pet-accessories';
               }
-              
+
               // Check for suspicious ingredients
               const suspiciousIngredients = [];
               const ingredients = product.ingredients_text?.toLowerCase() || '';
               if (ingredients.includes('by-product')) suspiciousIngredients.push('by-product meal');
               if (ingredients.includes('corn syrup')) suspiciousIngredients.push('corn syrup');
               if (ingredients.includes('artificial')) suspiciousIngredients.push('artificial additives');
-              
+
               productData = {
                 name: product.product_name || product.generic_name || `Pet Product ${query}`,
                 brand: product.brands || "Unknown Brand",
@@ -624,7 +625,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('Open Pet Food Facts API error:', error);
           // Continue to try other sources
         }
-        
+
         // Try UPC Database API as fallback
         if (!productData && process.env.UPC_DATABASE_API_KEY) {
           try {
@@ -634,10 +635,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 'Content-Type': 'application/json'
               }
             });
-            
+
             if (response.ok) {
               const data = await response.json();
-              
+
               // Only accept pet-related products
               const isPetProduct = data.title && (
                 data.title.toLowerCase().includes('dog') ||
@@ -649,7 +650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 data.title.toLowerCase().includes('canine') ||
                 data.category?.toLowerCase().includes('pet')
               );
-              
+
               if (isPetProduct) {
                 // Determine category from title
                 let category = 'pet-food';
@@ -661,7 +662,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 } else if (title.includes('leash') || title.includes('collar') || title.includes('bed')) {
                   category = 'pet-accessories';
                 }
-                
+
                 productData = {
                   name: data.title,
                   brand: data.brand || "Unknown Brand",
@@ -686,12 +687,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 });
               }
             }
-          } catch (error) {
-            console.error('UPC Database API error:', error);
-            // Fall back to mock data
           }
+        } catch (error) {
+          console.error('UPC Database API error:', error);
+          // Fall back to mock data
         }
-        
+
         // Fall back to mock data if API failed or no API key
         if (!productData) {
           productData = {
@@ -714,22 +715,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Add to database
         const product = await storage.createProduct(productData);
-        
+
         res.json({
           source,
           product,
           message
         });
-        
+
       } else if (type === 'image') {
         // Mock image recognition - in production, this would integrate with:
         // - Google Vision API
         // - AWS Rekognition
         // - Custom ML models
-        
+
         // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         // Mock image analysis result
         const mockProduct = {
           name: "Vision-Detected Pet Product",
@@ -749,17 +750,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Add to database
         const product = await storage.createProduct(mockProduct);
-        
+
         res.json({
           source: 'image-recognition',
           product,
           message: 'Product identified through mystical image analysis'
         });
-        
+
       } else {
         return res.status(400).json({ message: 'Invalid search type' });
       }
-      
+
     } catch (error) {
       console.error("Error in internet product search:", error);
       res.status(500).json({ message: "Failed to search cosmic internet" });
@@ -791,7 +792,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const blacklistedIngredients = await storage.getBlacklistedIngredients();
       const additionalSuspicious: string[] = [];
       let scoreAdjustment = 0;
-      
+
       // Check for blacklisted ingredients
       for (const blacklisted of blacklistedIngredients) {
         if (product.ingredients.toLowerCase().includes(blacklisted.ingredientName.toLowerCase())) {
@@ -994,13 +995,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!pet) {
         return res.status(404).json({ message: "Pet profile not found" });
       }
-      
+
       // Verify ownership
       const userId = req.user.claims.sub;
       if (pet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet profile" });
       }
-      
+
       res.json(pet);
     } catch (error) {
       console.error("Error fetching pet profile:", error);
@@ -1030,7 +1031,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify ownership first
       const existingPet = await storage.getPetProfile(id);
       if (!existingPet) {
@@ -1039,14 +1040,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (existingPet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet profile" });
       }
-      
+
       const petData = insertPetProfileSchema.partial().parse(req.body);
       const updatedPet = await storage.updatePetProfile(id, petData);
-      
+
       if (!updatedPet) {
         return res.status(404).json({ message: "Pet profile not found" });
       }
-      
+
       res.json(updatedPet);
     } catch (error) {
       console.error("Error updating pet profile:", error);
@@ -1061,12 +1062,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const success = await storage.deletePetProfile(id, userId);
       if (!success) {
         return res.status(404).json({ message: "Pet profile not found or access denied" });
       }
-      
+
       res.json({ message: "Pet profile deleted successfully" });
     } catch (error) {
       console.error("Error deleting pet profile:", error);
@@ -1079,13 +1080,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const petId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify pet ownership
       const pet = await storage.getPetProfile(petId);
       if (!pet || pet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet's health records" });
       }
-      
+
       const healthRecords = await storage.getPetHealthRecords(petId);
       res.json(healthRecords);
     } catch (error) {
@@ -1098,19 +1099,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const petId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify pet ownership
       const pet = await storage.getPetProfile(petId);
       if (!pet || pet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet's health records" });
       }
-      
+
       const healthData = {
         ...req.body,
         petId,
         userId
       };
-      
+
       const healthRecord = await storage.createHealthRecord(healthData);
       res.status(201).json(healthRecord);
     } catch (error) {
@@ -1123,13 +1124,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const recordId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify record ownership
       const existingRecord = await storage.getHealthRecord(recordId);
       if (!existingRecord || existingRecord.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this health record" });
       }
-      
+
       const updatedRecord = await storage.updateHealthRecord(recordId, req.body);
       res.json(updatedRecord);
     } catch (error) {
@@ -1142,12 +1143,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const recordId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const success = await storage.deleteHealthRecord(recordId, userId);
       if (!success) {
         return res.status(404).json({ message: "Health record not found or access denied" });
       }
-      
+
       res.json({ message: "Health record deleted successfully" });
     } catch (error) {
       console.error("Error deleting health record:", error);
@@ -1160,13 +1161,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const petId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify pet ownership
       const pet = await storage.getPetProfile(petId);
       if (!pet || pet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet's medical events" });
       }
-      
+
       const medicalEvents = await storage.getPetMedicalEvents(petId);
       res.json(medicalEvents);
     } catch (error) {
@@ -1179,19 +1180,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const petId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify pet ownership
       const pet = await storage.getPetProfile(petId);
       if (!pet || pet.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this pet's medical events" });
       }
-      
+
       const medicalData = {
         ...req.body,
         petId,
         userId
       };
-      
+
       const medicalEvent = await storage.createMedicalEvent(medicalData);
       res.status(201).json(medicalEvent);
     } catch (error) {
@@ -1204,13 +1205,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const eventId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       // Verify event ownership
       const existingEvent = await storage.getMedicalEvent(eventId);
       if (!existingEvent || existingEvent.userId !== userId) {
         return res.status(403).json({ message: "Access denied to this medical event" });
       }
-      
+
       const updatedEvent = await storage.updateMedicalEvent(eventId, req.body);
       res.json(updatedEvent);
     } catch (error) {
@@ -1223,12 +1224,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const eventId = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const success = await storage.deleteMedicalEvent(eventId, userId);
       if (!success) {
         return res.status(404).json({ message: "Medical event not found or access denied" });
       }
-      
+
       res.json({ message: "Medical event deleted successfully" });
     } catch (error) {
       console.error("Error deleting medical event:", error);
@@ -1345,7 +1346,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (response.ok) {
           const data = await response.json();
           const products = data.products || [];
-          
+
           for (const product of products.slice(0, 10)) {
             if (product.product_name && product.brands) {
               try {
@@ -1497,7 +1498,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync livestock data from USDA NASS Quick Stats API
       let syncedCount = 0;
-      
+
       // Connect to real USDA NASS API
       const usdaApiKey = process.env.USDA_NASS_API_KEY;
       if (!usdaApiKey) {
@@ -1508,7 +1509,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Fetch real livestock feed data from USDA
         const usdaResponse = await fetch(`https://quickstats.nass.usda.gov/api/api_GET/?key=${usdaApiKey}&sector_desc=ANIMALS%20%26%20PRODUCTS&commodity_desc=CATTLE&statisticcat_desc=PRODUCTION&agg_level_desc=NATIONAL&year=2023&format=JSON`);
         const usdaData = await usdaResponse.json();
-        
+
         console.log("USDA API Response:", usdaData);
 
         // Process USDA data into feed products
@@ -1543,7 +1544,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } catch (apiError) {
         console.warn("USDA API error, falling back to representative data:", apiError);
-        
+
         // Fallback to representative livestock feed products
         const livestockProducts = [
         {
@@ -1654,14 +1655,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync feed nutrition data from USDA FoodData Central API
       let syncedCount = 0;
-      
+
       const fdaApiKey = process.env.FDA_API_KEY;
-      
+
       try {
         // Connect to USDA FoodData Central for real nutrition data
         const fdcResponse = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=corn%20grain%20feed&pageSize=5&api_key=${fdaApiKey || 'DEMO_KEY'}`);
         const fdcData = await fdcResponse.json();
-        
+
         console.log("FoodData Central API Response:", fdcData);
 
         if (fdcData && fdcData.foods) {
@@ -1791,7 +1792,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync farm animal drug safety data from FDA Animal & Veterinary API
       let syncedCount = 0;
-      
+
       // Add farm animal specific safety concerns
       const farmSafetyIngredients = [
         {
@@ -1857,7 +1858,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync exotic animal products from specialized databases
       let syncedCount = 0;
-      
+
       // Note: In production, you would use exotic animal specialty APIs
       // For now, we'll simulate with representative exotic animal products
       const exoticProducts = [
@@ -1967,7 +1968,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync exotic animal nutrition data from veterinary research databases
       let syncedCount = 0;
-      
+
       // Note: In production, you would use exotic animal nutrition research APIs
       // For now, we'll simulate with species-specific nutrition data
       const exoticNutritionProducts = [
@@ -2063,7 +2064,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Sync exotic animal safety data from veterinary toxicology databases
       let syncedCount = 0;
-      
+
       // Add exotic animal specific safety concerns
       const exoticSafetyIngredients = [
         {
@@ -2300,7 +2301,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         console.log("🔮 Recalculating cosmic safety scores for all products...");
         const allProducts = await storage.getProducts(10000, 0);
-        
+
         for (const product of allProducts) {
           try {
             // Recalculate cosmic score based on current ingredient analysis
@@ -2312,7 +2313,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Check against blacklisted ingredients
               const blacklist = await storage.getBlacklistedIngredients();
               const ingredients = product.ingredients.toLowerCase();
-              
+
               for (const blacklisted of blacklist) {
                 if (ingredients.includes(blacklisted.ingredientName.toLowerCase())) {
                   suspiciousIngredients.push(blacklisted.ingredientName);
@@ -2382,7 +2383,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         for (const product of allProducts) {
           try {
             let transparencyLevel = 'poor';
-            
+
             // Determine transparency based on available information
             if (product.ingredients && product.sourceUrl && product.barcode) {
               transparencyLevel = 'excellent';
@@ -2461,7 +2462,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = (req as any).user?.claims?.sub;
       const productId = parseInt(req.params.productId);
       const { tagIds, relevanceScores } = req.body;
-      
+
       const tags = await storage.addProductTags(productId, tagIds, userId, relevanceScores);
       res.json(tags);
     } catch (error) {
@@ -2483,15 +2484,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { query, location, radius } = req.body;
       const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
-      
+
       // Default search coordinates (Lansing, MI as user location)
       let lat = 42.3314;  // Lansing, MI coordinates
       let lng = -84.5467;
-      
+
       // Convert radius from miles to meters (default 15 miles if not provided)
       const radiusInMiles = radius || 15;
       let searchRadius = Math.round(radiusInMiles * 1609.34); // Convert miles to meters
-      
+
       // Always use GPS location when provided - this takes absolute priority
       if (location && location.lat && location.lng) {
         lat = location.lat;
@@ -2507,9 +2508,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         // Step 1: Search for veterinary places with multiple approaches
         console.log(`🔍 Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
-        
+
         let searchData = { results: [] };
-        
+
         // Try multiple search approaches to find veterinary offices
         const searchQueries = [
           // Primary veterinary care search
@@ -2521,82 +2522,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Text search for vet clinics
           `https://maps.googleapis.com/maps/api/place/textsearch/json?query=vet+clinic+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`
         ];
-        
+
         for (const searchUrl of searchQueries) {
           try {
             console.log(`Trying search: ${searchUrl.includes('nearbysearch') ? 'nearby veterinary_care' : searchUrl.includes('veterinarian') ? 'text search veterinarian' : searchUrl.includes('animal+hospital') ? 'text search animal hospital' : 'text search vet clinic'}`);
-            
+
             const searchResponse = await fetch(searchUrl, {
               signal: AbortSignal.timeout(8000)
             });
-            
+
             if (!searchResponse.ok) {
               console.warn(`Search failed with status ${searchResponse.status}`);
               continue;
             }
-            
+
             const responseData = await searchResponse.json();
-            
+
             if (responseData.results && responseData.results.length > 0) {
               console.log(`✅ Found ${responseData.results.length} results with this search`);
               searchData = responseData;
               break;
             }
-            
+
             // Small delay between requests
             await new Promise(resolve => setTimeout(resolve, 200));
-            
+
           } catch (error) {
             console.warn(`Search query failed:`, error.message);
             continue;
           }
         }
-        
+
         console.log(`🏥 Google Places returned ${searchData.results?.length || 0} veterinary locations total`);
-        
+
         if (!searchData.results || searchData.results.length === 0) {
           console.log('🔍 No veterinary results from Google Places after trying all search methods, using fallback');
           throw new Error('No results from Google Places');
         }
-        
+
         // Step 2: Get detailed information for each place (in batches to avoid API limits)
         const detailedPractices = [];
         const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive API calls
-        
+
         for (let i = 0; i < maxResults; i++) {
           const place = searchData.results[i];
-          
+
           try {
             // Get place details including phone, website, hours, etc.
             const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,user_ratings_total,opening_hours,geometry,types,business_status&key=${googleApiKey}`;
-            
+
             const detailsResponse = await fetch(detailsUrl, {
               signal: AbortSignal.timeout(5000) // 5 second timeout per request
             });
-            
+
             if (!detailsResponse.ok) {
               console.warn(`Failed to get details for ${place.name}`);
               continue;
             }
-            
+
             const detailsData = await detailsResponse.json();
             const details = detailsData.result;
-            
+
             if (!details || details.business_status === 'CLOSED_PERMANENTLY') {
               console.log(`Skipping ${place.name} - permanently closed`);
               continue;
             }
-            
+
             // Calculate accurate distance using Haversine formula
             const R = 3959; // Earth's radius in miles
             const placeLat = details.geometry?.location?.lat || place.geometry?.location?.lat;
             const placeLng = details.geometry?.location?.lng || place.geometry?.location?.lng;
-            
+
             if (!placeLat || !placeLng) {
               console.warn(`No coordinates for ${place.name}`);
               continue;
             }
-            
+
             const dLat = (placeLat - lat) * Math.PI / 180;
             const dLng = (placeLng - lng) * Math.PI / 180;
             const a = 
@@ -2605,16 +2606,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
               Math.sin(dLng/2) * Math.sin(dLng/2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             const distance = R * c;
-            
+
             // Parse address components
             const addressParts = details.formatted_address ? details.formatted_address.split(', ') : ['Address not available'];
-            const zipMatch = details.formatted_address?.match(/\\b(\\d{5})(?:-\\d{4})?\\b/);
-            const stateMatch = details.formatted_address?.match(/\\b([A-Z]{2})\\b/);
-            
+            const zipMatch = details.formatted_address?.match(/\b(\d{5})(?:-\d{4})?\b/);
+            const stateMatch = details.formatted_address?.match(/\b([A-Z]{2})\b/);
+
             // Build services array based on Google place types and name
             const services = ['General Veterinary Care'];
             const nameAndTypes = `${details.name || place.name} ${(place.types || []).join(' ')}`.toLowerCase();
-            
+
             if (nameAndTypes.includes('hospital') || nameAndTypes.includes('animal hospital')) {
               services.push('Advanced Diagnostics', 'Surgery', 'Emergency Care', 'X-rays');
             }
@@ -2630,7 +2631,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (nameAndTypes.includes('exotic')) {
               services.push('Exotic Pet Care');
             }
-            
+
             // Build specialties
             const specialties = ['General Veterinary Care'];
             if (nameAndTypes.includes('small animal')) specialties.push('Small Animal Care');
@@ -2638,7 +2639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (nameAndTypes.includes('equine')) specialties.push('Equine Care');
             if (nameAndTypes.includes('exotic')) specialties.push('Exotic Animal Care');
             if (nameAndTypes.includes('emergency')) specialties.push('Emergency Medicine');
-            
+
             // Format hours
             let formattedHours = {
               'Monday': 'Call for hours',
@@ -2649,7 +2650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               'Saturday': 'Call for hours',
               'Sunday': 'Call for hours'
             };
-            
+
             if (details.opening_hours?.weekday_text) {
               const dayMap: {[key: string]: string} = {
                 'Monday': 'Monday',
@@ -2660,7 +2661,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 'Saturday': 'Saturday',
                 'Sunday': 'Sunday'
               };
-              
+
               details.opening_hours.weekday_text.forEach((dayText: string) => {
                 const parts = dayText.split(': ');
                 if (parts.length === 2) {
@@ -2672,7 +2673,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 }
               });
             }
-            
+
             const practice = {
               id: `google-${place.place_id}`,
               name: details.name || place.name,
@@ -2692,21 +2693,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
               latitude: placeLat,
               longitude: placeLng
             };
-            
+
             detailedPractices.push(practice);
             console.log(`✅ Added: ${practice.name} (${practice.distance}mi away, ${practice.rating}⭐)`);
-            
+
             // Small delay between API requests to avoid rate limiting
             if (i < maxResults - 1) {
               await new Promise(resolve => setTimeout(resolve, 100));
             }
-            
+
           } catch (detailError) {
             console.warn(`Error getting details for ${place.name}:`, detailError);
             // Add basic info without details if coordinates available
             const placeLat = place.geometry?.location?.lat;
             const placeLng = place.geometry?.location?.lng;
-            
+
             if (placeLat && placeLng) {
               const R = 3959;
               const dLat = (placeLat - lat) * Math.PI / 180;
@@ -2717,7 +2718,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 Math.sin(dLng/2) * Math.sin(dLng/2);
               const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
               const distance = R * c;
-              
+
               detailedPractices.push({
                 id: `google-basic-${place.place_id}`,
                 name: place.name,
@@ -2733,7 +2734,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 hours: {
                   'Monday': 'Call for hours',
                   'Tuesday': 'Call for hours',
-                  'Wednesday': 'Call for hours', 
+                  'Wednesday': 'Call for hours',
                   'Thursday': 'Call for hours',
                   'Friday': 'Call for hours',
                   'Saturday': 'Call for hours',
@@ -2748,7 +2749,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           }
         }
-        
+
         console.log(`🎯 Successfully processed ${detailedPractices.length} practices from Google Places`);
         let practices = detailedPractices;
 
@@ -2848,7 +2849,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             website: 'https://www.pennvetcare.com/',
             rating: 4.6,
             reviewCount: 178,
-            services: ['General Veterinary Care', 'Surgery', 'Digital X-Rays', 'Dental Care', 'Microchipping'],
+            services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Microchipping'],
             hours: {
               'Monday': '8:00 AM - 6:00 PM',
               'Tuesday': '7:00 AM - 6:00 PM',
@@ -2982,37 +2983,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
           filteredPractices = practices.filter((practice: any) => {
             // Multi-criteria scoring system
             let relevanceScore = 0;
-            
+
             // Name match (highest priority)
             if (practice.name.toLowerCase().includes(searchTerms)) relevanceScore += 10;
-            
+
             // Services match
             const serviceMatches = practice.services.filter((service: string) => 
               service.toLowerCase().includes(searchTerms)
             );
             relevanceScore += serviceMatches.length * 5;
-            
+
             // Specialties match
             const specialtyMatches = practice.specialties.filter((specialty: string) => 
               specialty.toLowerCase().includes(searchTerms)
             );
             relevanceScore += specialtyMatches.length * 7;
-            
+
             // Location match
             if (practice.city.toLowerCase().includes(searchTerms) || 
                 practice.state.toLowerCase().includes(searchTerms)) {
               relevanceScore += 3;
             }
-            
+
             // Emergency search priority
             if (searchTerms.includes('emergency') && practice.emergencyServices) {
               relevanceScore += 15;
             }
-            
+
             practice.relevanceScore = relevanceScore;
             return relevanceScore > 0;
           });
-          
+
           // Sort by relevance first, then distance
           filteredPractices.sort((a: any, b: any) => {
             const scoreDiff = (b.relevanceScore || 0) - (a.relevanceScore || 0);
@@ -3025,11 +3026,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const distanceWeight = a.distance || 999;
             const ratingBonus = (a.rating - 4.0) * 2; // Bonus for higher ratings
             const aScore = distanceWeight - ratingBonus;
-            
+
             const bDistanceWeight = b.distance || 999;
             const bRatingBonus = (b.rating - 4.0) * 2;
             const bScore = bDistanceWeight - bRatingBonus;
-            
+
             return aScore - bScore;
           });
         }
@@ -3044,15 +3045,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       } catch (googleError) {
         console.log("Google Places API failed, using fallback:", googleError);
-        
+
         // For Lansing area, combine database and local data as fallback
         if (Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
-          console.log('📍 Using detailed Lansing area veterinary data as fallback');
-          
+          console.log('🏥 Using detailed Lansing area veterinary data as fallback');
+
           // First get any database entries
           const dbOffices = await storage.getVeterinaryOffices();
           let allVets = [];
-          
+
           // Add database veterinary offices with distance calculation
           if (dbOffices && dbOffices.length > 0) {
             console.log(`Found ${dbOffices.length} veterinary offices in database`);
@@ -3068,7 +3069,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   Math.sin(dLng/2) * Math.sin(dLng/2);
                 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
                 const distance = R * c;
-                
+
                 // Only include if within radius
                 if (distance <= radiusInMiles) {
                   allVets.push({
@@ -3095,7 +3096,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               }
             }
           }
-          
+
           // Then add hardcoded fallback data
           const lansingVets = [
             {
@@ -3136,7 +3137,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               website: 'https://www.pennvetcare.com/',
               rating: 4.6,
               reviewCount: 178,
-              services: ['General Veterinary Care', 'Surgery', 'Digital X-Rays', 'Dental Care', 'Microchipping'],
+              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Microchipping'],
               hours: {
                 'Monday': '8:00 AM - 6:00 PM',
                 'Tuesday': '7:00 AM - 6:00 PM',
@@ -3207,18 +3208,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
               longitude: -84.4822
             }
           ];
-          
+
           // Filter fallback data by distance and add to results
           const filteredFallbackVets = lansingVets.filter(vet => vet.distance <= radiusInMiles);
           allVets.push(...filteredFallbackVets);
-          
+
           // Remove duplicates and sort by distance
           const uniqueVets = allVets.filter((vet, index, self) => 
             index === self.findIndex(v => v.name === vet.name)
           );
-          
+
           console.log(`Returning ${uniqueVets.length} total veterinary practices (${dbOffices?.length || 0} from database)`);
-          
+
           res.json({ 
             practices: uniqueVets.sort((a, b) => a.distance - b.distance),
             total: uniqueVets.length,
@@ -3232,7 +3233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Database fallback for other locations
         console.log('🗄️ Using database fallback for location search');
         const offices = await storage.getVeterinaryOffices();
-        
+
         if (!offices || offices.length === 0) {
           return res.status(404).json({
             practices: [],
@@ -3243,7 +3244,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             message: 'No veterinary practices found. Please try a different location.'
           });
         }
-        
+
         // Convert database records to our standard format and calculate distances
         const practices = offices.map((office: any, index: number) => {
           // Calculate distance if coordinates are available
@@ -3259,7 +3260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
             distance = R * c;
           }
-          
+
           return {
             id: `db-${office.id || index}`,
             name: office.name || `Veterinary Practice ${index + 1}`,
@@ -3288,10 +3289,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             longitude: office.longitude || null
           };
         });
-        
+
         // Sort by distance
         practices.sort((a: any, b: any) => (a.distance || 999) - (b.distance || 999));
-        
+
         res.json({
           practices,
           total: practices.length,
@@ -3318,12 +3319,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.parse(req.body);
-      
+
       const newOffice = await storage.addVeterinaryOffice({
         ...officeData,
         createdBy: userId,
       });
-      
+
       res.status(201).json(newOffice);
     } catch (error) {
       console.error("Error saving veterinary office:", error);
@@ -3351,13 +3352,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.partial().parse(req.body);
-      
+
       const updatedOffice = await storage.updateVeterinaryOffice(id, officeData, userId);
-      
+
       if (!updatedOffice) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
       }
-      
+
       res.json(updatedOffice);
     } catch (error) {
       console.error("Error updating veterinary office:", error);
@@ -3373,13 +3374,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const success = await storage.removeVeterinaryOffice(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
       }
-      
+
       res.json({ message: "Veterinary office deleted successfully" });
     } catch (error) {
       console.error("Error deleting veterinary office:", error);
@@ -3406,7 +3407,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         userId,
       });
-      
+
       const savedProduct = await storage.savePetProduct(productData);
       res.status(201).json(savedProduct);
     } catch (error) {
@@ -3422,14 +3423,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const updates = insertSavedProductSchema.partial().parse(req.body);
       const savedProduct = await storage.updateSavedProduct(id, updates);
-      
+
       if (!savedProduct || savedProduct.userId !== userId) {
         return res.status(404).json({ message: "Saved product not found or access denied" });
       }
-      
+
       res.json(savedProduct);
     } catch (error) {
       console.error("Error updating saved product:", error);
@@ -3444,13 +3445,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
-      
+
       const success = await storage.removeSavedProduct(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ message: "Saved product not found or access denied" });
       }
-      
+
       res.json({ message: "Saved product removed successfully" });
     } catch (error) {
       console.error("Error removing saved product:", error);
@@ -3459,7 +3460,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Product Update Submission Routes
-  
+
   // Get upload URL for product update images
   app.post("/api/objects/upload", isAuthenticated, async (req, res) => {
     try {
@@ -3546,7 +3547,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // This endpoint acknowledges the request to update legal documents
       // The actual updates are handled by the client-side components
       const timestamp = new Date().toISOString();
-      
+
       res.json({ 
         success: true, 
         message: "Legal documents update initiated successfully",
@@ -3582,7 +3583,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       const submission = await storage.reviewProductUpdateSubmission(id, reviewData);
-      
+
       if (!submission) {
         return res.status(404).json({ error: "Submission not found" });
       }
@@ -3592,7 +3593,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           const proposedChanges = submission.proposedChanges as any;
           await storage.updateProduct(submission.productId, proposedChanges);
-          
+
           // Mark as applied
           await storage.updateProductUpdateSubmission(id, {
             appliedAt: new Date(),
@@ -3629,11 +3630,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const operation = await storage.getLivestockOperation(id, userId);
-      
+
       if (!operation) {
         return res.status(404).json({ error: "Livestock operation not found" });
       }
-      
+
       res.json(operation);
     } catch (error) {
       console.error("Error fetching livestock operation:", error);
@@ -3644,12 +3645,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id;
-      
+
       if (!userId) {
         console.error("No user ID available");
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       const operationData = {
         ...req.body,
         userId: userId,
@@ -3670,11 +3671,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const operation = await storage.updateLivestockOperation(id, updates, userId);
-      
+
       if (!operation) {
         return res.status(404).json({ error: "Livestock operation not found" });
       }
-      
+
       res.json(operation);
     } catch (error) {
       console.error("Error updating livestock operation:", error);
@@ -3686,13 +3687,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteLivestockOperation(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Livestock operation not found" });
       }
-      
+
       res.json({ message: "Livestock operation deleted successfully" });
     } catch (error) {
       console.error("Error deleting livestock operation:", error);
@@ -3718,11 +3719,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const herd = await storage.getLivestockHerd(id, userId);
-      
+
       if (!herd) {
         return res.status(404).json({ error: "Livestock herd not found" });
       }
-      
+
       res.json(herd);
     } catch (error) {
       console.error("Error fetching livestock herd:", error);
@@ -3744,7 +3745,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/livestock/herds', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = (req as any).user?.claims?.sub;
+      const userId = req.user.claims.sub;
       if (!userId) {
         return res.status(401).json({ error: "User ID not found" });
       }
@@ -3761,8 +3762,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Validate required fields
       if (!herdData.operationId || !herdData.herdName || !herdData.species) {
+        console.error("Missing required fields");
         return res.status(400).json({ 
-          error: "Missing required fields: operationId, herdName, and species are required" 
+          message: "Missing required fields: operationId, herdName, and species are required" 
+        });
+      }
+
+      // Verify the operation belongs to the user
+      const operation = await storage.getLivestockOperation(herdData.operationId, userId);
+      if (!operation) {
+        console.error("Operation not found or not owned by user");
+        return res.status(403).json({ 
+          message: "Operation not found or you don't have permission to add herds to it" 
         });
       }
 
@@ -3772,7 +3783,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error creating livestock herd:", error);
       console.error("Error details:", error.message);
       console.error("Stack trace:", error.stack);
-      res.status(500).json({ error: "Failed to create livestock herd" });
+      res.status(500).json({ 
+        message: "Failed to create livestock herd. Please try again.",
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
     }
   });
 
@@ -3783,11 +3797,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const herd = await storage.updateLivestockHerd(id, updates, userId);
-      
+
       if (!herd) {
         return res.status(404).json({ error: "Livestock herd not found" });
       }
-      
+
       res.json(herd);
     } catch (error) {
       console.error("Error updating livestock herd:", error);
@@ -3799,13 +3813,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteLivestockHerd(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Livestock herd not found" });
       }
-      
+
       res.json({ message: "Livestock herd deleted successfully" });
     } catch (error) {
       console.error("Error deleting livestock herd:", error);
@@ -3831,11 +3845,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const feed = await storage.getFeedRecord(id, userId);
-      
+
       if (!feed) {
         return res.status(404).json({ error: "Feed record not found" });
       }
-      
+
       res.json(feed);
     } catch (error) {
       console.error("Error fetching feed record:", error);
@@ -3865,11 +3879,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const feed = await storage.updateFeedRecord(id, updates, userId);
-      
+
       if (!feed) {
         return res.status(404).json({ error: "Feed record not found" });
       }
-      
+
       res.json(feed);
     } catch (error) {
       console.error("Error updating feed record:", error);
@@ -3881,13 +3895,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteFeedRecord(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Feed record not found" });
       }
-      
+
       res.json({ message: "Feed record deleted successfully" });
     } catch (error) {
       console.error("Error deleting feed record:", error);
@@ -3913,11 +3927,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const record = await storage.getLivestockHealthRecord(id, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Livestock health record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error fetching livestock health record:", error);
@@ -3947,11 +3961,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const record = await storage.updateLivestockHealthRecord(id, updates, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Livestock health record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error updating livestock health record:", error);
@@ -3963,13 +3977,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteLivestockHealthRecord(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Livestock health record not found" });
       }
-      
+
       res.json({ message: "Livestock health record deleted successfully" });
     } catch (error) {
       console.error("Error deleting livestock health record:", error);
@@ -3978,7 +3992,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // =========================== LIVESTOCK PREVIEW ROUTES (NO AUTH REQUIRED) ===========================
-  
+
   // Sample data for preview mode
   const sampleOperations = [
     {
@@ -4225,11 +4239,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/preview/livestock/operations/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     const operation = sampleOperations.find(op => op.id === id);
-    
+
     if (!operation) {
       return res.status(404).json({ error: "Operation not found" });
     }
-    
+
     res.json(operation);
   });
 
@@ -4244,11 +4258,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/preview/livestock/herds/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     const herd = sampleHerds.find(h => h.id === id);
-    
+
     if (!herd) {
       return res.status(404).json({ error: "Herd not found" });
     }
-    
+
     res.json(herd);
   });
 
@@ -4378,11 +4392,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const feed = await storage.updatePetFeedRecord(id, updates, userId);
-      
+
       if (!feed) {
         return res.status(404).json({ error: "Pet feed record not found" });
       }
-      
+
       res.json(feed);
     } catch (error) {
       console.error("Error updating pet feed record:", error);
@@ -4394,13 +4408,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deletePetFeedRecord(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Pet feed record not found" });
       }
-      
+
       res.json({ message: "Pet feed record deleted successfully" });
     } catch (error) {
       console.error("Error deleting pet feed record:", error);
@@ -4439,11 +4453,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const animal = await storage.getFarmAnimal(id, userId);
-      
+
       if (!animal) {
         return res.status(404).json({ error: "Farm animal not found" });
       }
-      
+
       res.json(animal);
     } catch (error) {
       console.error("Error fetching farm animal:", error);
@@ -4473,11 +4487,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const animal = await storage.updateFarmAnimal(id, updates, userId);
-      
+
       if (!animal) {
         return res.status(404).json({ error: "Farm animal not found" });
       }
-      
+
       res.json(animal);
     } catch (error) {
       console.error("Error updating farm animal:", error);
@@ -4489,13 +4503,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteFarmAnimal(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Farm animal not found" });
       }
-      
+
       res.json({ message: "Farm animal deleted successfully" });
     } catch (error) {
       console.error("Error deleting farm animal:", error);
@@ -4521,11 +4535,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const record = await storage.getBreedingRecord(id, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Breeding record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error fetching breeding record:", error);
@@ -4555,11 +4569,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const record = await storage.updateBreedingRecord(id, updates, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Breeding record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error updating breeding record:", error);
@@ -4571,13 +4585,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteBreedingRecord(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Breeding record not found" });
       }
-      
+
       res.json({ message: "Breeding record deleted successfully" });
     } catch (error) {
       console.error("Error deleting breeding record:", error);
@@ -4603,11 +4617,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const record = await storage.getProductionRecord(id, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Production record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error fetching production record:", error);
@@ -4637,11 +4651,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const record = await storage.updateProductionRecord(id, updates, userId);
-      
+
       if (!record) {
         return res.status(404).json({ error: "Production record not found" });
       }
-      
+
       res.json(record);
     } catch (error) {
       console.error("Error updating production record:", error);
@@ -4653,13 +4667,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteProductionRecord(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Production record not found" });
       }
-      
+
       res.json({ message: "Production record deleted successfully" });
     } catch (error) {
       console.error("Error deleting production record:", error);
@@ -4685,11 +4699,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const movement = await storage.getAnimalMovement(id, userId);
-      
+
       if (!movement) {
         return res.status(404).json({ error: "Animal movement not found" });
       }
-      
+
       res.json(movement);
     } catch (error) {
       console.error("Error fetching animal movement:", error);
@@ -4719,11 +4733,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const movement = await storage.updateAnimalMovement(id, updates, userId);
-      
+
       if (!movement) {
         return res.status(404).json({ error: "Animal movement not found" });
       }
-      
+
       res.json(movement);
     } catch (error) {
       console.error("Error updating animal movement:", error);
@@ -4735,13 +4749,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteAnimalMovement(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Animal movement not found" });
       }
-      
+
       res.json({ message: "Animal movement deleted successfully" });
     } catch (error) {
       console.error("Error deleting animal movement:", error);
@@ -4760,7 +4774,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         targetSpecies: req.query.targetSpecies as string,
         category: req.query.category as string,
       };
-      
+
       const products = await storage.getFarmAnimalProducts(userId, filters);
       res.json(products);
     } catch (error) {
@@ -4774,11 +4788,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const product = await storage.getFarmAnimalProduct(id, userId);
-      
+
       if (!product) {
         return res.status(404).json({ error: "Farm animal product not found" });
       }
-      
+
       res.json(product);
     } catch (error) {
       console.error("Error fetching farm animal product:", error);
@@ -4808,11 +4822,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const product = await storage.updateFarmAnimalProduct(id, updates, userId);
-      
+
       if (!product) {
         return res.status(404).json({ error: "Farm animal product not found" });
       }
-      
+
       res.json(product);
     } catch (error) {
       console.error("Error updating farm animal product:", error);
@@ -4824,13 +4838,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteFarmAnimalProduct(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Farm animal product not found" });
       }
-      
+
       res.json({ message: "Farm animal product deleted successfully" });
     } catch (error) {
       console.error("Error deleting farm animal product:", error);
@@ -4846,7 +4860,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         category: req.query.category as string,
         specialties: req.query.specialties ? (req.query.specialties as string).split(',') : undefined,
       };
-      
+
       const sources = await storage.getInformationSources(filters);
       res.json(sources);
     } catch (error) {
@@ -4859,11 +4873,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const source = await storage.getInformationSource(id);
-      
+
       if (!source) {
         return res.status(404).json({ error: "Information source not found" });
       }
-      
+
       res.json(source);
     } catch (error) {
       console.error("Error fetching information source:", error);
@@ -4887,11 +4901,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const updates = req.body;
       const source = await storage.updateInformationSource(id, updates);
-      
+
       if (!source) {
         return res.status(404).json({ error: "Information source not found" });
       }
-      
+
       res.json(source);
     } catch (error) {
       console.error("Error updating information source:", error);
@@ -4903,11 +4917,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const success = await storage.deleteInformationSource(id);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Information source not found" });
       }
-      
+
       res.json({ message: "Information source deleted successfully" });
     } catch (error) {
       console.error("Error deleting information source:", error);
@@ -4925,7 +4939,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         targetSpecies: req.query.targetSpecies as string,
         isFavorite: req.query.isFavorite === 'true' ? true : req.query.isFavorite === 'false' ? false : undefined,
       };
-      
+
       const resources = await storage.getInformationalResources(userId, filters);
       res.json(resources);
     } catch (error) {
@@ -4939,14 +4953,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const resource = await storage.getInformationalResource(id, userId);
-      
+
       if (!resource) {
         return res.status(404).json({ error: "Informational resource not found" });
       }
-      
+
       // Increment view count
       await storage.incrementResourceViews(id);
-      
+
       res.json(resource);
     } catch (error) {
       console.error("Error fetching informational resource:", error);
@@ -4976,11 +4990,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const resource = await storage.updateInformationalResource(id, updates, userId);
-      
+
       if (!resource) {
         return res.status(404).json({ error: "Informational resource not found" });
       }
-      
+
       res.json(resource);
     } catch (error) {
       console.error("Error updating informational resource:", error);
@@ -4992,13 +5006,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteInformationalResource(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Informational resource not found" });
       }
-      
+
       res.json({ message: "Informational resource deleted successfully" });
     } catch (error) {
       console.error("Error deleting informational resource:", error);
@@ -5011,13 +5025,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
       const { isFavorite } = req.body;
-      
+
       const success = await storage.markResourceAsFavorite(id, userId, isFavorite);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Informational resource not found" });
       }
-      
+
       res.json({ message: `Resource ${isFavorite ? 'added to' : 'removed from'} favorites` });
     } catch (error) {
       console.error("Error updating resource favorite status:", error);
@@ -5052,11 +5066,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const review = await storage.getFarmProductReview(id);
-      
+
       if (!review) {
         return res.status(404).json({ error: "Farm product review not found" });
       }
-      
+
       res.json(review);
     } catch (error) {
       console.error("Error fetching farm product review:", error);
@@ -5086,11 +5100,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updates = req.body;
 
       const review = await storage.updateFarmProductReview(id, updates, userId);
-      
+
       if (!review) {
         return res.status(404).json({ error: "Farm product review not found" });
       }
-      
+
       res.json(review);
     } catch (error) {
       console.error("Error updating farm product review:", error);
@@ -5102,13 +5116,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const userId = (req as any).user?.claims?.sub;
-      
+
       const success = await storage.deleteFarmProductReview(id, userId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Farm product review not found" });
       }
-      
+
       res.json({ message: "Farm product review deleted successfully" });
     } catch (error) {
       console.error("Error deleting farm product review:", error);
@@ -5120,11 +5134,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const reviewId = parseInt(req.params.id);
       const success = await storage.voteReviewHelpful(reviewId);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Farm product review not found" });
       }
-      
+
       res.json({ message: "Review marked as helpful" });
     } catch (error) {
       console.error("Error voting review helpful:", error);

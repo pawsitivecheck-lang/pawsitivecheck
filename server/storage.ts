@@ -85,7 +85,7 @@ export interface IStorage {
   // User operations - mandatory for Replit Auth
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
-  
+
   // Product operations
   getProducts(limit?: number, offset?: number, search?: string): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
@@ -99,7 +99,7 @@ export interface IStorage {
     suspiciousIngredients: string[];
     lastAnalyzed: Date;
   }): Promise<Product | undefined>;
-  
+
   // Review operations
   getReviews(limit?: number, offset?: number): Promise<ProductReview[]>;
   getProductReviews(productId: number): Promise<ProductReview[]>;
@@ -107,29 +107,29 @@ export interface IStorage {
   createReview(review: InsertProductReview): Promise<ProductReview>;
   updateReview(id: number, updates: Partial<InsertProductReview>): Promise<ProductReview | undefined>;
   deleteReview(id: number, userId: string): Promise<boolean>;
-  
+
   // Recall operations
   getActiveRecalls(): Promise<ProductRecall[]>;
   getProductRecalls(productId: number): Promise<ProductRecall[]>;
   createRecall(recall: InsertProductRecall): Promise<ProductRecall>;
   updateRecall(id: number, updates: Partial<InsertProductRecall>): Promise<ProductRecall | undefined>;
-  
+
   // Ingredient blacklist operations
   getBlacklistedIngredients(): Promise<IngredientBlacklist[]>;
   addIngredientToBlacklist(ingredient: InsertIngredientBlacklist): Promise<IngredientBlacklist>;
   removeIngredientFromBlacklist(id: number): Promise<boolean>;
-  
+
   // Scan history operations
   getUserScanHistory(userId: string): Promise<ScanHistory[]>;
   createScanHistory(scan: InsertScanHistory): Promise<ScanHistory>;
-  
+
   // Pet profile operations
   getUserPetProfiles(userId: string): Promise<PetProfile[]>;
   getPetProfile(id: number): Promise<PetProfile | undefined>;
   createPetProfile(pet: InsertPetProfile): Promise<PetProfile>;
   updatePetProfile(id: number, updates: Partial<InsertPetProfile>): Promise<PetProfile | undefined>;
   deletePetProfile(id: number, userId: string): Promise<boolean>;
-  
+
   // Saved product operations
   getUserSavedProducts(userId: string): Promise<SavedProduct[]>;
   getPetSavedProducts(petId: number): Promise<SavedProduct[]>;
@@ -137,14 +137,14 @@ export interface IStorage {
   saveProductForPet(savedProduct: InsertSavedProduct): Promise<SavedProduct>;
   updateSavedProduct(id: number, updates: Partial<InsertSavedProduct>): Promise<SavedProduct | undefined>;
   removeSavedProduct(id: number, userId: string): Promise<boolean>;
-  
+
   // Veterinary office operations
   getVeterinaryOffices(limit?: number, offset?: number, search?: string, latitude?: number, longitude?: number): Promise<VeterinaryOffice[]>;
   getVeterinaryOffice(id: number): Promise<VeterinaryOffice | undefined>;
   createVeterinaryOffice(office: InsertVeterinaryOffice): Promise<VeterinaryOffice>;
   updateVeterinaryOffice(id: number, updates: Partial<InsertVeterinaryOffice>): Promise<VeterinaryOffice | undefined>;
   deleteVeterinaryOffice(id: number, userId: string): Promise<boolean>;
-  
+
   // Product update submission operations
   getUserProductUpdateSubmissions(userId: string): Promise<ProductUpdateSubmission[]>;
   getAllProductUpdateSubmissions(status?: string): Promise<ProductUpdateSubmission[]>;
@@ -156,14 +156,14 @@ export interface IStorage {
     adminNotes?: string;
     reviewedByUserId: string;
   }): Promise<ProductUpdateSubmission | undefined>;
-  
+
   // Health tracking operations
   getPetHealthRecords(petId: number): Promise<HealthRecord[]>;
   getHealthRecord(id: number): Promise<HealthRecord | undefined>;
   createHealthRecord(record: InsertHealthRecord): Promise<HealthRecord>;
   updateHealthRecord(id: number, updates: Partial<InsertHealthRecord>): Promise<HealthRecord | undefined>;
   deleteHealthRecord(id: number, userId: string): Promise<boolean>;
-  
+
   // Medical event operations
   getPetMedicalEvents(petId: number): Promise<MedicalEvent[]>;
   getMedicalEvent(id: number): Promise<MedicalEvent | undefined>;
@@ -176,7 +176,7 @@ export interface IStorage {
   getAnimalTag(id: number): Promise<AnimalTag | undefined>;
   createAnimalTag(tag: InsertAnimalTag): Promise<AnimalTag>;
   updateAnimalTag(id: number, updates: Partial<InsertAnimalTag>): Promise<AnimalTag | undefined>;
-  
+
   // Product tag operations
   getProductTags(productId: number): Promise<(ProductTag & { tag: AnimalTag })[]>;
   addProductTags(productId: number, tagIds: number[], userId: string, relevanceScores?: number[]): Promise<ProductTag[]>;
@@ -195,7 +195,7 @@ export interface IStorage {
 
   // Livestock operation methods
   getLivestockOperations(userId: string): Promise<LivestockOperation[]>;
-  getLivestockOperation(id: number, userId: string): Promise<LivestockOperation | undefined>;
+  getLivestockOperation(operationId: number, userId: string): Promise<LivestockOperation | null>;
   createLivestockOperation(operation: InsertLivestockOperation): Promise<LivestockOperation>;
   updateLivestockOperation(id: number, updates: Partial<InsertLivestockOperation>, userId: string): Promise<LivestockOperation | undefined>;
   deleteLivestockOperation(id: number, userId: string): Promise<boolean>;
@@ -314,7 +314,7 @@ export class DatabaseStorage implements IStorage {
   // Product operations
   async getProducts(limit = 50, offset = 0, search?: string): Promise<Product[]> {
     let query = db.select().from(products);
-    
+
     if (search) {
       query = query.where(
         or(
@@ -324,7 +324,7 @@ export class DatabaseStorage implements IStorage {
         )
       ) as typeof query;
     }
-    
+
     return await query
       .orderBy(desc(products.createdAt))
       .limit(limit)
@@ -578,9 +578,9 @@ export class DatabaseStorage implements IStorage {
   // Veterinary office operations
   async getVeterinaryOffices(limit = 50, offset = 0, search?: string, latitude?: number, longitude?: number): Promise<VeterinaryOffice[]> {
     let query = db.select().from(veterinaryOffices);
-    
+
     let whereConditions = [eq(veterinaryOffices.isActive, true)];
-    
+
     if (search) {
       whereConditions.push(
         or(
@@ -591,7 +591,7 @@ export class DatabaseStorage implements IStorage {
         )!
       );
     }
-    
+
     return query
       .where(and(...whereConditions))
       .limit(limit)
@@ -629,7 +629,7 @@ export class DatabaseStorage implements IStorage {
     return (result.rowCount ?? 0) > 0;
   }
 
-  
+
   // Product update submission operations
   async getUserProductUpdateSubmissions(userId: string): Promise<ProductUpdateSubmission[]> {
     return await db.select().from(productUpdateSubmissions)
@@ -639,11 +639,11 @@ export class DatabaseStorage implements IStorage {
 
   async getAllProductUpdateSubmissions(status?: string): Promise<ProductUpdateSubmission[]> {
     let query = db.select().from(productUpdateSubmissions);
-    
+
     if (status) {
       query = query.where(eq(productUpdateSubmissions.status, status)) as typeof query;
     }
-    
+
     return await query.orderBy(desc(productUpdateSubmissions.submittedAt));
   }
 
@@ -759,11 +759,11 @@ export class DatabaseStorage implements IStorage {
   // Animal tag operations
   async getAnimalTags(filters?: { type?: string; parentId?: number }): Promise<AnimalTag[]> {
     let conditions = [eq(animalTags.isActive, true)];
-    
+
     if (filters?.type) {
       conditions.push(eq(animalTags.type, filters.type));
     }
-    
+
     if (filters?.parentId !== undefined) {
       if (filters.parentId === null) {
         conditions.push(sql`${animalTags.parentId} IS NULL`);
@@ -771,7 +771,7 @@ export class DatabaseStorage implements IStorage {
         conditions.push(eq(animalTags.parentId, filters.parentId));
       }
     }
-    
+
     return await db
       .select()
       .from(animalTags)
@@ -896,11 +896,11 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(livestockOperations.createdAt));
   }
 
-  async getLivestockOperation(id: number, userId: string): Promise<LivestockOperation | undefined> {
+  async getLivestockOperation(operationId: number, userId: string): Promise<LivestockOperation | undefined> {
     const [operation] = await db
       .select()
       .from(livestockOperations)
-      .where(and(eq(livestockOperations.id, id), eq(livestockOperations.userId, userId), eq(livestockOperations.isActive, true)));
+      .where(and(eq(livestockOperations.id, operationId), eq(livestockOperations.userId, userId), eq(livestockOperations.isActive, true)));
     return operation;
   }
 
@@ -1127,7 +1127,7 @@ export class DatabaseStorage implements IStorage {
     if (animalId) {
       conditions.push(or(eq(breedingRecords.damId, animalId), eq(breedingRecords.sireId, animalId))!);
     }
-    
+
     return await db
       .select()
       .from(breedingRecords)
@@ -1246,14 +1246,14 @@ export class DatabaseStorage implements IStorage {
 
   async getFarmAnimalProducts(userId: string, filters?: { productType?: string; targetSpecies?: string; category?: string }): Promise<FarmAnimalProduct[]> {
     const conditions = [eq(farmAnimalProducts.userId, userId), eq(farmAnimalProducts.isActive, true)];
-    
+
     if (filters?.productType) {
       conditions.push(eq(farmAnimalProducts.productType, filters.productType));
     }
     if (filters?.category) {
       conditions.push(eq(farmAnimalProducts.category, filters.category));
     }
-    
+
     return await db
       .select()
       .from(farmAnimalProducts)
@@ -1295,14 +1295,14 @@ export class DatabaseStorage implements IStorage {
 
   async getInformationSources(filters?: { sourceType?: string; category?: string; specialties?: string[] }): Promise<InformationSource[]> {
     const conditions = [eq(informationSources.isActive, true)];
-    
+
     if (filters?.sourceType) {
       conditions.push(eq(informationSources.sourceType, filters.sourceType));
     }
     if (filters?.category) {
       conditions.push(eq(informationSources.category, filters.category));
     }
-    
+
     return await db
       .select()
       .from(informationSources)
@@ -1344,7 +1344,7 @@ export class DatabaseStorage implements IStorage {
 
   async getInformationalResources(userId: string, filters?: { resourceType?: string; category?: string; targetSpecies?: string; isFavorite?: boolean }): Promise<InformationalResource[]> {
     const conditions = [eq(informationalResources.userId, userId)];
-    
+
     if (filters?.resourceType) {
       conditions.push(eq(informationalResources.resourceType, filters.resourceType));
     }
@@ -1354,7 +1354,7 @@ export class DatabaseStorage implements IStorage {
     if (filters?.isFavorite !== undefined) {
       conditions.push(eq(informationalResources.isFavorite, filters.isFavorite));
     }
-    
+
     return await db
       .select()
       .from(informationalResources)
