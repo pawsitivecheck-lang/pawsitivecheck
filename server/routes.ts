@@ -3643,12 +3643,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
     try {
+      console.log("Creating livestock operation with data:", req.body);
+      console.log("User ID:", req.user.id);
+      
       const operationData = {
         ...req.body,
         userId: req.user.id,
       };
 
+      console.log("Final operation data:", operationData);
       const operation = await storage.createLivestockOperation(operationData);
+      console.log("Created operation:", operation);
       res.status(201).json(operation);
     } catch (error) {
       console.error("Error creating livestock operation:", error);
