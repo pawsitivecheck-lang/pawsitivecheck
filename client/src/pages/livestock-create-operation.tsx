@@ -25,13 +25,19 @@ export default function LivestockCreateOperation() {
 
   const createOperationMutation = useMutation({
     mutationFn: async (data: any) => {
-      console.log("Making API request with data:", data);
+      console.log("🚀 Starting API request with data:", data);
+      console.log("🔍 Data type:", typeof data);
+      console.log("🔍 Data keys:", Object.keys(data));
+      
       try {
+        console.log("📡 Calling apiRequest...");
         const response = await apiRequest("/api/livestock/operations", "POST", data);
-        console.log("API request successful, response:", response);
-        return response;
+        console.log("✅ API request successful, response:", response);
+        return response.json();
       } catch (error) {
-        console.error("API request failed:", error);
+        console.error("❌ API request failed:", error);
+        console.error("❌ Error type:", typeof error);
+        console.error("❌ Error details:", error);
         throw error;
       }
     },
@@ -102,14 +108,16 @@ export default function LivestockCreateOperation() {
       primarySpecies: getSpeciesForOperationType(formData.operationType),
     };
     
-    console.log("Submitting operation data:", finalData);
-    console.log("About to call createOperationMutation.mutate...");
+    console.log("🎯 Final data to submit:", finalData);
+    console.log("🎯 Final data stringify:", JSON.stringify(finalData, null, 2));
+    console.log("📤 About to call createOperationMutation.mutate...");
     
     try {
+      console.log("🔄 Calling mutation...");
       createOperationMutation.mutate(finalData);
-      console.log("Mutation called successfully");
+      console.log("✅ Mutation called successfully");
     } catch (error) {
-      console.error("Error calling mutation:", error);
+      console.error("❌ Error calling mutation:", error);
     }
   };
 
