@@ -292,6 +292,9 @@ export default function VetAdmin() {
                   <DialogTitle>
                     {editingOffice ? "Edit Veterinary Office" : "Add New Veterinary Office"}
                   </DialogTitle>
+                  <DialogDescription>
+                    {editingOffice ? "Update the veterinary office information below." : "Fill in the details to add a new veterinary office to the directory."}
+                  </DialogDescription>
                 </DialogHeader>
                 
                 <Form {...form}>

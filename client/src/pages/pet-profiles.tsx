@@ -495,6 +495,9 @@ export default function PetProfiles() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Edit Pet Profile</DialogTitle>
+            <DialogDescription>
+              Update your pet's information including basic details, health records, and preferences.
+            </DialogDescription>
           </DialogHeader>
           {selectedPet && (
             <PetForm

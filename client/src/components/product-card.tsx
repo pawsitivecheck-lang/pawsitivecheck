@@ -242,16 +242,16 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             <div className="p-2 bg-starlight-500/5 rounded border border-starlight-500/20 mb-3">
               <div className="flex items-center justify-between">
                 <span className="text-cosmic-400 text-xs">Official Source</span>
-                <a 
-                  href={product.sourceUrl || `https://www.google.com/search?q=${encodeURIComponent(product.brand + ' pet products')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-starlight-400 hover:text-starlight-300 text-xs underline"
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(product.sourceUrl || `https://www.google.com/search?q=${encodeURIComponent(product.brand + ' pet products')}`, '_blank', 'noopener,noreferrer');
+                  }}
+                  className="text-starlight-400 hover:text-starlight-300 text-xs underline bg-transparent border-none p-0 cursor-pointer"
                   data-testid={`product-source-link-${product.id}`}
-                  onClick={(e) => e.stopPropagation()}
                 >
                   View Brand Info →
-                </a>
+                </button>
               </div>
             </div>
           )}
