@@ -484,6 +484,7 @@ export default function Landing() {
               <Link to={`/product/${product.id}`} key={product.id}>
                 <ProductCard 
                   product={product}
+                  onClick={() => {}}
                 />
               </Link>
             )) || (
