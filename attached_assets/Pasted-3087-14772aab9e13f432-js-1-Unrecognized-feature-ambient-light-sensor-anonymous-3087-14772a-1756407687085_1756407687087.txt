@@ -1,0 +1,92 @@
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'ambient-light-sensor'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'battery'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'layout-animations'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'legacy-image-formats'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'navigation-override'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'oversized-images'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'publickey-credentials'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'speaker-selection'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'unoptimized-images'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'unsized-media'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Unrecognized feature: 'pointer-lock'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+3087-14772aab9e13f432.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+(anonymous) @ 3087-14772aab9e13f432.js:1
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Tracking Prevention blocked a Script resource from loading <URL>.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+e @ framework-f2734605c7f0bb61.js:1
+  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+e @ framework-f2734605c7f0bb61.js:1
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2Flivestock&id=%3Ar13t%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+main.tsx:11 PWA: Service Worker registered successfully: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+client:802  WebSocket connection to 'wss://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/?token=isWQW7laAzeL' failed: Error during WebSocket handshake: Unexpected response code: 400
+createConnection @ client:802
+client:815  WebSocket connection to 'wss://localhost:5173/?token=isWQW7laAzeL' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+createConnection @ client:815
+client:830  [vite] failed to connect to websocket.
+your current setup:
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:830
