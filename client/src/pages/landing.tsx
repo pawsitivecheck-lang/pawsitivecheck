@@ -284,7 +284,7 @@ export default function Landing() {
       <section className="relative bg-gradient-to-r from-primary/10 to-primary/20 py-12 sm:py-16 lg:py-20" id="hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="text-center lg:text-left bg-[#121417]">
+            <div className="text-center lg:text-left">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 leading-tight" data-testid="text-welcome-title">
                 Keep Your Pets Safe!
               </h1>
