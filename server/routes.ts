@@ -3644,11 +3644,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/livestock/operations', isAuthenticated, async (req: any, res) => {
     try {
       console.log("Creating livestock operation with data:", req.body);
-      console.log("User ID:", req.user.id);
+      console.log("User object:", req.user);
+      console.log("Session:", req.session);
+      
+      // Get user ID from claims if available
+      const userId = req.user?.id || req.user?.claims?.sub;
+      console.log("User ID from req.user.id:", req.user?.id);
+      console.log("User ID from claims:", req.user?.claims?.sub);
+      console.log("Final userId:", userId);
+      
+      if (!userId) {
+        console.error("No user ID available");
+        return res.status(401).json({ error: "User not authenticated" });
+      }
       
       const operationData = {
         ...req.body,
-        userId: req.user.id,
+        userId: userId,
       };
 
       console.log("Final operation data:", operationData);
