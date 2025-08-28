@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { RefreshCw, Database, CheckCircle, AlertTriangle, Clock, Zap } from "lucide-react";
+import { RefreshCw, Database, CheckCircle, AlertTriangle, Clock, Zap, Crown, ChartLine, Ban, Shield, Users, Package, Eye, TrendingUp, FileText } from "lucide-react";
 
 interface SyncStatus {
   database: {
@@ -33,10 +33,32 @@ interface SyncResult {
 export default function DatabaseSync() {
   const { toast } = useToast();
   const [activeSync, setActiveSync] = useState<string | null>(null);
+  const [isUpdatingLegal, setIsUpdatingLegal] = useState(false);
 
   const { data: syncStatus, refetch: refetchStatus } = useQuery<SyncStatus>({
     queryKey: ['/api/admin/sync/status'],
     refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
+  // Admin data queries
+  const { data: analytics = {} } = useQuery({
+    queryKey: ['/api/admin/analytics'],
+  });
+
+  const { data: recentRecalls = [] } = useQuery({
+    queryKey: ['/api/recalls'],
+  });
+
+  const { data: blacklistedIngredients = [] } = useQuery({
+    queryKey: ['/api/blacklist'],
+  });
+
+  const { data: recentProducts } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const res = await fetch('/api/products?limit=10');
+      return await res.json();
+    },
   });
 
   const syncProductsMutation = useMutation({
@@ -280,6 +302,33 @@ export default function DatabaseSync() {
     },
   });
 
+  // Admin mutations
+  const updateLegalDocuments = useMutation({
+    mutationFn: async () => {
+      return apiRequest('POST', '/api/admin/update-legal');
+    },
+    onSuccess: () => {
+      toast({
+        title: "Legal Documents Updated",
+        description: "Privacy Policy, Terms of Service, and Cookie Policy have been updated with current 2025 regulations.",
+      });
+      setIsUpdatingLegal(false);
+    },
+    onError: () => {
+      toast({
+        title: "Update Failed",
+        description: "Could not update legal documents. Please try again.",
+        variant: "destructive",
+      });
+      setIsUpdatingLegal(false);
+    },
+  });
+
+  const handleUpdateLegal = () => {
+    setIsUpdatingLegal(true);
+    updateLegalDocuments.mutate();
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "Never";
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -291,7 +340,259 @@ export default function DatabaseSync() {
   };
 
   return (
-    <div className="space-y-6" data-testid="database-sync">
+    <div className="space-y-8" data-testid="database-sync">
+      {/* Admin Header */}
+      <div className="text-center mb-8">
+        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6 shadow-lg">
+          <Crown className="text-3xl text-white" />
+        </div>
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-200 mb-4" data-testid="text-admin-title">
+          Admin Control Center
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 text-lg" data-testid="text-admin-description">
+          Manage platform content, users, safety data and cosmic synchronization
+        </p>
+      </div>
+
+      {/* Admin Analytics Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-products">
+          <CardContent className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <Package className="text-blue-600" />
+            </div>
+            <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-products">
+              {(analytics as any)?.totalProducts || 0}
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">Total Products</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-users">
+          <CardContent className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <Users className="text-green-600" />
+            </div>
+            <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-total-users">
+              {(analytics as any)?.totalUsers || 0}
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">Active Users</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-unsafe">
+          <CardContent className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+              <AlertTriangle className="text-red-600" />
+            </div>
+            <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-unsafe-products">
+              {(analytics as any)?.cursedProducts || 0}
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">Unsafe Products</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-safe">
+          <CardContent className="p-6 text-center">
+            <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <Shield className="text-green-600" />
+            </div>
+            <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-safe-products">
+              {(analytics as any)?.blessedProducts || 0}
+            </div>
+            <p className="text-gray-600 dark:text-gray-400">Safe Products</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Admin Grid */}
+      <div className="grid lg:grid-cols-3 gap-8 mb-8">
+        {/* Active Recalls Management */}
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recalls-management">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-600">
+              <AlertTriangle className="h-5 w-5" />
+              Active Recalls
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {(recentRecalls as any[]).slice(0, 3).map((recall: any) => (
+                <div key={recall.id} className="p-3 bg-red-50 dark:bg-red-950/20 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
+                  <div className="flex justify-between items-start mb-1">
+                    <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{recall.reason}</p>
+                    <Badge className="bg-red-100 text-red-600 text-xs" data-testid="badge-recall-severity">
+                      {recall.severity}
+                    </Badge>
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs">
+                    {new Date(recall.recallDate).toLocaleDateString()}
+                  </p>
+                </div>
+              )) || (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-active-recalls">
+                  No active recalls
+                </p>
+              )}
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+              data-testid="button-manage-recalls"
+            >
+              Manage Recalls
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Blacklist Management */}
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-blacklist-management">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-600">
+              <Ban className="h-5 w-5" />
+              Ingredient Blacklist
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
+                <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
+                  <span className="text-gray-800 dark:text-gray-200 text-sm">{ingredient.ingredientName}</span>
+                  <Badge 
+                    className={
+                      ingredient.severity === 'high' 
+                        ? 'bg-red-100 text-red-600' 
+                        : ingredient.severity === 'medium'
+                        ? 'bg-yellow-100 text-yellow-600'
+                        : 'bg-gray-100 text-gray-600'
+                    }
+                    data-testid="badge-ingredient-severity"
+                  >
+                    {ingredient.severity || 'low'}
+                  </Badge>
+                </div>
+              )) || (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-blacklisted-ingredients">
+                  No blacklisted ingredients
+                </p>
+              )}
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+              data-testid="button-manage-blacklist"
+            >
+              Manage Blacklist
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Recent Products */}
+        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recent-products">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-blue-600">
+              <Package className="h-5 w-5" />
+              Recent Products
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {(recentProducts as any[])?.slice(0, 4).map((product: any) => (
+                <div key={product.id} className="flex justify-between items-center" data-testid={`product-item-${product.id}`}>
+                  <div>
+                    <p className="text-gray-800 dark:text-gray-200 text-sm font-medium truncate">{product.name}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">{product.brand}</p>
+                  </div>
+                  <Badge 
+                    className={
+                      product.cosmicClarity === 'blessed' 
+                        ? 'bg-green-100 text-green-600' 
+                        : product.cosmicClarity === 'cursed'
+                        ? 'bg-red-100 text-red-600'
+                        : 'bg-yellow-100 text-yellow-600'
+                    }
+                    data-testid="badge-product-clarity"
+                  >
+                    {product.cosmicClarity || 'unknown'}
+                  </Badge>
+                </div>
+              )) || (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-products">
+                  No products found
+                </p>
+              )}
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full mt-4"
+              onClick={() => window.location.href = "/product-database"}
+              data-testid="button-view-all-products"
+            >
+              View All Products
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Admin Actions */}
+      <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-admin-actions">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Crown className="h-5 w-5 text-blue-600" />
+            Administrative Actions
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <Button 
+              className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
+              data-testid="button-update-database"
+            >
+              <Package className="mr-2 h-4 w-4" />
+              Update Database
+            </Button>
+            <Button 
+              className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
+              onClick={() => window.location.href = "/admin/product-submissions"}
+              data-testid="button-review-submissions"
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Review Submissions
+            </Button>
+            <Button 
+              className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
+              data-testid="button-issue-recall"
+            >
+              <AlertTriangle className="mr-2 h-4 w-4" />
+              Issue Recall
+            </Button>
+            <Button 
+              className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
+              data-testid="button-approve-product"
+            >
+              <Shield className="mr-2 h-4 w-4" />
+              Approve Product
+            </Button>
+            <Button 
+              className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
+              onClick={handleUpdateLegal}
+              disabled={isUpdatingLegal}
+              data-testid="button-update-legal"
+            >
+              {isUpdatingLegal ? (
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <FileText className="mr-2 h-4 w-4" />
+              )}
+              {isUpdatingLegal ? "Updating..." : "Update Legal Docs"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Status Overview */}
       <Card className="cosmic-card">
         <CardHeader>
@@ -687,6 +988,23 @@ export default function DatabaseSync() {
             Synchronize with external databases to keep product information, recalls, 
             and ingredient safety data current. Full sync updates all data sources.
           </p>
+        </CardContent>
+      </Card>
+
+      {/* Admin Guidelines */}
+      <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950" data-testid="card-admin-guidelines">
+        <CardContent className="p-8">
+          <div className="text-center max-w-2xl mx-auto">
+            <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6">
+              <Shield className="text-2xl text-white" />
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4" data-testid="text-admin-guidelines-title">Administrator Guidelines</h3>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed" data-testid="text-admin-guidelines">
+              As a platform administrator, you have the responsibility to ensure pet product safety data is accurate and up-to-date. 
+              Use these tools to maintain data quality, manage recalls promptly, and keep pet owners informed about product safety.
+              The cosmic synchronization tools above help maintain real-time data integrity across all systems.
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
