@@ -1,5 +1,7 @@
 import { createRoot } from "react-dom/client";
+// Restore original app with error boundary
 import App from "./App";
+import ErrorBoundary from "./components/ErrorBoundary";
 import "./index.css";
 
 // PWA Service Worker Registration
@@ -55,4 +57,8 @@ window.addEventListener("appinstalled", () => {
   deferredPrompt = null;
 });
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);
