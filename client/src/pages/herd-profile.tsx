@@ -587,7 +587,15 @@ export default function HerdProfile() {
 
   const handleSubmitMovement = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Form submitted - handleSubmitMovement called");
+    
     const formData = new FormData(e.currentTarget);
+    
+    // Debug form data
+    console.log("Form data entries:");
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     
     const movementData: InsertAnimalMovement = {
       animalId: null, // Null for herd-level movements
@@ -602,9 +610,13 @@ export default function HerdProfile() {
       notes: formData.get("notes") as string || null,
     };
 
+    console.log("Movement data constructed:", movementData);
+
     if (editingMovement) {
+      console.log("Updating existing movement");
       updateMovementMutation.mutate({ id: editingMovement.id, ...movementData });
     } else {
+      console.log("Creating new movement");
       createMovementMutation.mutate(movementData);
     }
   };
