@@ -4716,15 +4716,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/animal-movements', isAuthenticated, async (req: any, res) => {
     try {
-      const movementData = {
+      console.log("Received movement data:", req.body);
+      
+      const movementData = insertAnimalMovementSchema.parse({
         ...req.body,
         userId: req.user?.claims?.sub,
-      };
+      });
+      
+      console.log("Validated movement data:", movementData);
 
       const movement = await storage.createAnimalMovement(movementData);
+      console.log("Created movement:", movement);
       res.status(201).json(movement);
     } catch (error) {
       console.error("Error creating animal movement:", error);
+      if (error instanceof z.ZodError) {
+        console.error("Validation errors:", error.errors);
+        return res.status(400).json({ 
+          error: "Invalid movement data", 
+          details: error.errors 
+        });
+      }
       res.status(500).json({ error: "Failed to create animal movement" });
     }
   });
