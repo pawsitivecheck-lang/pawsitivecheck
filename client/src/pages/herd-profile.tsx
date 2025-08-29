@@ -22,7 +22,7 @@ import {
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
   Egg, ShoppingCart, FileText, Search, Stethoscope, Wheat, Package
 } from "lucide-react";
-import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord, InsertProductionRecord, InsertAnimalMovement } from "@shared/schema";
+import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord, InsertProductionRecord, InsertAnimalMovement, InsertBreedingRecord } from "@shared/schema";
 
 interface HerdProfileProps {
   herdId: string;
@@ -44,6 +44,8 @@ export default function HerdProfile() {
   const [editingProduction, setEditingProduction] = useState<ProductionRecord | null>(null);
   const [isAddMovementDialogOpen, setIsAddMovementDialogOpen] = useState(false);
   const [editingMovement, setEditingMovement] = useState<AnimalMovement | null>(null);
+  const [isAddBreedingDialogOpen, setIsAddBreedingDialogOpen] = useState(false);
+  const [editingBreeding, setEditingBreeding] = useState<BreedingRecord | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showAnimalTracking, setShowAnimalTracking] = useState(false);
   
@@ -401,6 +403,82 @@ export default function HerdProfile() {
     },
   });
 
+  // Breeding record mutations
+  const createBreedingMutation = useMutation({
+    mutationFn: async (breedingData: InsertBreedingRecord) => {
+      return await apiRequest("/api/breeding-records", "POST", breedingData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/breeding-records"] });
+      setIsAddBreedingDialogOpen(false);
+      setEditingBreeding(null);
+      toast({
+        title: "Success",
+        description: "Breeding record added successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to add breeding record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateBreedingMutation = useMutation({
+    mutationFn: async ({ id, ...breedingData }: { id: number } & InsertBreedingRecord) => {
+      return await apiRequest(`/api/breeding-records/${id}`, "PUT", breedingData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/breeding-records"] });
+      setIsAddBreedingDialogOpen(false);
+      setEditingBreeding(null);
+      toast({
+        title: "Success",
+        description: "Breeding record updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update breeding record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteBreedingMutation = useMutation({
+    mutationFn: async (breedingId: number) => {
+      return await apiRequest(`/api/breeding-records/${breedingId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/breeding-records"] });
+      toast({
+        title: "Success",
+        description: "Breeding record deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete breeding record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -528,6 +606,35 @@ export default function HerdProfile() {
       updateMovementMutation.mutate({ id: editingMovement.id, ...movementData });
     } else {
       createMovementMutation.mutate(movementData);
+    }
+  };
+
+  const handleSubmitBreeding = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const breedingData: InsertBreedingRecord = {
+      userId: user!.id,
+      damId: 1, // Default dam ID for herd-level breeding
+      sireId: formData.get('sireId') ? parseInt(formData.get('sireId') as string) : null,
+      externalSireInfo: formData.get('externalSireInfo') as string || null,
+      breedingDate: formData.get('breedingDate') ? new Date(formData.get('breedingDate') as string) : new Date(),
+      breedingMethod: (formData.get('breedingMethod') as string) || 'natural',
+      expectedBirthDate: formData.get('expectedBirthDate') ? new Date(formData.get('expectedBirthDate') as string) : null,
+      actualBirthDate: formData.get('actualBirthDate') ? new Date(formData.get('actualBirthDate') as string) : null,
+      gestationDays: formData.get('gestationDays') ? parseInt(formData.get('gestationDays') as string) : null,
+      offspringCount: formData.get('offspringCount') ? parseInt(formData.get('offspringCount') as string) : 1,
+      offspringIds: [],
+      birthWeight: formData.get('birthWeight') ? formData.get('birthWeight') as string : null,
+      birthComplications: formData.get('birthComplications') as string || null,
+      veterinarianAssisted: formData.get('veterinarianAssisted') === 'true',
+      notes: formData.get('notes') as string || null,
+    };
+
+    if (editingBreeding) {
+      updateBreedingMutation.mutate({ id: editingBreeding.id, ...breedingData });
+    } else {
+      createBreedingMutation.mutate(breedingData);
     }
   };
 
@@ -1785,7 +1892,10 @@ export default function HerdProfile() {
                     <CardTitle>Breeding Records</CardTitle>
                     <CardDescription>Track breeding activities and pregnancies</CardDescription>
                   </div>
-                  <Button data-testid="button-add-breeding-record">
+                  <Button 
+                    onClick={() => setIsAddBreedingDialogOpen(true)}
+                    data-testid="button-add-breeding-record"
+                  >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Add Breeding Record
                   </Button>
@@ -2206,6 +2316,133 @@ export default function HerdProfile() {
                 </ScrollArea>
               </>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Breeding Record Dialog */}
+        <Dialog open={isAddBreedingDialogOpen} onOpenChange={setIsAddBreedingDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingBreeding ? 'Edit Breeding Record' : 'Add Breeding Record'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmitBreeding}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="breedingDate">Breeding Date *</Label>
+                  <Input 
+                    name="breedingDate" 
+                    type="date" 
+                    required 
+                    defaultValue={editingBreeding?.breedingDate ? new Date(editingBreeding.breedingDate).toISOString().split('T')[0] : ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="breedingMethod">Breeding Method</Label>
+                  <Select name="breedingMethod" defaultValue={editingBreeding?.breedingMethod || "natural"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="natural">Natural</SelectItem>
+                      <SelectItem value="ai">Artificial Insemination</SelectItem>
+                      <SelectItem value="et">Embryo Transfer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="externalSireInfo">Sire Information</Label>
+                  <Input 
+                    name="externalSireInfo" 
+                    placeholder="Bull name, ID, or breed" 
+                    defaultValue={editingBreeding?.externalSireInfo || ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="expectedBirthDate">Expected Birth Date</Label>
+                  <Input 
+                    name="expectedBirthDate" 
+                    type="date" 
+                    defaultValue={editingBreeding?.expectedBirthDate ? new Date(editingBreeding.expectedBirthDate).toISOString().split('T')[0] : ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="actualBirthDate">Actual Birth Date</Label>
+                  <Input 
+                    name="actualBirthDate" 
+                    type="date" 
+                    defaultValue={editingBreeding?.actualBirthDate ? new Date(editingBreeding.actualBirthDate).toISOString().split('T')[0] : ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="offspringCount">Number of Offspring</Label>
+                  <Input 
+                    name="offspringCount" 
+                    type="number" 
+                    placeholder="1" 
+                    defaultValue={editingBreeding?.offspringCount || 1} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="birthWeight">Birth Weight</Label>
+                  <Input 
+                    name="birthWeight" 
+                    type="number" 
+                    step="0.1" 
+                    placeholder="0.0" 
+                    defaultValue={editingBreeding?.birthWeight || ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="gestationDays">Gestation Days</Label>
+                  <Input 
+                    name="gestationDays" 
+                    type="number" 
+                    placeholder="280" 
+                    defaultValue={editingBreeding?.gestationDays || ""} 
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="veterinarianAssisted">Veterinarian Assisted</Label>
+                  <Select name="veterinarianAssisted" defaultValue={editingBreeding?.veterinarianAssisted ? "true" : "false"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="false">No</SelectItem>
+                      <SelectItem value="true">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="birthComplications">Birth Complications</Label>
+                  <Textarea 
+                    name="birthComplications" 
+                    placeholder="Any complications during birth..."
+                    defaultValue={editingBreeding?.birthComplications || ""} 
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea 
+                    name="notes" 
+                    placeholder="Additional breeding notes..."
+                    defaultValue={editingBreeding?.notes || ""} 
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsAddBreedingDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createBreedingMutation.isPending || updateBreedingMutation.isPending}
+                  data-testid="button-save-breeding"
+                >
+                  {(createBreedingMutation.isPending || updateBreedingMutation.isPending) ? "Saving..." : (editingBreeding ? "Update Record" : "Add Record")}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
