@@ -824,6 +824,7 @@ export default function HerdProfile() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="grain">Grain</SelectItem>
+                      <SelectItem value="grass">Grass</SelectItem>
                       <SelectItem value="hay">Hay</SelectItem>
                       <SelectItem value="silage">Silage</SelectItem>
                       <SelectItem value="supplement">Supplement</SelectItem>
