@@ -20,9 +20,9 @@ import ThemeToggle from "@/components/theme-toggle";
 import { 
   ArrowLeft, PlusCircle, Users, Heart, Baby, TrendingUp, DollarSign, 
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
-  Egg, ShoppingCart, FileText, Search, Stethoscope
+  Egg, ShoppingCart, FileText, Search, Stethoscope, Wheat, Package
 } from "lucide-react";
-import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement } from "@shared/schema";
+import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement } from "@shared/schema";
 
 interface HerdProfileProps {
   herdId: string;
@@ -36,7 +36,10 @@ export default function HerdProfile() {
   const [selectedAnimal, setSelectedAnimal] = useState<FarmAnimal | null>(null);
   const [isAddAnimalDialogOpen, setIsAddAnimalDialogOpen] = useState(false);
   const [isEditHerdDialogOpen, setIsEditHerdDialogOpen] = useState(false);
+  const [isAddFeedDialogOpen, setIsAddFeedDialogOpen] = useState(false);
+  const [editingFeed, setEditingFeed] = useState<FeedManagement | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [showAnimalTracking, setShowAnimalTracking] = useState(false);
   
   // Get herd ID from URL
   const params = useParams();
@@ -75,6 +78,11 @@ export default function HerdProfile() {
     enabled: !!herdId && isAuthenticated,
   });
 
+  const { data: feedRecords = [], isLoading: feedLoading } = useQuery<FeedManagement[]>({
+    queryKey: ["/api/livestock/herds", herdId, "feeds"],
+    enabled: !!herdId && isAuthenticated,
+  });
+
   const createAnimalMutation = useMutation({
     mutationFn: async (animalData: any) => {
       return await apiRequest("/api/farm-animals", "POST", animalData);
@@ -108,6 +116,80 @@ export default function HerdProfile() {
     },
   });
 
+  const createFeedMutation = useMutation({
+    mutationFn: async (feedData: InsertFeedManagement) => {
+      return await apiRequest("/api/livestock/feeds", "POST", feedData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "feeds"] });
+      setIsAddFeedDialogOpen(false);
+      setEditingFeed(null);
+      toast({
+        title: "Success",
+        description: "Feed record added successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to add feed record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateFeedMutation = useMutation({
+    mutationFn: async ({ id, ...feedData }: { id: number } & Partial<InsertFeedManagement>) => {
+      return await apiRequest(`/api/livestock/feeds/${id}`, "PUT", feedData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "feeds"] });
+      setEditingFeed(null);
+      toast({
+        title: "Success",
+        description: "Feed record updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update feed record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteFeedMutation = useMutation({
+    mutationFn: async (feedId: number) => {
+      return await apiRequest(`/api/livestock/feeds/${feedId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "feeds"] });
+      toast({
+        title: "Success",
+        description: "Feed record deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete feed record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -133,6 +215,32 @@ export default function HerdProfile() {
     };
 
     createAnimalMutation.mutate(animalData);
+  };
+
+  const handleSubmitFeed = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const feedData = {
+      herdId: parseInt(herdId!),
+      feedType: formData.get('feedType') as string,
+      feedName: formData.get('feedName') as string,
+      supplier: formData.get('supplier') as string || undefined,
+      quantityPerFeeding: formData.get('quantityPerFeeding') ? parseFloat(formData.get('quantityPerFeeding') as string) : undefined,
+      quantityUnit: formData.get('quantityUnit') as string || 'lbs',
+      feedingsPerDay: parseInt(formData.get('feedingsPerDay') as string) || 1,
+      costPerUnit: formData.get('costPerUnit') ? parseFloat(formData.get('costPerUnit') as string) : undefined,
+      lastPurchaseDate: formData.get('lastPurchaseDate') as string || undefined,
+      currentStock: formData.get('currentStock') ? parseFloat(formData.get('currentStock') as string) : undefined,
+      stockUnit: formData.get('stockUnit') as string || 'lbs',
+      notes: formData.get('notes') as string || undefined,
+    };
+
+    if (editingFeed) {
+      updateFeedMutation.mutate({ id: editingFeed.id, ...feedData });
+    } else {
+      createFeedMutation.mutate(feedData);
+    }
   };
 
   const getSpeciesIcon = (species: string) => {
@@ -259,17 +367,48 @@ export default function HerdProfile() {
               <Edit className="h-4 w-4 mr-2" />
               Edit Herd
             </Button>
-            <Dialog open={isAddAnimalDialogOpen} onOpenChange={setIsAddAnimalDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="flex items-center gap-2" data-testid="button-add-animal">
-                  <PlusCircle className="h-4 w-4" />
-                  Add Animal
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Add Animal to {herd.herdName}</DialogTitle>
-                </DialogHeader>
+            
+            <Button 
+              onClick={() => setIsAddFeedDialogOpen(true)}
+              className="flex items-center gap-2"
+              data-testid="button-add-feed"
+            >
+              <Wheat className="h-4 w-4" />
+              Manage Feed
+            </Button>
+            
+            {showAnimalTracking ? (
+              <Button 
+                onClick={() => setIsAddAnimalDialogOpen(true)}
+                variant="outline" 
+                className="flex items-center gap-2" 
+                data-testid="button-add-animal"
+              >
+                <PlusCircle className="h-4 w-4" />
+                Add Animal
+              </Button>
+            ) : (
+              <Button 
+                onClick={() => setShowAnimalTracking(true)}
+                variant="outline"
+                className="flex items-center gap-2"
+                data-testid="button-enable-animal-tracking"
+              >
+                <Users className="h-4 w-4" />
+                Track Individual Animals (Optional)
+              </Button>
+            )}
+          </div>
+        </div>
+
+        
+        {/* Add Animal Dialog */}
+        {showAnimalTracking && (
+          <Dialog open={isAddAnimalDialogOpen} onOpenChange={setIsAddAnimalDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Add Animal to {herd.herdName}</DialogTitle>
+              </DialogHeader>
                 <form onSubmit={handleSubmitAnimal}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
                     <div>
@@ -387,8 +526,113 @@ export default function HerdProfile() {
                 </form>
               </DialogContent>
             </Dialog>
-          </div>
-        </div>
+        )}
+
+        {/* Feed Management Dialog */}
+        <Dialog open={isAddFeedDialogOpen} onOpenChange={setIsAddFeedDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingFeed ? 'Edit Feed Record' : 'Add Feed Record'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmitFeed}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="feedType">Feed Type *</Label>
+                  <Select name="feedType" required defaultValue={editingFeed?.feedType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select feed type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="grain">Grain</SelectItem>
+                      <SelectItem value="hay">Hay</SelectItem>
+                      <SelectItem value="silage">Silage</SelectItem>
+                      <SelectItem value="supplement">Supplement</SelectItem>
+                      <SelectItem value="concentrate">Concentrate</SelectItem>
+                      <SelectItem value="mineral">Mineral Mix</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="feedName">Feed Name *</Label>
+                  <Input name="feedName" placeholder="e.g., Corn Silage, Alfalfa Hay" required defaultValue={editingFeed?.feedName} />
+                </div>
+                <div>
+                  <Label htmlFor="supplier">Supplier</Label>
+                  <Input name="supplier" placeholder="Feed supplier name" defaultValue={editingFeed?.supplier} />
+                </div>
+                <div>
+                  <Label htmlFor="quantityPerFeeding">Quantity per Feeding</Label>
+                  <Input name="quantityPerFeeding" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.quantityPerFeeding} />
+                </div>
+                <div>
+                  <Label htmlFor="quantityUnit">Unit</Label>
+                  <Select name="quantityUnit" defaultValue={editingFeed?.quantityUnit || 'lbs'}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                      <SelectItem value="tons">Tons</SelectItem>
+                      <SelectItem value="bushels">Bushels</SelectItem>
+                      <SelectItem value="bales">Bales</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="feedingsPerDay">Feedings per Day</Label>
+                  <Input name="feedingsPerDay" type="number" placeholder="1" defaultValue={editingFeed?.feedingsPerDay || 1} />
+                </div>
+                <div>
+                  <Label htmlFor="costPerUnit">Cost per Unit ($)</Label>
+                  <Input name="costPerUnit" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.costPerUnit} />
+                </div>
+                <div>
+                  <Label htmlFor="lastPurchaseDate">Last Purchase Date</Label>
+                  <Input name="lastPurchaseDate" type="date" defaultValue={editingFeed?.lastPurchaseDate} />
+                </div>
+                <div>
+                  <Label htmlFor="currentStock">Current Stock</Label>
+                  <Input name="currentStock" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.currentStock} />
+                </div>
+                <div>
+                  <Label htmlFor="stockUnit">Stock Unit</Label>
+                  <Select name="stockUnit" defaultValue={editingFeed?.stockUnit || 'lbs'}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                      <SelectItem value="tons">Tons</SelectItem>
+                      <SelectItem value="bushels">Bushels</SelectItem>
+                      <SelectItem value="bales">Bales</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea name="notes" placeholder="Additional feed notes..." defaultValue={editingFeed?.notes} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsAddFeedDialogOpen(false);
+                  setEditingFeed(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createFeedMutation.isPending || updateFeedMutation.isPending}
+                  data-testid="button-save-feed"
+                >
+                  {(createFeedMutation.isPending || updateFeedMutation.isPending) ? "Saving..." : (editingFeed ? "Update Feed" : "Add Feed")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -459,13 +703,13 @@ export default function HerdProfile() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className={`grid w-full ${showAnimalTracking ? 'grid-cols-6' : 'grid-cols-5'}`}>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="animals">Animals ({animals.length})</TabsTrigger>
+            <TabsTrigger value="feed">Feed Management</TabsTrigger>
+            {showAnimalTracking && <TabsTrigger value="animals">Animals ({animals.length})</TabsTrigger>}
             <TabsTrigger value="health">Health</TabsTrigger>
             <TabsTrigger value="breeding">Breeding</TabsTrigger>
             <TabsTrigger value="production">Production</TabsTrigger>
-            <TabsTrigger value="movements">Movements</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -530,7 +774,140 @@ export default function HerdProfile() {
             </div>
           </TabsContent>
 
-          <TabsContent value="animals" className="space-y-6">
+          <TabsContent value="feed" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Herd Feed Management</CardTitle>
+                    <CardDescription>Manage feed records and nutrition for the entire herd</CardDescription>
+                  </div>
+                  <Button 
+                    onClick={() => setIsAddFeedDialogOpen(true)}
+                    data-testid="button-add-feed-record"
+                  >
+                    <Package className="h-4 w-4 mr-2" />
+                    Add Feed Record
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {feedLoading ? (
+                  <div className="flex justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                  </div>
+                ) : feedRecords.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {feedRecords.map((feed) => (
+                      <Card 
+                        key={feed.id} 
+                        className="hover:shadow-lg transition-all duration-300"
+                        data-testid={`card-feed-${feed.id}`}
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                <Wheat className="h-6 w-6 text-white" />
+                              </div>
+                              <div>
+                                <CardTitle className="text-lg">{feed.feedName}</CardTitle>
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                  {feed.feedType}
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="flex gap-1">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => {
+                                  setEditingFeed(feed);
+                                  setIsAddFeedDialogOpen(true);
+                                }}
+                                data-testid={`button-edit-feed-${feed.id}`}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => deleteFeedMutation.mutate(feed.id)}
+                                data-testid={`button-delete-feed-${feed.id}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        
+                        <CardContent className="pt-0">
+                          <div className="space-y-3">
+                            {feed.supplier && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Supplier:</span>
+                                <span>{feed.supplier}</span>
+                              </div>
+                            )}
+                            {feed.quantityPerFeeding && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Per Feeding:</span>
+                                <span>{feed.quantityPerFeeding} {feed.quantityUnit}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                              <span className="font-medium">Daily Feedings:</span>
+                              <span>{feed.feedingsPerDay}</span>
+                            </div>
+                            {feed.costPerUnit && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Cost:</span>
+                                <span>${feed.costPerUnit}/{feed.quantityUnit}</span>
+                              </div>
+                            )}
+                            {feed.currentStock && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="font-medium">Stock:</span>
+                                <Badge variant="outline">
+                                  {feed.currentStock} {feed.stockUnit}
+                                </Badge>
+                              </div>
+                            )}
+                            {feed.notes && (
+                              <div className="mt-3 pt-3 border-t">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{feed.notes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Wheat className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      No Feed Records
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      Start tracking feed for your herd to monitor nutrition and costs.
+                    </p>
+                    <Button 
+                      onClick={() => setIsAddFeedDialogOpen(true)}
+                      className="flex items-center gap-2"
+                      data-testid="button-add-first-feed"
+                    >
+                      <Package className="h-4 w-4" />
+                      Add First Feed Record
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {showAnimalTracking && (
+            <TabsContent value="animals" className="space-y-6">
             {animalsLoading ? (
               <div className="flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
@@ -626,6 +1003,7 @@ export default function HerdProfile() {
               </Card>
             )}
           </TabsContent>
+        )}
 
           <TabsContent value="health" className="space-y-6">
             <Card>
