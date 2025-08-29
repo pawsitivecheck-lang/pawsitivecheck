@@ -487,6 +487,7 @@ export default function HerdProfile() {
     const formData = new FormData(e.currentTarget);
     
     const productionData: InsertProductionRecord = {
+      animalId: 1, // Default for herd-level production
       herdId: parseInt(herdId!),
       userId: user!.id,
       recordDate: formData.get("recordDate") ? new Date(formData.get("recordDate") as string) : new Date(),
@@ -655,14 +656,6 @@ export default function HerdProfile() {
               Edit Herd
             </Button>
             
-            <Button 
-              onClick={() => setIsAddFeedDialogOpen(true)}
-              className="flex items-center gap-2"
-              data-testid="button-add-feed"
-            >
-              <Wheat className="h-4 w-4" />
-              Manage Feed
-            </Button>
             
             {showAnimalTracking ? (
               <Button 
@@ -1259,11 +1252,10 @@ export default function HerdProfile() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className={`grid w-full ${showAnimalTracking ? 'grid-cols-6' : 'grid-cols-5'}`}>
+          <TabsList className={`grid w-full ${showAnimalTracking ? 'grid-cols-5' : 'grid-cols-4'}`}>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="feed">Feed Management</TabsTrigger>
             {showAnimalTracking && <TabsTrigger value="animals">Animals ({animals.length})</TabsTrigger>}
-            <TabsTrigger value="health">Health</TabsTrigger>
+            <TabsTrigger value="health">Health & Feed</TabsTrigger>
             <TabsTrigger value="breeding">Breeding</TabsTrigger>
             <TabsTrigger value="production">Production</TabsTrigger>
           </TabsList>
@@ -1330,137 +1322,6 @@ export default function HerdProfile() {
             </div>
           </TabsContent>
 
-          <TabsContent value="feed" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle>Herd Feed Management</CardTitle>
-                    <CardDescription>Manage feed records and nutrition for the entire herd</CardDescription>
-                  </div>
-                  <Button 
-                    onClick={() => setIsAddFeedDialogOpen(true)}
-                    data-testid="button-add-feed-record"
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    Add Feed Record
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {feedLoading ? (
-                  <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-                  </div>
-                ) : feedRecords.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {feedRecords.map((feed) => (
-                      <Card 
-                        key={feed.id} 
-                        className="hover:shadow-lg transition-all duration-300"
-                        data-testid={`card-feed-${feed.id}`}
-                      >
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="h-12 w-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                                <Wheat className="h-6 w-6 text-white" />
-                              </div>
-                              <div>
-                                <CardTitle className="text-lg">{feed.feedName}</CardTitle>
-                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                                  {feed.feedType}
-                                </Badge>
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => {
-                                  setEditingFeed(feed);
-                                  setIsAddFeedDialogOpen(true);
-                                }}
-                                data-testid={`button-edit-feed-${feed.id}`}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => deleteFeedMutation.mutate(feed.id)}
-                                data-testid={`button-delete-feed-${feed.id}`}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        
-                        <CardContent className="pt-0">
-                          <div className="space-y-3">
-                            {feed.supplier && (
-                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                <span className="font-medium">Supplier:</span>
-                                <span>{feed.supplier}</span>
-                              </div>
-                            )}
-                            {feed.quantityPerFeeding && (
-                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                <span className="font-medium">Per Feeding:</span>
-                                <span>{feed.quantityPerFeeding} {feed.quantityUnit}</span>
-                              </div>
-                            )}
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                              <span className="font-medium">Daily Feedings:</span>
-                              <span>{feed.feedingsPerDay}</span>
-                            </div>
-                            {feed.costPerUnit && (
-                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                <span className="font-medium">Cost:</span>
-                                <span>${feed.costPerUnit}/{feed.quantityUnit}</span>
-                              </div>
-                            )}
-                            {feed.currentStock && (
-                              <div className="flex items-center gap-2 text-sm">
-                                <span className="font-medium">Stock:</span>
-                                <Badge variant="outline">
-                                  {feed.currentStock} {feed.stockUnit}
-                                </Badge>
-                              </div>
-                            )}
-                            {feed.notes && (
-                              <div className="mt-3 pt-3 border-t">
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{feed.notes}</p>
-                              </div>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <Wheat className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      No Feed Records
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
-                      Start tracking feed for your herd to monitor nutrition and costs.
-                    </p>
-                    <Button 
-                      onClick={() => setIsAddFeedDialogOpen(true)}
-                      className="flex items-center gap-2"
-                      data-testid="button-add-first-feed"
-                    >
-                      <Package className="h-4 w-4" />
-                      Add First Feed Record
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {showAnimalTracking && (
             <TabsContent value="animals" className="space-y-6">
@@ -1779,6 +1640,133 @@ export default function HerdProfile() {
                         >
                           <PlusCircle className="h-4 w-4 mr-2" />
                           Add First Health Record
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Feed & Nutrition Management */}
+                <Card className="mt-6">
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <CardTitle className="text-lg">Feed & Nutrition Management</CardTitle>
+                        <CardDescription>Track feed records and nutrition for optimal health</CardDescription>
+                      </div>
+                      <Button 
+                        onClick={() => setIsAddFeedDialogOpen(true)}
+                        data-testid="button-add-feed-record"
+                      >
+                        <Package className="h-4 w-4 mr-2" />
+                        Add Feed Record
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {feedLoading ? (
+                      <div className="flex justify-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                      </div>
+                    ) : feedRecords.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {feedRecords.map((feed) => (
+                          <Card 
+                            key={feed.id} 
+                            className="hover:shadow-lg transition-all duration-300"
+                            data-testid={`card-feed-${feed.id}`}
+                          >
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <div className="h-12 w-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                                    <Wheat className="h-6 w-6 text-white" />
+                                  </div>
+                                  <div>
+                                    <CardTitle className="text-lg">{feed.feedName}</CardTitle>
+                                    <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                      {feed.feedType}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="flex gap-1">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditingFeed(feed);
+                                      setIsAddFeedDialogOpen(true);
+                                    }}
+                                    data-testid={`button-edit-feed-${feed.id}`}
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => deleteFeedMutation.mutate(feed.id)}
+                                    data-testid={`button-delete-feed-${feed.id}`}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardHeader>
+                            
+                            <CardContent className="pt-0">
+                              <div className="space-y-3">
+                                {feed.supplier && (
+                                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <span className="font-medium">Supplier:</span>
+                                    <span>{feed.supplier}</span>
+                                  </div>
+                                )}
+                                {feed.quantityPerFeeding && (
+                                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <span className="font-medium">Per Feeding:</span>
+                                    <span>{feed.quantityPerFeeding} {feed.quantityUnit}</span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                  <span className="font-medium">Daily Feedings:</span>
+                                  <span>{feed.feedingsPerDay}</span>
+                                </div>
+                                {feed.costPerUnit && (
+                                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <span className="font-medium">Cost:</span>
+                                    <span>${feed.costPerUnit}/{feed.quantityUnit}</span>
+                                  </div>
+                                )}
+                                {feed.currentStock && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium">Stock:</span>
+                                    <Badge variant="outline">
+                                      {feed.currentStock} {feed.stockUnit}
+                                    </Badge>
+                                  </div>
+                                )}
+                                {feed.notes && (
+                                  <div className="mt-3 pt-3 border-t">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">{feed.notes}</p>
+                                  </div>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <Wheat className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                        <p>No feed records found</p>
+                        <p className="text-sm mt-2">Start tracking feed for optimal health and nutrition</p>
+                        <Button 
+                          onClick={() => setIsAddFeedDialogOpen(true)}
+                          className="mt-4"
+                          data-testid="button-add-first-feed"
+                        >
+                          <Package className="h-4 w-4 mr-2" />
+                          Add First Feed Record
                         </Button>
                       </div>
                     )}
