@@ -22,7 +22,7 @@ import {
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
   Egg, ShoppingCart, FileText, Search, Stethoscope, Wheat, Package
 } from "lucide-react";
-import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord } from "@shared/schema";
+import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord, InsertProductionRecord } from "@shared/schema";
 
 interface HerdProfileProps {
   herdId: string;
@@ -40,6 +40,8 @@ export default function HerdProfile() {
   const [editingFeed, setEditingFeed] = useState<FeedManagement | null>(null);
   const [isAddHealthDialogOpen, setIsAddHealthDialogOpen] = useState(false);
   const [editingHealth, setEditingHealth] = useState<LivestockHealthRecord | null>(null);
+  const [isAddProductionDialogOpen, setIsAddProductionDialogOpen] = useState(false);
+  const [editingProduction, setEditingProduction] = useState<ProductionRecord | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showAnimalTracking, setShowAnimalTracking] = useState(false);
   
@@ -262,6 +264,71 @@ export default function HerdProfile() {
     },
   });
 
+  // Production record mutations
+  const createProductionMutation = useMutation({
+    mutationFn: async (productionData: InsertProductionRecord) => {
+      return await apiRequest("/api/production-records", "POST", productionData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/production-records"] });
+      setIsAddProductionDialogOpen(false);
+      setEditingProduction(null);
+      toast({
+        title: "Success",
+        description: "Production record added successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to add production record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateProductionMutation = useMutation({
+    mutationFn: async ({ id, ...productionData }: { id: number } & InsertProductionRecord) => {
+      return await apiRequest(`/api/production-records/${id}`, "PUT", productionData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/production-records"] });
+      setIsAddProductionDialogOpen(false);
+      setEditingProduction(null);
+      toast({
+        title: "Success",
+        description: "Production record updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update production record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteProductionMutation = useMutation({
+    mutationFn: async (productionId: number) => {
+      return await apiRequest(`/api/production-records/${productionId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/production-records"] });
+      toast({
+        title: "Success",
+        description: "Production record deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete production record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -340,6 +407,31 @@ export default function HerdProfile() {
       updateHealthMutation.mutate({ id: editingHealth.id, ...healthData });
     } else {
       createHealthMutation.mutate(healthData);
+    }
+  };
+
+  const handleSubmitProduction = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const productionData: InsertProductionRecord = {
+      herdId: parseInt(herdId!),
+      userId: user!.id,
+      recordDate: formData.get("recordDate") ? new Date(formData.get("recordDate") as string) : new Date(),
+      productType: formData.get("productType") as string,
+      quantity: formData.get("quantity") ? formData.get("quantity") as string : null,
+      quantityUnit: formData.get("quantityUnit") as string || 'lbs',
+      qualityGrade: formData.get("qualityGrade") as string || null,
+      marketPrice: formData.get("marketPrice") ? formData.get("marketPrice") as string : null,
+      totalValue: formData.get("totalValue") ? formData.get("totalValue") as string : null,
+      buyer: formData.get("buyer") as string || null,
+      notes: formData.get("notes") as string || null,
+    };
+
+    if (editingProduction) {
+      updateProductionMutation.mutate({ id: editingProduction.id, ...productionData });
+    } else {
+      createProductionMutation.mutate(productionData);
     }
   };
 
@@ -808,6 +900,109 @@ export default function HerdProfile() {
                   data-testid="button-save-health"
                 >
                   {(createHealthMutation.isPending || updateHealthMutation.isPending) ? "Saving..." : (editingHealth ? "Update Record" : "Add Record")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Production Record Dialog */}
+        <Dialog open={isAddProductionDialogOpen} onOpenChange={setIsAddProductionDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingProduction ? 'Edit Production Record' : 'Add Production Record'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmitProduction}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="recordDate">Record Date *</Label>
+                  <Input name="recordDate" type="date" required defaultValue={editingProduction?.recordDate ? new Date(editingProduction.recordDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]} />
+                </div>
+                <div>
+                  <Label htmlFor="productType">Product Type *</Label>
+                  <Select name="productType" required defaultValue={editingProduction?.productType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select product type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="milk">Milk</SelectItem>
+                      <SelectItem value="eggs">Eggs</SelectItem>
+                      <SelectItem value="wool">Wool</SelectItem>
+                      <SelectItem value="meat">Meat</SelectItem>
+                      <SelectItem value="leather">Leather</SelectItem>
+                      <SelectItem value="manure">Manure</SelectItem>
+                      <SelectItem value="offspring">Offspring</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input name="quantity" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.quantity || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="quantityUnit">Unit</Label>
+                  <Select name="quantityUnit" defaultValue={editingProduction?.quantityUnit || 'lbs'}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                      <SelectItem value="gallons">Gallons</SelectItem>
+                      <SelectItem value="liters">Liters</SelectItem>
+                      <SelectItem value="dozens">Dozens</SelectItem>
+                      <SelectItem value="head">Head</SelectItem>
+                      <SelectItem value="tons">Tons</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="qualityGrade">Quality Grade</Label>
+                  <Select name="qualityGrade" defaultValue={editingProduction?.qualityGrade || ""}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select grade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="premium">Premium</SelectItem>
+                      <SelectItem value="grade_a">Grade A</SelectItem>
+                      <SelectItem value="grade_b">Grade B</SelectItem>
+                      <SelectItem value="standard">Standard</SelectItem>
+                      <SelectItem value="organic">Organic</SelectItem>
+                      <SelectItem value="free_range">Free Range</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="marketPrice">Market Price ($/unit)</Label>
+                  <Input name="marketPrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.marketPrice || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="totalValue">Total Value ($)</Label>
+                  <Input name="totalValue" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.totalValue || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="buyer">Buyer/Customer</Label>
+                  <Input name="buyer" placeholder="Buyer or customer name" defaultValue={editingProduction?.buyer || ""} />
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="notes">Additional Notes</Label>
+                  <Textarea name="notes" placeholder="Additional production notes..." defaultValue={editingProduction?.notes || ""} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsAddProductionDialogOpen(false);
+                  setEditingProduction(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createProductionMutation.isPending || updateProductionMutation.isPending}
+                  data-testid="button-save-production"
+                >
+                  {(createProductionMutation.isPending || updateProductionMutation.isPending) ? "Saving..." : (editingProduction ? "Update Record" : "Add Record")}
                 </Button>
               </DialogFooter>
             </form>
@@ -1444,18 +1639,129 @@ export default function HerdProfile() {
                     <CardTitle>Production Records</CardTitle>
                     <CardDescription>Track milk, eggs, wool, and other production</CardDescription>
                   </div>
-                  <Button data-testid="button-add-production-record">
+                  <Button 
+                    onClick={() => setIsAddProductionDialogOpen(true)}
+                    data-testid="button-add-production-record"
+                  >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Add Production Record
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <TrendingUp className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                  <p>No production records found</p>
-                  <p className="text-sm mt-2">Start tracking production data for your herd</p>
-                </div>
+                {productionRecords?.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {productionRecords.map((record) => (
+                      <Card 
+                        key={record.id} 
+                        className="hover:shadow-lg transition-all duration-300"
+                        data-testid={`card-production-${record.id}`}
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                                {record.productType === 'milk' && <Milk className="h-6 w-6 text-white" />}
+                                {record.productType === 'eggs' && <Egg className="h-6 w-6 text-white" />}
+                                {record.productType === 'meat' && <Beef className="h-6 w-6 text-white" />}
+                                {!['milk', 'eggs', 'meat'].includes(record.productType) && <Package className="h-6 w-6 text-white" />}
+                              </div>
+                              <div>
+                                <CardTitle className="text-lg capitalize">{record.productType}</CardTitle>
+                                <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
+                                  {new Date(record.recordDate).toLocaleDateString()}
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="flex gap-1">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => {
+                                  setEditingProduction(record);
+                                  setIsAddProductionDialogOpen(true);
+                                }}
+                                data-testid={`button-edit-production-${record.id}`}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => deleteProductionMutation.mutate(record.id)}
+                                data-testid={`button-delete-production-${record.id}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        
+                        <CardContent className="pt-0">
+                          <div className="space-y-3">
+                            {record.quantity && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Quantity:</span>
+                                <span>{record.quantity} {record.quantityUnit}</span>
+                              </div>
+                            )}
+                            {record.qualityGrade && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Grade:</span>
+                                <Badge variant="outline" className="capitalize">
+                                  {record.qualityGrade.replace('_', ' ')}
+                                </Badge>
+                              </div>
+                            )}
+                            {record.marketPrice && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Price:</span>
+                                <span>${record.marketPrice}/{record.quantityUnit}</span>
+                              </div>
+                            )}
+                            {record.totalValue && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="font-medium">Total Value:</span>
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                  ${record.totalValue}
+                                </Badge>
+                              </div>
+                            )}
+                            {record.buyer && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Buyer:</span>
+                                <span>{record.buyer}</span>
+                              </div>
+                            )}
+                            {record.notes && (
+                              <div className="mt-3 pt-3 border-t">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{record.notes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <TrendingUp className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      No Production Records
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      Start tracking production like milk yield, egg count, or wool harvest.
+                    </p>
+                    <Button 
+                      onClick={() => setIsAddProductionDialogOpen(true)}
+                      className="flex items-center gap-2"
+                      data-testid="button-add-first-production"
+                    >
+                      <TrendingUp className="h-4 w-4" />
+                      Add First Production Record
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
