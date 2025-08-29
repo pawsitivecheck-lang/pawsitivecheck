@@ -401,7 +401,7 @@ export const productionRecords = pgTable("production_records", {
 // Animal movement/transfer records
 export const animalMovements = pgTable("animal_movements", {
   id: serial("id").primaryKey(),
-  animalId: integer("animal_id").references(() => farmAnimals.id).notNull(),
+  animalId: integer("animal_id").references(() => farmAnimals.id), // Make nullable for herd-level movements
   userId: varchar("user_id").references(() => users.id).notNull(),
   movementDate: timestamp("movement_date").notNull(),
   movementType: varchar("movement_type", { length: 50 }).notNull(), // transfer, sale, purchase, death, slaughter

@@ -590,7 +590,7 @@ export default function HerdProfile() {
     const formData = new FormData(e.currentTarget);
     
     const movementData: InsertAnimalMovement = {
-      animalId: 1, // Default for herd-level movements
+      animalId: null, // Null for herd-level movements
       userId: user!.id,
       movementDate: formData.get("movementDate") ? new Date(formData.get("movementDate") as string) : new Date(),
       movementType: (formData.get("movementType") as string) || 'transfer',
