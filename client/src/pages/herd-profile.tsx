@@ -1360,12 +1360,13 @@ export default function HerdProfile() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className={`grid w-full ${showAnimalTracking ? 'grid-cols-5' : 'grid-cols-4'}`}>
+          <TabsList className={`grid w-full ${showAnimalTracking ? 'grid-cols-6' : 'grid-cols-5'}`}>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             {showAnimalTracking && <TabsTrigger value="animals">Animals ({animals.length})</TabsTrigger>}
             <TabsTrigger value="health">Health & Feed</TabsTrigger>
             <TabsTrigger value="breeding">Breeding</TabsTrigger>
             <TabsTrigger value="production">Production</TabsTrigger>
+            <TabsTrigger value="movements">Movements</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
