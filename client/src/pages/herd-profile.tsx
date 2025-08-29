@@ -44,6 +44,17 @@ export default function HerdProfile() {
   const [editingProduction, setEditingProduction] = useState<ProductionRecord | null>(null);
   const [isAddMovementDialogOpen, setIsAddMovementDialogOpen] = useState(false);
   const [editingMovement, setEditingMovement] = useState<AnimalMovement | null>(null);
+  const [movementFormData, setMovementFormData] = useState({
+    movementDate: new Date().toISOString().split('T')[0],
+    movementType: '',
+    animalCount: 1,
+    destination: '',
+    buyer: '',
+    salePrice: '',
+    transportationCost: '',
+    veterinaryCertificate: 'false',
+    notes: ''
+  });
   const [isAddBreedingDialogOpen, setIsAddBreedingDialogOpen] = useState(false);
   const [editingBreeding, setEditingBreeding] = useState<BreedingRecord | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -585,38 +596,23 @@ export default function HerdProfile() {
     }
   };
 
-  const handleSubmitMovement = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted - handleSubmitMovement called");
-    
-    const formData = new FormData(e.currentTarget);
-    
-    // Debug form data
-    console.log("Form data entries:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-    
+  const handleSubmitMovement = () => {
     const movementData: InsertAnimalMovement = {
       animalId: null, // Null for herd-level movements
       userId: user!.id,
-      movementDate: formData.get("movementDate") ? new Date(formData.get("movementDate") as string) : new Date(),
-      movementType: (formData.get("movementType") as string) || 'transfer',
-      externalLocation: formData.get("destination") as string || null,
-      reason: formData.get("buyer") as string || null,
-      price: formData.get("salePrice") ? formData.get("salePrice") as string : null,
-      transportMethod: formData.get("transportationCost") ? `Cost: $${formData.get("transportationCost")}` : null,
-      healthCertificate: formData.get("veterinaryCertificate") === "true" ? "Required" : null,
-      notes: formData.get("notes") as string || null,
+      movementDate: new Date(movementFormData.movementDate),
+      movementType: movementFormData.movementType as any,
+      externalLocation: movementFormData.destination || null,
+      reason: movementFormData.buyer || null,
+      price: movementFormData.salePrice || null,
+      transportMethod: movementFormData.transportationCost ? `Cost: $${movementFormData.transportationCost}` : null,
+      healthCertificate: movementFormData.veterinaryCertificate === "true" ? "Required" : null,
+      notes: movementFormData.notes || null,
     };
 
-    console.log("Movement data constructed:", movementData);
-
     if (editingMovement) {
-      console.log("Updating existing movement");
       updateMovementMutation.mutate({ id: editingMovement.id, ...movementData });
     } else {
-      console.log("Creating new movement");
       createMovementMutation.mutate(movementData);
     }
   };
@@ -1223,74 +1219,125 @@ export default function HerdProfile() {
             <DialogHeader>
               <DialogTitle>{editingMovement ? 'Edit Movement Record' : 'Add Movement Record'}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmitMovement}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
-                <div>
-                  <Label htmlFor="movementDate">Movement Date *</Label>
-                  <Input name="movementDate" type="date" required defaultValue={editingMovement?.movementDate ? new Date(editingMovement.movementDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]} />
-                </div>
-                <div>
-                  <Label htmlFor="movementType">Movement Type *</Label>
-                  <select name="movementType" required className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" defaultValue={editingMovement?.movementType || ""}>
-                    <option value="">Select movement type</option>
-                    <option value="sale">Sale</option>
-                    <option value="transfer">Transfer</option>
-                    <option value="purchase">Purchase</option>
-                    <option value="birth">Birth</option>
-                    <option value="death">Death</option>
-                    <option value="culling">Culling</option>
-                    <option value="lease">Lease</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <Label htmlFor="animalCount">Number of Animals *</Label>
-                  <Input name="animalCount" type="number" min="1" required defaultValue={1} />
-                </div>
-                <div>
-                  <Label htmlFor="destination">Destination</Label>
-                  <Input name="destination" placeholder="Farm name or location" defaultValue={editingMovement?.externalLocation || ""} />
-                </div>
-                <div>
-                  <Label htmlFor="buyer">Buyer/Recipient</Label>
-                  <Input name="buyer" placeholder="Buyer or recipient name" defaultValue={editingMovement?.reason || ""} />
-                </div>
-                <div>
-                  <Label htmlFor="salePrice">Sale/Purchase Price ($)</Label>
-                  <Input name="salePrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.price || ""} />
-                </div>
-                <div>
-                  <Label htmlFor="transportationCost">Transportation Cost ($)</Label>
-                  <Input name="transportationCost" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.transportMethod?.includes('Cost:') ? editingMovement.transportMethod.replace('Cost: $', '') : ""} />
-                </div>
-                <div>
-                  <Label htmlFor="veterinaryCertificate">Veterinary Certificate</Label>
-                  <select name="veterinaryCertificate" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" defaultValue={editingMovement?.healthCertificate ? "true" : "false"}>
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                  </select>
-                </div>
-                <div className="col-span-2">
-                  <Label htmlFor="notes">Additional Notes</Label>
-                  <Textarea name="notes" placeholder="Additional movement notes..." defaultValue={editingMovement?.notes || ""} />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+              <div>
+                <Label htmlFor="movementDate">Movement Date *</Label>
+                <Input 
+                  type="date" 
+                  value={movementFormData.movementDate}
+                  onChange={(e) => setMovementFormData({...movementFormData, movementDate: e.target.value})}
+                />
               </div>
-              <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => {
-                  setIsAddMovementDialogOpen(false);
-                  setEditingMovement(null);
-                }}>
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={createMovementMutation.isPending || updateMovementMutation.isPending}
-                  data-testid="button-save-movement"
+              <div>
+                <Label htmlFor="movementType">Movement Type *</Label>
+                <select 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+                  value={movementFormData.movementType}
+                  onChange={(e) => setMovementFormData({...movementFormData, movementType: e.target.value})}
                 >
-                  {(createMovementMutation.isPending || updateMovementMutation.isPending) ? "Saving..." : (editingMovement ? "Update Record" : "Add Record")}
-                </Button>
-              </DialogFooter>
-            </form>
+                  <option value="">Select movement type</option>
+                  <option value="sale">Sale</option>
+                  <option value="transfer">Transfer</option>
+                  <option value="purchase">Purchase</option>
+                  <option value="birth">Birth</option>
+                  <option value="death">Death</option>
+                  <option value="culling">Culling</option>
+                  <option value="lease">Lease</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="animalCount">Number of Animals *</Label>
+                <Input 
+                  type="number" 
+                  min="1" 
+                  value={movementFormData.animalCount}
+                  onChange={(e) => setMovementFormData({...movementFormData, animalCount: parseInt(e.target.value) || 1})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="destination">Destination</Label>
+                <Input 
+                  placeholder="Farm name or location" 
+                  value={movementFormData.destination}
+                  onChange={(e) => setMovementFormData({...movementFormData, destination: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="buyer">Buyer/Recipient</Label>
+                <Input 
+                  placeholder="Buyer or recipient name" 
+                  value={movementFormData.buyer}
+                  onChange={(e) => setMovementFormData({...movementFormData, buyer: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="salePrice">Sale/Purchase Price ($)</Label>
+                <Input 
+                  type="number" 
+                  step="0.01" 
+                  placeholder="0.00" 
+                  value={movementFormData.salePrice}
+                  onChange={(e) => setMovementFormData({...movementFormData, salePrice: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="transportationCost">Transportation Cost ($)</Label>
+                <Input 
+                  type="number" 
+                  step="0.01" 
+                  placeholder="0.00" 
+                  value={movementFormData.transportationCost}
+                  onChange={(e) => setMovementFormData({...movementFormData, transportationCost: e.target.value})}
+                />
+              </div>
+              <div>
+                <Label htmlFor="veterinaryCertificate">Veterinary Certificate</Label>
+                <select 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+                  value={movementFormData.veterinaryCertificate}
+                  onChange={(e) => setMovementFormData({...movementFormData, veterinaryCertificate: e.target.value})}
+                >
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </div>
+              <div className="col-span-2">
+                <Label htmlFor="notes">Additional Notes</Label>
+                <Textarea 
+                  placeholder="Additional movement notes..." 
+                  value={movementFormData.notes}
+                  onChange={(e) => setMovementFormData({...movementFormData, notes: e.target.value})}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => {
+                setIsAddMovementDialogOpen(false);
+                setEditingMovement(null);
+                setMovementFormData({
+                  movementDate: new Date().toISOString().split('T')[0],
+                  movementType: '',
+                  animalCount: 1,
+                  destination: '',
+                  buyer: '',
+                  salePrice: '',
+                  transportationCost: '',
+                  veterinaryCertificate: 'false',
+                  notes: ''
+                });
+              }}>
+                Cancel
+              </Button>
+              <Button 
+                type="button" 
+                disabled={createMovementMutation.isPending || updateMovementMutation.isPending || !movementFormData.movementType}
+                data-testid="button-save-movement"
+                onClick={handleSubmitMovement}
+              >
+                {(createMovementMutation.isPending || updateMovementMutation.isPending) ? "Saving..." : (editingMovement ? "Update Record" : "Add Record")}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
 
