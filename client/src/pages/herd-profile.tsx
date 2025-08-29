@@ -597,6 +597,19 @@ export default function HerdProfile() {
   };
 
   const handleSubmitMovement = () => {
+    console.log("handleSubmitMovement called!");
+    console.log("Movement form data:", movementFormData);
+    
+    // Validate required fields
+    if (!movementFormData.movementType) {
+      toast({
+        title: "Error",
+        description: "Please select a movement type.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const movementData: InsertAnimalMovement = {
       animalId: null, // Null for herd-level movements
       userId: user!.id,
@@ -610,9 +623,13 @@ export default function HerdProfile() {
       notes: movementFormData.notes || null,
     };
 
+    console.log("Submitting movement data:", movementData);
+
     if (editingMovement) {
+      console.log("Updating existing movement");
       updateMovementMutation.mutate({ id: editingMovement.id, ...movementData });
     } else {
+      console.log("Creating new movement");
       createMovementMutation.mutate(movementData);
     }
   };
