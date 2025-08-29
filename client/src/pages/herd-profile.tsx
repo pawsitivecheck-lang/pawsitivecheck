@@ -1231,21 +1231,17 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="movementType">Movement Type *</Label>
-                  <Select name="movementType" required defaultValue={editingMovement?.movementType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select movement type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="sale">Sale</SelectItem>
-                      <SelectItem value="transfer">Transfer</SelectItem>
-                      <SelectItem value="purchase">Purchase</SelectItem>
-                      <SelectItem value="birth">Birth</SelectItem>
-                      <SelectItem value="death">Death</SelectItem>
-                      <SelectItem value="culling">Culling</SelectItem>
-                      <SelectItem value="lease">Lease</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <select name="movementType" required className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" defaultValue={editingMovement?.movementType || ""}>
+                    <option value="">Select movement type</option>
+                    <option value="sale">Sale</option>
+                    <option value="transfer">Transfer</option>
+                    <option value="purchase">Purchase</option>
+                    <option value="birth">Birth</option>
+                    <option value="death">Death</option>
+                    <option value="culling">Culling</option>
+                    <option value="lease">Lease</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
                 <div>
                   <Label htmlFor="animalCount">Number of Animals *</Label>
@@ -1269,15 +1265,10 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="veterinaryCertificate">Veterinary Certificate</Label>
-                  <Select name="veterinaryCertificate" defaultValue={editingMovement?.healthCertificate ? "true" : "false"}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="false">No</SelectItem>
-                      <SelectItem value="true">Yes</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <select name="veterinaryCertificate" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" defaultValue={editingMovement?.healthCertificate ? "true" : "false"}>
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </select>
                 </div>
                 <div className="col-span-2">
                   <Label htmlFor="notes">Additional Notes</Label>
