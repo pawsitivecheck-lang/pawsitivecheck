@@ -22,7 +22,7 @@ import {
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
   Egg, ShoppingCart, FileText, Search, Stethoscope, Wheat, Package
 } from "lucide-react";
-import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord, InsertProductionRecord } from "@shared/schema";
+import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord, InsertProductionRecord, InsertAnimalMovement } from "@shared/schema";
 
 interface HerdProfileProps {
   herdId: string;
@@ -42,6 +42,8 @@ export default function HerdProfile() {
   const [editingHealth, setEditingHealth] = useState<LivestockHealthRecord | null>(null);
   const [isAddProductionDialogOpen, setIsAddProductionDialogOpen] = useState(false);
   const [editingProduction, setEditingProduction] = useState<ProductionRecord | null>(null);
+  const [isAddMovementDialogOpen, setIsAddMovementDialogOpen] = useState(false);
+  const [editingMovement, setEditingMovement] = useState<AnimalMovement | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showAnimalTracking, setShowAnimalTracking] = useState(false);
   
@@ -79,6 +81,11 @@ export default function HerdProfile() {
 
   const { data: productionRecords = [], isLoading: productionLoading } = useQuery<ProductionRecord[]>({
     queryKey: ["/api/production-records"],
+    enabled: !!herdId && isAuthenticated,
+  });
+
+  const { data: movementRecords = [], isLoading: movementLoading } = useQuery<AnimalMovement[]>({
+    queryKey: ["/api/animal-movements"],
     enabled: !!herdId && isAuthenticated,
   });
 
@@ -329,6 +336,71 @@ export default function HerdProfile() {
     },
   });
 
+  // Movement record mutations
+  const createMovementMutation = useMutation({
+    mutationFn: async (movementData: InsertAnimalMovement) => {
+      return await apiRequest("/api/animal-movements", "POST", movementData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/animal-movements"] });
+      setIsAddMovementDialogOpen(false);
+      setEditingMovement(null);
+      toast({
+        title: "Success",
+        description: "Movement record added successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to add movement record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateMovementMutation = useMutation({
+    mutationFn: async ({ id, ...movementData }: { id: number } & InsertAnimalMovement) => {
+      return await apiRequest(`/api/animal-movements/${id}`, "PUT", movementData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/animal-movements"] });
+      setIsAddMovementDialogOpen(false);
+      setEditingMovement(null);
+      toast({
+        title: "Success",
+        description: "Movement record updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update movement record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteMovementMutation = useMutation({
+    mutationFn: async (movementId: number) => {
+      return await apiRequest(`/api/animal-movements/${movementId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/animal-movements"] });
+      toast({
+        title: "Success",
+        description: "Movement record deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete movement record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -420,11 +492,10 @@ export default function HerdProfile() {
       recordDate: formData.get("recordDate") ? new Date(formData.get("recordDate") as string) : new Date(),
       productType: formData.get("productType") as string,
       quantity: formData.get("quantity") ? formData.get("quantity") as string : null,
-      quantityUnit: formData.get("quantityUnit") as string || 'lbs',
-      qualityGrade: formData.get("qualityGrade") as string || null,
-      marketPrice: formData.get("marketPrice") ? formData.get("marketPrice") as string : null,
-      totalValue: formData.get("totalValue") ? formData.get("totalValue") as string : null,
-      buyer: formData.get("buyer") as string || null,
+      unit: formData.get("quantityUnit") as string || 'lbs',
+      quality: formData.get("qualityGrade") as string || null,
+      sellingPrice: formData.get("marketPrice") ? formData.get("marketPrice") as string : null,
+      buyerInfo: formData.get("buyer") as string || null,
       notes: formData.get("notes") as string || null,
     };
 
@@ -432,6 +503,30 @@ export default function HerdProfile() {
       updateProductionMutation.mutate({ id: editingProduction.id, ...productionData });
     } else {
       createProductionMutation.mutate(productionData);
+    }
+  };
+
+  const handleSubmitMovement = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const movementData: InsertAnimalMovement = {
+      animalId: 1, // Default for herd-level movements
+      userId: user!.id,
+      movementDate: formData.get("movementDate") ? new Date(formData.get("movementDate") as string) : new Date(),
+      movementType: formData.get("movementType") as string,
+      externalLocation: formData.get("destination") as string || null,
+      reason: formData.get("buyer") as string || null,
+      price: formData.get("salePrice") ? formData.get("salePrice") as string : null,
+      transportMethod: formData.get("transportationCost") ? `Cost: $${formData.get("transportationCost")}` : null,
+      healthCertificate: formData.get("veterinaryCertificate") === "true" ? "Required" : null,
+      notes: formData.get("notes") as string || null,
+    };
+
+    if (editingMovement) {
+      updateMovementMutation.mutate({ id: editingMovement.id, ...movementData });
+    } else {
+      createMovementMutation.mutate(movementData);
     }
   };
 
@@ -1003,6 +1098,92 @@ export default function HerdProfile() {
                   data-testid="button-save-production"
                 >
                   {(createProductionMutation.isPending || updateProductionMutation.isPending) ? "Saving..." : (editingProduction ? "Update Record" : "Add Record")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Movement Record Dialog */}
+        <Dialog open={isAddMovementDialogOpen} onOpenChange={setIsAddMovementDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingMovement ? 'Edit Movement Record' : 'Add Movement Record'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmitMovement}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="movementDate">Movement Date *</Label>
+                  <Input name="movementDate" type="date" required defaultValue={editingMovement?.movementDate ? new Date(editingMovement.movementDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]} />
+                </div>
+                <div>
+                  <Label htmlFor="movementType">Movement Type *</Label>
+                  <Select name="movementType" required defaultValue={editingMovement?.movementType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select movement type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sale">Sale</SelectItem>
+                      <SelectItem value="transfer">Transfer</SelectItem>
+                      <SelectItem value="purchase">Purchase</SelectItem>
+                      <SelectItem value="birth">Birth</SelectItem>
+                      <SelectItem value="death">Death</SelectItem>
+                      <SelectItem value="culling">Culling</SelectItem>
+                      <SelectItem value="lease">Lease</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="animalCount">Number of Animals *</Label>
+                  <Input name="animalCount" type="number" min="1" required defaultValue={editingMovement?.animalCount || 1} />
+                </div>
+                <div>
+                  <Label htmlFor="destination">Destination</Label>
+                  <Input name="destination" placeholder="Farm name or location" defaultValue={editingMovement?.destination || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="buyer">Buyer/Recipient</Label>
+                  <Input name="buyer" placeholder="Buyer or recipient name" defaultValue={editingMovement?.buyer || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="salePrice">Sale/Purchase Price ($)</Label>
+                  <Input name="salePrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.salePrice || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="transportationCost">Transportation Cost ($)</Label>
+                  <Input name="transportationCost" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.transportationCost || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="veterinaryCertificate">Veterinary Certificate</Label>
+                  <Select name="veterinaryCertificate" defaultValue={editingMovement?.veterinaryCertificate ? "true" : "false"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="false">No</SelectItem>
+                      <SelectItem value="true">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="notes">Additional Notes</Label>
+                  <Textarea name="notes" placeholder="Additional movement notes..." defaultValue={editingMovement?.notes || ""} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsAddMovementDialogOpen(false);
+                  setEditingMovement(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createMovementMutation.isPending || updateMovementMutation.isPending}
+                  data-testid="button-save-movement"
+                >
+                  {(createMovementMutation.isPending || updateMovementMutation.isPending) ? "Saving..." : (editingMovement ? "Update Record" : "Add Record")}
                 </Button>
               </DialogFooter>
             </form>
@@ -1702,35 +1883,35 @@ export default function HerdProfile() {
                             {record.quantity && (
                               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <span className="font-medium">Quantity:</span>
-                                <span>{record.quantity} {record.quantityUnit}</span>
+                                <span>{record.quantity} {record.unit}</span>
                               </div>
                             )}
-                            {record.qualityGrade && (
+                            {record.quality && (
                               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <span className="font-medium">Grade:</span>
                                 <Badge variant="outline" className="capitalize">
-                                  {record.qualityGrade.replace('_', ' ')}
+                                  {record.quality.replace('_', ' ')}
                                 </Badge>
                               </div>
                             )}
-                            {record.marketPrice && (
+                            {record.sellingPrice && (
                               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <span className="font-medium">Price:</span>
-                                <span>${record.marketPrice}/{record.quantityUnit}</span>
+                                <span>${record.sellingPrice}/{record.unit}</span>
                               </div>
                             )}
-                            {record.totalValue && (
+                            {record.sellingPrice && record.quantity && (
                               <div className="flex items-center gap-2 text-sm">
                                 <span className="font-medium">Total Value:</span>
                                 <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                                  ${record.totalValue}
+                                  ${(parseFloat(record.sellingPrice) * parseFloat(record.quantity)).toFixed(2)}
                                 </Badge>
                               </div>
                             )}
-                            {record.buyer && (
+                            {record.buyerInfo && (
                               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                                 <span className="font-medium">Buyer:</span>
-                                <span>{record.buyer}</span>
+                                <span>{record.buyerInfo}</span>
                               </div>
                             )}
                             {record.notes && (
@@ -1774,18 +1955,132 @@ export default function HerdProfile() {
                     <CardTitle>Animal Movements</CardTitle>
                     <CardDescription>Track sales, transfers, and animal movements</CardDescription>
                   </div>
-                  <Button data-testid="button-add-movement-record">
+                  <Button 
+                    onClick={() => setIsAddMovementDialogOpen(true)}
+                    data-testid="button-add-movement-record"
+                  >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Add Movement Record
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <MapPin className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                  <p>No movement records found</p>
-                  <p className="text-sm mt-2">Track animal sales, transfers, and movements</p>
-                </div>
+                {movementRecords?.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {movementRecords.map((record) => (
+                      <Card 
+                        key={record.id} 
+                        className="hover:shadow-lg transition-all duration-300"
+                        data-testid={`card-movement-${record.id}`}
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-12 w-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                                <MapPin className="h-6 w-6 text-white" />
+                              </div>
+                              <div>
+                                <CardTitle className="text-lg capitalize">{record.movementType}</CardTitle>
+                                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                                  {new Date(record.movementDate).toLocaleDateString()}
+                                </Badge>
+                              </div>
+                            </div>
+                            <div className="flex gap-1">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => {
+                                  setEditingMovement(record);
+                                  setIsAddMovementDialogOpen(true);
+                                }}
+                                data-testid={`button-edit-movement-${record.id}`}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => deleteMovementMutation.mutate(record.id)}
+                                data-testid={`button-delete-movement-${record.id}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        
+                        <CardContent className="pt-0">
+                          <div className="space-y-3">
+                            {record.externalLocation && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Location:</span>
+                                <span>{record.externalLocation}</span>
+                              </div>
+                            )}
+                            {record.reason && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Reason:</span>
+                                <span>{record.reason}</span>
+                              </div>
+                            )}
+                            {record.price && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Price:</span>
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                  ${record.price}
+                                </Badge>
+                              </div>
+                            )}
+                            {record.weight && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Weight:</span>
+                                <span>{record.weight} lbs</span>
+                              </div>
+                            )}
+                            {record.transportMethod && (
+                              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">Transport:</span>
+                                <span>{record.transportMethod}</span>
+                              </div>
+                            )}
+                            {record.healthCertificate && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="font-medium">Health Cert:</span>
+                                <Badge variant="outline">
+                                  {record.healthCertificate}
+                                </Badge>
+                              </div>
+                            )}
+                            {record.notes && (
+                              <div className="mt-3 pt-3 border-t">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{record.notes}</p>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <MapPin className="h-16 w-16 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      No Movement Records
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      Start tracking animal sales, transfers, and movements.
+                    </p>
+                    <Button 
+                      onClick={() => setIsAddMovementDialogOpen(true)}
+                      className="flex items-center gap-2"
+                      data-testid="button-add-first-movement"
+                    >
+                      <MapPin className="h-4 w-4" />
+                      Add First Movement Record
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
