@@ -22,7 +22,7 @@ import {
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
   Egg, ShoppingCart, FileText, Search, Stethoscope, Wheat, Package
 } from "lucide-react";
-import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement } from "@shared/schema";
+import type { LivestockHerd, FarmAnimal, BreedingRecord, ProductionRecord, AnimalMovement, FeedManagement, InsertFeedManagement, LivestockHealthRecord, InsertLivestockHealthRecord } from "@shared/schema";
 
 interface HerdProfileProps {
   herdId: string;
@@ -38,6 +38,8 @@ export default function HerdProfile() {
   const [isEditHerdDialogOpen, setIsEditHerdDialogOpen] = useState(false);
   const [isAddFeedDialogOpen, setIsAddFeedDialogOpen] = useState(false);
   const [editingFeed, setEditingFeed] = useState<FeedManagement | null>(null);
+  const [isAddHealthDialogOpen, setIsAddHealthDialogOpen] = useState(false);
+  const [editingHealth, setEditingHealth] = useState<LivestockHealthRecord | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [showAnimalTracking, setShowAnimalTracking] = useState(false);
   
@@ -80,6 +82,11 @@ export default function HerdProfile() {
 
   const { data: feedRecords = [], isLoading: feedLoading } = useQuery<FeedManagement[]>({
     queryKey: ["/api/livestock/herds", herdId, "feeds"],
+    enabled: !!herdId && isAuthenticated,
+  });
+
+  const { data: healthRecords = [], isLoading: healthLoading } = useQuery<LivestockHealthRecord[]>({
+    queryKey: ["/api/livestock/herds", herdId, "health-records"],
     enabled: !!herdId && isAuthenticated,
   });
 
@@ -190,6 +197,71 @@ export default function HerdProfile() {
     },
   });
 
+  // Health record mutations
+  const createHealthMutation = useMutation({
+    mutationFn: async (healthData: InsertLivestockHealthRecord) => {
+      return await apiRequest("/api/livestock/health-records", "POST", healthData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "health-records"] });
+      setIsAddHealthDialogOpen(false);
+      setEditingHealth(null);
+      toast({
+        title: "Success",
+        description: "Health record added successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to add health record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateHealthMutation = useMutation({
+    mutationFn: async ({ id, ...healthData }: { id: number } & InsertLivestockHealthRecord) => {
+      return await apiRequest(`/api/livestock/health-records/${id}`, "PUT", healthData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "health-records"] });
+      setIsAddHealthDialogOpen(false);
+      setEditingHealth(null);
+      toast({
+        title: "Success",
+        description: "Health record updated successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to update health record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteHealthMutation = useMutation({
+    mutationFn: async (healthId: number) => {
+      return await apiRequest(`/api/livestock/health-records/${healthId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "health-records"] });
+      toast({
+        title: "Success",
+        description: "Health record deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: "Failed to delete health record. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -221,25 +293,53 @@ export default function HerdProfile() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
-    const feedData = {
+    const feedData: InsertFeedManagement = {
       herdId: parseInt(herdId!),
+      userId: user!.id,
       feedType: formData.get('feedType') as string,
       feedName: formData.get('feedName') as string,
-      supplier: formData.get('supplier') as string || undefined,
-      quantityPerFeeding: formData.get('quantityPerFeeding') ? parseFloat(formData.get('quantityPerFeeding') as string) : undefined,
+      supplier: formData.get('supplier') as string || null,
+      quantityPerFeeding: formData.get('quantityPerFeeding') ? formData.get('quantityPerFeeding') as string : null,
       quantityUnit: formData.get('quantityUnit') as string || 'lbs',
       feedingsPerDay: parseInt(formData.get('feedingsPerDay') as string) || 1,
-      costPerUnit: formData.get('costPerUnit') ? parseFloat(formData.get('costPerUnit') as string) : undefined,
-      lastPurchaseDate: formData.get('lastPurchaseDate') as string || undefined,
-      currentStock: formData.get('currentStock') ? parseFloat(formData.get('currentStock') as string) : undefined,
+      costPerUnit: formData.get('costPerUnit') ? formData.get('costPerUnit') as string : null,
+      lastPurchaseDate: formData.get('lastPurchaseDate') ? new Date(formData.get('lastPurchaseDate') as string) : null,
+      currentStock: formData.get('currentStock') ? formData.get('currentStock') as string : null,
       stockUnit: formData.get('stockUnit') as string || 'lbs',
-      notes: formData.get('notes') as string || undefined,
+      notes: formData.get('notes') as string || null,
     };
 
     if (editingFeed) {
       updateFeedMutation.mutate({ id: editingFeed.id, ...feedData });
     } else {
       createFeedMutation.mutate(feedData);
+    }
+  };
+
+  const handleSubmitHealth = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    const healthData: InsertLivestockHealthRecord = {
+      herdId: parseInt(herdId!),
+      userId: user!.id,
+      recordDate: formData.get("recordDate") ? new Date(formData.get("recordDate") as string) : new Date(),
+      animalCount: parseInt(formData.get("animalCount") as string) || 1,
+      healthIssue: formData.get("healthIssue") as string || null,
+      treatment: formData.get("treatment") as string || null,
+      medicationUsed: formData.get("medicationUsed") as string || null,
+      withdrawalPeriod: formData.get("withdrawalPeriod") ? parseInt(formData.get("withdrawalPeriod") as string) : null,
+      veterinarian: formData.get("veterinarian") as string || null,
+      treatmentCost: formData.get("treatmentCost") ? formData.get("treatmentCost") as string : null,
+      followUpRequired: formData.get("followUpRequired") === "true",
+      followUpDate: formData.get("followUpDate") ? new Date(formData.get("followUpDate") as string) : null,
+      notes: formData.get("notes") as string || null,
+    };
+
+    if (editingHealth) {
+      updateHealthMutation.mutate({ id: editingHealth.id, ...healthData });
+    } else {
+      createHealthMutation.mutate(healthData);
     }
   };
 
@@ -558,11 +658,11 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="supplier">Supplier</Label>
-                  <Input name="supplier" placeholder="Feed supplier name" defaultValue={editingFeed?.supplier} />
+                  <Input name="supplier" placeholder="Feed supplier name" defaultValue={editingFeed?.supplier || ""} />
                 </div>
                 <div>
                   <Label htmlFor="quantityPerFeeding">Quantity per Feeding</Label>
-                  <Input name="quantityPerFeeding" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.quantityPerFeeding} />
+                  <Input name="quantityPerFeeding" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.quantityPerFeeding || ""} />
                 </div>
                 <div>
                   <Label htmlFor="quantityUnit">Unit</Label>
@@ -585,15 +685,15 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="costPerUnit">Cost per Unit ($)</Label>
-                  <Input name="costPerUnit" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.costPerUnit} />
+                  <Input name="costPerUnit" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.costPerUnit || ""} />
                 </div>
                 <div>
                   <Label htmlFor="lastPurchaseDate">Last Purchase Date</Label>
-                  <Input name="lastPurchaseDate" type="date" defaultValue={editingFeed?.lastPurchaseDate} />
+                  <Input name="lastPurchaseDate" type="date" defaultValue={editingFeed?.lastPurchaseDate ? new Date(editingFeed.lastPurchaseDate).toISOString().split('T')[0] : ""} />
                 </div>
                 <div>
                   <Label htmlFor="currentStock">Current Stock</Label>
-                  <Input name="currentStock" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.currentStock} />
+                  <Input name="currentStock" type="number" step="0.01" placeholder="0.00" defaultValue={editingFeed?.currentStock || ""} />
                 </div>
                 <div>
                   <Label htmlFor="stockUnit">Stock Unit</Label>
@@ -612,7 +712,7 @@ export default function HerdProfile() {
                 </div>
                 <div className="col-span-2">
                   <Label htmlFor="notes">Notes</Label>
-                  <Textarea name="notes" placeholder="Additional feed notes..." defaultValue={editingFeed?.notes} />
+                  <Textarea name="notes" placeholder="Additional feed notes..." defaultValue={editingFeed?.notes || ""} />
                 </div>
               </div>
               <DialogFooter>
@@ -628,6 +728,86 @@ export default function HerdProfile() {
                   data-testid="button-save-feed"
                 >
                   {(createFeedMutation.isPending || updateFeedMutation.isPending) ? "Saving..." : (editingFeed ? "Update Feed" : "Add Feed")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Health Record Dialog */}
+        <Dialog open={isAddHealthDialogOpen} onOpenChange={setIsAddHealthDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{editingHealth ? 'Edit Health Record' : 'Add Health Record'}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmitHealth}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="recordDate">Record Date *</Label>
+                  <Input name="recordDate" type="date" required defaultValue={editingHealth?.recordDate ? new Date(editingHealth.recordDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]} />
+                </div>
+                <div>
+                  <Label htmlFor="animalCount">Number of Animals *</Label>
+                  <Input name="animalCount" type="number" min="1" required defaultValue={editingHealth?.animalCount || animals.length || 1} />
+                </div>
+                <div>
+                  <Label htmlFor="healthIssue">Health Issue</Label>
+                  <Input name="healthIssue" placeholder="e.g., Vaccination, Injury, Illness" defaultValue={editingHealth?.healthIssue || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="veterinarian">Veterinarian</Label>
+                  <Input name="veterinarian" placeholder="Veterinarian name" defaultValue={editingHealth?.veterinarian || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="medicationUsed">Medication Used</Label>
+                  <Input name="medicationUsed" placeholder="Medication name" defaultValue={editingHealth?.medicationUsed || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="withdrawalPeriod">Withdrawal Period (days)</Label>
+                  <Input name="withdrawalPeriod" type="number" placeholder="0" defaultValue={editingHealth?.withdrawalPeriod || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="treatmentCost">Treatment Cost ($)</Label>
+                  <Input name="treatmentCost" type="number" step="0.01" placeholder="0.00" defaultValue={editingHealth?.treatmentCost || ""} />
+                </div>
+                <div>
+                  <Label htmlFor="followUpRequired">Follow-up Required</Label>
+                  <Select name="followUpRequired" defaultValue={editingHealth?.followUpRequired ? "true" : "false"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="false">No</SelectItem>
+                      <SelectItem value="true">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="followUpDate">Follow-up Date</Label>
+                  <Input name="followUpDate" type="date" defaultValue={editingHealth?.followUpDate ? new Date(editingHealth.followUpDate).toISOString().split('T')[0] : ""} />
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="treatment">Treatment Description</Label>
+                  <Textarea name="treatment" placeholder="Describe the treatment given..." defaultValue={editingHealth?.treatment || ""} />
+                </div>
+                <div className="col-span-2">
+                  <Label htmlFor="notes">Additional Notes</Label>
+                  <Textarea name="notes" placeholder="Additional health notes..." defaultValue={editingHealth?.notes || ""} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => {
+                  setIsAddHealthDialogOpen(false);
+                  setEditingHealth(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createHealthMutation.isPending || updateHealthMutation.isPending}
+                  data-testid="button-save-health"
+                >
+                  {(createHealthMutation.isPending || updateHealthMutation.isPending) ? "Saving..." : (editingHealth ? "Update Record" : "Add Record")}
                 </Button>
               </DialogFooter>
             </form>
@@ -1013,7 +1193,10 @@ export default function HerdProfile() {
                     <CardTitle>Health & Medical Records</CardTitle>
                     <CardDescription>Veterinary care, vaccinations, and health monitoring</CardDescription>
                   </div>
-                  <Button data-testid="button-add-health-record">
+                  <Button 
+                    onClick={() => setIsAddHealthDialogOpen(true)}
+                    data-testid="button-add-health-record"
+                  >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Add Health Record
                   </Button>
@@ -1111,11 +1294,118 @@ export default function HerdProfile() {
                     <CardTitle className="text-lg">Recent Health Records</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                      <Stethoscope className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-                      <p>No health records found</p>
-                      <p className="text-sm mt-2">Start tracking health and medical care for your animals</p>
-                    </div>
+                    {healthLoading ? (
+                      <div className="flex justify-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                      </div>
+                    ) : healthRecords.length > 0 ? (
+                      <div className="space-y-4">
+                        {healthRecords.map((record) => (
+                          <Card key={record.id} className="border-l-4 border-l-blue-500" data-testid={`card-health-${record.id}`}>
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <Stethoscope className="h-5 w-5 text-white" />
+                                  </div>
+                                  <div>
+                                    <CardTitle className="text-base">
+                                      {record.healthIssue || 'Health Record'}
+                                    </CardTitle>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                      {new Date(record.recordDate).toLocaleDateString()} • {record.animalCount} animal{record.animalCount > 1 ? 's' : ''}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="flex gap-1">
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => {
+                                      setEditingHealth(record);
+                                      setIsAddHealthDialogOpen(true);
+                                    }}
+                                    data-testid={`button-edit-health-${record.id}`}
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => deleteHealthMutation.mutate(record.id)}
+                                    data-testid={`button-delete-health-${record.id}`}
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardHeader>
+                            <CardContent className="pt-0">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {record.veterinarian && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400">Veterinarian:</span>
+                                    <span>{record.veterinarian}</span>
+                                  </div>
+                                )}
+                                {record.medicationUsed && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400">Medication:</span>
+                                    <span>{record.medicationUsed}</span>
+                                  </div>
+                                )}
+                                {record.treatmentCost && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400">Cost:</span>
+                                    <span>${record.treatmentCost}</span>
+                                  </div>
+                                )}
+                                {record.withdrawalPeriod && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400">Withdrawal:</span>
+                                    <span>{record.withdrawalPeriod} days</span>
+                                  </div>
+                                )}
+                                {record.followUpRequired && (
+                                  <div className="flex items-center gap-2 text-sm">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400">Follow-up:</span>
+                                    <Badge variant="outline">
+                                      {record.followUpDate ? new Date(record.followUpDate).toLocaleDateString() : 'Required'}
+                                    </Badge>
+                                  </div>
+                                )}
+                              </div>
+                              {record.treatment && (
+                                <div className="mt-3 pt-3 border-t">
+                                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Treatment:</p>
+                                  <p className="text-sm text-gray-700 dark:text-gray-300">{record.treatment}</p>
+                                </div>
+                              )}
+                              {record.notes && (
+                                <div className="mt-3 pt-3 border-t">
+                                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Notes:</p>
+                                  <p className="text-sm text-gray-700 dark:text-gray-300">{record.notes}</p>
+                                </div>
+                              )}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <Stethoscope className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
+                        <p>No health records found</p>
+                        <p className="text-sm mt-2">Start tracking health and medical care for your animals</p>
+                        <Button 
+                          onClick={() => setIsAddHealthDialogOpen(true)}
+                          className="mt-4"
+                          data-testid="button-add-first-health"
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2" />
+                          Add First Health Record
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </CardContent>
