@@ -491,7 +491,7 @@ export default function HerdProfile() {
       userId: user!.id,
       recordDate: formData.get("recordDate") ? new Date(formData.get("recordDate") as string) : new Date(),
       productType: formData.get("productType") as string,
-      quantity: formData.get("quantity") ? formData.get("quantity") as string : null,
+      quantity: formData.get("quantity") as string,
       unit: formData.get("quantityUnit") as string || 'lbs',
       quality: formData.get("qualityGrade") as string || null,
       sellingPrice: formData.get("marketPrice") ? formData.get("marketPrice") as string : null,
@@ -514,7 +514,7 @@ export default function HerdProfile() {
       animalId: 1, // Default for herd-level movements
       userId: user!.id,
       movementDate: formData.get("movementDate") ? new Date(formData.get("movementDate") as string) : new Date(),
-      movementType: formData.get("movementType") as string,
+      movementType: (formData.get("movementType") as string) || 'transfer',
       externalLocation: formData.get("destination") as string || null,
       reason: formData.get("buyer") as string || null,
       price: formData.get("salePrice") ? formData.get("salePrice") as string : null,
@@ -1037,7 +1037,7 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="quantityUnit">Unit</Label>
-                  <Select name="quantityUnit" defaultValue={editingProduction?.quantityUnit || 'lbs'}>
+                  <Select name="quantityUnit" defaultValue={editingProduction?.unit || 'lbs'}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -1054,7 +1054,7 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="qualityGrade">Quality Grade</Label>
-                  <Select name="qualityGrade" defaultValue={editingProduction?.qualityGrade || ""}>
+                  <Select name="qualityGrade" defaultValue={editingProduction?.quality || ""}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select grade" />
                     </SelectTrigger>
@@ -1070,15 +1070,15 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="marketPrice">Market Price ($/unit)</Label>
-                  <Input name="marketPrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.marketPrice || ""} />
+                  <Input name="marketPrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.sellingPrice || ""} />
                 </div>
                 <div>
                   <Label htmlFor="totalValue">Total Value ($)</Label>
-                  <Input name="totalValue" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.totalValue || ""} />
+                  <Input name="totalValue" type="number" step="0.01" placeholder="0.00" defaultValue={editingProduction?.sellingPrice && editingProduction?.quantity ? (parseFloat(editingProduction.sellingPrice) * parseFloat(editingProduction.quantity)).toFixed(2) : ""} />
                 </div>
                 <div>
                   <Label htmlFor="buyer">Buyer/Customer</Label>
-                  <Input name="buyer" placeholder="Buyer or customer name" defaultValue={editingProduction?.buyer || ""} />
+                  <Input name="buyer" placeholder="Buyer or customer name" defaultValue={editingProduction?.buyerInfo || ""} />
                 </div>
                 <div className="col-span-2">
                   <Label htmlFor="notes">Additional Notes</Label>
@@ -1136,27 +1136,27 @@ export default function HerdProfile() {
                 </div>
                 <div>
                   <Label htmlFor="animalCount">Number of Animals *</Label>
-                  <Input name="animalCount" type="number" min="1" required defaultValue={editingMovement?.animalCount || 1} />
+                  <Input name="animalCount" type="number" min="1" required defaultValue={1} />
                 </div>
                 <div>
                   <Label htmlFor="destination">Destination</Label>
-                  <Input name="destination" placeholder="Farm name or location" defaultValue={editingMovement?.destination || ""} />
+                  <Input name="destination" placeholder="Farm name or location" defaultValue={editingMovement?.externalLocation || ""} />
                 </div>
                 <div>
                   <Label htmlFor="buyer">Buyer/Recipient</Label>
-                  <Input name="buyer" placeholder="Buyer or recipient name" defaultValue={editingMovement?.buyer || ""} />
+                  <Input name="buyer" placeholder="Buyer or recipient name" defaultValue={editingMovement?.reason || ""} />
                 </div>
                 <div>
                   <Label htmlFor="salePrice">Sale/Purchase Price ($)</Label>
-                  <Input name="salePrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.salePrice || ""} />
+                  <Input name="salePrice" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.price || ""} />
                 </div>
                 <div>
                   <Label htmlFor="transportationCost">Transportation Cost ($)</Label>
-                  <Input name="transportationCost" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.transportationCost || ""} />
+                  <Input name="transportationCost" type="number" step="0.01" placeholder="0.00" defaultValue={editingMovement?.transportMethod?.includes('Cost:') ? editingMovement.transportMethod.replace('Cost: $', '') : ""} />
                 </div>
                 <div>
                   <Label htmlFor="veterinaryCertificate">Veterinary Certificate</Label>
-                  <Select name="veterinaryCertificate" defaultValue={editingMovement?.veterinaryCertificate ? "true" : "false"}>
+                  <Select name="veterinaryCertificate" defaultValue={editingMovement?.healthCertificate ? "true" : "false"}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
