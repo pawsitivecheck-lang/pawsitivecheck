@@ -1,5 +1,5 @@
 import { HelpCircle } from "lucide-react";
-import { SimpleTooltip } from "@/components/ui/simple-tooltip";
+import { SimpleTooltip } from "@/components/ui/tooltip-override";
 
 interface HelpTooltipProps {
   content: string;
