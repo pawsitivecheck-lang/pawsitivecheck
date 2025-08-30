@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,6 +36,8 @@ export default function HerdProfile() {
   const queryClient = useQueryClient();
   const [selectedAnimal, setSelectedAnimal] = useState<FarmAnimal | null>(null);
   const [isAddAnimalDialogOpen, setIsAddAnimalDialogOpen] = useState(false);
+  const [isEditAnimalDialogOpen, setIsEditAnimalDialogOpen] = useState(false);
+  const [isDeleteAnimalDialogOpen, setIsDeleteAnimalDialogOpen] = useState(false);
   const [isEditHerdDialogOpen, setIsEditHerdDialogOpen] = useState(false);
   const [isAddFeedDialogOpen, setIsAddFeedDialogOpen] = useState(false);
   const [editingFeed, setEditingFeed] = useState<FeedManagement | null>(null);
@@ -490,6 +493,56 @@ export default function HerdProfile() {
     },
   });
 
+  // Edit animal mutation
+  const editAnimalMutation = useMutation({
+    mutationFn: async ({ id, ...animalData }: any) => {
+      return await apiRequest(`/api/farm-animals/${id}`, "PUT", animalData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "animals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId] });
+      setIsEditAnimalDialogOpen(false);
+      setSelectedAnimal(null);
+      toast({
+        title: "Success",
+        description: "Animal updated successfully!",
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating animal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update animal. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete animal mutation
+  const deleteAnimalMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await apiRequest(`/api/farm-animals/${id}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId, "animals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/herds", herdId] });
+      setIsDeleteAnimalDialogOpen(false);
+      setSelectedAnimal(null);
+      toast({
+        title: "Success",
+        description: "Animal removed from herd successfully!",
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting animal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove animal. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitAnimal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -515,6 +568,56 @@ export default function HerdProfile() {
     };
 
     createAnimalMutation.mutate(animalData);
+  };
+
+  // Handle edit animal form submission
+  const handleEditAnimal = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedAnimal) return;
+    
+    const formData = new FormData(e.currentTarget);
+    
+    const animalData = {
+      id: selectedAnimal.id,
+      name: formData.get('name') || undefined,
+      earTag: formData.get('earTag') || undefined,
+      microchipId: formData.get('microchipId') || undefined,
+      species: formData.get('species'),
+      breed: formData.get('breed') || undefined,
+      gender: formData.get('gender'),
+      birthDate: formData.get('birthDate') || undefined,
+      currentWeight: formData.get('currentWeight') ? parseFloat(formData.get('currentWeight') as string) : undefined,
+      weightUnit: formData.get('weightUnit') || 'lbs',
+      purpose: formData.get('purpose') || 'meat',
+      acquisitionDate: formData.get('acquisitionDate') || undefined,
+      acquisitionType: formData.get('acquisitionType') || 'born_on_farm',
+      acquisitionCost: formData.get('acquisitionCost') ? parseFloat(formData.get('acquisitionCost') as string) : undefined,
+      isBreeder: formData.get('isBreeder') === 'true',
+      notes: formData.get('notes') || undefined,
+    };
+
+    editAnimalMutation.mutate(animalData);
+  };
+
+  // Handle edit button click
+  const handleEditClick = () => {
+    if (selectedAnimal) {
+      setIsEditAnimalDialogOpen(true);
+    }
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = () => {
+    if (selectedAnimal) {
+      setIsDeleteAnimalDialogOpen(true);
+    }
+  };
+
+  // Confirm delete
+  const confirmDeleteAnimal = () => {
+    if (selectedAnimal) {
+      deleteAnimalMutation.mutate(selectedAnimal.id);
+    }
   };
 
   const handleSubmitFeed = (e: React.FormEvent<HTMLFormElement>) => {
@@ -2289,6 +2392,7 @@ export default function HerdProfile() {
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={handleEditClick}
                         data-testid="button-edit-animal"
                       >
                         <Edit className="h-4 w-4 mr-2" />
@@ -2297,6 +2401,8 @@ export default function HerdProfile() {
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={handleDeleteClick}
+                        className="text-red-600 hover:text-red-700"
                         data-testid="button-delete-animal"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
@@ -2513,6 +2619,202 @@ export default function HerdProfile() {
             </form>
           </DialogContent>
         </Dialog>
+
+        {/* Edit Animal Dialog */}
+        <Dialog open={isEditAnimalDialogOpen} onOpenChange={setIsEditAnimalDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Animal: {selectedAnimal?.name || selectedAnimal?.earTag || "Unknown"}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleEditAnimal}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="name">Name</Label>
+                  <Input name="name" defaultValue={selectedAnimal?.name || ""} placeholder="Animal name (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="earTag">Ear Tag</Label>
+                  <Input name="earTag" defaultValue={selectedAnimal?.earTag || ""} placeholder="Ear tag ID" />
+                </div>
+                <div>
+                  <Label htmlFor="microchipId">Microchip ID</Label>
+                  <Input name="microchipId" defaultValue={selectedAnimal?.microchipId || ""} placeholder="Microchip ID (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="species">Species *</Label>
+                  <Select name="species" defaultValue={selectedAnimal?.species} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select species" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cattle">Cattle</SelectItem>
+                      <SelectItem value="sheep">Sheep</SelectItem>
+                      <SelectItem value="goats">Goats</SelectItem>
+                      <SelectItem value="pigs">Pigs</SelectItem>
+                      <SelectItem value="chickens">Chickens</SelectItem>
+                      <SelectItem value="ducks">Ducks</SelectItem>
+                      <SelectItem value="turkeys">Turkeys</SelectItem>
+                      <SelectItem value="horses">Horses</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="breed">Breed</Label>
+                  <Input name="breed" defaultValue={selectedAnimal?.breed || ""} placeholder="Breed (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="gender">Gender *</Label>
+                  <Select name="gender" defaultValue={selectedAnimal?.gender} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="castrated">Castrated</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="birthDate">Birth Date</Label>
+                  <Input 
+                    name="birthDate" 
+                    type="date" 
+                    defaultValue={selectedAnimal?.birthDate ? new Date(selectedAnimal.birthDate).toISOString().split('T')[0] : ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="currentWeight">Current Weight</Label>
+                  <Input 
+                    name="currentWeight" 
+                    type="number" 
+                    step="0.1" 
+                    defaultValue={selectedAnimal?.currentWeight || ""} 
+                    placeholder="Weight" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="weightUnit">Weight Unit</Label>
+                  <Select name="weightUnit" defaultValue={selectedAnimal?.weightUnit || "lbs"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="purpose">Purpose</Label>
+                  <Select name="purpose" defaultValue={selectedAnimal?.purpose || "meat"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="breeding">Breeding</SelectItem>
+                      <SelectItem value="dairy">Dairy</SelectItem>
+                      <SelectItem value="meat">Meat</SelectItem>
+                      <SelectItem value="egg_production">Egg Production</SelectItem>
+                      <SelectItem value="fiber">Fiber</SelectItem>
+                      <SelectItem value="companion">Companion</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="acquisitionDate">Acquisition Date</Label>
+                  <Input 
+                    name="acquisitionDate" 
+                    type="date" 
+                    defaultValue={selectedAnimal?.acquisitionDate ? new Date(selectedAnimal.acquisitionDate).toISOString().split('T')[0] : ""} 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="acquisitionType">Acquisition Type</Label>
+                  <Select name="acquisitionType" defaultValue={selectedAnimal?.acquisitionType || "born_on_farm"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="born_on_farm">Born on Farm</SelectItem>
+                      <SelectItem value="purchased">Purchased</SelectItem>
+                      <SelectItem value="rescued">Rescued</SelectItem>
+                      <SelectItem value="inherited">Inherited</SelectItem>
+                      <SelectItem value="traded">Traded</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="acquisitionCost">Acquisition Cost</Label>
+                  <Input 
+                    name="acquisitionCost" 
+                    type="number" 
+                    step="0.01" 
+                    defaultValue={selectedAnimal?.acquisitionCost || ""} 
+                    placeholder="Cost in dollars" 
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="isBreeder">Breeding Animal</Label>
+                  <Select name="isBreeder" defaultValue={selectedAnimal?.isBreeder ? "true" : "false"}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="false">No</SelectItem>
+                      <SelectItem value="true">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea 
+                    name="notes" 
+                    defaultValue={selectedAnimal?.notes || ""} 
+                    placeholder="Additional notes about this animal..." 
+                    rows={3} 
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsEditAnimalDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={editAnimalMutation.isPending}
+                  data-testid="button-update-animal"
+                >
+                  {editAnimalMutation.isPending ? "Updating..." : "Update Animal"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Animal Confirmation Dialog */}
+        <AlertDialog open={isDeleteAnimalDialogOpen} onOpenChange={setIsDeleteAnimalDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Remove Animal</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to remove "{selectedAnimal?.name || selectedAnimal?.earTag || "this animal"}" from the herd? 
+                This action cannot be undone and will permanently remove all data associated with this animal.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDeleteAnimal}
+                disabled={deleteAnimalMutation.isPending}
+                className="bg-red-600 hover:bg-red-700"
+                data-testid="button-confirm-delete-animal"
+              >
+                {deleteAnimalMutation.isPending ? "Removing..." : "Remove Animal"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
