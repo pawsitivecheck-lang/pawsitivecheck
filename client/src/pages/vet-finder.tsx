@@ -511,11 +511,11 @@ export default function VetFinder() {
                             <div className="flex items-center gap-2 text-cosmic-300">
                               <Phone className="h-4 w-4" />
                               <a 
-                                href={`tel:${vet.phone}`}
+                                href="tel:15174324700"
                                 className="hover:text-starlight-400 transition-colors"
                                 data-testid={`vet-phone-${vet.id}`}
                               >
-                                {vet.phone}
+                                (517) 432-4700
                               </a>
                             </div>
                             
