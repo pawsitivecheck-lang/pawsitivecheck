@@ -386,13 +386,13 @@ export default function VetFinder() {
                       <SelectTrigger className="w-48 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100" data-testid="select-radius">
                         <SelectValue placeholder="Search radius" />
                       </SelectTrigger>
-                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
-                        <SelectItem value="5" className="text-cosmic-100 hover:bg-cosmic-700">5 miles</SelectItem>
-                        <SelectItem value="10" className="text-cosmic-100 hover:bg-cosmic-700">10 miles</SelectItem>
-                        <SelectItem value="15" className="text-cosmic-100 hover:bg-cosmic-700">15 miles</SelectItem>
-                        <SelectItem value="25" className="text-cosmic-100 hover:bg-cosmic-700">25 miles</SelectItem>
-                        <SelectItem value="50" className="text-cosmic-100 hover:bg-cosmic-700">50 miles</SelectItem>
-                        <SelectItem value="100" className="text-cosmic-100 hover:bg-cosmic-700">100 miles</SelectItem>
+                      <SelectContent className="bg-cosmic-900 border-cosmic-600 backdrop-blur-sm">
+                        <SelectItem value="5" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">5 miles</SelectItem>
+                        <SelectItem value="10" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">10 miles</SelectItem>
+                        <SelectItem value="15" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">15 miles</SelectItem>
+                        <SelectItem value="25" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">25 miles</SelectItem>
+                        <SelectItem value="50" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">50 miles</SelectItem>
+                        <SelectItem value="100" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">100 miles</SelectItem>
                       </SelectContent>
                     </Select>
                     <span className="text-cosmic-400 text-sm">
