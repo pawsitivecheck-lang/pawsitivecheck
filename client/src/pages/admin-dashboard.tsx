@@ -328,10 +328,10 @@ export default function AdminDashboard() {
           <div className="space-y-6 mt-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-mystical-purple via-starlight-500 to-cosmic-500 flex items-center justify-center gap-3">
-                <Database className="h-8 w-8" />
+                <Database className="h-8 w-8 text-mystical-purple dark:text-starlight-400" />
                 🌟 COSMIC DATABASE COMMAND CENTER 🌟
               </h2>
-              <p className="text-cosmic-400 mt-2">
+              <p className="text-cosmic-400 dark:text-cosmic-300 mt-2">
                 Control the cosmic forces that keep all platform data synchronized and up-to-date
               </p>
             </div>
