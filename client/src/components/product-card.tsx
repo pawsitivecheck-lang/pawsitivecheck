@@ -192,12 +192,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               <div className="space-y-1">
                 {product.sourceUrls.map((url, index) => (
                   <div key={index} className="text-xs">
-                    <a 
-                      href={url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 underline transition-colors cursor-pointer"
-                      onClick={(e) => e.stopPropagation()}
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="text-blue-400 hover:text-blue-300 underline transition-colors cursor-pointer bg-transparent border-none p-0 text-left"
                       data-testid={`source-link-${index}`}
                     >
                       {url.includes('fda.gov') ? 'FDA Safety Warning' :
@@ -206,7 +206,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                        url.includes('hartzvictims.org') ? 'Safety Report Database' :
                        url.includes('avma.org') ? 'Veterinary Association Warning' :
                        'Safety Information'}
-                    </a>
+                    </button>
                   </div>
                 ))}
               </div>

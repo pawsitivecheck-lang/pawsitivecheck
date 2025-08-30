@@ -2562,8 +2562,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Veterinary search using Google Places API for nationwide coverage
   app.post('/api/vets/search', async (req, res) => {
+    // Declare variables outside try block so they're accessible in catch
+    const { query, location, radius } = req.body;
+    
     try {
-      const { query, location, radius } = req.body;
       const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
 
       // Default search coordinates (Lansing, MI as user location)
@@ -3154,9 +3156,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.parse(req.body);
 
-      const newOffice = await storage.addVeterinaryOffice({
+      const newOffice = await storage.createVeterinaryOffice({
         ...officeData,
-        createdBy: userId,
+        addedByUserId: userId,
       });
 
       res.status(201).json(newOffice);
@@ -3187,7 +3189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const officeData = insertVeterinaryOfficeSchema.partial().parse(req.body);
 
-      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData, userId);
+      const updatedOffice = await storage.updateVeterinaryOffice(id, officeData);
 
       if (!updatedOffice) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3209,7 +3211,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const id = parseInt(req.params.id);
       const userId = req.user.claims.sub;
 
-      const success = await storage.removeVeterinaryOffice(id, userId);
+      const success = await storage.deleteVeterinaryOffice(id, userId);
 
       if (!success) {
         return res.status(404).json({ message: "Veterinary office not found or access denied" });
@@ -3226,7 +3228,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/saved-products', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const savedProducts = await storage.getSavedProducts(userId);
+      const savedProducts = await storage.getUserSavedProducts(userId);
       res.json(savedProducts);
     } catch (error) {
       console.error("Error fetching saved products:", error);
@@ -3242,7 +3244,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId,
       });
 
-      const savedProduct = await storage.savePetProduct(productData);
+      const savedProduct = await storage.saveProductForPet(productData);
       res.status(201).json(savedProduct);
     } catch (error) {
       console.error("Error saving product for pet:", error);
@@ -3431,7 +3433,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Mark as applied
           await storage.updateProductUpdateSubmission(id, {
             appliedAt: new Date(),
-          });
+          } as any);
         } catch (error) {
           console.error("Error applying product changes:", error);
           // Keep submission as approved but log the error
@@ -5191,7 +5193,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             isEnabled: true,
             frequency: 'twice_daily',
             nextRun
-          });
+          } as any);
           createdSchedules.push(schedule);
         } catch (error) {
           console.error(`Error creating schedule for ${syncConfig.syncType}:`, error);
