@@ -1,0 +1,54 @@
+Navigated to https://pawsitivecheck.com/corporate-accountability
+ Third-party cookie is blocked in Chrome either because of Chrome flags or browser configuration.
+index-DuMB-uOG.js:533  GET https://pawsitivecheck.com/api/auth/user 401 (Unauthorized)
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
+sw.js:76 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+(anonymous) @ sw.js:76
+googleads.g.doubleclick.net/pagead/ads?client=ca-pub-2513342355355066&output=html&h=280&slotname=0987654321&adk=2447927636&adf=1823364562&pi=t.ma~as.0987654321&w=728&fwrn=4&fwrnh=100&lmt=1756593384&rafmt=1&format=728x280&url=https%3A%2F%2Fpawsitivecheck.com%2Fcorporate-accountability&fwr=0&fwrattr=true&rh=90&rw=728&rpe=1&resp_fmts=3&wgl=1&uach=WyJDaHJvbWUgT1MiLCIxNjI5NS43NC4wIiwiYXJtIiwiIiwiMTM4LjAuNzIwNC4yMzIiLG51bGwsMCxudWxsLCI2NCIsW1siTm90KUE7QnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjEzOC4wLjcyMDQuMjMyIl0sWyJHb29nbGUgQ2hyb21lIiwiMTM4LjAuNzIwNC4yMzIiXV0sMF0.&abgtt=6&dt=1756595299166&bpp=58&bdt=392&idt=233&shv=r20250827&mjsv=m202508270101&ptt=9&saldr=aa&abxe=1&cookie_enabled=1&eoidce=1&prev_fmts=0x0&nras=1&correlator=2379532141329&frm=20&pv=1&u_tz=-240&u_his=1&u_h=864&u_w=1536&u_ah=816&u_aw=1536&u_cd=24&u_sd=1.25&dmc=8&adx=136&ady=-73&biw=982&bih=730&scr_x=0&scr_y=0&eid=31094294%2C31094363%2C31094393%2C95362655%2C95366795%2C95369705%2C95369802%2C95370341%2C31094389%2C42533294%2C95370631&oid=2&pvsid=8880971837974962&tmod=1968350463&uas=0&nvt=2&ref=https%3A%2F%2Fpawsitivecheck.com%2F&fc=1920&brdim=0%2C0%2C0%2C0%2C1536%2C0%2C1536%2C816%2C982%2C730&vis=1&rsz=%7C%7CoeE%7C&abl=CS&pfx=0&fu=128&bc=31&bz=1.56&td=1&tdf=2&psd=W251bGwsbnVsbCxudWxsLDNd&nt=1&pgls=CAk.&ifi=2&uci=a!2&fsb=1&dtd=272:1  Failed to load resource: the server responded with a status of 400 ()
+index-DuMB-uOG.js:533 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
+index-DuMB-uOG.js:655 PWA: Service Worker registered successfully: ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'https://pawsitivecheck.com/', …}
+corporate-accountability:1 Error while trying to use the following icon from the Manifest: https://pawsitivecheck.com/icon-192.png (Download error or resource isn't a valid image)
+show_ads_impl_fy2021.js?bust=31094389:103 XHR finished loading: GET "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20250827&st=env&sde=1".
+(anonymous) @ show_ads_impl_fy2021.js?bust=31094389:103
+Aj @ show_ads_impl_fy2021.js?bust=31094389:103
+zj @ show_ads_impl_fy2021.js?bust=31094389:102
+Bj @ show_ads_impl_fy2021.js?bust=31094389:104
+OZ @ show_ads_impl_fy2021.js?bust=31094389:587
+(anonymous) @ show_ads_impl_fy2021.js?bust=31094389:587
