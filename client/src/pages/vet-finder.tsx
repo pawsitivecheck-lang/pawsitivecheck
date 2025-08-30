@@ -36,7 +36,7 @@ interface VetPractice {
   website?: string;
   rating: number;
   reviewCount: number;
-  services: string[];
+  services?: string[];
   hours: {
     Monday: string;
     Tuesday: string;
@@ -46,8 +46,8 @@ interface VetPractice {
     Saturday: string;
     Sunday: string;
   };
-  specialties: string[];
-  emergencyServices: boolean;
+  specialties?: string[];
+  emergencyServices?: boolean;
   distance?: number;
   latitude?: number;
   longitude?: number;
@@ -209,7 +209,7 @@ export default function VetFinder() {
     );
   };
 
-  const AnimalServicesDisplay = ({ specialties, services, vetId }: { specialties: string[], services: string[], vetId: string }) => {
+  const AnimalServicesDisplay = ({ specialties, services, vetId }: { specialties?: string[], services?: string[], vetId: string }) => {
     const animalTypes = (Array.isArray(specialties) ? specialties : []).filter(specialty => 
       specialty.toLowerCase().includes('animal') || 
       specialty.toLowerCase().includes('pet') ||
