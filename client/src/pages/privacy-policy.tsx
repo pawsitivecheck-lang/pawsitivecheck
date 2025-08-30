@@ -59,6 +59,11 @@ export default function PrivacyPolicy() {
                   <li>• Account information through secure Replit authentication (email, name, profile image)</li>
                   <li>• Pet profile data including names, species, breeds, age, weight, medical conditions, allergies, and health history</li>
                   <li>• Animal preferences, tagging selections, and species-specific requirements for comprehensive animal care</li>
+                  <li>• Livestock operation details including farm name, operation type, address, head counts, primary species, and certifications</li>
+                  <li>• Livestock herd information including herd names, species, breeds, housing types, feeding schedules, and health protocols</li>
+                  <li>• Feed management records including feed types, schedules, costs, suppliers, and inventory tracking</li>
+                  <li>• Livestock health records including treatments, medications, veterinary visits, and medical event tracking</li>
+                  <li>• Individual farm animal data including breeding records, production metrics, and movement tracking</li>
                   <li>• Notification preferences including product recalls, safety alerts, and system updates</li>
                   <li>• Content moderation data when users flag inappropriate content or reviews</li>
                   <li>• Device identifiers and installation data for PWA functionality</li>
@@ -75,6 +80,9 @@ export default function PrivacyPolicy() {
                   <li>• Search queries for products from our curated U.S. & Canada animal care database</li>
                   <li>• Animal tag associations and product suitability preferences</li>
                   <li>• Recall alert subscription preferences and notification settings</li>
+                  <li>• Livestock management activities including herd creation, feed scheduling, and health record entries</li>
+                  <li>• Agricultural business information and farm operation management data</li>
+                  <li>• Commercial feed purchasing patterns and supplier relationship data</li>
                 </ul>
               </div>
 

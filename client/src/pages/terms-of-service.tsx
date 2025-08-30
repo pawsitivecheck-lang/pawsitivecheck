@@ -78,6 +78,10 @@ export default function TermsOfService() {
                 <li>• Community reviews with content moderation, health tracking, and peer insights</li>
                 <li>• Real-time product recall alerts, customizable notifications, and safety monitoring</li>
                 <li>• Progressive Web App (PWA) with offline functionality, push notifications, and data synchronization</li>
+                <li>• Livestock management system for commercial farm operations including herd tracking, feed management, and health records</li>
+                <li>• Agricultural business tools for livestock operations, feed scheduling, veterinary management, and production tracking</li>
+                <li>• Farm animal health monitoring with vaccination schedules, medical events, and breeding record management</li>
+                <li>• Commercial feed management with supplier tracking, cost analysis, and inventory management systems</li>
                 <li>• Curated database of 45+ high-quality animal care products with continuous quality control</li>
                 <li>• User-generated content moderation system with community flagging and admin review</li>
                 <li>• Notification preferences system with granular control over alerts and communications</li>
@@ -108,6 +112,8 @@ export default function TermsOfService() {
                   <li>• You are responsible for maintaining account security</li>
                   <li>• One account per person; no sharing accounts</li>
                   <li>• You must be at least 13 years old to use our services</li>
+                  <li>• Commercial agricultural users must ensure compliance with applicable farming regulations and business licensing</li>
+                  <li>• Livestock operation data must be accurate and kept current for proper farm management</li>
                 </ul>
               </div>
               
@@ -204,6 +210,45 @@ export default function TermsOfService() {
                 <h3 className="font-semibold text-mystical-red mb-2">Third-Party Content and Services</h3>
                 <p className="text-sm">
                   We are not responsible for the accuracy, completeness, or reliability of third-party content, including user reviews, external product databases (Open Pet Food Facts, FDA databases), manufacturer information, recall data from regulatory agencies, veterinary practice information, or corporate accountability ratings. Authentication services, mapping services, advertising networks, and other third-party integrations operate independently. Links to external websites, products, or services are provided for convenience only and do not constitute endorsement. Third-party AI models and data sources may contain biases or inaccuracies beyond our control.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-mystical-red mb-2">Agricultural and Livestock Management Disclaimers</h3>
+                <p className="text-sm">
+                  Our livestock management system, farm operation tools, feed scheduling, and agricultural business features are provided for informational and organizational purposes only. We are not responsible for agricultural business decisions, livestock health outcomes, feed management choices, breeding decisions, or commercial farming results. Users must comply with all applicable agricultural regulations, livestock welfare standards, feed safety requirements, and business licensing obligations. Livestock health data, veterinary scheduling, and medical records should supplement, not replace, professional veterinary care and agricultural expertise. Commercial feed recommendations and supplier information are user-generated and not endorsed by PawsitiveCheck.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Agricultural Business Use */}
+          <Card className="cosmic-card border-mystical-red/30" data-testid="card-agricultural-use">
+            <CardHeader>
+              <CardTitle className="flex items-center text-mystical-red">
+                <AlertTriangle className="mr-3 h-5 w-5" />
+                Agricultural Business Use
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-cosmic-200">
+              <div>
+                <h3 className="font-semibold text-mystical-red mb-2">Commercial Farm Operations</h3>
+                <p className="text-sm">
+                  Users operating commercial agricultural businesses acknowledge that PawsitiveCheck's livestock management tools are supplementary business management aids and do not constitute professional agricultural, veterinary, or business consulting services. Farm operation decisions, livestock health management, feed purchasing, and agricultural business strategies remain the sole responsibility of the user. We do not guarantee any specific business outcomes, livestock health improvements, or commercial benefits from using our platform.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold text-mystical-red mb-2">Regulatory Compliance</h3>
+                <p className="text-sm">
+                  Commercial agricultural users are solely responsible for compliance with all applicable federal, state, and local regulations including but not limited to livestock welfare standards, feed safety regulations, organic certification requirements, animal health protocols, business licensing, tax obligations, and environmental regulations. PawsitiveCheck does not provide regulatory guidance or ensure compliance with agricultural laws.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-mystical-red mb-2">Data Backup and Business Continuity</h3>
+                <p className="text-sm">
+                  While we strive to maintain reliable service, agricultural users should maintain independent backup systems for critical farm data including livestock records, health information, and business documentation. We are not liable for any business disruption, data loss, or agricultural operation impacts resulting from service interruptions, data errors, or platform unavailability.
                 </p>
               </div>
             </CardContent>
