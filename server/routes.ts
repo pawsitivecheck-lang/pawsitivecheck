@@ -2618,11 +2618,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
 
             if (!searchResponse.ok) {
-              console.warn(`Search failed with status ${searchResponse.status}`);
+              const errorText = await searchResponse.text();
+              console.warn(`Search failed with status ${searchResponse.status}: ${errorText}`);
               continue;
             }
 
             const responseData = await searchResponse.json();
+            
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Google Places API Response:', JSON.stringify(responseData, null, 2));
+            }
 
             if (responseData.results && responseData.results.length > 0) {
               if (process.env.NODE_ENV === 'development') {
