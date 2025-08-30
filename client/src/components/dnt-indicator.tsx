@@ -16,16 +16,16 @@ export default function DNTIndicator() {
   return (
     <div className="relative">
       <div 
-        className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2 text-sm cursor-pointer"
+        className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-2 sm:px-3 py-2 text-sm cursor-pointer"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         data-testid="dnt-indicator"
       >
         <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
-        <span className="text-green-700 dark:text-green-300 font-medium">
+        <span className="hidden sm:inline text-green-700 dark:text-green-300 font-medium">
           Do Not Track Enabled
         </span>
-        <Info className="h-3 w-3 text-green-600 dark:text-green-400" />
+        <Info className="hidden sm:inline h-3 w-3 text-green-600 dark:text-green-400" />
       </div>
 
       {showTooltip && (

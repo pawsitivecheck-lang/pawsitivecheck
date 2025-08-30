@@ -6,6 +6,7 @@ import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, Chevron
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import PWAInstallButton from "@/components/pwa-install-button";
+import DNTIndicator from "@/components/dnt-indicator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +54,10 @@ export default function Navbar() {
           </div>
           
           {/* Right Section - User Menu */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Do Not Track Indicator */}
+            <DNTIndicator />
+            
             {/* PWA Install Button */}
             <PWAInstallButton />
             
