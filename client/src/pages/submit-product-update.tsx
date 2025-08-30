@@ -187,7 +187,7 @@ export default function SubmitProductUpdate() {
                             <SelectValue placeholder="Select update type" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="bg-popover border-border">
                           <SelectItem value="info_correction">Information Correction</SelectItem>
                           <SelectItem value="image_update">Image Update</SelectItem>
                           <SelectItem value="new_product">New Product Suggestion</SelectItem>

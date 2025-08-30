@@ -223,7 +223,7 @@ export default function HealthTracking({ petId, petName }: HealthTrackingProps) 
                       <SelectTrigger className="cosmic-input">
                         <SelectValue placeholder="Select condition" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="1">1 - Very thin</SelectItem>
                         <SelectItem value="2">2 - Thin</SelectItem>
                         <SelectItem value="3">3 - Lean</SelectItem>
@@ -245,7 +245,7 @@ export default function HealthTracking({ petId, petName }: HealthTrackingProps) 
                       <SelectTrigger className="cosmic-input">
                         <SelectValue placeholder="Energy level" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="1">1 - Very low</SelectItem>
                         <SelectItem value="2">2 - Low</SelectItem>
                         <SelectItem value="3">3 - Normal</SelectItem>
@@ -261,7 +261,7 @@ export default function HealthTracking({ petId, petName }: HealthTrackingProps) 
                       <SelectTrigger className="cosmic-input">
                         <SelectValue placeholder="Appetite level" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="1">1 - Very poor</SelectItem>
                         <SelectItem value="2">2 - Poor</SelectItem>
                         <SelectItem value="3">3 - Normal</SelectItem>
@@ -279,7 +279,7 @@ export default function HealthTracking({ petId, petName }: HealthTrackingProps) 
                       <SelectTrigger className="cosmic-input">
                         <SelectValue placeholder="Coat condition" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="excellent">Excellent</SelectItem>
                         <SelectItem value="good">Good</SelectItem>
                         <SelectItem value="fair">Fair</SelectItem>
@@ -364,7 +364,7 @@ export default function HealthTracking({ petId, petName }: HealthTrackingProps) 
                       <SelectTrigger className="cosmic-input">
                         <SelectValue placeholder="Select event type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="vaccination">Vaccination</SelectItem>
                         <SelectItem value="checkup">Regular Checkup</SelectItem>
                         <SelectItem value="illness">Illness</SelectItem>

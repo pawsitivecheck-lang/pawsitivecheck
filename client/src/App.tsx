@@ -37,6 +37,7 @@ import FeedTracking from "@/pages/feed-tracking";
 import HerdProfile from "@/pages/herd-profile";
 import OperationProfile from "@/pages/operation-profile";
 import CookieConsent from "@/components/cookie-consent";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();

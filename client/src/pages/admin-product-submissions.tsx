@@ -157,7 +157,7 @@ export default function AdminProductSubmissions() {
                   <SelectTrigger className="bg-slate-700/50 border-purple-500/30 text-white" data-testid="select-filter-status">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-popover border-border">
                     <SelectItem value="all">All Submissions</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="in_review">In Review</SelectItem>
@@ -281,7 +281,7 @@ export default function AdminProductSubmissions() {
                       <SelectTrigger className="bg-slate-700/50 border-purple-500/30">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-popover border-border">
                         <SelectItem value="pending">Pending</SelectItem>
                         <SelectItem value="in_review">In Review</SelectItem>
                         <SelectItem value="approved">Approved</SelectItem>
