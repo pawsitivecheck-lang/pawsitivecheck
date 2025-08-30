@@ -74,7 +74,7 @@ export default function AdminDashboard() {
           <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
             <Crown className="text-2xl text-white" />
           </div>
-          <p className="text-gray-600">Loading admin dashboard...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading admin dashboard...</p>
         </div>
       </div>
     );
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="admin-header" />
         </div>
@@ -102,26 +102,26 @@ export default function AdminDashboard() {
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6 shadow-lg">
               <Crown className="text-3xl text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4" data-testid="text-admin-title">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-200 mb-4" data-testid="text-admin-title">
               Admin Dashboard
             </h1>
-            <p className="text-gray-600 text-lg" data-testid="text-admin-description">
+            <p className="text-gray-600 dark:text-gray-400 text-lg" data-testid="text-admin-description">
               Manage platform content, users, and safety data
             </p>
           </div>
 
           {/* Welcome Message */}
-          <Card className="border border-blue-200 bg-blue-50 mb-8" data-testid="card-admin-welcome">
+          <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 mb-8" data-testid="card-admin-welcome">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
                   <Crown className="text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-1" data-testid="text-welcome-admin">
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-1" data-testid="text-welcome-admin">
                     Welcome, Administrator {user.firstName}
                   </h2>
-                  <p className="text-gray-600" data-testid="text-admin-status">
+                  <p className="text-gray-600 dark:text-gray-400" data-testid="text-admin-status">
                     Manage your pet safety platform from here
                   </p>
                 </div>
@@ -131,51 +131,51 @@ export default function AdminDashboard() {
 
           {/* Analytics Overview */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-products">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-products">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
                   <Package className="text-blue-600" />
                 </div>
                 <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-products">
                   {(analytics as any)?.totalProducts || 0}
                 </div>
-                <p className="text-gray-600">Products Analyzed</p>
+                <p className="text-gray-600 dark:text-gray-400">Products Analyzed</p>
               </CardContent>
             </Card>
 
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-users">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-users">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
                   <Users className="text-green-600" />
                 </div>
                 <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-total-users">
                   {(analytics as any)?.totalUsers || 0}
                 </div>
-                <p className="text-gray-600">Active Users</p>
+                <p className="text-gray-600 dark:text-gray-400">Active Users</p>
               </CardContent>
             </Card>
 
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-unsafe">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-unsafe">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 mx-auto bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mb-4">
                   <AlertTriangle className="text-red-600" />
                 </div>
                 <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-unsafe-products">
                   {(analytics as any)?.cursedProducts || 0}
                 </div>
-                <p className="text-gray-600">Unsafe Products</p>
+                <p className="text-gray-600 dark:text-gray-400">Unsafe Products</p>
               </CardContent>
             </Card>
 
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-stat-safe">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-safe">
               <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
                   <Shield className="text-green-600" />
                 </div>
                 <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-safe-products">
                   {(analytics as any)?.blessedProducts || 0}
                 </div>
-                <p className="text-gray-600">Safe Products</p>
+                <p className="text-gray-600 dark:text-gray-400">Safe Products</p>
               </CardContent>
             </Card>
           </div>
@@ -183,9 +183,9 @@ export default function AdminDashboard() {
           {/* Main Dashboard Grid */}
           <div className="grid lg:grid-cols-3 gap-8 mb-8">
             {/* Active Recalls Management */}
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recalls-management">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-recalls-management">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-red-600">
+                <CardTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
                   <AlertTriangle className="h-5 w-5" />
                   Active Recalls
                 </CardTitle>
@@ -193,19 +193,19 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {(recentRecalls as any[]).slice(0, 3).map((recall: any) => (
-                    <div key={recall.id} className="p-3 bg-red-50 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
+                    <div key={recall.id} className="p-3 bg-red-50 dark:bg-red-950 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
                       <div className="flex justify-between items-start mb-1">
-                        <p className="text-gray-800 text-sm font-medium">{recall.reason}</p>
-                        <Badge className="bg-red-100 text-red-600 text-xs" data-testid="badge-recall-severity">
+                        <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{recall.reason}</p>
+                        <Badge className="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 text-xs" data-testid="badge-recall-severity">
                           {recall.severity}
                         </Badge>
                       </div>
-                      <p className="text-gray-500 text-xs">
+                      <p className="text-gray-500 dark:text-gray-400 text-xs">
                         {new Date(recall.recallDate).toLocaleDateString()}
                       </p>
                     </div>
                   )) || (
-                    <p className="text-gray-500 text-center py-4" data-testid="text-no-active-recalls">
+                    <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-active-recalls">
                       No active recalls
                     </p>
                   )}
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50"
+                  className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
                   data-testid="button-manage-recalls"
                 >
                   Manage Recalls
@@ -222,9 +222,9 @@ export default function AdminDashboard() {
             </Card>
 
             {/* Blacklist Management */}
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-blacklist-management">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-blacklist-management">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-red-600">
+                <CardTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
                   <Ban className="h-5 w-5" />
                   Ingredient Blacklist
                 </CardTitle>
@@ -233,14 +233,14 @@ export default function AdminDashboard() {
                 <div className="space-y-3">
                   {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
                     <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
-                      <span className="text-gray-800 text-sm">{ingredient.ingredientName}</span>
+                      <span className="text-gray-800 dark:text-gray-200 text-sm">{ingredient.ingredientName}</span>
                       <Badge 
                         className={
                           ingredient.severity === 'high' 
-                            ? 'bg-red-100 text-red-600' 
+                            ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400' 
                             : ingredient.severity === 'medium'
-                            ? 'bg-yellow-100 text-yellow-600'
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                         }
                         data-testid="badge-ingredient-severity"
                       >
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
                       </Badge>
                     </div>
                   )) || (
-                    <p className="text-gray-500 text-center py-4" data-testid="text-no-blacklisted">
+                    <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-blacklisted">
                       No blacklisted ingredients
                     </p>
                   )}
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1 border-red-500 text-red-600 hover:bg-red-50 text-xs"
+                    className="flex-1 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950 text-xs"
                     data-testid="button-add-ingredient"
                   >
                     Add Ingredient
@@ -265,7 +265,7 @@ export default function AdminDashboard() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1 border-gray-400 text-gray-600 hover:bg-gray-50 text-xs"
+                    className="flex-1 border-gray-400 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 text-xs"
                     data-testid="button-manage-blacklist"
                   >
                     Manage List
@@ -275,9 +275,9 @@ export default function AdminDashboard() {
             </Card>
 
             {/* Recent Activity */}
-            <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recent-activity">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-recent-activity">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-blue-600">
+                <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                   <TrendingUp className="h-5 w-5" />
                   Recent Activity
                 </CardTitle>
@@ -285,18 +285,18 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {recentProducts && recentProducts.slice(0, 3).map((product: any) => (
-                    <div key={product.id} className="p-3 bg-gray-50 border rounded" data-testid={`activity-item-${product.id}`}>
-                      <p className="text-gray-800 text-sm font-medium">{product.name}</p>
+                    <div key={product.id} className="p-3 bg-gray-50 dark:bg-gray-700 border dark:border-gray-600 rounded" data-testid={`activity-item-${product.id}`}>
+                      <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{product.name}</p>
                       <div className="flex justify-between items-center mt-1">
-                        <span className="text-gray-600 text-xs">Added by {product.brand}</span>
+                        <span className="text-gray-600 dark:text-gray-400 text-xs">Added by {product.brand}</span>
                         {product.cosmicClarity && (
                           <Badge 
                             className={
                               product.cosmicClarity === 'blessed' 
-                                ? 'bg-green-100 text-green-600' 
+                                ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400' 
                                 : product.cosmicClarity === 'cursed'
-                                ? 'bg-red-100 text-red-600'
-                                : 'bg-yellow-100 text-yellow-600'
+                                ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400'
+                                : 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400'
                             }
                             data-testid="badge-product-clarity"
                           >
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   )) || (
-                    <p className="text-gray-500 text-center py-4" data-testid="text-no-recent-activity">
+                    <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-recent-activity">
                       No recent activity
                     </p>
                   )}
@@ -314,7 +314,7 @@ export default function AdminDashboard() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-blue-500 text-blue-600 hover:bg-blue-50"
+                  className="w-full mt-4 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
                   data-testid="button-view-all-activity"
                 >
                   View All Activity
