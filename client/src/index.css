@@ -695,3 +695,61 @@ img {
 .dark .text-white {
   @apply text-foreground;
 }
+
+/* Cosmic theme dark mode support */
+.dark .text-cosmic-600 {
+  color: hsl(252, 40%, 70%);
+}
+
+.dark .text-starlight-400 {
+  color: hsl(255, 60%, 80%);
+}
+
+.dark .text-starlight-500 {
+  color: hsl(255, 70%, 85%);
+}
+
+.dark .text-mystical-green {
+  color: hsl(142, 50%, 65%);
+}
+
+.dark .text-mystical-red {
+  color: hsl(0, 60%, 70%);
+}
+
+.dark .text-mystical-purple {
+  color: hsl(280, 60%, 75%);
+}
+
+.dark .bg-mystical-green {
+  background-color: hsl(142, 50%, 45%);
+}
+
+.dark .bg-mystical-red {
+  background-color: hsl(0, 60%, 50%);
+}
+
+.dark .bg-mystical-purple {
+  background-color: hsl(280, 60%, 55%);
+}
+
+.dark .border-starlight-500 {
+  border-color: hsl(255, 70%, 85%);
+}
+
+.dark .border-mystical-green {
+  border-color: hsl(142, 50%, 65%);
+}
+
+.dark .border-mystical-red {
+  border-color: hsl(0, 60%, 70%);
+}
+
+.dark .border-mystical-purple {
+  border-color: hsl(280, 60%, 75%);
+}
+
+/* Cosmic card dark mode */
+.dark .cosmic-card {
+  @apply bg-card border-border text-card-foreground;
+}

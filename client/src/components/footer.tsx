@@ -3,13 +3,13 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-800 mt-auto">
+    <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-800 dark:bg-card mt-auto">
       <div className="max-w-6xl mx-auto">
         {/* Mission, Features, Contact Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8">
           <div className="text-center sm:text-left">
-            <h4 className="text-lg font-bold text-white mb-3" data-testid="text-mission-title">Our Mission</h4>
-            <ul className="space-y-2 text-gray-300 text-sm">
+            <h4 className="text-lg font-bold text-white dark:text-foreground mb-3" data-testid="text-mission-title">Our Mission</h4>
+            <ul className="space-y-2 text-gray-300 dark:text-muted-foreground text-sm">
               <li>
                 <Link to="/comprehensive-safety-analysis" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
@@ -34,8 +34,8 @@ export default function Footer() {
           </div>
           
           <div className="text-center sm:text-left">
-            <h4 className="text-lg font-bold text-white mb-3" data-testid="text-features-title">Key Features</h4>
-            <ul className="space-y-2 text-gray-300 text-sm">
+            <h4 className="text-lg font-bold text-white dark:text-foreground mb-3" data-testid="text-features-title">Key Features</h4>
+            <ul className="space-y-2 text-gray-300 dark:text-muted-foreground text-sm">
               <li>
                 <Link to="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
                   Product Scanner
@@ -55,8 +55,8 @@ export default function Footer() {
           </div>
           
           <div className="text-center sm:text-left sm:col-span-2 lg:col-span-1">
-            <h4 className="text-lg font-bold text-white mb-3" data-testid="text-contact-title">Contact & Support</h4>
-            <ul className="space-y-3 text-gray-300 text-sm">
+            <h4 className="text-lg font-bold text-white dark:text-foreground mb-3" data-testid="text-contact-title">Contact & Support</h4>
+            <ul className="space-y-3 text-gray-300 dark:text-muted-foreground text-sm">
               <li>
                 <div className="space-y-1">
                   <a href="mailto:pawsitivecheck@gmail.com" className="hover:text-white transition-colors cursor-pointer block font-medium" data-testid="link-contact-email">

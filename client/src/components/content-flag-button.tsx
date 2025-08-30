@@ -102,7 +102,7 @@ export function ContentFlagButton({
         <Button
           variant={variant}
           size={size}
-          className={`text-gray-500 hover:text-red-600 ${className}`}
+          className={`text-muted-foreground hover:text-red-600 ${className}`}
           data-testid={`button-flag-${contentType}-${contentId}`}
         >
           {showIcon && <Flag className="h-3 w-3 mr-1" />}
@@ -149,7 +149,7 @@ export function ContentFlagButton({
               maxLength={500}
               data-testid="textarea-report-description"
             />
-            <div className="text-xs text-gray-500 text-right">
+            <div className="text-xs text-muted-foreground text-right">
               {description.length}/500 characters
             </div>
           </div>

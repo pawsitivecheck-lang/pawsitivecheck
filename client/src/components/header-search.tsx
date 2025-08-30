@@ -615,7 +615,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       <div className={`relative ${isMobile ? 'w-full' : 'flex-1 max-w-md mx-4'}`}>
         <form onSubmit={handleSearch} className="relative">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               ref={inputRef}
               type="text"
@@ -634,7 +634,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full px-10 pr-20 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
+              className="w-full bg-background border border-border rounded-full px-10 pr-20 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -644,7 +644,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={clearSearch}
                 variant="ghost"
                 size="sm"
-                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
@@ -686,7 +686,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Scanner Menu Dropdown */}
         {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-gray-800/95 backdrop-blur-md border border-gray-600 rounded-lg p-2 z-[60] shadow-lg">
+          <div className="absolute right-0 top-12 w-48 bg-popover/95 backdrop-blur-md border border-border rounded-lg p-2 z-[60] shadow-lg">
             <div className="space-y-1">
               <Button
                 onClick={() => {
@@ -695,7 +695,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
+                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
                 data-testid="button-barcode-scanner"
               >
                 <Scan className="mr-2 h-4 w-4" />
@@ -708,7 +708,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
+                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
                 data-testid="button-image-scanner"
               >
                 <Image className="mr-2 h-4 w-4" />
@@ -721,7 +721,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 }}
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-gray-200 hover:text-blue-400 hover:bg-gray-700"
+                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
                 data-testid="button-internet-search"
               >
                 <Globe className="mr-2 h-4 w-4" />
@@ -733,13 +733,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length === 0 && recentSearches.length > 0)) && (
-          <div className="absolute top-12 left-0 right-0 bg-gray-800/95 backdrop-blur-md border border-gray-600 rounded-lg p-1 z-[60] shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute top-12 left-0 right-0 bg-popover/95 backdrop-blur-md border border-border rounded-lg p-1 z-[60] shadow-lg max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
             {searchQuery.length >= 1 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
-              <div className="p-2 border-b border-gray-600/30">
-                <div className="flex items-center gap-2 text-xs text-gray-300">
-                  <kbd className="px-1.5 py-0.5 text-[10px] bg-gray-700/50 border border-gray-600 rounded text-gray-200">Tab</kbd>
+              <div className="p-2 border-b border-border/30">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <kbd className="px-1.5 py-0.5 text-[10px] bg-accent/50 border border-border rounded text-accent-foreground">Tab</kbd>
                   <span>to autofill: </span>
                   <span 
                     className="text-blue-300 font-mono cursor-pointer hover:text-blue-200 underline"
@@ -763,7 +763,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Recent Searches (shown when query is short or empty) */}
             {searchQuery.length === 0 && recentSearches.length > 0 && (
               <div className="p-2">
-                <p className="text-xs text-gray-300 mb-2 px-2">Recent Searches</p>
+                <p className="text-xs text-muted-foreground mb-2 px-2">Recent Searches</p>
                 <div className="space-y-1">
                   {recentSearches.map((search, index) => (
                     <div
@@ -775,12 +775,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                         clearSearch();
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedIndex === index ? 'bg-gray-700' : 'hover:bg-gray-700/50'
+                        selectedIndex === index ? 'bg-accent' : 'hover:bg-accent/50'
                       }`}
                       data-testid={`recent-search-${index}`}
                     >
-                      <Clock className="h-4 w-4 text-gray-400" />
-                      <span className="text-gray-200 text-sm">{search}</span>
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-popover-foreground text-sm">{search}</span>
                     </div>
                   ))}
                 </div>
@@ -791,7 +791,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {searchResults.length > 0 && (
               <div className="p-2">
                 {recentSearches.length > 0 && searchQuery.length === 0 && (
-                  <p className="text-xs text-gray-300 mb-2 px-2 border-t border-gray-600 pt-2">Products</p>
+                  <p className="text-xs text-muted-foreground mb-2 px-2 border-t border-border pt-2">Products</p>
                 )}
                 <div className="space-y-1">
                   {searchResults.map((product, index) => {
@@ -801,13 +801,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                         key={product.id}
                         onClick={() => selectProduct(product)}
                         className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                          selectedIndex === adjustedIndex ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                          selectedIndex === adjustedIndex ? 'bg-accent' : 'hover:bg-accent/50'
                         }`}
                         data-testid={`search-result-${product.id}`}
                       >
                         <div className="flex-1 min-w-0">
-                          <p className="text-gray-900 dark:text-gray-100 text-sm font-medium truncate">{product.name}</p>
-                          <p className="text-gray-500 dark:text-gray-400 text-xs">{product.brand}</p>
+                          <p className="text-popover-foreground text-sm font-medium truncate">{product.name}</p>
+                          <p className="text-muted-foreground text-xs">{product.brand}</p>
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
                           {product.cosmicScore && (
@@ -829,8 +829,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Loading state */}
             {(searchMutation.isPending || internetSearchMutation.isPending) && (
               <div className="p-4 text-center">
-                <Loader2 className="h-4 w-4 animate-spin mx-auto text-gray-400" />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <Loader2 className="h-4 w-4 animate-spin mx-auto text-muted-foreground" />
+                <p className="text-xs text-muted-foreground mt-2">
                   {searchMutation.isPending ? 'Searching database...' : 'Searching online...'}
                 </p>
               </div>
@@ -840,11 +840,11 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {!searchMutation.isPending && !internetSearchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
               <div className="p-4 text-center space-y-3">
                 <div>
-                  <Search className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-600 dark:text-gray-300">No products found in database</p>
+                  <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                  <p className="text-sm text-muted-foreground">No products found in database</p>
                 </div>
-                <div className="border-t border-gray-600 pt-3">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Search online for this product?</p>
+                <div className="border-t border-border pt-3">
+                  <p className="text-xs text-muted-foreground mb-2">Search online for this product?</p>
                   <Button
                     onClick={() => internetSearchMutation.mutate(searchQuery)}
                     disabled={internetSearchMutation.isPending}
@@ -878,7 +878,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       {/* Internet Search Modal */}
       {showInternetSearch && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+          <div className="bg-popover rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Internet Product Search</h3>
               <Button
