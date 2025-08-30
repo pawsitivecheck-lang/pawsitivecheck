@@ -2,7 +2,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import "@/utils/browser-compat"; // Initialize browser compatibility fixes
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
@@ -37,7 +37,7 @@ import LivestockCreateOperation from "@/pages/livestock-create-operation";
 import FeedTracking from "@/pages/feed-tracking";
 import HerdProfile from "@/pages/herd-profile";
 import OperationProfile from "@/pages/operation-profile";
-import CookieConsent from "@/components/cookie-consent";
+// import CookieConsent from "@/components/cookie-consent";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -111,9 +111,7 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <div className="min-h-screen">
-          <Toaster />
           <Router />
-          <CookieConsent />
         </div>
       </QueryClientProvider>
     </ErrorBoundary>
