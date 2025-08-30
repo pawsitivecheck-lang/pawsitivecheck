@@ -2595,25 +2595,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let searchData = { results: [] };
 
-      // Try multiple search approaches to find veterinary offices
+      // Try multiple search approaches using the new Places API format
       const searchQueries = [
-        // Primary veterinary care search
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`,
-        // Text search for veterinarians
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=veterinarian+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
-        // Text search for animal hospitals
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=animal+hospital+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
-        // Text search for vet clinics
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=vet+clinic+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`
+        {
+          method: 'POST',
+          url: 'https://places.googleapis.com/v1/places:searchNearby',
+          body: {
+            includedTypes: ['veterinary_care'],
+            maxResultCount: 20,
+            locationRestriction: {
+              circle: {
+                center: { latitude: lat, longitude: lng },
+                radius: searchRadius
+              }
+            }
+          },
+          description: 'nearby veterinary_care'
+        },
+        {
+          method: 'POST', 
+          url: 'https://places.googleapis.com/v1/places:searchText',
+          body: {
+            textQuery: `veterinarian near ${lat},${lng}`,
+            maxResultCount: 20,
+            locationBias: {
+              circle: {
+                center: { latitude: lat, longitude: lng },
+                radius: searchRadius
+              }
+            }
+          },
+          description: 'text search veterinarian'
+        },
+        {
+          method: 'POST',
+          url: 'https://places.googleapis.com/v1/places:searchText', 
+          body: {
+            textQuery: `animal hospital near ${lat},${lng}`,
+            maxResultCount: 20,
+            locationBias: {
+              circle: {
+                center: { latitude: lat, longitude: lng },
+                radius: searchRadius
+              }
+            }
+          },
+          description: 'text search animal hospital'
+        }
       ];
 
-        for (const searchUrl of searchQueries) {
+        for (const searchQuery of searchQueries) {
           try {
             if (process.env.NODE_ENV === 'development') {
-              console.log(`Trying search: ${searchUrl.includes('nearbysearch') ? 'nearby veterinary_care' : searchUrl.includes('veterinarian') ? 'text search veterinarian' : searchUrl.includes('animal+hospital') ? 'text search animal hospital' : 'text search vet clinic'}`);
+              console.log(`Trying search: ${searchQuery.description}`);
             }
 
-            const searchResponse = await fetch(searchUrl, {
+            const searchResponse = await fetch(searchQuery.url, {
+              method: searchQuery.method,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': googleApiKey,
+                'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.location,places.rating,places.nationalPhoneNumber,places.websiteUri,places.id'
+              },
+              body: JSON.stringify(searchQuery.body),
               signal: AbortSignal.timeout(8000)
             });
 
@@ -2629,11 +2673,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.log('Google Places API Response:', JSON.stringify(responseData, null, 2));
             }
 
-            if (responseData.results && responseData.results.length > 0) {
+            if (responseData.places && responseData.places.length > 0) {
               if (process.env.NODE_ENV === 'development') {
-                console.log(`Found ${responseData.results.length} results with this search`);
+                console.log(`Found ${responseData.places.length} results with this search`);
               }
-              searchData = responseData;
+              // Convert new API format to match our expected format
+              searchData = { 
+                results: responseData.places.map(place => ({
+                  place_id: place.id,
+                  name: place.displayName?.text || 'Veterinary Office',
+                  formatted_address: place.formattedAddress,
+                  geometry: {
+                    location: {
+                      lat: place.location?.latitude,
+                      lng: place.location?.longitude
+                    }
+                  },
+                  rating: place.rating,
+                  formatted_phone_number: place.nationalPhoneNumber,
+                  website: place.websiteUri
+                }))
+              };
               break;
             }
 
@@ -2700,38 +2760,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-        // Step 2: Get detailed information for each place (in batches to avoid API limits)
+        // Step 2: Process the search results (we already have the essential information)
         const detailedPractices = [];
-        const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive API calls
+        const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive results
 
         for (let i = 0; i < maxResults; i++) {
           const place = searchData.results[i];
 
           try {
-            // Get place details including phone, website, hours, etc.
-            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,user_ratings_total,opening_hours,geometry,types,business_status&key=${googleApiKey}`;
-
-            const detailsResponse = await fetch(detailsUrl, {
-              signal: AbortSignal.timeout(5000) // 5 second timeout per request
-            });
-
-            if (!detailsResponse.ok) {
-              console.warn(`Failed to get details for ${place.name}`);
-              continue;
-            }
-
-            const detailsData = await detailsResponse.json();
-            const details = detailsData.result;
-
-            if (!details || details.business_status === 'CLOSED_PERMANENTLY') {
-              console.log(`Skipping ${place.name} - permanently closed`);
-              continue;
-            }
+            // Use the data we already have from the search results
 
             // Calculate accurate distance using Haversine formula
             const R = 3959; // Earth's radius in miles
-            const placeLat = details.geometry?.location?.lat || place.geometry?.location?.lat;
-            const placeLng = details.geometry?.location?.lng || place.geometry?.location?.lng;
+            const placeLat = place.geometry?.location?.lat;
+            const placeLng = place.geometry?.location?.lng;
 
             if (!placeLat || !placeLng) {
               console.warn(`No coordinates for ${place.name}`);
@@ -2748,13 +2790,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const distance = R * c;
 
             // Parse address components
-            const addressParts = details.formatted_address ? details.formatted_address.split(', ') : ['Address not available'];
-            const zipMatch = details.formatted_address?.match(/\b(\d{5})(?:-\d{4})?\b/);
-            const stateMatch = details.formatted_address?.match(/\b([A-Z]{2})\b/);
+            const addressParts = place.formatted_address ? place.formatted_address.split(', ') : ['Address not available'];
+            const zipMatch = place.formatted_address?.match(/\b(\d{5})(?:-\d{4})?\b/);
+            const stateMatch = place.formatted_address?.match(/\b([A-Z]{2})\b/);
 
-            // Build services array based on Google place types and name
+            // Build services array based on Google place name
             const services = ['General Veterinary Care'];
-            const nameAndTypes = `${details.name || place.name} ${(place.types || []).join(' ')}`.toLowerCase();
+            const nameAndTypes = place.name.toLowerCase();
 
             if (nameAndTypes.includes('hospital') || nameAndTypes.includes('animal hospital')) {
               services.push('Advanced Diagnostics', 'Surgery', 'Emergency Care', 'X-rays');
@@ -2780,7 +2822,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (nameAndTypes.includes('exotic')) specialties.push('Exotic Animal Care');
             if (nameAndTypes.includes('emergency')) specialties.push('Emergency Medicine');
 
-            // Format hours
+            // Format hours - using default since we don't have opening hours from search API
             let formattedHours = {
               'Monday': 'Call for hours',
               'Tuesday': 'Call for hours',
@@ -2791,40 +2833,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
               'Sunday': 'Call for hours'
             };
 
-            if (details.opening_hours?.weekday_text) {
-              const dayMap: {[key: string]: string} = {
-                'Monday': 'Monday',
-                'Tuesday': 'Tuesday', 
-                'Wednesday': 'Wednesday',
-                'Thursday': 'Thursday',
-                'Friday': 'Friday',
-                'Saturday': 'Saturday',
-                'Sunday': 'Sunday'
-              };
-
-              details.opening_hours.weekday_text.forEach((dayText: string) => {
-                const parts = dayText.split(': ');
-                if (parts.length === 2) {
-                  const day = parts[0];
-                  const hours = parts[1];
-                  if (dayMap[day]) {
-                    formattedHours[dayMap[day] as keyof typeof formattedHours] = hours === 'Closed' ? 'Closed' : hours;
-                  }
-                }
-              });
-            }
-
             const practice = {
               id: `google-${place.place_id}`,
-              name: details.name || place.name,
-              address: addressParts.length > 1 ? addressParts[0] : details.formatted_address || 'Address not available',
+              name: place.name,
+              address: addressParts.length > 1 ? addressParts[0] : place.formatted_address || 'Address not available',
               city: addressParts.length > 2 ? addressParts[addressParts.length - 3] : 'City not specified',
               state: stateMatch ? stateMatch[1] : 'State not specified',
               zipCode: zipMatch ? zipMatch[1] : '',
-              phone: details.formatted_phone_number || '(Contact for phone)',
-              website: details.website || '',
-              rating: Math.round((details.rating || 4.2) * 10) / 10,
-              reviewCount: details.user_ratings_total || 0,
+              phone: place.formatted_phone_number || '(Contact for phone)',
+              website: place.website || '',
+              rating: Math.round((place.rating || 4.2) * 10) / 10,
+              reviewCount: 0, // Not available in search results
               services: Array.from(new Set(services)), // Remove duplicates
               hours: formattedHours,
               specialties: Array.from(new Set(specialties)), // Remove duplicates
