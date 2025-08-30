@@ -4606,6 +4606,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User account deletion
+  app.delete('/api/user/account', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const success = await storage.deleteAllUserData(userId);
+      
+      if (!success) {
+        return res.status(500).json({ error: "Failed to delete account data" });
+      }
+
+      // Clear the session after successful deletion
+      req.logout(() => {
+        res.json({ message: "Account deleted successfully" });
+      });
+    } catch (error) {
+      console.error("Error deleting user account:", error);
+      res.status(500).json({ error: "Failed to delete account" });
+    }
+  });
+
   app.get('/api/farm-product-reviews/:id', async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);

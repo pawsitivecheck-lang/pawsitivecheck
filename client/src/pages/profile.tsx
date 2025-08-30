@@ -38,17 +38,17 @@ export default function Profile() {
     enabled: isAuthenticated,
   });
 
-  const { data: pets = [], isLoading: isPetsLoading } = useQuery({
+  const { data: pets = [] as any[], isLoading: isPetsLoading } = useQuery({
     queryKey: ["/api/pets"],
     enabled: isAuthenticated,
   });
 
-  const { data: dataSummary = {} } = useQuery({
+  const { data: dataSummary = {} as any } = useQuery({
     queryKey: ["/api/user/data-summary"],
     enabled: isAuthenticated,
   });
 
-  const { data: livestockOperations = [] } = useQuery({
+  const { data: livestockOperations = [] as any[] } = useQuery({
     queryKey: ["/api/livestock/operations"],
     enabled: isAuthenticated,
   });
@@ -960,7 +960,7 @@ export default function Profile() {
                             size="sm"
                             onClick={() => {
                               if (confirm(`Are you sure you want to delete all ${petCount} pet profile${petCount !== 1 ? 's' : ''}? This action cannot be undone.`)) {
-                                pets.forEach((pet: any) => {
+                                (pets as any[]).forEach((pet: any) => {
                                   // Using the existing delete functionality
                                   fetch(`/api/pets/${pet.id}`, { method: 'DELETE' })
                                     .then(() => {
@@ -1007,7 +1007,7 @@ export default function Profile() {
                             size="sm"
                             onClick={() => {
                               if (confirm(`Are you sure you want to delete all livestock operations? This will also delete all associated herds and records. This action cannot be undone.`)) {
-                                livestockOperations.forEach((operation: any) => {
+                                (livestockOperations as any[]).forEach((operation: any) => {
                                   deleteOperationMutation.mutate(operation.id);
                                 });
                               }
