@@ -27,6 +27,20 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
     console.debug('Scan attempt failed:', error);
   }, []);
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isActive) {
+        onClose();
+      }
+    };
+
+    if (isActive) {
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => document.removeEventListener('keydown', handleEscapeKey);
+    }
+  }, [isActive, onClose]);
+
   useEffect(() => {
     if (isActive && !scannerRef.current) {
       try {
@@ -116,11 +130,22 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
     }
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    // Only close if clicking on the backdrop, not the modal content
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isActive) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" data-testid="modal-barcode-scanner">
-      <Card className="cosmic-card w-full max-w-lg mx-4">
+    <div 
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer" 
+      data-testid="modal-barcode-scanner"
+      onClick={handleBackdropClick}
+    >
+      <Card className="cosmic-card w-full max-w-lg mx-4 cursor-default">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-starlight-400">
             <Camera className="h-5 w-5" />
