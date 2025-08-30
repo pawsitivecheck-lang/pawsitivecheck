@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +21,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import { 
   ArrowLeft, PlusCircle, Users, Home, TrendingUp, DollarSign, 
   Edit, Trash2, Calendar, Weight, MapPin, Activity, Beef, Milk, 
-  Egg, ShoppingCart, FileText, Search, Stethoscope
+  Egg, ShoppingCart, FileText, Search, Stethoscope, MoreVertical
 } from "lucide-react";
 
 interface LivestockOperation {
@@ -63,6 +65,9 @@ export default function OperationProfile() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAddHerdDialogOpen, setIsAddHerdDialogOpen] = useState(false);
+  const [isEditHerdDialogOpen, setIsEditHerdDialogOpen] = useState(false);
+  const [isDeleteHerdDialogOpen, setIsDeleteHerdDialogOpen] = useState(false);
+  const [selectedHerd, setSelectedHerd] = useState<LivestockHerd | null>(null);
   
   // Get operation ID from URL
   const params = useParams();
@@ -133,6 +138,54 @@ export default function OperationProfile() {
     },
   });
 
+  // Edit herd mutation
+  const editHerdMutation = useMutation({
+    mutationFn: async ({ id, ...herdData }: any) => {
+      return await apiRequest("PUT", `/api/livestock/herds/${id}`, herdData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/livestock/operations/${operationId}/herds`] });
+      setIsEditHerdDialogOpen(false);
+      setSelectedHerd(null);
+      toast({
+        title: "Success",
+        description: "Herd updated successfully.",
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating herd:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update herd. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete herd mutation
+  const deleteHerdMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await apiRequest("DELETE", `/api/livestock/herds/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/livestock/operations/${operationId}/herds`] });
+      setIsDeleteHerdDialogOpen(false);
+      setSelectedHerd(null);
+      toast({
+        title: "Success",
+        description: "Herd deleted successfully.",
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting herd:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete herd. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmitHerd = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -159,6 +212,49 @@ export default function OperationProfile() {
     });
 
     createHerdMutation.mutate(herdData);
+  };
+
+  // Handle edit herd form submission
+  const handleEditHerd = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedHerd) return;
+    
+    const formData = new FormData(e.currentTarget);
+    
+    const herdData = {
+      id: selectedHerd.id,
+      herdName: formData.get('herdName'),
+      species: formData.get('species'),
+      breed: formData.get('breed') || undefined,
+      headCount: parseInt(formData.get('headCount') as string) || 0,
+      averageWeight: formData.get('averageWeight') || undefined,
+      weightUnit: formData.get('weightUnit') || 'lbs',
+      purpose: formData.get('purpose'),
+      housingType: formData.get('housingType'),
+      ageRange: formData.get('ageRange') || undefined,
+      notes: formData.get('notes') || undefined,
+    };
+
+    editHerdMutation.mutate(herdData);
+  };
+
+  // Handle edit button click
+  const handleEditClick = (herd: LivestockHerd) => {
+    setSelectedHerd(herd);
+    setIsEditHerdDialogOpen(true);
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = (herd: LivestockHerd) => {
+    setSelectedHerd(herd);
+    setIsDeleteHerdDialogOpen(true);
+  };
+
+  // Confirm delete
+  const confirmDelete = () => {
+    if (selectedHerd) {
+      deleteHerdMutation.mutate(selectedHerd.id);
+    }
   };
 
   const getSpeciesIcon = (species: string) => {
@@ -568,18 +664,55 @@ export default function OperationProfile() {
                         )}
                       </div>
                       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="w-full"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/livestock/herds/${herd.id}`);
-                          }}
-                          data-testid={`button-manage-herd-${herd.id}`}
-                        >
-                          Manage Herd
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/livestock/herds/${herd.id}`);
+                            }}
+                            data-testid={`button-manage-herd-${herd.id}`}
+                          >
+                            Manage
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={(e) => e.stopPropagation()}
+                                data-testid={`button-herd-actions-${herd.id}`}
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(herd);
+                                }}
+                                data-testid={`button-edit-herd-${herd.id}`}
+                              >
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit Herd
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteClick(herd);
+                                }}
+                                className="text-red-600"
+                                data-testid={`button-delete-herd-${herd.id}`}
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete Herd
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -641,6 +774,130 @@ export default function OperationProfile() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Edit Herd Dialog */}
+        <Dialog open={isEditHerdDialogOpen} onOpenChange={setIsEditHerdDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Herd: {selectedHerd?.herdName}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleEditHerd}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="herdName">Herd Name *</Label>
+                  <Input name="herdName" defaultValue={selectedHerd?.herdName} placeholder="Main Herd" required />
+                </div>
+                <div>
+                  <Label htmlFor="species">Species *</Label>
+                  <Select name="species" defaultValue={selectedHerd?.species} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select species" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="cattle">Cattle</SelectItem>
+                      <SelectItem value="pigs">Pigs</SelectItem>
+                      <SelectItem value="chickens">Chickens</SelectItem>
+                      <SelectItem value="sheep">Sheep</SelectItem>
+                      <SelectItem value="goats">Goats</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="breed">Breed</Label>
+                  <Input name="breed" defaultValue={selectedHerd?.breed} placeholder="Breed (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="headCount">Head Count *</Label>
+                  <Input name="headCount" type="number" defaultValue={selectedHerd?.headCount} placeholder="0" required />
+                </div>
+                <div>
+                  <Label htmlFor="purpose">Purpose *</Label>
+                  <Select name="purpose" defaultValue={selectedHerd?.purpose} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select purpose" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="breeding">Breeding</SelectItem>
+                      <SelectItem value="dairy">Dairy</SelectItem>
+                      <SelectItem value="meat">Meat</SelectItem>
+                      <SelectItem value="egg_production">Egg Production</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="housingType">Housing Type *</Label>
+                  <Select name="housingType" defaultValue={selectedHerd?.housingType} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select housing type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="pasture">Pasture</SelectItem>
+                      <SelectItem value="barn">Barn</SelectItem>
+                      <SelectItem value="free_range">Free Range</SelectItem>
+                      <SelectItem value="cage_free">Cage Free</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="averageWeight">Average Weight</Label>
+                  <Input name="averageWeight" type="number" step="0.01" defaultValue={selectedHerd?.averageWeight} placeholder="Average weight (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="weightUnit">Weight Unit</Label>
+                  <Select name="weightUnit" defaultValue={selectedHerd?.weightUnit || 'lbs'}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                      <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea name="notes" placeholder="Additional notes about this herd..." rows={3} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsEditHerdDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={editHerdMutation.isPending}
+                  data-testid="button-update-herd"
+                >
+                  {editHerdMutation.isPending ? "Updating..." : "Update Herd"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Herd Confirmation Dialog */}
+        <AlertDialog open={isDeleteHerdDialogOpen} onOpenChange={setIsDeleteHerdDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Herd</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{selectedHerd?.herdName}"? This action cannot be undone.
+                All data associated with this herd will be permanently removed.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDelete}
+                disabled={deleteHerdMutation.isPending}
+                className="bg-red-600 hover:bg-red-700"
+                data-testid="button-confirm-delete-herd"
+              >
+                {deleteHerdMutation.isPending ? "Deleting..." : "Delete Herd"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
