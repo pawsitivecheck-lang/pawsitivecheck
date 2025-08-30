@@ -2647,9 +2647,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         if (!searchData.results || searchData.results.length === 0) {
           if (process.env.NODE_ENV === 'development') {
-            console.log('No Google Places results after trying all search methods, using fallback');
+            console.log('No Google Places results after trying all search methods, using database fallback');
           }
-          throw new Error('No results from Google Places');
+          
+          // Fall back to database veterinary offices
+          const databaseOffices = await storage.getVeterinaryOffices(20, 0, query, lat, lng);
+          
+          if (databaseOffices.length === 0) {
+            return res.json({
+              practices: [],
+              total: 0,
+              searchQuery: query || 'veterinarian',
+              location: location || null,
+              source: 'Database (No Results)',
+              message: 'No veterinary offices found in this area. Try expanding your search radius or check a different location.'
+            });
+          }
+          
+          // Return database results formatted like Google Places results
+          const formattedPractices = databaseOffices.map((office: any) => ({
+            id: office.id,
+            place_id: `db_${office.id}`,
+            name: office.name,
+            address: office.address,
+            city: office.city,
+            state: office.state,
+            zipCode: office.zipCode,
+            phone: office.phone,
+            email: office.email,
+            website: office.website,
+            rating: office.rating || 4.5,
+            distance: 0, // Calculate if needed
+            isEmergency: office.isEmergency || false,
+            emergencyServices: office.isEmergency || false,
+            services: office.services || ['General Veterinary Care'],
+            specialties: office.specialties || [],
+            hours: office.hours || 'Hours not available',
+            source: 'Database'
+          }));
+          
+          return res.json({
+            practices: formattedPractices,
+            total: formattedPractices.length,
+            searchQuery: query || 'veterinarian',
+            location: location || null,
+            source: 'Database Fallback'
+          });
         }
 
         // Step 2: Get detailed information for each place (in batches to avoid API limits)
