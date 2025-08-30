@@ -210,13 +210,13 @@ export default function VetFinder() {
   };
 
   const AnimalServicesDisplay = ({ specialties, services, vetId }: { specialties: string[], services: string[], vetId: string }) => {
-    const animalTypes = specialties.filter(specialty => 
+    const animalTypes = (specialties || []).filter(specialty => 
       specialty.toLowerCase().includes('animal') || 
       specialty.toLowerCase().includes('pet') ||
       specialty.toLowerCase().includes('care')
     );
     
-    const serviceTypes = services.filter(service => 
+    const serviceTypes = (services || []).filter(service => 
       !service.toLowerCase().includes('general')
     );
 
