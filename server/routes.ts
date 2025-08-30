@@ -2553,7 +2553,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/google-maps-key', (req, res) => {
     // This endpoint provides the public Google Maps API key which is safe to expose
     // as it's restricted by domain and intended for client-side use
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDqTGBM7FePTcdWvgJS9SkOpL4dg8JVOJs';
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'Google Maps API key not configured' });
+    }
     res.json({ key: apiKey });
   });
 
