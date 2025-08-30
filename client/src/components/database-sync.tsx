@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { RefreshCw, Database, CheckCircle, AlertTriangle, Clock, Zap, Crown, ChartLine, Ban, Shield, Users, Package, Eye, TrendingUp, FileText } from "lucide-react";
+import { RefreshCw, Database, CheckCircle, AlertTriangle, Clock, Zap, Crown, ChartLine, Ban, Shield, Users, Package, Eye, TrendingUp, FileText, Plus, Edit, Trash } from "lucide-react";
 
 interface SyncStatus {
   database: {
@@ -606,35 +606,64 @@ export default function DatabaseSync() {
         </CardContent>
       </Card>
 
-      {/* Administrative Actions & Data Synchronization */}
+      {/* Data Synchronization & Administrative Actions */}
       <Card className="cosmic-card">
         <CardHeader>
           <CardTitle className="font-mystical flex items-center gap-2">
-            <Crown className="h-5 w-5 text-blue-600" />
-            Administrative Actions & Data Synchronization
+            <RefreshCw className="h-5 w-5 text-starlight-500" />
+            Data Synchronization & Product Management
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Administrative Actions Section */}
+          {/* Product Management Section */}
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-cosmic-200 mb-4 flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Administrative Actions
+              <Package className="h-4 w-4" />
+              Product Management
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <Button 
+                className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
+                onClick={() => window.location.href = "/admin/products/add"}
+                data-testid="button-add-product"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Product
+              </Button>
+              <Button 
+                className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
+                onClick={() => window.location.href = "/admin/products/manage"}
+                data-testid="button-modify-product"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Modify Products
+              </Button>
+              <Button 
+                className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
+                onClick={() => window.location.href = "/admin/products/delete"}
+                data-testid="button-delete-product"
+              >
+                <Trash className="mr-2 h-4 w-4" />
+                Delete Products
+              </Button>
+              <Button 
+                className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
+                onClick={() => window.location.href = "/admin/products/ban"}
+                data-testid="button-ban-product"
+              >
+                <Ban className="mr-2 h-4 w-4" />
+                Ban Products
+              </Button>
+            </div>
+            
+            {/* Other Administrative Actions */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <Button 
                 className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
                 data-testid="button-enhance-analysis"
               >
                 <ChartLine className="mr-2 h-4 w-4" />
                 Enhance Analysis
-              </Button>
-              <Button 
-                className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
-                data-testid="button-update-database"
-              >
-                <Package className="mr-2 h-4 w-4" />
-                Update Database
               </Button>
               <Button 
                 className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
@@ -677,8 +706,8 @@ export default function DatabaseSync() {
           {/* Data Synchronization Section */}
           <div>
             <h3 className="text-lg font-semibold text-cosmic-200 mb-4 flex items-center gap-2">
-              <RefreshCw className="h-4 w-4 text-starlight-500" />
-              Data Synchronization
+              <Database className="h-4 w-4 text-starlight-500" />
+              Database Synchronization
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
             <div className="space-y-3">
