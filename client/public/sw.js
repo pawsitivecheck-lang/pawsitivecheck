@@ -105,7 +105,7 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        
+
         return fetch(request)
           .then((response) => {
             // Don't cache non-successful responses
@@ -136,7 +136,7 @@ self.addEventListener('fetch', (event) => {
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {
   console.log('PWA: Background sync triggered:', event.tag);
-  
+
   if (event.tag === 'sync-reviews') {
     event.waitUntil(syncPendingReviews());
   } else if (event.tag === 'sync-scans') {

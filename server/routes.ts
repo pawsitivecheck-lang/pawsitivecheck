@@ -12,7 +12,8 @@ import {
   insertPetProfileSchema,
   insertSavedProductSchema,
   insertProductUpdateSubmissionSchema,
-  insertVeterinaryOfficeSchema // Import the schema for veterinary offices
+  insertVeterinaryOfficeSchema, // Import the schema for veterinary offices
+  insertAnimalMovementSchema // Import the schema for animal movements
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
@@ -1490,7 +1491,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Farm Animal API Endpoints
+  // Admin sync endpoints
   app.post('/api/admin/sync/livestock', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -1701,7 +1702,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.warn("FoodData Central API error, falling back to representative data:", apiError);
       }
 
-      // Always include some representative feed nutrition products
+      // Always include some representative feed feed nutrition products
       const nutritionProducts = [
         {
           name: "Corn Grain (Feed Grade)",
@@ -1736,7 +1737,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           brand: "USDA Reference",
           category: "feed-ingredient",
           description: "High-quality forage with excellent protein and calcium content",
-          ingredients: "Dried alfalfa (Medicago sativa) - 18.9% protein, 1.5% fat, 25.0% fiber, high calcium",
+          ingredients: "Dried alfalfa (Medicago sativa) - 18.9% protein, 1.5% fat, 30.0% fiber, high calcium",
           barcode: `FDC-ALFALFA-${Date.now()}`,
           cosmicScore: 91,
           cosmicClarity: 'blessed',
@@ -2145,7 +2146,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const results = [];
       let recalculatedProducts = 0;
 
-      console.log("🌟 INITIATING FULL COSMIC SYNCHRONIZATION 🌟");
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Starting full synchronization...");
+      }
 
       // Sync products from external APIs
       try {
@@ -2302,7 +2305,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // RECALCULATE ALL SAFETY SCORES AND COSMIC CLARITY
       try {
-        console.log("🔮 Recalculating cosmic safety scores for all products...");
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Recalculating cosmic safety scores for all products...");
+        }
         const allProducts = await storage.getProducts(10000, 0);
 
         for (const product of allProducts) {
@@ -2371,7 +2376,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
 
-        results.push(`🔮 Safety Analysis: Recalculated cosmic scores for ${recalculatedProducts} products`);
+        results.push(`🔮 Safety Analysis: Recalculated scores for ${recalculatedProducts} products`);
       } catch (err) {
         results.push("🔮 Safety Analysis: Recalculation failed");
         console.error("Safety recalculation error:", err);
@@ -2379,7 +2384,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // UPDATE ALL PRODUCT TRANSPARENCY LEVELS
       try {
-        console.log("🔍 Updating transparency levels for all products...");
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Updating transparency levels for all products...");
+        }
         const allProducts = await storage.getProducts(10000, 0);
         let updatedTransparency = 0;
 
@@ -2412,25 +2419,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // REFRESH ALL CACHED DATA
       try {
-        console.log("💾 Refreshing system caches...");
+        if (process.env.NODE_ENV === 'development') {
+          console.log("Refreshing system caches...");
+        }
         // This would refresh any caching systems in a real implementation
         results.push("💾 Cache: System caches refreshed");
       } catch (err) {
         results.push("💾 Cache: Refresh failed");
       }
 
-      console.log("✨ COSMIC SYNCHRONIZATION COMPLETE ✨");
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Full synchronization complete.");
+      }
 
       res.json({ 
-        message: `🌟 FULL COSMIC SYNCHRONIZATION COMPLETE! 🌟 Updated ${totalSynced + recalculatedProducts} total items. All product safety scores, cosmic clarity assessments, transparency levels, and system data have been fully refreshed from authoritative sources.`,
+        message: `FULL SYNCHRONIZATION COMPLETE! Updated ${totalSynced + recalculatedProducts} total items. All product safety scores, clarity assessments, transparency levels, and system data have been fully refreshed from authoritative sources.`,
         totalSynced: totalSynced + recalculatedProducts,
         details: results,
         recalculatedProducts,
         timestamp: new Date().toISOString()
       });
     } catch (error) {
-      console.error("💥 Error during full cosmic synchronization:", error);
-      res.status(500).json({ message: "💥 Failed to complete full cosmic synchronization" });
+      console.error("Error during full synchronization:", error);
+      res.status(500).json({ message: "Failed to complete full synchronization" });
     }
   });
 
@@ -2504,13 +2515,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Try Google Places API first for nationwide coverage
       if (!googleApiKey) {
-        console.warn('⚠️  Google Places API key not found, falling back to local data');
-        throw new Error('Google API key not available');
-      }
-
-      try {
+        console.warn('Google Places API key not found, falling back to local data');
+        // Don't throw error, just fall through to fallback data
+      } else {
         // Step 1: Search for veterinary places with multiple approaches
-        console.log(`🔍 Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
+        }
 
         let searchData = { results: [] };
 
@@ -2528,7 +2539,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         for (const searchUrl of searchQueries) {
           try {
-            console.log(`Trying search: ${searchUrl.includes('nearbysearch') ? 'nearby veterinary_care' : searchUrl.includes('veterinarian') ? 'text search veterinarian' : searchUrl.includes('animal+hospital') ? 'text search animal hospital' : 'text search vet clinic'}`);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`Trying search: ${searchUrl.includes('nearbysearch') ? 'nearby veterinary_care' : searchUrl.includes('veterinarian') ? 'text search veterinarian' : searchUrl.includes('animal+hospital') ? 'text search animal hospital' : 'text search vet clinic'}`);
+            }
 
             const searchResponse = await fetch(searchUrl, {
               signal: AbortSignal.timeout(8000)
@@ -2542,7 +2555,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const responseData = await searchResponse.json();
 
             if (responseData.results && responseData.results.length > 0) {
-              console.log(`✅ Found ${responseData.results.length} results with this search`);
+              if (process.env.NODE_ENV === 'development') {
+                console.log(`Found ${responseData.results.length} results with this search`);
+              }
               searchData = responseData;
               break;
             }
@@ -2556,10 +2571,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
 
-        console.log(`🏥 Google Places returned ${searchData.results?.length || 0} veterinary locations total`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Google Places returned ${searchData.results?.length || 0} veterinary locations total`);
+        }
 
         if (!searchData.results || searchData.results.length === 0) {
-          console.log('🔍 No veterinary results from Google Places after trying all search methods, using fallback');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('No Google Places results after trying all search methods, using fallback');
+          }
           throw new Error('No results from Google Places');
         }
 
@@ -2698,7 +2717,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             };
 
             detailedPractices.push(practice);
-            console.log(`✅ Added: ${practice.name} (${practice.distance}mi away, ${practice.rating}⭐)`);
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`Added: ${practice.name} (${practice.distance}mi away, ${practice.rating}⭐)`);
+            }
 
             // Small delay between API requests to avoid rate limiting
             if (i < maxResults - 1) {
@@ -2753,12 +2774,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
 
-        console.log(`🎯 Successfully processed ${detailedPractices.length} practices from Google Places`);
         let practices = detailedPractices;
 
         // If no Google Places results, fall back to local Lansing data for that area
         if (practices.length === 0 && Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
-          console.log('🏥 No Google results for Lansing area, using local vet data');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Using local vet data for Lansing area fallback');
+          }
           practices = [
           {
             id: 'lansing-1',
@@ -3049,192 +3071,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (googleError) {
         console.log("Google Places API failed, using fallback:", googleError);
 
-        // For Lansing area, combine database and local data as fallback
-        if (Math.abs(lat - 42.3314) < 0.5 && Math.abs(lng + 84.5467) < 0.5) {
-          console.log('🏥 Using detailed Lansing area veterinary data as fallback');
-
-          // First get any database entries
-          const dbOffices = await storage.getVeterinaryOffices();
-          let allVets = [];
-
-          // Add database veterinary offices with distance calculation
-          if (dbOffices && dbOffices.length > 0) {
-            console.log(`Found ${dbOffices.length} veterinary offices in database`);
-            for (const office of dbOffices) {
-              if (office.latitude && office.longitude) {
-                // Calculate distance using Haversine formula
-                const R = 3959; // Earth's radius in miles
-                const dLat = (office.latitude - lat) * Math.PI / 180;
-                const dLng = (office.longitude - lng) * Math.PI / 180;
-                const a = 
-                  Math.sin(dLat/2) * Math.sin(dLat/2) +
-                  Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
-                  Math.sin(dLng/2) * Math.sin(dLng/2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                const distance = R * c;
-
-                // Only include if within radius
-                if (distance <= radiusInMiles) {
-                  allVets.push({
-                    id: `db-${office.id}`,
-                    name: office.name,
-                    address: office.address,
-                    city: office.city,
-                    state: office.state,
-                    zipCode: office.zipCode,
-                    phone: office.phone,
-                    website: office.website || '',
-                    rating: office.rating || 4.2,
-                    reviewCount: office.reviewCount || 0,
-                    services: office.services || ['General Veterinary Care'],
-                    hours: office.hours || {},
-                    specialties: office.specialties || ['General Veterinary Care'],
-                    emergencyServices: office.emergencyServices || false,
-                    distance: Math.round(distance * 10) / 10,
-                    latitude: parseFloat(office.latitude),
-                    longitude: parseFloat(office.longitude),
-                    description: office.description
-                  });
-                }
-              }
-            }
-          }
-
-          // Then add hardcoded fallback data
-          const lansingVets = [
-            {
-              id: 'lansing-fallback-1',
-              name: 'Miller Animal Clinic',
-              address: '6515 W. Saginaw Hwy',
-              city: 'Lansing',
-              state: 'MI',
-              zipCode: '48917',
-              phone: '(517) 321-6406',
-              website: 'https://milleranimalclinic.com/',
-              rating: 4.5,
-              reviewCount: 189,
-              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Vaccinations'],
-              hours: {
-                'Monday': '8:00 AM - 7:00 PM',
-                'Tuesday': '8:00 AM - 7:00 PM',
-                'Wednesday': '8:00 AM - 6:00 PM',
-                'Thursday': '8:00 AM - 7:00 PM',
-                'Friday': '8:00 AM - 6:00 PM',
-                'Saturday': '9:00 AM - 5:00 PM',
-                'Sunday': 'Closed'
-              },
-              specialties: ['Small Animal Care', 'Over 70 Years Experience'],
-              emergencyServices: false,
-              distance: 3.2,
-              latitude: 42.7025,
-              longitude: -84.6891
-            },
-            {
-              id: 'lansing-fallback-2',
-              name: 'Pennsylvania Veterinary Care',
-              address: '5438 S Pennsylvania Ave',
-              city: 'Lansing',
-              state: 'MI',
-              zipCode: '48911',
-              phone: '(517) 393-8010',
-              website: 'https://www.pennvetcare.com/',
-              rating: 4.6,
-              reviewCount: 178,
-              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Microchipping'],
-              hours: {
-                'Monday': '8:00 AM - 6:00 PM',
-                'Tuesday': '7:00 AM - 6:00 PM',
-                'Wednesday': '8:00 AM - 6:00 PM',
-                'Thursday': '7:00 AM - 6:00 PM',
-                'Friday': '8:00 AM - 2:00 PM',
-                'Saturday': 'Closed',
-                'Sunday': 'Closed'
-              },
-              specialties: ['Fear Free Certified', 'Regenerative Medicine', 'Since 1992'],
-              emergencyServices: false,
-              distance: 4.1,
-              latitude: 42.6652,
-              longitude: -84.5553
-            },
-            {
-              id: 'lansing-fallback-3',
-              name: 'Lake Lansing Road Animal Clinic',
-              address: '1615 Lake Lansing Rd',
-              city: 'Lansing',
-              state: 'MI',
-              zipCode: '48912',
-              phone: '(517) 484-8031',
-              website: 'https://lansingvetclinic.com/',
-              rating: 4.4,
-              reviewCount: 298,
-              services: ['General Veterinary Care', 'Surgery', 'Dental Care', 'Wellness Exams', 'Medical Care'],
-              hours: {
-                'Monday': '8:00 AM - 5:30 PM',
-                'Tuesday': '8:00 AM - 5:30 PM',
-                'Wednesday': '8:00 AM - 5:30 PM',
-                'Thursday': '8:00 AM - 5:30 PM',
-                'Friday': '8:00 AM - 5:30 PM',
-                'Saturday': '8:00 AM - 1:00 PM, 2:00 PM - 5:30 PM',
-                'Sunday': 'Closed'
-              },
-              specialties: ['Full Service Hospital', 'Comprehensive Care', 'Since 1985'],
-              emergencyServices: false,
-              distance: 1.9,
-              latitude: 42.7542,
-              longitude: -84.5324
-            },
-            {
-              id: 'lansing-fallback-4',
-              name: 'Michigan State University Emergency Vet',
-              address: '736 Wilson Rd',
-              city: 'East Lansing',
-              state: 'MI',
-              zipCode: '48824',
-              phone: '(517) 353-5420',
-              website: 'https://cvm.msu.edu/hospital',
-              rating: 4.7,
-              reviewCount: 312,
-              services: ['24/7 Emergency Care', 'Critical Care', 'Surgery', 'Advanced Diagnostics', 'Specialty Medicine', 'Trauma Care'],
-              hours: {
-                'Monday': '24 Hours',
-                'Tuesday': '24 Hours',
-                'Wednesday': '24 Hours',
-                'Thursday': '24 Hours',
-                'Friday': '24 Hours',
-                'Saturday': '24 Hours',
-                'Sunday': '24 Hours'
-              },
-              specialties: ['Emergency Medicine', 'Critical Care', 'Teaching Hospital', 'Specialty Services'],
-              emergencyServices: true,
-              distance: 2.4,
-              latitude: 42.7011,
-              longitude: -84.4822
-            }
-          ];
-
-          // Filter fallback data by distance and add to results
-          const filteredFallbackVets = lansingVets.filter(vet => vet.distance <= radiusInMiles);
-          allVets.push(...filteredFallbackVets);
-
-          // Remove duplicates and sort by distance
-          const uniqueVets = allVets.filter((vet, index, self) => 
-            index === self.findIndex(v => v.name === vet.name)
-          );
-
-          console.log(`Returning ${uniqueVets.length} total veterinary practices (${dbOffices?.length || 0} from database)`);
-
-          res.json({ 
-            practices: uniqueVets.sort((a, b) => a.distance - b.distance),
-            total: uniqueVets.length,
-            searchQuery: query || 'veterinarian',
-            location: location || null,
-            source: 'Database + Local Fallback (Lansing)'
-          });
-          return;
-        }
-
         // Database fallback for other locations
-        console.log('🗄️ Using database fallback for location search');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Using database fallback for location search');
+        }
         const offices = await storage.getVeterinaryOffices();
 
         if (!offices || offices.length === 0) {
@@ -3777,14 +3617,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(herd);
     } catch (error) {
       console.error("Error creating livestock herd:", error);
-      
+
       // Handle specific database errors
       if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
         return res.status(503).json({ 
           message: "Database temporarily unavailable. Please try again in a moment." 
         });
       }
-      
+
       if (error.code === '23505') { // Unique constraint violation
         return res.status(409).json({ 
           message: "A herd with this name already exists in this operation." 
@@ -4721,17 +4561,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/animal-movements', isAuthenticated, async (req: any, res) => {
     try {
-      console.log("Received movement data:", req.body);
-      
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Received movement data:", req.body);
+      }
+
       const movementData = insertAnimalMovementSchema.parse({
         ...req.body,
         userId: req.user?.claims?.sub,
       });
-      
-      console.log("Validated movement data:", movementData);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Validated movement data:", movementData);
+      }
 
       const movement = await storage.createAnimalMovement(movementData);
-      console.log("Created movement:", movement);
+      if (process.env.NODE_ENV === 'development') {
+        console.log("Created movement:", movement);
+      }
       res.status(201).json(movement);
     } catch (error) {
       console.error("Error creating animal movement:", error);
