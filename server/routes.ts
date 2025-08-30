@@ -5000,6 +5000,212 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =============================== SYNC SCHEDULE MANAGEMENT ENDPOINTS ===============================
+
+  // Get all sync schedules
+  app.get('/api/admin/sync/schedules', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const schedules = await storage.getSyncSchedules();
+      res.json(schedules);
+    } catch (error) {
+      console.error("Error fetching sync schedules:", error);
+      res.status(500).json({ message: "Failed to fetch sync schedules" });
+    }
+  });
+
+  // Get specific sync schedule
+  app.get('/api/admin/sync/schedules/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const id = parseInt(req.params.id);
+      const schedule = await storage.getSyncSchedule(id);
+      
+      if (!schedule) {
+        return res.status(404).json({ message: "Sync schedule not found" });
+      }
+
+      res.json(schedule);
+    } catch (error) {
+      console.error("Error fetching sync schedule:", error);
+      res.status(500).json({ message: "Failed to fetch sync schedule" });
+    }
+  });
+
+  // Create new sync schedule
+  app.post('/api/admin/sync/schedules', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const scheduleData = req.body;
+      
+      // Calculate next run time based on frequency
+      let nextRun = new Date();
+      switch (scheduleData.frequency) {
+        case 'twice_daily':
+          nextRun.setHours(nextRun.getHours() + 12);
+          break;
+        case 'daily':
+          nextRun.setDate(nextRun.getDate() + 1);
+          break;
+        case 'weekly':
+          nextRun.setDate(nextRun.getDate() + 7);
+          break;
+        case 'custom':
+          // For custom schedules, use cron expression to calculate next run
+          // For now, default to 1 hour
+          nextRun.setHours(nextRun.getHours() + 1);
+          break;
+      }
+
+      const schedule = await storage.createSyncSchedule({
+        ...scheduleData,
+        nextRun
+      });
+
+      res.status(201).json(schedule);
+    } catch (error) {
+      console.error("Error creating sync schedule:", error);
+      res.status(500).json({ message: "Failed to create sync schedule" });
+    }
+  });
+
+  // Update sync schedule
+  app.put('/api/admin/sync/schedules/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const id = parseInt(req.params.id);
+      const updates = req.body;
+      
+      // If frequency changed, recalculate next run time
+      if (updates.frequency) {
+        let nextRun = new Date();
+        switch (updates.frequency) {
+          case 'twice_daily':
+            nextRun.setHours(nextRun.getHours() + 12);
+            break;
+          case 'daily':
+            nextRun.setDate(nextRun.getDate() + 1);
+            break;
+          case 'weekly':
+            nextRun.setDate(nextRun.getDate() + 7);
+            break;
+          case 'custom':
+            nextRun.setHours(nextRun.getHours() + 1);
+            break;
+        }
+        updates.nextRun = nextRun;
+      }
+
+      const schedule = await storage.updateSyncSchedule(id, updates);
+      
+      if (!schedule) {
+        return res.status(404).json({ message: "Sync schedule not found" });
+      }
+
+      res.json(schedule);
+    } catch (error) {
+      console.error("Error updating sync schedule:", error);
+      res.status(500).json({ message: "Failed to update sync schedule" });
+    }
+  });
+
+  // Delete sync schedule
+  app.delete('/api/admin/sync/schedules/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteSyncSchedule(id);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Sync schedule not found" });
+      }
+
+      res.json({ message: "Sync schedule deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting sync schedule:", error);
+      res.status(500).json({ message: "Failed to delete sync schedule" });
+    }
+  });
+
+  // Bulk create schedules for "sync everything twice daily"
+  app.post('/api/admin/sync/schedules/bulk-twice-daily', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      // Define all sync types that should run twice daily
+      const syncTypes = [
+        { name: '🐾 Pet Products Sync', syncType: 'products' },
+        { name: '🚨 Recall Alerts Sync', syncType: 'recalls' },
+        { name: '⚠️ Dangerous Ingredients Sync', syncType: 'ingredients' },
+        { name: '🚜 Livestock Data Sync', syncType: 'livestock' },
+        { name: '🌾 Feed Nutrition Sync', syncType: 'feed-nutrition' },
+        { name: '🦎 Exotic Products Sync', syncType: 'exotic-products' },
+        { name: '🍃 Exotic Nutrition Sync', syncType: 'exotic-nutrition' },
+        { name: '⚠️ Exotic Safety Sync', syncType: 'exotic-safety' }
+      ];
+
+      const createdSchedules = [];
+      let nextRunBase = new Date();
+      
+      for (const [index, syncConfig] of syncTypes.entries()) {
+        // Stagger the sync schedules by 30 minutes each to avoid overwhelming the system
+        let nextRun = new Date(nextRunBase);
+        nextRun.setMinutes(nextRun.getMinutes() + (index * 30));
+        
+        try {
+          const schedule = await storage.createSyncSchedule({
+            name: syncConfig.name,
+            syncType: syncConfig.syncType,
+            isEnabled: true,
+            frequency: 'twice_daily',
+            nextRun
+          });
+          createdSchedules.push(schedule);
+        } catch (error) {
+          console.error(`Error creating schedule for ${syncConfig.syncType}:`, error);
+        }
+      }
+
+      res.status(201).json({
+        message: `Created ${createdSchedules.length} sync schedules for twice-daily execution`,
+        schedules: createdSchedules,
+        totalCreated: createdSchedules.length
+      });
+    } catch (error) {
+      console.error("Error creating bulk sync schedules:", error);
+      res.status(500).json({ message: "Failed to create bulk sync schedules" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

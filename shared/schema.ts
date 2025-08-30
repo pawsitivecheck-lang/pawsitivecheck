@@ -105,6 +105,25 @@ export const contentModerationReports = pgTable("content_moderation_reports", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Sync scheduling for automated data synchronization
+export const syncSchedules = pgTable("sync_schedules", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(), // human-readable name
+  syncType: varchar("sync_type", { length: 50 }).notNull(), // products, recalls, ingredients, livestock, etc.
+  isEnabled: boolean("is_enabled").default(true),
+  frequency: varchar("frequency", { length: 20 }).notNull(), // twice_daily, daily, weekly, custom
+  customCron: varchar("custom_cron", { length: 50 }), // for custom schedules (e.g., "0 */6 * * *")
+  lastRun: timestamp("last_run"),
+  nextRun: timestamp("next_run"),
+  runCount: integer("run_count").default(0),
+  successCount: integer("success_count").default(0),
+  failureCount: integer("failure_count").default(0),
+  lastResult: varchar("last_result", { length: 20 }).default('pending'), // success, failure, pending
+  lastError: text("last_error"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const productRecalls = pgTable("product_recalls", {
   id: serial("id").primaryKey(),
   productId: integer("product_id").references(() => products.id).notNull(),
@@ -903,6 +922,19 @@ export const insertContentModerationReportSchema = createInsertSchema(contentMod
   updatedAt: true,
 });
 
+export const insertSyncScheduleSchema = createInsertSchema(syncSchedules).omit({
+  id: true,
+  runCount: true,
+  successCount: true,
+  failureCount: true,
+  lastRun: true,
+  nextRun: true,
+  lastResult: true,
+  lastError: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Updated user schema with notification preferences
 export const updateUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -946,4 +978,6 @@ export type FarmProductReview = typeof farmProductReviews.$inferSelect;
 export type InsertFarmProductReview = z.infer<typeof insertFarmProductReviewSchema>;
 export type ContentModerationReport = typeof contentModerationReports.$inferSelect;
 export type InsertContentModerationReport = z.infer<typeof insertContentModerationReportSchema>;
+export type SyncSchedule = typeof syncSchedules.$inferSelect;
+export type InsertSyncSchedule = z.infer<typeof insertSyncScheduleSchema>;
 export type UserNotificationPreferences = z.infer<typeof userNotificationPreferencesSchema>;

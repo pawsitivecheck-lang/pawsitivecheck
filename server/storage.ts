@@ -25,6 +25,7 @@ import {
   informationSources,
   informationalResources,
   farmProductReviews,
+  syncSchedules,
   type User,
   type UpsertUser,
   type Product,
@@ -77,6 +78,8 @@ import {
   type InsertInformationalResource,
   type FarmProductReview,
   type InsertFarmProductReview,
+  type SyncSchedule,
+  type InsertSyncSchedule,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -289,6 +292,22 @@ export interface IStorage {
   updateFarmProductReview(id: number, updates: Partial<InsertFarmProductReview>, userId: string): Promise<FarmProductReview | undefined>;
   deleteFarmProductReview(id: number, userId: string): Promise<boolean>;
   voteReviewHelpful(reviewId: number): Promise<boolean>;
+
+  // Sync schedule operations
+  getSyncSchedules(): Promise<SyncSchedule[]>;
+  getSyncSchedule(id: number): Promise<SyncSchedule | undefined>;
+  createSyncSchedule(schedule: InsertSyncSchedule): Promise<SyncSchedule>;
+  updateSyncSchedule(id: number, updates: Partial<InsertSyncSchedule>): Promise<SyncSchedule | undefined>;
+  deleteSyncSchedule(id: number): Promise<boolean>;
+  updateSyncScheduleStatus(id: number, status: {
+    lastRun?: Date;
+    nextRun?: Date;
+    lastResult?: 'success' | 'failure' | 'pending';
+    lastError?: string;
+    runCount?: number;
+    successCount?: number;
+    failureCount?: number;
+  }): Promise<SyncSchedule | undefined>;
 
   // User account management methods
   deleteAllUserData(userId: string): Promise<boolean>;
@@ -1454,6 +1473,67 @@ export class DatabaseStorage implements IStorage {
       })
       .where(eq(informationalResources.id, id));
     return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== SYNC SCHEDULE METHODS ===============================
+
+  async getSyncSchedules(): Promise<SyncSchedule[]> {
+    return await db
+      .select()
+      .from(syncSchedules)
+      .orderBy(desc(syncSchedules.createdAt));
+  }
+
+  async getSyncSchedule(id: number): Promise<SyncSchedule | undefined> {
+    const [schedule] = await db.select().from(syncSchedules).where(eq(syncSchedules.id, id));
+    return schedule;
+  }
+
+  async createSyncSchedule(schedule: InsertSyncSchedule): Promise<SyncSchedule> {
+    const [newSchedule] = await db.insert(syncSchedules).values(schedule).returning();
+    return newSchedule;
+  }
+
+  async updateSyncSchedule(id: number, updates: Partial<InsertSyncSchedule>): Promise<SyncSchedule | undefined> {
+    const [schedule] = await db
+      .update(syncSchedules)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(syncSchedules.id, id))
+      .returning();
+    return schedule;
+  }
+
+  async deleteSyncSchedule(id: number): Promise<boolean> {
+    const result = await db.delete(syncSchedules).where(eq(syncSchedules.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async updateSyncScheduleStatus(id: number, status: {
+    lastRun?: Date;
+    nextRun?: Date;
+    lastResult?: 'success' | 'failure' | 'pending';
+    lastError?: string;
+    runCount?: number;
+    successCount?: number;
+    failureCount?: number;
+  }): Promise<SyncSchedule | undefined> {
+    // Increment counters based on result
+    let updateData: any = { ...status, updatedAt: new Date() };
+    
+    if (status.lastResult === 'success' && status.runCount !== undefined) {
+      updateData.runCount = status.runCount + 1;
+      updateData.successCount = sql`success_count + 1`;
+    } else if (status.lastResult === 'failure' && status.runCount !== undefined) {
+      updateData.runCount = status.runCount + 1;
+      updateData.failureCount = sql`failure_count + 1`;
+    }
+
+    const [schedule] = await db
+      .update(syncSchedules)
+      .set(updateData)
+      .where(eq(syncSchedules.id, id))
+      .returning();
+    return schedule;
   }
 
   // =============================== FARM PRODUCT REVIEW METHODS ===============================

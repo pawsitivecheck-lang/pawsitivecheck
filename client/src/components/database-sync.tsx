@@ -36,6 +36,28 @@ export default function DatabaseSync() {
   const [activeSync, setActiveSync] = useState<string | null>(null);
   const [isUpdatingLegal, setIsUpdatingLegal] = useState(false);
 
+  // Bulk twice daily mutation for the main component
+  const bulkTwiceDailyMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest('POST', '/api/admin/sync/schedules/bulk-twice-daily');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "🌟 COSMIC SCHEDULING COMPLETE! 🌟",
+        description: `Created ${data.totalCreated} sync schedules for twice-daily execution with smart staggering.`,
+        duration: 8000,
+      });
+    },
+    onError: () => {
+      toast({
+        title: "💥 Scheduling Failed",
+        description: "Could not create bulk sync schedules. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const { data: syncStatus, refetch: refetchStatus } = useQuery<SyncStatus>({
     queryKey: ['/api/admin/sync/status'],
     refetchInterval: 30000, // Refresh every 30 seconds
@@ -1047,6 +1069,210 @@ export default function DatabaseSync() {
           </div>
         </CardContent>
       </Card>
+
+      {/* =============== SYNC SCHEDULE MANAGEMENT =============== */}
+      <Card className="bg-gradient-to-r from-purple-900/30 to-blue-900/30 border-2 border-purple-500/50 backdrop-blur-sm" data-testid="card-sync-schedules">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+                <Clock className="text-white" size={24} />
+              </div>
+              <div>
+                <CardTitle className="text-2xl text-white" data-testid="text-sync-schedules-title">
+                  🕐 Automated Sync Scheduling
+                </CardTitle>
+                <p className="text-purple-200 text-sm mt-1">Configure automatic synchronization schedules for all data sources</p>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Quick Setup Buttons */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button
+              onClick={() => bulkTwiceDailyMutation.mutate()}
+              disabled={bulkTwiceDailyMutation.isPending}
+              className="h-16 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold"
+              data-testid="button-bulk-twice-daily"
+            >
+              {bulkTwiceDailyMutation.isPending ? (
+                <>
+                  <RefreshCw className="h-5 w-5 mr-3 animate-spin" />
+                  Setting up schedules...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-5 w-5 mr-3" />
+                  🚀 Sync EVERYTHING 2x Daily
+                </>
+              )}
+            </Button>
+            
+            <SyncScheduleDialog onScheduleCreated={() => {}} />
+          </div>
+
+          {/* Sync Schedule List */}
+          <SyncScheduleList />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+
+// Sync Schedule Dialog Component
+function SyncScheduleDialog({ onScheduleCreated }: { onScheduleCreated: () => void }) {
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    syncType: '',
+    frequency: 'daily',
+    customCron: '',
+    isEnabled: true
+  });
+
+  const createScheduleMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await apiRequest('POST', '/api/admin/sync/schedules', data);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "✨ Schedule Created Successfully!",
+        description: "Your sync schedule has been configured and will run automatically.",
+      });
+      setOpen(false);
+      setFormData({ name: '', syncType: '', frequency: 'daily', customCron: '', isEnabled: true });
+      onScheduleCreated();
+    },
+    onError: () => {
+      toast({
+        title: "Failed to Create Schedule",
+        description: "Could not create the sync schedule. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const syncTypeOptions = [
+    { value: 'products', label: '🐾 Pet Products' },
+    { value: 'recalls', label: '🚨 Product Recalls' },
+    { value: 'ingredients', label: '⚠️ Dangerous Ingredients' },
+    { value: 'livestock', label: '🐄 Livestock Data' },
+    { value: 'feed-nutrition', label: '🌾 Feed Nutrition' },
+    { value: 'exotic-products', label: '🦎 Exotic Products' },
+    { value: 'exotic-nutrition', label: '🍃 Exotic Nutrition' },
+    { value: 'exotic-safety', label: '⚠️ Exotic Safety' }
+  ];
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    createScheduleMutation.mutate(formData);
+  };
+
+  return (
+    <Card className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-400/30 cursor-pointer hover:border-purple-300/50 transition-colors" onClick={() => setOpen(true)}>
+      <CardContent className="flex items-center justify-center h-16">
+        <div className="flex items-center gap-3 text-white font-semibold">
+          <Plus className="h-5 w-5" />
+          ⚙️ Create Custom Schedule
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Sync Schedule List Component
+function SyncScheduleList() {
+  const { toast } = useToast();
+
+  const { data: schedules = [] } = useQuery({
+    queryKey: ['/api/admin/sync/schedules'],
+  });
+
+  const formatNextRun = (dateString: string | null) => {
+    if (!dateString) return "Not scheduled";
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime();
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (diffHours > 0) {
+      return `in ${diffHours}h ${diffMinutes}m`;
+    } else if (diffMinutes > 0) {
+      return `in ${diffMinutes}m`;
+    } else if (diffMs > 0) {
+      return "in <1m";
+    } else {
+      return "overdue";
+    }
+  };
+
+  const getStatusBadge = (schedule: any) => {
+    if (!schedule.isEnabled) {
+      return <Badge variant="secondary" className="text-xs">Disabled</Badge>;
+    }
+    
+    switch (schedule.lastResult) {
+      case 'success':
+        return <Badge className="bg-green-600 text-xs">Success</Badge>;
+      case 'failure':
+        return <Badge variant="destructive" className="text-xs">Failed</Badge>;
+      default:
+        return <Badge variant="outline" className="text-xs">Pending</Badge>;
+    }
+  };
+
+  if (schedules.length === 0) {
+    return (
+      <div className="text-center py-8 text-purple-200">
+        <Clock className="h-12 w-12 mx-auto mb-4 text-purple-400" />
+        <p className="text-lg mb-2">No sync schedules configured</p>
+        <p className="text-sm text-purple-300">Create schedules to automate your data synchronization</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-white">Active Sync Schedules ({schedules.length})</h3>
+      </div>
+      
+      <div className="grid gap-3">
+        {schedules.map((schedule: any) => (
+          <Card key={schedule.id} className="bg-slate-800/50 border-purple-500/20" data-testid={`schedule-${schedule.id}`}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h4 className="font-medium text-white text-sm">{schedule.name}</h4>
+                    {getStatusBadge(schedule)}
+                  </div>
+                  
+                  <div className="text-xs text-gray-300 space-y-1">
+                    <div className="flex items-center gap-4">
+                      <span>Type: <strong>{schedule.syncType}</strong></span>
+                      <span>Frequency: <strong>{schedule.frequency.replace('_', ' ')}</strong></span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span>Next: <strong>{formatNextRun(schedule.nextRun)}</strong></span>
+                      <span>Runs: <strong>{schedule.runCount}</strong> ({schedule.successCount}✓, {schedule.failureCount}✗)</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${schedule.isEnabled ? 'bg-green-400' : 'bg-gray-400'}`} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
