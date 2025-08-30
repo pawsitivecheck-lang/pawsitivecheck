@@ -1328,6 +1328,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Helper functions for filtering animal care products 
+  function isAnimalCareProduct(product: any): boolean {
+    const name = (product.product_name || '').toLowerCase();
+    const categories = product.categories_tags || [];
+    const brands = (product.brands || '').toLowerCase();
+    
+    // Exclude human food products
+    const humanFoodKeywords = ['hot dog', 'burger', 'pizza', 'human', 'people', 'soda', 'coffee', 'tea', 'juice'];
+    if (humanFoodKeywords.some(keyword => name.includes(keyword))) {
+      return false;
+    }
+    
+    // Include animal care specific categories
+    const animalCareCategories = [
+      'pet', 'dog', 'cat', 'bird', 'fish', 'reptile', 'ferret', 'rabbit', 'guinea', 
+      'hamster', 'livestock', 'cattle', 'chicken', 'pig', 'sheep', 'goat', 'horse',
+      'feed', 'treat', 'toy', 'leash', 'collar', 'aquarium', 'cage', 'litter'
+    ];
+    
+    const hasAnimalKeywords = animalCareCategories.some(keyword => 
+      name.includes(keyword) || brands.includes(keyword) || 
+      categories.some((cat: string) => cat.toLowerCase().includes(keyword))
+    );
+    
+    return hasAnimalKeywords;
+  }
+
+  function checkNorthAmericanAvailability(product: any): boolean {
+    // For Open Pet Food Facts, we'll use heuristics since geographic data is limited
+    const countries = product.countries_tags || [];
+    const manufacturerCountries = product.manufacturing_places || '';
+    const origins = product.origins || '';
+    
+    // Check if explicitly sold in US/Canada
+    const northAmericaCountries = ['united-states', 'usa', 'canada', 'north-america'];
+    const hasNorthAmericaTag = countries.some((country: string) => 
+      northAmericaCountries.some(na => country.toLowerCase().includes(na))
+    );
+    
+    // Check manufacturing/origin locations
+    const hasNorthAmericanOrigin = northAmericaCountries.some(na => 
+      manufacturerCountries.toLowerCase().includes(na) || 
+      origins.toLowerCase().includes(na)
+    );
+    
+    // For products without specific geographic info, allow major pet food brands that are known to be available in North America
+    const knownNorthAmericanBrands = ['purina', 'hills', 'royal canin', 'blue buffalo', 'wellness', 'nutro', 'iams', 'pedigree', 'whiskas', 'friskies'];
+    const isKnownBrand = knownNorthAmericanBrands.some(brand => 
+      (product.brands || '').toLowerCase().includes(brand)
+    );
+    
+    return hasNorthAmericaTag || hasNorthAmericanOrigin || isKnownBrand;
+  }
+
+  function determineAnimalCareCategory(product: any): string {
+    const name = (product.product_name || '').toLowerCase();
+    const categories = product.categories_tags || [];
+    
+    if (categories.some((cat: string) => cat.includes('treat') || cat.includes('snack'))) {
+      return 'pet-treats';
+    } else if (categories.some((cat: string) => cat.includes('toy'))) {
+      return 'pet-toys';
+    } else if (name.includes('dog') || categories.some((cat: string) => cat.includes('dog'))) {
+      return 'pet-food';
+    } else if (name.includes('cat') || categories.some((cat: string) => cat.includes('cat'))) {
+      return 'pet-food';
+    } else if (name.includes('bird') || name.includes('parrot')) {
+      return 'exotic-pet-food';
+    } else if (name.includes('fish') || name.includes('aquarium')) {
+      return 'aquatic-food';
+    } else if (name.includes('reptile') || name.includes('lizard') || name.includes('snake')) {
+      return 'exotic-pet-food';
+    } else if (name.includes('ferret') || name.includes('rabbit') || name.includes('guinea')) {
+      return 'exotic-pet-food';
+    } else if (name.includes('livestock') || name.includes('cattle') || name.includes('pig') || name.includes('chicken')) {
+      return 'farm-feed';
+    }
+    
+    return 'pet-food'; // Default fallback
+  }
+
   app.post('/api/admin/sync/products', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -1336,11 +1417,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
       }
 
-      // Sync products from external API (simulate for now)
+      // Sync products from external API with strict filtering for animal care products in North America
       let syncedCount = 0;
       try {
-        // Try to fetch from Open Pet Food Facts API
-        const response = await fetch('https://world.openpetfoodfacts.org/api/v2/search?page_size=20&json=1', {
+        // Try to fetch from Open Pet Food Facts API with animal care focus
+        const response = await fetch('https://world.openpetfoodfacts.org/api/v2/search?page_size=30&json=1&categories_tags=en:dog-foods,en:cat-foods,en:pet-food', {
           headers: {
             'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
           }
@@ -1351,29 +1432,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const products = data.products || [];
 
           for (const product of products.slice(0, 10)) {
-            if (product.product_name && product.brands) {
-              try {
-                // Check if product already exists by name
-                const existingProducts = await storage.getProducts(1000, 0, product.product_name);
-                if (existingProducts.length === 0) {
-                  await storage.createProduct({
-                    name: product.product_name,
-                    brand: product.brands.split(',')[0].trim(),
-                    category: 'pet-food',
-                    description: product.generic_name || null,
-                    ingredients: product.ingredients_text || null,
-                    barcode: product.code || null,
-                    cosmicScore: 70,
-                    cosmicClarity: 'questionable',
-                    transparencyLevel: 'good',
-                    isBlacklisted: false,
-                    suspiciousIngredients: [],
-                    lastAnalyzed: new Date()
-                  });
-                  syncedCount++;
+            // Strict filtering for animal care products only
+            if (product.product_name && product.brands && isAnimalCareProduct(product)) {
+              // Geographic filtering - prioritize products sold in North America
+              const isNorthAmerican = checkNorthAmericanAvailability(product);
+              
+              if (isNorthAmerican) {
+                try {
+                  // Check if product already exists by name
+                  const existingProducts = await storage.getProducts(1000, 0, product.product_name);
+                  if (existingProducts.length === 0) {
+                    await storage.createProduct({
+                      name: product.product_name,
+                      brand: product.brands.split(',')[0].trim(),
+                      category: determineAnimalCareCategory(product),
+                      description: product.generic_name || "Animal care product verified for U.S. & Canada markets",
+                      ingredients: product.ingredients_text || null,
+                      barcode: product.code || null,
+                      cosmicScore: 70,
+                      cosmicClarity: 'questionable',
+                      transparencyLevel: 'good',
+                      isBlacklisted: false,
+                      suspiciousIngredients: [],
+                      lastAnalyzed: new Date()
+                    });
+                    syncedCount++;
+                  }
+                } catch (err) {
+                  console.warn("Failed to sync product:", product.product_name, err);
                 }
-              } catch (err) {
-                console.warn("Failed to sync product:", product.product_name, err);
               }
             }
           }

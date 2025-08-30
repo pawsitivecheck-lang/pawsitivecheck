@@ -80,6 +80,17 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+### August 30, 2025 - Database Curation & Geographic Filtering
+- **Product Database Cleanup**: Removed 16 non-animal care products including human food items (hot dogs) and unverified "Unknown Brand" entries
+- **Geographic Market Focus**: Updated product sync logic to prioritize products sold in U.S. & Canada markets only
+- **Enhanced Product Filtering**: Implemented strict filtering functions to ensure only animal care products are added:
+  - `isAnimalCareProduct()`: Filters out human food and non-animal products using keyword analysis
+  - `checkNorthAmericanAvailability()`: Verifies products are available in North American markets
+  - `determineAnimalCareCategory()`: Automatically categorizes products into specific animal care categories
+- **Improved API Integration**: Updated Open Pet Food Facts sync to target animal care categories specifically
+- **Database Quality**: Reduced product count from 57 to 45 high-quality, verified animal care products
+- **Category Standardization**: Updated generic categories (habitat→reptile-habitat, aquarium→aquarium-supplies) for better organization
+
 ### August 25, 2025 - Real API Integration & Comprehensive Animal Care Management
 - **Real API Integration**: Connected platform to live USDA NASS Quick Stats API and FDA Animal & Veterinary API with proper authentication using real API keys
 - **Livestock Database**: Expanded to include 46 products with 8 livestock-specific feeds and ingredients including beef cattle, dairy cow, swine, sheep/goat, and poultry feeds  
