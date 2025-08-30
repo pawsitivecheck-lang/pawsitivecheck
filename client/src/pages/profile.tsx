@@ -16,7 +16,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp, PlusCircle, Heart, Dog, Cat, Bird, Fish, Weight, Stethoscope, Edit, Trash2 } from "lucide-react";
+import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp, PlusCircle, Heart, Dog, Cat, Bird, Fish, Weight, Stethoscope, Edit, Trash2, Settings, AlertTriangle, Database } from "lucide-react";
 import type { PetProfile } from "@shared/schema";
 
 export default function Profile() {
@@ -39,6 +39,16 @@ export default function Profile() {
 
   const { data: pets = [], isLoading: isPetsLoading } = useQuery({
     queryKey: ["/api/pets"],
+    enabled: isAuthenticated,
+  });
+
+  const { data: dataSummary = {} } = useQuery({
+    queryKey: ["/api/user/data-summary"],
+    enabled: isAuthenticated,
+  });
+
+  const { data: livestockOperations = [] } = useQuery({
+    queryKey: ["/api/livestock/operations"],
     enabled: isAuthenticated,
   });
 
@@ -73,6 +83,50 @@ export default function Profile() {
   const reviewCount = Array.isArray(userReviews) ? userReviews.length : 0;
   const scanCount = Array.isArray(userScans) ? userScans.length : 0;
   const petCount = Array.isArray(pets) ? pets.length : 0;
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest("/api/user/account", "DELETE");
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Account deleted successfully. You will be logged out.",
+      });
+      // Redirect to home page after account deletion
+      window.location.href = "/";
+    },
+    onError: (error) => {
+      console.error("Error deleting account:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete account. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteOperationMutation = useMutation({
+    mutationFn: async (operationId: number) => {
+      return await apiRequest(`/api/livestock/operations/${operationId}`, "DELETE");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/livestock/operations"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/data-summary"] });
+      toast({
+        title: "Success",
+        description: "Livestock operation deleted successfully!",
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting livestock operation:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete livestock operation. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
   const rankProgress = getNextRankProgress(reviewCount);
 
   const createPetMutation = useMutation({
@@ -600,7 +654,7 @@ export default function Profile() {
 
           {/* Profile Tabs */}
           <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
                 My Reviews
               </TabsTrigger>
@@ -609,6 +663,9 @@ export default function Profile() {
               </TabsTrigger>
               <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
                 Achievements
+              </TabsTrigger>
+              <TabsTrigger value="data-management" className="data-[state=active]:bg-red-100 dark:data-[state=active]:bg-red-900/20 data-[state=active]:text-red-600 dark:data-[state=active]:text-red-400" data-testid="tab-data-management">
+                Data Management
               </TabsTrigger>
             </TabsList>
 
@@ -825,6 +882,179 @@ export default function Profile() {
                         Unlocked!
                       </Badge>
                     )}
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="data-management" className="mt-6" data-testid="content-data-management">
+              <div className="space-y-6">
+                {/* Data Summary Card */}
+                <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-data-summary">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                      <Database className="h-5 w-5" />
+                      Your Data Summary
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg" data-testid="summary-pets">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{dataSummary.petProfiles || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Pet Profiles</div>
+                      </div>
+                      <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg" data-testid="summary-operations">
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">{dataSummary.livestockOperations || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Livestock Operations</div>
+                      </div>
+                      <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg" data-testid="summary-herds">
+                        <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{dataSummary.livestockHerds || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Livestock Herds</div>
+                      </div>
+                      <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg" data-testid="summary-health">
+                        <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{dataSummary.healthRecords || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Health Records</div>
+                      </div>
+                      <div className="text-center p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg" data-testid="summary-reviews">
+                        <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{dataSummary.reviews || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Product Reviews</div>
+                      </div>
+                      <div className="text-center p-4 bg-pink-50 dark:bg-pink-900/20 rounded-lg" data-testid="summary-scans">
+                        <div className="text-2xl font-bold text-pink-600 dark:text-pink-400">{dataSummary.scans || 0}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">Product Scans</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Profile Management Cards */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Pet Profiles Management */}
+                  <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-manage-pets">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                        <Heart className="h-5 w-5" />
+                        Pet Profiles
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Manage your pet profiles and their health information.
+                      </p>
+                      <div className="flex gap-2">
+                        <span className="flex-1 text-sm text-gray-500">
+                          {petCount} profile{petCount !== 1 ? 's' : ''}
+                        </span>
+                        {petCount > 0 && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to delete all ${petCount} pet profile${petCount !== 1 ? 's' : ''}? This action cannot be undone.`)) {
+                                pets.forEach((pet: any) => {
+                                  // Using the existing delete functionality
+                                  fetch(`/api/pets/${pet.id}`, { method: 'DELETE' })
+                                    .then(() => {
+                                      queryClient.invalidateQueries({ queryKey: ["/api/pets"] });
+                                      queryClient.invalidateQueries({ queryKey: ["/api/user/data-summary"] });
+                                    });
+                                });
+                                toast({
+                                  title: "Success",
+                                  description: "All pet profiles deleted successfully!",
+                                });
+                              }
+                            }}
+                            className="text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-600 dark:hover:bg-red-900/20"
+                            data-testid="button-delete-all-pets"
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Delete All
+                          </Button>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Livestock Operations Management */}
+                  <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-manage-livestock">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                        <Shield className="h-5 w-5" />
+                        Livestock Operations
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Manage your livestock operations and herd information.
+                      </p>
+                      <div className="flex gap-2">
+                        <span className="flex-1 text-sm text-gray-500">
+                          {dataSummary.livestockOperations || 0} operation{dataSummary.livestockOperations !== 1 ? 's' : ''}
+                        </span>
+                        {(dataSummary.livestockOperations || 0) > 0 && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to delete all livestock operations? This will also delete all associated herds and records. This action cannot be undone.`)) {
+                                livestockOperations.forEach((operation: any) => {
+                                  deleteOperationMutation.mutate(operation.id);
+                                });
+                              }
+                            }}
+                            className="text-red-600 border-red-300 hover:bg-red-50 dark:text-red-400 dark:border-red-600 dark:hover:bg-red-900/20"
+                            data-testid="button-delete-all-operations"
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Delete All
+                          </Button>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Danger Zone - Complete Account Deletion */}
+                <Card className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 shadow" data-testid="card-danger-zone">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-red-700 dark:text-red-400">
+                      <AlertTriangle className="h-5 w-5" />
+                      Danger Zone
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold text-red-700 dark:text-red-400 mb-2">Delete Account</h3>
+                        <p className="text-red-600 dark:text-red-300 text-sm mb-4">
+                          Permanently delete your account and all associated data. This action cannot be undone and will remove:
+                        </p>
+                        <ul className="text-red-600 dark:text-red-300 text-sm space-y-1 ml-4 list-disc mb-4">
+                          <li>All pet profiles and health records</li>
+                          <li>All livestock operations and herd data</li>
+                          <li>All product reviews and scan history</li>
+                          <li>All saved products and preferences</li>
+                          <li>Your user account and authentication data</li>
+                        </ul>
+                      </div>
+                      <Button 
+                        variant="destructive"
+                        onClick={() => {
+                          if (confirm("Are you absolutely sure you want to delete your entire account? This will permanently remove all your data and cannot be undone.")) {
+                            if (confirm("This is your final warning. Delete your account and ALL data permanently?")) {
+                              deleteAccountMutation.mutate();
+                            }
+                          }
+                        }}
+                        disabled={deleteAccountMutation.isPending}
+                        className="bg-red-600 hover:bg-red-700 text-white"
+                        data-testid="button-delete-account"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        {deleteAccountMutation.isPending ? "Deleting Account..." : "Delete Account Permanently"}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

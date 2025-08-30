@@ -287,6 +287,17 @@ export interface IStorage {
   updateFarmProductReview(id: number, updates: Partial<InsertFarmProductReview>, userId: string): Promise<FarmProductReview | undefined>;
   deleteFarmProductReview(id: number, userId: string): Promise<boolean>;
   voteReviewHelpful(reviewId: number): Promise<boolean>;
+
+  // User account management methods
+  deleteAllUserData(userId: string): Promise<boolean>;
+  getUserDataSummary(userId: string): Promise<{
+    petProfiles: number;
+    livestockOperations: number;
+    livestockHerds: number;
+    healthRecords: number;
+    reviews: number;
+    scans: number;
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1466,6 +1477,166 @@ export class DatabaseStorage implements IStorage {
       })
       .where(eq(farmProductReviews.id, reviewId));
     return (result.rowCount ?? 0) > 0;
+  }
+
+  // =============================== USER ACCOUNT MANAGEMENT METHODS ===============================
+
+  async getUserDataSummary(userId: string): Promise<{
+    petProfiles: number;
+    livestockOperations: number;
+    livestockHerds: number;
+    healthRecords: number;
+    reviews: number;
+    scans: number;
+  }> {
+    const [petCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(petProfiles)
+      .where(and(eq(petProfiles.userId, userId), eq(petProfiles.isActive, true)));
+
+    const [operationCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(livestockOperations)
+      .where(and(eq(livestockOperations.userId, userId), eq(livestockOperations.isActive, true)));
+
+    const [herdCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(livestockHerds)
+      .where(and(eq(livestockHerds.userId, userId), eq(livestockHerds.isActive, true)));
+
+    const [healthCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(healthRecords)
+      .where(eq(healthRecords.userId, userId));
+
+    const [reviewCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(productReviews)
+      .where(eq(productReviews.userId, userId));
+
+    const [scanCount] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(scanHistory)
+      .where(eq(scanHistory.userId, userId));
+
+    return {
+      petProfiles: petCount?.count || 0,
+      livestockOperations: operationCount?.count || 0,
+      livestockHerds: herdCount?.count || 0,
+      healthRecords: healthCount?.count || 0,
+      reviews: reviewCount?.count || 0,
+      scans: scanCount?.count || 0,
+    };
+  }
+
+  async deleteAllUserData(userId: string): Promise<boolean> {
+    try {
+      // Start a transaction to ensure all deletions are atomic
+      await db.transaction(async (tx) => {
+        // Soft delete pet profiles
+        await tx
+          .update(petProfiles)
+          .set({ isActive: false, updatedAt: new Date() })
+          .where(eq(petProfiles.userId, userId));
+
+        // Soft delete livestock operations
+        await tx
+          .update(livestockOperations)
+          .set({ isActive: false, updatedAt: new Date() })
+          .where(eq(livestockOperations.userId, userId));
+
+        // Soft delete livestock herds
+        await tx
+          .update(livestockHerds)
+          .set({ isActive: false, updatedAt: new Date() })
+          .where(eq(livestockHerds.userId, userId));
+
+        // Delete health records
+        await tx
+          .delete(healthRecords)
+          .where(eq(healthRecords.userId, userId));
+
+        // Delete medical events
+        await tx
+          .delete(medicalEvents)
+          .where(eq(medicalEvents.userId, userId));
+
+        // Delete product reviews
+        await tx
+          .delete(productReviews)
+          .where(eq(productReviews.userId, userId));
+
+        // Delete scan history
+        await tx
+          .delete(scanHistory)
+          .where(eq(scanHistory.userId, userId));
+
+        // Delete saved products
+        await tx
+          .delete(savedProducts)
+          .where(eq(savedProducts.userId, userId));
+
+        // Delete veterinary offices
+        await tx
+          .delete(veterinaryOffices)
+          .where(eq(veterinaryOffices.userId, userId));
+
+        // Delete feed management records
+        await tx
+          .delete(feedManagement)
+          .where(eq(feedManagement.userId, userId));
+
+        // Delete livestock health records
+        await tx
+          .delete(livestockHealthRecords)
+          .where(eq(livestockHealthRecords.userId, userId));
+
+        // Delete farm animals
+        await tx
+          .delete(farmAnimals)
+          .where(eq(farmAnimals.userId, userId));
+
+        // Delete breeding records
+        await tx
+          .delete(breedingRecords)
+          .where(eq(breedingRecords.userId, userId));
+
+        // Delete production records
+        await tx
+          .delete(productionRecords)
+          .where(eq(productionRecords.userId, userId));
+
+        // Delete animal movements
+        await tx
+          .delete(animalMovements)
+          .where(eq(animalMovements.userId, userId));
+
+        // Delete farm animal products
+        await tx
+          .delete(farmAnimalProducts)
+          .where(eq(farmAnimalProducts.userId, userId));
+
+        // Delete informational resources
+        await tx
+          .delete(informationalResources)
+          .where(eq(informationalResources.userId, userId));
+
+        // Delete farm product reviews
+        await tx
+          .delete(farmProductReviews)
+          .where(eq(farmProductReviews.userId, userId));
+
+        // Finally, delete the user account itself
+        await tx
+          .delete(users)
+          .where(eq(users.id, userId));
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting user data:', error);
+      return false;
+    }
   }
 }
 

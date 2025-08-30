@@ -5145,6 +5145,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =========================== USER ACCOUNT MANAGEMENT ROUTES ===========================
+
+  // Get user data summary for profile management
+  app.get('/api/user/data-summary', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = (req as any).user?.claims?.sub;
+      const summary = await storage.getUserDataSummary(userId);
+      res.json(summary);
+    } catch (error) {
+      console.error("Error getting user data summary:", error);
+      res.status(500).json({ error: "Failed to get user data summary" });
+    }
+  });
+
+  // Delete all user data and account
+  app.delete('/api/user/account', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = (req as any).user?.claims?.sub;
+
+      const success = await storage.deleteAllUserData(userId);
+
+      if (!success) {
+        return res.status(500).json({ error: "Failed to delete user account" });
+      }
+
+      // Clear the session after account deletion
+      req.session.destroy((err: any) => {
+        if (err) {
+          console.error("Error destroying session:", err);
+        }
+      });
+
+      res.json({ message: "User account and all associated data deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting user account:", error);
+      res.status(500).json({ error: "Failed to delete user account" });
+    }
+  });
+
   app.post('/api/farm-product-reviews/:id/vote-helpful', async (req: any, res) => {
     try {
       const reviewId = parseInt(req.params.id);
