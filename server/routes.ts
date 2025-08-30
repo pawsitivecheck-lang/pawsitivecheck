@@ -152,6 +152,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     return existingProduct; // Return existing product instead of creating duplicate
                   }
 
+                  // FILTER OUT HUMAN FOOD - Only allow legitimate pet products
+                  const productName = (product.product_name || '').toLowerCase();
+                  const humanFoodKeywords = ['hot dog', 'pizza', 'sandwich', 'burger', 'bread', 'cookie', 'cake', 'soda', 'beer', 'wine', 'coffee', 'tea', 'candy', 'chocolate', 'ice cream', 'pasta', 'rice', 'cereal'];
+                  
+                  if (humanFoodKeywords.some(keyword => productName.includes(keyword))) {
+                    console.log(`Filtered out human food product: ${product.product_name}`);
+                    return null; // Skip human food products
+                  }
+
                   // Calculate cosmic score based on available data quality
                   let cosmicScore = 60;
                   if (product.ingredients_text) cosmicScore += 15;
