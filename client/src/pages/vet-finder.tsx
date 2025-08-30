@@ -456,7 +456,7 @@ export default function VetFinder() {
                   Mystical Veterinary Guardians
                 </h2>
                 <div className="text-cosmic-300 text-sm">
-                  Showing {Math.min(visibleResults, vetPractices.length)} of {vetPractices.length} results
+                  Showing {Math.min(visibleResults, (vetPractices || []).length)} of {(vetPractices || []).length} results
                 </div>
               </div>
               
@@ -484,7 +484,7 @@ export default function VetFinder() {
               </Card>
               
               <div className="grid gap-6">
-                {vetPractices.slice(0, visibleResults).map((vet) => (
+                {(vetPractices || []).slice(0, visibleResults).map((vet) => (
                   <Card key={vet.id} className="cosmic-card" data-testid={`vet-card-${vet.id}`}>
                     <CardContent className="p-6">
                       <div className="grid md:grid-cols-3 gap-6">
@@ -638,7 +638,7 @@ export default function VetFinder() {
           )}
 
           {/* No Results */}
-          {searchVetsMutation.data && vetPractices.length === 0 && (
+          {searchVetsMutation.data && (vetPractices || []).length === 0 && (
             <Card className="cosmic-card text-center p-8" data-testid="card-no-results">
               <Building2 className="mx-auto h-12 w-12 text-cosmic-500 mb-4" />
               <h3 className="text-xl font-mystical text-cosmic-300 mb-2">No Cosmic Healers Found</h3>
@@ -657,7 +657,7 @@ export default function VetFinder() {
           )}
 
           {/* Welcome State */}
-          {vetPractices.length === 0 && !searchVetsMutation.data && (
+          {(vetPractices || []).length === 0 && !searchVetsMutation.data && (
             <Card className="cosmic-card text-center p-8" data-testid="card-welcome">
               <Heart className="mx-auto h-16 w-16 text-starlight-500 mb-4" />
               <h3 className="text-2xl font-mystical text-starlight-400 mb-4">Find Your Pet's Guardian</h3>

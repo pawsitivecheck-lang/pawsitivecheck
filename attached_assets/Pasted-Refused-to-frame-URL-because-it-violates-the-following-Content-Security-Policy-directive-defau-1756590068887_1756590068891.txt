@@ -1,0 +1,43 @@
+Refused to frame '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'frame-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+Refused to frame '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'frame-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+Refused to frame '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'frame-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+Refused to frame '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'frame-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+Refused to frame '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'frame-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+show_ads_impl_fy2021.js?bust=31094349:102 Refused to load the script 'https://ep2.adtrafficquality.google/sodar/sodar2.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+(anonymous) @ show_ads_impl_fy2021.js?bust=31094349:102
+show_ads_impl_fy2021.js?bust=31094349:102 Uncaught (in promise) undefined
+/api/recalls:1  Failed to load resource: the server responded with a status of 500 ()
+/api/auth/user:1  Failed to load resource: the server responded with a status of 401 ()
+/api/products?limit=3:1  Failed to load resource: the server responded with a status of 500 ()
+/api/analytics/dashboard:1  Failed to load resource: the server responded with a status of 500 ()
+/api/reviews?limit=3&featured=true:1  Failed to load resource: the server responded with a status of 500 ()
+index-cvoJAei4.js:40 TypeError: o.slice is not a function
+    at PV (index-cvoJAei4.js:577:81314)
+    at jy (index-cvoJAei4.js:38:17879)
+    at Py (index-cvoJAei4.js:40:3158)
+    at dN (index-cvoJAei4.js:40:45767)
+    at iN (index-cvoJAei4.js:40:40564)
+    at wO (index-cvoJAei4.js:40:40492)
+    at p0 (index-cvoJAei4.js:40:40345)
+    at Yy (index-cvoJAei4.js:40:36604)
+    at rN (index-cvoJAei4.js:40:37416)
+    at Vl (index-cvoJAei4.js:38:3274)
+Iy @ index-cvoJAei4.js:40
+index-cvoJAei4.js:38 Uncaught TypeError: o.slice is not a function
+    at PV (index-cvoJAei4.js:577:81314)
+    at jy (index-cvoJAei4.js:38:17879)
+    at Py (index-cvoJAei4.js:40:3158)
+    at dN (index-cvoJAei4.js:40:45767)
+    at iN (index-cvoJAei4.js:40:40564)
+    at wO (index-cvoJAei4.js:40:40492)
+    at p0 (index-cvoJAei4.js:40:40345)
+    at Yy (index-cvoJAei4.js:40:36604)
+    at rN (index-cvoJAei4.js:40:37416)
+    at Vl (index-cvoJAei4.js:38:3274)
+da3d6357-bfaa-4fc2-829d-9b1043ff63fa.picard.prod.repl.run/:1 Error while trying to use the following icon from the Manifest: https://da3d6357-bfaa-4fc2-829d-9b1043ff63fa.picard.prod.repl.run/icon-192.png (Download error or resource isn't a valid image)

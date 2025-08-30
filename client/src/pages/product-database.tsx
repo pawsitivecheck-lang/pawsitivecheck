@@ -474,7 +474,7 @@ export default function ProductDatabase() {
             <>
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredProducts.slice(page * limit, (page + 1) * limit).map((product: any, index: number) => (
+                  {(filteredProducts || []).slice(page * limit, (page + 1) * limit).map((product: any, index: number) => (
                     <ProductCard 
                       key={product.id}
                       product={product}
@@ -484,7 +484,7 @@ export default function ProductDatabase() {
                 </div>
                 
                 {/* In-content Ad */}
-                {filteredProducts.slice(page * limit, (page + 1) * limit).length >= 4 && (
+                {(filteredProducts || []).slice(page * limit, (page + 1) * limit).length >= 4 && (
                   <div className="my-8">
                     <AdBanner size="leaderboard" position="product-list" />
                   </div>
