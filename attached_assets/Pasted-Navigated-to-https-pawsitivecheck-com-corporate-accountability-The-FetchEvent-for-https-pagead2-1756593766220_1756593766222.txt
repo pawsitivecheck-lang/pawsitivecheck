@@ -1,0 +1,69 @@
+Navigated to https://pawsitivecheck.com/corporate-accountability
+The FetchEvent for "https://pagead2.googlesyndication.com/pagead/gen_204?id=plmetrics&cls=0.000&mls=0.000&nls=0&cas=0.000&nas=0&was=0.000&wls=0.000&tls=0.000&lcp=720&lcps=37180&cbt=229&mbt=110&nlt=4&nif=2&ifi=3&eid=95370072%2C31094104%2C31094363%2C31094394%2C95362655%2C95369705%2C95370074%2C95370341%2C95370632%2C95340253%2C95340255&top=1&pvsid=4336836039109061" resulted in a network error response: the promise was rejected.
+Promise.then
+(anonymous) @ sw.js:102
+sw.js:130 Uncaught (in promise) Error: Offline and no cached response available
+    at sw.js:130:19
+(anonymous) @ sw.js:130
+Promise.catch
+(anonymous) @ sw.js:125
+Promise.then
+(anonymous) @ sw.js:104
+Fetch failed loading: GET "https://pagead2.googlesyndication.com/pagead/gen_204?id=plmetrics&cls=0.000&mls=0.000&nls=0&cas=0.000&nas=0&was=0.000&wls=0.000&tls=0.000&lcp=720&lcps=37180&cbt=229&mbt=110&nlt=4&nif=2&ifi=3&eid=95370072%2C31094104%2C31094363%2C31094394%2C95362655%2C95369705%2C95370074%2C95370341%2C95370632%2C95340253%2C95340255&top=1&pvsid=4336836039109061".
+ Third-party cookie is blocked in Chrome either because of Chrome flags or browser configuration.
+index-DuMB-uOG.js:533  GET https://pawsitivecheck.com/api/auth/user 401 (Unauthorized)
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
+sw.js:69 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+(anonymous) @ sw.js:69
+ads:1  Failed to load resource: the server responded with a status of 400 ()
+index-DuMB-uOG.js:533 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
+index-DuMB-uOG.js:655 PWA: Service Worker registered successfully: ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'https://pawsitivecheck.com/', …}
+show_ads_impl_fy2021.js:103 XHR finished loading: GET "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20250827&st=env".
+(anonymous) @ show_ads_impl_fy2021.js:103
+Aj @ show_ads_impl_fy2021.js:103
+zj @ show_ads_impl_fy2021.js:102
+Bj @ show_ads_impl_fy2021.js:104
+MZ @ show_ads_impl_fy2021.js:587
+(anonymous) @ show_ads_impl_fy2021.js:587
+corporate-accountability:1 Error while trying to use the following icon from the Manifest: https://pawsitivecheck.com/icon-192.png (Download error or resource isn't a valid image)
+sw.js:109 Fetch finished loading: GET "https://ep1.adtrafficquality.google/pagead/sodar?id=sodar2&v=237&t=2&li=gda_r20250827&jk=6929594257287380&bg=!-vml-bbNAAbjzW2Fw807ADQBe5WfOKzCpvPs1zehnernJgHf8zssIIQqB0YzzcSE5Fv-IR5YtoQMwUsLlYgwRDiJJcaAAgAABO9SAAAAb2gBB34ANj2BPTMKa_Mwl9PQDT1ztg0pf6g81PxSWkM8oGB0glWvAPX4VsMxh8WcrP77qcFN5RjSNnTG75kCXpwIUexxX5UMcdMYL6HpaFOU2YmPfTHNiw0J4CGs5MKAWt5Xsfe4IRFoxntGDdvZap80PyvHCuRpNNr2ST2iUs58YFQPOEZg9iy0eC8zJvo-LJrvOU360-nwEwSOYwetkXBfz9qL38f_KDY3QSququwYkpmmKKk2copFV6hrkit8yNL2wlcKxK4_URV0_kOBoaItq4s9EeshLcDQjOF05PQv0GE3TM3oyi6PNp5EqCSMuO-io9wHlpnrjc_UCifXBYXprEI1dZl896yJEBkMg3o8ZSjDETKPyaVqYxv6CBTqlArWmp43j6bkzlkBEpb7gTRQNq5gUq9fmJdOStyvFIx1MlH0ZVbvE06mL2KNQzyen3FRCRGWXswDyRNGVKhvj-_FCSqUTzltPYNhXlIuE6b_eHtQPJtMq42omwn4plufMWiqNra0C_8y2gSZ7-wxf6Lfv12r7ynhS1PZkVGKF_BogXqXIM7r0vyc2OrZTcbX6LA9UjTfTKRBqnN5dJ8vmJbyDw7YLXJODauILJph_i-wZqx-AR2BS2Mo_CLtRgbBeCZqs5hzgH9PCcSaIGfJockO_liO2hQhlC62SJjlgFAk7unz_s5Ejczx7AM3WFNckemQlQ2Mi3BPP8eev1pDdV4FJXV0HaKaNtK-YHqW1uc5gjrE-NnV2TXQ9pHjfj94g83fB_RLVgRDT7bHO3jZ-65YS2F0I114c6h2RS4BzAaGi-fO8tr0D43JTlrk3Uyp7FFbElzBdb7m5fXaC-ZkPZyaRdtBJdo0y4JJObDUkLFGq-ylKUvuFuzktXvJ0g".
+(anonymous) @ sw.js:109
+Promise.then
+(anonymous) @ sw.js:104
