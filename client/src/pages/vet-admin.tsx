@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +26,8 @@ import {
   Clock,
   Shield,
   Building2,
-  Search
+  Search,
+  RefreshCw
 } from "lucide-react";
 import Footer from "@/components/footer";
 
@@ -45,6 +46,8 @@ type VeterinaryOffice = {
   services?: string[];
   specialties?: string[];
   hours?: Record<string, string>;
+  isOpen?: boolean;
+  hoursLastUpdated?: string;
   emergencyServices: boolean;
   acceptsWalkIns: boolean;
   languages?: string[];
@@ -183,6 +186,32 @@ export default function VetAdmin() {
     },
   });
 
+  // Refresh hours for all veterinary offices
+  const refreshHoursMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/veterinary-offices/refresh-hours', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Failed to refresh hours');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/vets'] });
+      toast({
+        title: "Success",
+        description: `Updated hours for ${data.updated} out of ${data.total} veterinary offices`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to refresh veterinary hours",
+        variant: "destructive",
+      });
+    },
+  });
+
   const onSubmit = (data: z.infer<typeof vetOfficeFormSchema>) => {
     const transformedData = {
       ...data,
@@ -272,30 +301,41 @@ export default function VetAdmin() {
               </div>
             </div>
             
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  className="shrink-0"
-                  onClick={() => {
-                    setEditingOffice(null);
-                    form.reset();
-                  }}
-                  data-testid="button-add-vet"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Vet Office
-                </Button>
-              </DialogTrigger>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={() => refreshHoursMutation.mutate()}
+                disabled={refreshHoursMutation.isPending}
+                data-testid="button-refresh-hours"
+                className="shrink-0"
+              >
+                <RefreshCw className={`mr-2 h-4 w-4 ${refreshHoursMutation.isPending ? 'animate-spin' : ''}`} />
+                Refresh Hours
+              </Button>
               
-              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>
-                    {editingOffice ? "Edit Veterinary Office" : "Add New Veterinary Office"}
-                  </DialogTitle>
-                  <DialogDescription>
-                    {editingOffice ? "Update the veterinary office information below." : "Fill in the details to add a new veterinary office to the directory."}
-                  </DialogDescription>
-                </DialogHeader>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    className="shrink-0"
+                    onClick={() => {
+                      setEditingOffice(null);
+                      form.reset();
+                    }}
+                    data-testid="button-add-vet"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Vet Office
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingOffice ? "Edit Veterinary Office" : "Add New Veterinary Office"}
+                    </DialogTitle>
+                    <DialogDescription>
+                      {editingOffice ? "Update the veterinary office information below." : "Fill in the details to add a new veterinary office to the directory."}
+                    </DialogDescription>
+                  </DialogHeader>
                 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -640,6 +680,7 @@ export default function VetAdmin() {
             )}
           </div>
         </div>
+      </div>
       </div>
       
       <Footer />

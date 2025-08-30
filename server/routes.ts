@@ -2689,7 +2689,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       res.json({
-        practices: practices.sort((a, b) => a.distance - b.distance),
+        practices: practices.sort((a: any, b: any) => a.distance - b.distance),
         total: practices.length,
         source: 'Google Places API'
       });
@@ -2729,6 +2729,141 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching veterinary offices:", error);
       res.status(500).json({ message: "Failed to fetch veterinary offices" });
+    }
+  });
+
+  // Refresh real-time hours for all veterinary offices
+  app.post('/api/veterinary-offices/refresh-hours', async (req, res) => {
+    try {
+      if (!process.env.GOOGLE_PLACES_API_KEY) {
+        return res.status(503).json({ 
+          message: "Google Places API not configured", 
+          updated: 0 
+        });
+      }
+
+      const offices = await storage.getVeterinaryOffices();
+      let updatedCount = 0;
+      const results = [];
+
+      for (const office of offices) {
+        try {
+          // Search for the place using name and address
+          const searchResponse = await fetch('https://places.googleapis.com/v1/places:searchText', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Goog-Api-Key': process.env.GOOGLE_PLACES_API_KEY,
+              'X-Goog-FieldMask': 'places.displayName,places.currentOpeningHours,places.regularOpeningHours,places.id'
+            },
+            body: JSON.stringify({
+              textQuery: `${office.name} ${office.address} ${office.city} ${office.state}`,
+              maxResultCount: 1
+            }),
+            signal: AbortSignal.timeout(3000)
+          });
+
+          if (searchResponse.ok) {
+            const searchData = await searchResponse.json();
+            
+            if (searchData.places && searchData.places.length > 0) {
+              const place = searchData.places[0];
+              const hoursData = place.currentOpeningHours || place.regularOpeningHours;
+              
+              // Format hours similar to the search endpoint
+              const formatHours = (openingHours: any) => {
+                if (!openingHours?.weekdayDescriptions) {
+                  return {
+                    Monday: 'Call for hours',
+                    Tuesday: 'Call for hours', 
+                    Wednesday: 'Call for hours',
+                    Thursday: 'Call for hours',
+                    Friday: 'Call for hours',
+                    Saturday: 'Call for hours',
+                    Sunday: 'Call for hours'
+                  };
+                }
+
+                const hoursObj: any = {};
+                const dayMapping: any = {
+                  'Monday': 'Monday',
+                  'Tuesday': 'Tuesday', 
+                  'Wednesday': 'Wednesday',
+                  'Thursday': 'Thursday',
+                  'Friday': 'Friday',
+                  'Saturday': 'Saturday',
+                  'Sunday': 'Sunday'
+                };
+
+                // Initialize with closed
+                Object.keys(dayMapping).forEach(day => {
+                  hoursObj[day] = 'Closed';
+                });
+
+                // Parse weekday descriptions
+                openingHours.weekdayDescriptions.forEach((desc: string) => {
+                  const parts = desc.split(': ');
+                  if (parts.length === 2) {
+                    const day = parts[0];
+                    const hours = parts[1];
+                    if (dayMapping[day]) {
+                      hoursObj[dayMapping[day]] = hours === 'Closed' ? 'Closed' : hours;
+                    }
+                  }
+                });
+
+                return hoursObj;
+              };
+
+              const formattedHours = formatHours(hoursData);
+              
+              // Update the office with new hours
+              await storage.updateVeterinaryOffice(office.id, {
+                hours: formattedHours,
+                isOpen: hoursData?.openNow || false,
+                hoursLastUpdated: new Date()
+              });
+              
+              updatedCount++;
+              results.push({
+                office: office.name,
+                status: 'updated',
+                isOpen: hoursData?.openNow || false
+              });
+            } else {
+              results.push({
+                office: office.name,
+                status: 'not_found'
+              });
+            }
+          } else {
+            results.push({
+              office: office.name,
+              status: 'api_error'
+            });
+          }
+        } catch (officeError) {
+          console.error(`Error updating hours for ${office.name}:`, officeError);
+          results.push({
+            office: office.name,
+            status: 'error'
+          });
+        }
+      }
+
+      res.json({
+        message: `Updated hours for ${updatedCount} veterinary offices`,
+        updated: updatedCount,
+        total: offices.length,
+        results
+      });
+
+    } catch (error) {
+      console.error('Error refreshing veterinary office hours:', error);
+      res.status(500).json({ 
+        message: 'Failed to refresh hours',
+        updated: 0 
+      });
     }
   });
 
@@ -3162,13 +3297,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error creating livestock herd:", error);
 
       // Handle specific database errors
-      if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      if ((error as any).code === 'ECONNREFUSED' || (error as any).code === 'ENOTFOUND') {
         return res.status(503).json({ 
           message: "Database temporarily unavailable. Please try again in a moment." 
         });
       }
 
-      if (error.code === '23505') { // Unique constraint violation
+      if ((error as any).code === '23505') { // Unique constraint violation
         return res.status(409).json({ 
           message: "A herd with this name already exists in this operation." 
         });
@@ -3176,7 +3311,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.status(500).json({ 
         message: "Failed to create herd. Please try again.",
-        error: process.env.NODE_ENV === 'development' ? error.message : "Internal server error"
+        error: process.env.NODE_ENV === 'development' ? (error as Error).message : "Internal server error"
       });
     }
   });
