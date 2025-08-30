@@ -27,6 +27,7 @@ export default function Profile() {
   const [selectedPet, setSelectedPet] = useState<PetProfile | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isProfileEditDialogOpen, setIsProfileEditDialogOpen] = useState(false);
 
   const { data: userReviews = [] } = useQuery({
     queryKey: ['/api/user/reviews'],
@@ -301,13 +302,138 @@ export default function Profile() {
                   </div>
                   
                   <div className="text-center">
-                    <Button 
-                      variant="outline"
-                      className="border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                      data-testid="button-edit-profile"
-                    >
-                      Edit Profile
-                    </Button>
+                    <Dialog open={isProfileEditDialogOpen} onOpenChange={setIsProfileEditDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          className="border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          data-testid="button-edit-profile"
+                        >
+                          <Settings className="mr-2 h-4 w-4" />
+                          Edit Profile
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle className="flex items-center gap-2">
+                            <Settings className="h-5 w-5" />
+                            Profile Settings
+                          </DialogTitle>
+                          <DialogDescription>
+                            Manage your profile information and account settings.
+                          </DialogDescription>
+                        </DialogHeader>
+                        
+                        <div className="space-y-6">
+                          {/* Profile Information Section */}
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Profile Information</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                  First Name
+                                </label>
+                                <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                  {user?.firstName || 'Not provided'}
+                                </div>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                  Last Name
+                                </label>
+                                <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                  {user?.lastName || 'Not provided'}
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Email Address
+                              </label>
+                              <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                {user?.email || 'Not provided'}
+                              </div>
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              Profile information is managed through your Replit account settings.
+                            </div>
+                          </div>
+
+                          {/* Data Summary */}
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Your Data Summary</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{(dataSummary as any).petProfiles || 0}</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400">Pet Profiles</div>
+                              </div>
+                              <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <div className="text-2xl font-bold text-green-600 dark:text-green-400">{(dataSummary as any).livestockOperations || 0}</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400">Livestock Operations</div>
+                              </div>
+                              <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{(dataSummary as any).reviews || 0}</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400">Product Reviews</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Notification Preferences */}
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notification Preferences</h3>
+                            <NotificationPreferences />
+                          </div>
+
+                          {/* Danger Zone - Account Deletion */}
+                          <div className="space-y-4">
+                            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                              <Card className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800">
+                                <CardHeader>
+                                  <CardTitle className="flex items-center gap-2 text-red-700 dark:text-red-400">
+                                    <AlertTriangle className="h-5 w-5" />
+                                    Danger Zone
+                                  </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <div className="space-y-4">
+                                    <div>
+                                      <h4 className="font-semibold text-red-700 dark:text-red-400 mb-2">Delete Account</h4>
+                                      <p className="text-red-600 dark:text-red-300 text-sm mb-4">
+                                        Permanently delete your account and all associated data. This action cannot be undone and will remove:
+                                      </p>
+                                      <ul className="text-red-600 dark:text-red-300 text-sm space-y-1 ml-4 list-disc mb-4">
+                                        <li>All pet profiles and health records</li>
+                                        <li>All livestock operations and herd data</li>
+                                        <li>All product reviews and scan history</li>
+                                        <li>All saved products and preferences</li>
+                                        <li>Your user account and authentication data</li>
+                                      </ul>
+                                    </div>
+                                    <Button 
+                                      variant="destructive"
+                                      onClick={() => {
+                                        if (confirm("Are you absolutely sure you want to delete your entire account? This will permanently remove all your data and cannot be undone.")) {
+                                          if (confirm("This is your final warning. Delete your account and ALL data permanently?")) {
+                                            deleteAccountMutation.mutate();
+                                            setIsProfileEditDialogOpen(false);
+                                          }
+                                        }
+                                      }}
+                                      disabled={deleteAccountMutation.isPending}
+                                      className="bg-red-600 hover:bg-red-700 text-white"
+                                      data-testid="button-delete-account"
+                                    >
+                                      <Trash2 className="h-4 w-4 mr-2" />
+                                      {deleteAccountMutation.isPending ? "Deleting Account..." : "Delete Account Permanently"}
+                                    </Button>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
               </CardContent>
