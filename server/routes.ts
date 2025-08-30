@@ -2602,7 +2602,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           url: 'https://places.googleapis.com/v1/places:searchNearby',
           body: {
             includedTypes: ['veterinary_care'],
-            maxResultCount: 10, // Reduced for faster response
+            maxResultCount: 5, // Further reduced for fastest response
             locationRestriction: {
               circle: {
                 center: { latitude: lat, longitude: lng },
@@ -2731,7 +2731,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Step 2: Process the search results (we already have the essential information)
         const detailedPractices = [];
-        const maxResults = Math.min(searchData.results.length, 10); // Limit for fast response
+        const maxResults = Math.min(searchData.results.length, 5); // Limit for fastest response
 
         for (let i = 0; i < maxResults; i++) {
           const place: any = searchData.results[i];
@@ -2763,36 +2763,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const zipMatch = place.formatted_address?.match(/\b(\d{5})(?:-\d{4})?\b/);
             const stateMatch = place.formatted_address?.match(/\b([A-Z]{2})\b/);
 
-            // Build services array based on Google place name
-            const services = ['General Veterinary Care'];
+            // Simplified services for faster processing
             const nameAndTypes = place.name.toLowerCase();
+            const services = ['General Veterinary Care'];
+            if (nameAndTypes.includes('hospital')) services.push('Surgery');
+            if (nameAndTypes.includes('emergency')) services.push('Emergency Care');
 
-            if (nameAndTypes.includes('hospital') || nameAndTypes.includes('animal hospital')) {
-              services.push('Advanced Diagnostics', 'Surgery', 'Emergency Care', 'X-rays');
-            }
-            if (nameAndTypes.includes('clinic')) {
-              services.push('Wellness Exams', 'Vaccinations', 'Preventive Medicine');
-            }
-            if (nameAndTypes.includes('emergency') || nameAndTypes.includes('24')) {
-              services.push('24/7 Emergency Services', 'Critical Care');
-            }
-            if (nameAndTypes.includes('dental')) {
-              services.push('Dental Care');
-            }
-            if (nameAndTypes.includes('exotic')) {
-              services.push('Exotic Pet Care');
-            }
-
-            // Build specialties
+            // Simplified specialties
             const specialties = ['General Veterinary Care'];
-            if (nameAndTypes.includes('small animal')) specialties.push('Small Animal Care');
-            if (nameAndTypes.includes('large animal')) specialties.push('Large Animal Care');
-            if (nameAndTypes.includes('equine')) specialties.push('Equine Care');
-            if (nameAndTypes.includes('exotic')) specialties.push('Exotic Animal Care');
-            if (nameAndTypes.includes('emergency')) specialties.push('Emergency Medicine');
 
-            // Format hours - using default since we don't have opening hours from search API
-            let formattedHours = {
+            // Simplified hours for faster processing
+            const formattedHours = {
               'Monday': 'Call for hours',
               'Tuesday': 'Call for hours',
               'Wednesday': 'Call for hours',
@@ -2812,11 +2793,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
               phone: place.formatted_phone_number || '(Contact for phone)',
               website: place.website || '',
               rating: Math.round((place.rating || 4.2) * 10) / 10,
-              reviewCount: 0, // Not available in search results
-              services: Array.from(new Set(services)), // Remove duplicates
+              reviewCount: 0,
+              services: services,
               hours: formattedHours,
-              specialties: Array.from(new Set(specialties)), // Remove duplicates
-              emergencyServices: nameAndTypes.includes('emergency') || nameAndTypes.includes('24'),
+              specialties: specialties,
+              emergencyServices: nameAndTypes.includes('emergency'),
               distance: Math.round(distance * 10) / 10,
               latitude: placeLat,
               longitude: placeLng

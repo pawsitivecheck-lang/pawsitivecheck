@@ -95,21 +95,30 @@ export default function VetFinder() {
 
   const searchVetsMutation = useMutation({
     mutationFn: async (searchData: { query: string; location?: {lat: number, lng: number}; radius?: number }) => {
-      // In a real implementation, this would call Google Places API, Yelp API, or similar
-      // For now, we'll use web search to find actual vet information
-      const response = await fetch('/api/vets/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(searchData),
-      });
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
       
-      if (!response.ok) {
-        throw new Error('Failed to search for veterinarians');
+      try {
+        const response = await fetch('/api/vets/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(searchData),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          throw new Error('Failed to search for veterinarians');
+        }
+        
+        return await response.json();
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
       }
-      
-      return await response.json();
     },
     onSuccess: (data) => {
       setVetPractices(data.practices || []);
