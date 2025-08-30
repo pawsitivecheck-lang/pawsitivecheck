@@ -16,12 +16,8 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  SimpleTooltip,
-} from "@/components/ui/simple-tooltip"
+// Temporarily disabled tooltip imports to fix React hook errors
+// import { SimpleTooltip } from "@/components/ui/simple-tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -583,14 +579,14 @@ const SidebarMenuButton = React.forwardRef<
       }
     }
 
-    // Simplified tooltip for sidebar - disable complex features that cause errors
-    if (state === "collapsed" && !isMobile && typeof tooltip === "object" && tooltip.children) {
-      return (
-        <SimpleTooltip content={tooltip.children} side="right">
-          {button}
-        </SimpleTooltip>
-      )
-    }
+    // Temporarily disabled tooltips to fix React hook errors
+    // if (state === "collapsed" && !isMobile && typeof tooltip === "object" && tooltip.children) {
+    //   return (
+    //     <SimpleTooltip content={String(tooltip.children)} side="right">
+    //       {button}
+    //     </SimpleTooltip>
+    //   )
+    // }
     
     return button
   }

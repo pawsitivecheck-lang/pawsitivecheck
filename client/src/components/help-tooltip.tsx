@@ -1,5 +1,4 @@
 import { HelpCircle } from "lucide-react";
-import { SimpleTooltip } from "@/components/ui/tooltip-override";
 
 interface HelpTooltipProps {
   content: string;
@@ -10,11 +9,11 @@ interface HelpTooltipProps {
 
 export default function HelpTooltip({ content, className = "", side = "top" }: HelpTooltipProps) {
   return (
-    <SimpleTooltip content={content} side={side}>
+    <div title={content} className="inline-block cursor-help">
       <HelpCircle 
-        className={`h-4 w-4 text-cosmic-400 hover:text-cosmic-200 transition-colors cursor-help ${className}`}
+        className={`h-4 w-4 text-cosmic-400 hover:text-cosmic-200 transition-colors ${className}`}
         data-testid="help-tooltip-trigger"
       />
-    </SimpleTooltip>
+    </div>
   );
 }
