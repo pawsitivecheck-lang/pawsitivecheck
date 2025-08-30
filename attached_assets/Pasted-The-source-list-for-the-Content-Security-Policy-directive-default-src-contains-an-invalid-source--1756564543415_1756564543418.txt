@@ -1,0 +1,546 @@
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+PawsitiveCheck:1  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+PawsitiveCheck:1  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+PawsitiveCheck:1  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+_app-76512666ac2c2be1.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+_app-76512666ac2c2be1.js:38 [LaunchDarkly] LaunchDarkly client initialized
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=D004GE3C77U8PIVDSDJG&lib=ttq.
+init-script.ts:45   GET https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=D004GE3C77U8PIVDSDJG&lib=ttq net::ERR_BLOCKED_BY_CLIENT
+o.load @ init-script.ts:45
+(anonymous) @ init-script.ts:48
+(anonymous) @ init-script.ts:4
+initialize @ index.ts:249
+h @ plugin.js:19
+(anonymous) @ index.ts:154
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:140
+(anonymous) @ event-queue.js:50
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:30
+(anonymous) @ index.ts:410
+(anonymous) @ index.ts:408
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:404
+(anonymous) @ index.ts:200
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+ne @ index.ts:116
+(anonymous) @ index.ts:304
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+re @ index.ts:239
+(anonymous) @ index.ts:338
+Promise.then
+(anonymous) @ index.ts:339
+t @ index.ts:307
+n @ index.ts:337
+(anonymous) @ index.ts:389
+(anonymous) @ index.ts:393
+(anonymous) @ standalone-analytics.ts:53
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+se @ standalone-analytics.ts:49
+(anonymous) @ standalone.ts:69
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+de @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+_app-76512666ac2c2be1.js:38   GET https://www.google-analytics.com/analytics.js net::ERR_BLOCKED_BY_CLIENT
+(anonymous) @ index.js:58
+y.run @ browser.js:153
+d @ browser.js:123
+n @ _app-76512666ac2c2be1.js:38
+setTimeout
+(anonymous) @ _app-76512666ac2c2be1.js:38
+c @ browser.js:41
+o.nextTick @ browser.js:143
+YoZL.t.exports @ index.js:55
+e.load @ protos.js:261
+w.initialize @ index.js:210
+initialize @ protos.js:322
+(anonymous) @ index.ts:171
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ event-queue.js:50
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:30
+(anonymous) @ index.ts:410
+(anonymous) @ index.ts:408
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:404
+(anonymous) @ index.ts:200
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+ne @ index.ts:116
+(anonymous) @ index.ts:304
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+re @ index.ts:239
+(anonymous) @ index.ts:338
+Promise.then
+(anonymous) @ index.ts:339
+t @ index.ts:307
+n @ index.ts:337
+(anonymous) @ index.ts:389
+(anonymous) @ index.ts:393
+(anonymous) @ standalone-analytics.ts:53
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+se @ standalone-analytics.ts:49
+(anonymous) @ standalone.ts:69
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+de @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://www.google-analytics.com/analytics.js.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+js?id=AW-11411994397:127   GET https://googleads.g.doubleclick.net/pagead/viewthroughconversion/11411994397/?random=1756564523548&cv=11&fst=1756564523548&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be58r1v9171242957za200zd9171242957xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=101509157~103116026~103200004~103233427~104527906~104528501~104684208~104684211~104948813~105347236~105427542~105427544&u_w=1536&u_h=960&url=https%3A%2F%2Freplit.com%2F%40leirsteinv%2FPawsitiveCheck&ref=https%3A%2F%2Freplit.com%2Flogin%3Fgoto%3D%252F%2540leirsteinv%252FPawsitiveCheck%26error%3Dunauthorized&hn=www.googleadservices.com&frm=0&tiba=Loading...%20-%20Replit&npa=0&pscdl=noapi&auid=1285983030.1756504656&data=event%3Dgtag.config&rfmt=3&fmt=4 net::ERR_BLOCKED_BY_CLIENT
+Lc @ js?id=AW-11411994397:127
+Hm @ js?id=AW-11411994397:310
+Wm @ js?id=AW-11411994397:312
+KA @ js?id=AW-11411994397:577
+(anonymous) @ js?id=AW-11411994397:583
+UA @ js?id=AW-11411994397:586
+VA @ js?id=AW-11411994397:581
+f @ js?id=AW-11411994397:705
+(anonymous) @ js?id=AW-11411994397:707
+on @ js?id=AW-11411994397:322
+rp @ js?id=AW-11411994397:342
+BJ @ js?id=AW-11411994397:707
+v @ js?id=AW-11411994397:372
+xn @ js?id=AW-11411994397:324
+cr @ js?id=AW-11411994397:372
+(anonymous) @ js?id=AW-11411994397:376
+(anonymous) @ js?id=AW-11411994397:374
+config @ js?id=AW-11411994397:618
+fD @ js?id=AW-11411994397:626
+(anonymous) @ js?id=AW-11411994397:632
+window.gtag @ index.js:49
+(anonymous) @ index.js:86
+(anonymous) @ protos.js:262
+(anonymous) @ index.js:27
+n @ _app-76512666ac2c2be1.js:38
+script
+YoZL.t.exports @ index.js:44
+e.load @ protos.js:261
+OMmk.d.initialize @ index.js:59
+initialize @ protos.js:322
+(anonymous) @ index.ts:171
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ event-queue.js:50
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:30
+(anonymous) @ index.ts:410
+(anonymous) @ index.ts:408
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:404
+(anonymous) @ index.ts:200
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+ne @ index.ts:116
+(anonymous) @ index.ts:304
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+re @ index.ts:239
+(anonymous) @ index.ts:338
+Promise.then
+(anonymous) @ index.ts:339
+t @ index.ts:307
+n @ index.ts:337
+(anonymous) @ index.ts:389
+(anonymous) @ index.ts:393
+(anonymous) @ standalone-analytics.ts:53
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+se @ standalone-analytics.ts:49
+(anonymous) @ standalone.ts:69
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+de @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+(anonymous) @ sdk.min.js:1
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://googleads.g.doubleclick.net/pagead/viewthroughconversion/11411994397/?random=1756564523548&cv=11&fst=1756564523548&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be58r1v9171242957za200zd9171242957xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=101509157~103116026~103200004~103233427~104527906~104528501~104684208~104684211~104948813~105347236~105427542~105427544&u_w=1536&u_h=960&url=https%3A%2F%2Freplit.com%2F%40leirsteinv%2FPawsitiveCheck&ref=https%3A%2F%2Freplit.com%2Flogin%3Fgoto%3D%252F%2540leirsteinv%252FPawsitiveCheck%26error%3Dunauthorized&hn=www.googleadservices.com&frm=0&tiba=Loading...%20-%20Replit&npa=0&pscdl=noapi&auid=1285983030.1756504656&data=event%3Dgtag.config&rfmt=3&fmt=4.
+_app-76512666ac2c2be1.js:38 Adding extension: Javascript Commands {extensionArgs: {…}, local: false, logLevel: 'info'}
+framework-3ad632cd1bd0ce09.js:1  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'battery'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'layout-animations'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'navigation-override'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'oversized-images'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'publickey-credentials'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'speaker-selection'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'unoptimized-images'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'unsized-media'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Unrecognized feature: 'pointer-lock'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+framework-3ad632cd1bd0ce09.js:1  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-3ad632cd1bd0ce09.js:1
+(anonymous) @ framework-3ad632cd1bd0ce09.js:1
+uD @ framework-3ad632cd1bd0ce09.js:1
+uI @ framework-3ad632cd1bd0ce09.js:1
+uM @ framework-3ad632cd1bd0ce09.js:1
+uS @ framework-3ad632cd1bd0ce09.js:1
+C @ framework-3ad632cd1bd0ce09.js:1
+z @ framework-3ad632cd1bd0ce09.js:1
+_app-76512666ac2c2be1.js:38  Command: javascript-root-command has unrecognized contributions: commandbar. Valid contributions are commandbar,filetree-context-menu,sidebar-search,editor-context-menu {logLevel: 'warn'}
+(anonymous) @ _app-76512666ac2c2be1.js:38
+a @ 4796-ef468d011ccf0968.js:1
+warn @ 4796-ef468d011ccf0968.js:1
+(anonymous) @ replEnvironmentDesktop-66d5a018eced8db5.js:2
+(anonymous) @ main-9f6aeb471d32bb10.js:1
+n @ main-9f6aeb471d32bb10.js:1
+u @ main-9f6aeb471d32bb10.js:1
+(anonymous) @ main-9f6aeb471d32bb10.js:1
+(anonymous) @ main-9f6aeb471d32bb10.js:1
+registerCreateCommand @ replEnvironmentDesktop-66d5a018eced8db5.js:2
+r @ replEnvironmentDesktop-66d5a018eced8db5.js:2
+n @ _app-76512666ac2c2be1.js:38
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Ar4o%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+(index):70   GET https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066 net::ERR_BLOCKED_BY_CLIENT
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066.
+main.tsx:13 PWA: Service Worker registered successfully: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+client:802  WebSocket connection to 'wss://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/?token=QPrGPoEIt5wI' failed: Error during WebSocket handshake: Unexpected response code: 400
+createConnection @ client:802
+connect @ client:437
+connect @ client:811
+connect @ client:290
+connect @ client:383
+(anonymous) @ client:908
+client:815  WebSocket connection to 'wss://localhost:5173/?token=QPrGPoEIt5wI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+createConnection @ client:815
+connect @ client:437
+connect @ client:822
+client:830  [vite] failed to connect to websocket.
+your current setup:
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev:/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .
+connect @ client:830
+await in connect
+connect @ client:290
+connect @ client:383
+(anonymous) @ client:908
