@@ -285,7 +285,7 @@ export default function TermsOfService() {
                 If you have any questions about these Terms of Service, please contact us:
               </p>
               <div className="space-y-2">
-                <p>Email: pawsitivecheck@gmail.com</p>
+                <p>Email: <a href="mailto:pawsitivecheck@gmail.com" className="text-starlight-400 hover:text-starlight-300 underline">pawsitivecheck@gmail.com</a></p>
                 <p>We typically respond within 24-48 hours</p>
               </div>
             </CardContent>
