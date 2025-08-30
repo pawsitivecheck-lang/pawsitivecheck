@@ -108,13 +108,11 @@ function Router() {
 
 function App() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen">
-          <Router />
-        </div>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen">
+        <Router />
+      </div>
+    </QueryClientProvider>
   );
 }
 
