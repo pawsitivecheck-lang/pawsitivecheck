@@ -46,6 +46,7 @@ interface LivestockHerd {
 export default function LivestockDashboard() {
   const [, navigate] = useLocation();
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [visibleOperations, setVisibleOperations] = useState(6); // Show 6 operations initially
   // Header and footer are properly implemented
   const [formData, setFormData] = useState({
     operationName: "",
@@ -354,8 +355,17 @@ export default function LivestockDashboard() {
             </TabsList>
 
             <TabsContent value="operations">
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {operations?.map((operation) => (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold">Your Operations</h3>
+                  {operations && operations.length > 0 && (
+                    <div className="text-sm text-gray-500">
+                      Showing {Math.min(visibleOperations, operations.length)} of {operations.length} operations
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {operations?.slice(0, visibleOperations).map((operation) => (
                   <Card 
                     key={operation.id}
                     className="cursor-pointer transition-all hover:shadow-lg"
@@ -393,7 +403,23 @@ export default function LivestockDashboard() {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                  ))}
+                </div>
+                
+                {/* Load More Button */}
+                {operations && visibleOperations < operations.length && (
+                  <div className="text-center mt-6">
+                    <Button
+                      onClick={() => setVisibleOperations(prev => Math.min(prev + 6, operations.length))}
+                      variant="outline"
+                      size="lg"
+                      className="px-8"
+                      data-testid="button-load-more-operations"
+                    >
+                      Load More Operations ({operations.length - visibleOperations} remaining)
+                    </Button>
+                  </div>
+                )}
               </div>
             </TabsContent>
 
