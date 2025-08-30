@@ -63,6 +63,13 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Skip external domains (like Google Ads, fonts, etc.) - let browser handle them
+  if (!url.origin.includes(self.location.hostname) && 
+      !url.hostname.includes('fonts.googleapis.com') && 
+      !url.hostname.includes('fonts.gstatic.com')) {
+    return; // Let browser handle external requests normally
+  }
+
   // Handle API requests
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
@@ -91,7 +98,11 @@ self.addEventListener('fetch', (event) => {
                   headers: { 'Content-Type': 'application/json' }
                 });
               }
-              throw new Error('Offline and no cached response available');
+              // Silently fail for non-critical API requests
+              return new Response('{"error": "Service unavailable"}', {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' }
+              });
             });
         })
     );
@@ -113,12 +124,15 @@ self.addEventListener('fetch', (event) => {
               return response;
             }
 
-            // Cache new resources
-            const responseClone = response.clone();
-            caches.open(DYNAMIC_CACHE)
-              .then((cache) => {
-                cache.put(request, responseClone);
-              });
+            // Cache new resources (only same-origin)
+            if (url.origin === self.location.origin) {
+              const responseClone = response.clone();
+              caches.open(DYNAMIC_CACHE)
+                .then((cache) => {
+                  cache.put(request, responseClone);
+                })
+                .catch(() => {}); // Silently fail cache operations
+            }
 
             return response;
           })
@@ -127,7 +141,8 @@ self.addEventListener('fetch', (event) => {
             if (request.mode === 'navigate') {
               return caches.match('/index.html');
             }
-            throw new Error('Offline and no cached response available');
+            // Silently fail for other resources
+            return new Response('', { status: 503 });
           });
       })
   );
