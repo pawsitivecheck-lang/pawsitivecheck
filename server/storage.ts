@@ -99,6 +99,8 @@ export interface IStorage {
     suspiciousIngredients: string[];
     lastAnalyzed: Date;
   }): Promise<Product | undefined>;
+  deleteProduct(id: number): Promise<boolean>;
+  banProduct(id: number): Promise<Product | undefined>;
 
   // Review operations
   getReviews(limit?: number, offset?: number): Promise<ProductReview[]>;
@@ -371,6 +373,27 @@ export class DatabaseStorage implements IStorage {
     const [product] = await db
       .update(products)
       .set({ ...updates, updatedAt: new Date() })
+      .where(eq(products.id, id))
+      .returning();
+    return product;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db
+      .delete(products)
+      .where(eq(products.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async banProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db
+      .update(products)
+      .set({ 
+        isBlacklisted: true,
+        cosmicClarity: 'cursed',
+        cosmicScore: 0,
+        updatedAt: new Date() 
+      })
       .where(eq(products.id, id))
       .returning();
     return product;

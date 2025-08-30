@@ -1492,6 +1492,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Product Management endpoints
+  app.delete('/api/admin/products/:id', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      const success = await storage.deleteProduct(productId);
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.json({ message: `Product ${productId} permanently deleted from database`, productId });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  app.post('/api/admin/products/:id/ban', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+
+      const bannedProduct = await storage.banProduct(productId);
+      if (!bannedProduct) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.json({ 
+        message: `Product ${productId} banned and marked as cursed`, 
+        product: bannedProduct 
+      });
+    } catch (error) {
+      console.error("Error banning product:", error);
+      res.status(500).json({ message: "Failed to ban product" });
+    }
+  });
+
   // Admin sync endpoints
   app.post('/api/admin/sync/livestock', isAdmin, async (req: any, res) => {
     try {
