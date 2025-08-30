@@ -51,6 +51,8 @@ interface VetPractice {
   distance?: number;
   latitude?: number;
   longitude?: number;
+  isOpen?: boolean;
+  hoursLastUpdated?: string;
 }
 
 export default function VetFinder() {
@@ -168,24 +170,56 @@ export default function VetFinder() {
     return distance < 1 ? `${(distance * 5280).toFixed(0)}ft` : `${distance.toFixed(1)}mi`;
   };
 
-  const formatHours = (hours: { [key: string]: string }) => {
+  const formatHours = (hours: { [key: string]: string }, isOpen?: boolean) => {
     const today = new Date().toLocaleDateString('en', { weekday: 'long' });
-    return hours[today] || "Hours vary";
+    const todayHours = hours[today] || "Hours vary";
+    
+    if (typeof isOpen === 'boolean') {
+      const status = isOpen ? '🟢 OPEN' : '🔴 CLOSED';
+      return `${status} • ${todayHours}`;
+    }
+    
+    return todayHours;
   };
 
   const getCurrentDay = () => {
     return new Date().toLocaleDateString('en', { weekday: 'long' });
   };
 
-  const HoursDisplay = ({ hours, vetId }: { hours: { [key: string]: string }, vetId: string }) => {
+  const HoursDisplay = ({ 
+    hours, 
+    vetId, 
+    isOpen, 
+    hoursLastUpdated 
+  }: { 
+    hours: { [key: string]: string }, 
+    vetId: string,
+    isOpen?: boolean,
+    hoursLastUpdated?: string
+  }) => {
     const currentDay = getCurrentDay();
     const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     
+    const formatLastUpdated = (timestamp?: string) => {
+      if (!timestamp) return '';
+      const date = new Date(timestamp);
+      return `Updated ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    };
+    
     return (
       <div className="space-y-1">
-        <h4 className="text-cosmic-200 font-medium mb-2">Daily Hours</h4>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-cosmic-200 font-medium">Real-Time Hours</h4>
+          {hoursLastUpdated && (
+            <span className="text-xs text-cosmic-400" title={`Hours last updated: ${new Date(hoursLastUpdated).toLocaleString()}`}>
+              {formatLastUpdated(hoursLastUpdated)}
+            </span>
+          )}
+        </div>
         {daysOrder.map((day) => {
           const isToday = day === currentDay;
+          const dayHours = hours[day] || 'Call for hours';
+          
           return (
             <div 
               key={day}
@@ -199,8 +233,11 @@ export default function VetFinder() {
               <span className="font-medium">
                 {isToday ? `${day} (Today)` : day}
               </span>
-              <span className={isToday ? 'text-starlight-300' : 'text-cosmic-400'}>
-                {hours[day] || 'Call for hours'}
+              <span className={`${isToday ? 'text-starlight-300' : 'text-cosmic-400'} flex items-center gap-1`}>
+                {isToday && typeof isOpen === 'boolean' && (
+                  <span className={`inline-block w-2 h-2 rounded-full ${isOpen ? 'bg-green-400' : 'bg-red-400'}`} />
+                )}
+                {dayHours}
               </span>
             </div>
           );
@@ -509,7 +546,12 @@ export default function VetFinder() {
 
                           {/* Hours Display */}
                           <div className="mb-4">
-                            <HoursDisplay hours={vet.hours} vetId={vet.id} />
+                            <HoursDisplay 
+                              hours={vet.hours} 
+                              vetId={vet.id} 
+                              isOpen={vet.isOpen} 
+                              hoursLastUpdated={vet.hoursLastUpdated}
+                            />
                           </div>
                         </div>
 
@@ -519,11 +561,19 @@ export default function VetFinder() {
                           <div className="bg-cosmic-800/30 rounded-lg p-4 border border-cosmic-700">
                             <div className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
                               <Clock className="h-4 w-4" />
-                              Today's Hours
+                              Current Status
                             </div>
                             <div className="text-starlight-400 font-medium">
-                              {formatHours(vet.hours)}
+                              {formatHours(vet.hours, vet.isOpen)}
                             </div>
+                            {vet.hoursLastUpdated && (
+                              <div className="text-xs text-cosmic-400 mt-1">
+                                Hours updated: {new Date(vet.hoursLastUpdated).toLocaleTimeString([], { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit' 
+                                })}
+                              </div>
+                            )}
                           </div>
 
                           {vet.emergencyServices && (

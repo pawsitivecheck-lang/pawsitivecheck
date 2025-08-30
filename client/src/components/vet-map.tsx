@@ -26,6 +26,8 @@ interface VetPractice {
   distance?: number;
   latitude?: number;
   longitude?: number;
+  isOpen?: boolean;
+  hoursLastUpdated?: string;
 }
 
 interface VetMapProps {

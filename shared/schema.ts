@@ -253,6 +253,8 @@ export const veterinaryOffices = pgTable("veterinary_offices", {
   services: text("services").array(), // array of services offered
   specialties: text("specialties").array(), // array of specialties
   hours: jsonb("hours"), // store hours as JSON object
+  isOpen: boolean("is_open"), // current open/closed status from Google Places API
+  hoursLastUpdated: timestamp("hours_last_updated"), // when hours were last fetched from API
   emergencyServices: boolean("emergency_services").default(false),
   acceptsWalkIns: boolean("accepts_walk_ins").default(false),
   languages: text("languages").array(), // languages spoken

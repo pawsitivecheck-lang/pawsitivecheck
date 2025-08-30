@@ -2594,7 +2594,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         headers: {
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': process.env.GOOGLE_PLACES_API_KEY,
-          'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.location,places.rating,places.nationalPhoneNumber,places.websiteUri,places.id'
+          'X-Goog-FieldMask': 'places.displayName,places.formattedAddress,places.location,places.rating,places.nationalPhoneNumber,places.websiteUri,places.id,places.currentOpeningHours,places.regularOpeningHours'
         },
         body: JSON.stringify({
           includedTypes: ['veterinary_care'],
@@ -2622,6 +2622,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat * Math.PI / 180) * Math.cos(placeLat * Math.PI / 180) * Math.sin(dLng/2) * Math.sin(dLng/2);
         const distance = Math.round(3959 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * 10) / 10;
 
+        // Process real-time hours from Google Places API
+        const formatHours = (openingHours: any) => {
+          if (!openingHours?.weekdayDescriptions) {
+            return {
+              Monday: 'Call for hours',
+              Tuesday: 'Call for hours', 
+              Wednesday: 'Call for hours',
+              Thursday: 'Call for hours',
+              Friday: 'Call for hours',
+              Saturday: 'Call for hours',
+              Sunday: 'Call for hours'
+            };
+          }
+
+          const hoursObj: any = {};
+          const dayMapping: any = {
+            'Monday': 'Monday',
+            'Tuesday': 'Tuesday', 
+            'Wednesday': 'Wednesday',
+            'Thursday': 'Thursday',
+            'Friday': 'Friday',
+            'Saturday': 'Saturday',
+            'Sunday': 'Sunday'
+          };
+
+          // Initialize with closed
+          Object.keys(dayMapping).forEach(day => {
+            hoursObj[day] = 'Closed';
+          });
+
+          // Parse weekday descriptions
+          openingHours.weekdayDescriptions.forEach((desc: string) => {
+            const parts = desc.split(': ');
+            if (parts.length === 2) {
+              const day = parts[0];
+              const hours = parts[1];
+              if (dayMapping[day]) {
+                hoursObj[dayMapping[day]] = hours === 'Closed' ? 'Closed' : hours;
+              }
+            }
+          });
+
+          return hoursObj;
+        };
+
+        // Use current hours if available, fall back to regular hours
+        const hoursData = place.currentOpeningHours || place.regularOpeningHours;
+        const formattedHours = formatHours(hoursData);
+
         return {
           id: `google-${place.id}`,
           name: place.displayName?.text || 'Vet Clinic',
@@ -2631,9 +2680,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           rating: place.rating || 4.0,
           distance: distance,
           services: ['General Veterinary Care'],
-          hours: { 'Monday': 'Call for hours' },
+          hours: formattedHours,
           latitude: placeLat,
-          longitude: placeLng
+          longitude: placeLng,
+          isOpen: hoursData?.openNow || false,
+          hoursLastUpdated: new Date().toISOString()
         };
       });
 

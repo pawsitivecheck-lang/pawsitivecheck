@@ -1,11 +1,18 @@
-// DISABLED - This file has been replaced with simple-tooltip.tsx to avoid React hook conflicts
-// The original Radix UI tooltip was causing React hook errors
+// Simple fallback tooltip component without hooks
+import React from 'react';
 
-// Re-export from simple-tooltip for compatibility
-export { 
-  Tooltip, 
-  TooltipTrigger, 
-  TooltipContent, 
-  TooltipProvider,
-  SimpleTooltip 
-} from "./simple-tooltip"
+export interface TooltipProps {
+  children: React.ReactNode;
+  content?: string;
+}
+
+export const Tooltip = ({ children, content }: TooltipProps) => (
+  <div title={content} style={{ display: 'inline-block' }}>
+    {children}
+  </div>
+);
+
+export const TooltipTrigger = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export const TooltipContent = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export const TooltipProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export const SimpleTooltip = Tooltip;
