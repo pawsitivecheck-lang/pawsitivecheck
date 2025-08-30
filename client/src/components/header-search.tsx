@@ -686,7 +686,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Scanner Menu Dropdown */}
         {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-popover/95 backdrop-blur-md border border-border rounded-lg p-2 z-[60] shadow-lg">
+          <div className="absolute right-0 top-12 w-48 bg-popover border border-border rounded-lg p-2 z-[60] shadow-lg">
             <div className="space-y-1">
               <Button
                 onClick={() => {
@@ -733,7 +733,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length === 0 && recentSearches.length > 0)) && (
-          <div className="absolute top-12 left-0 right-0 bg-popover/95 backdrop-blur-md border border-border rounded-lg p-1 z-[60] shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute top-12 left-0 right-0 bg-popover border border-border rounded-lg p-1 z-[60] shadow-lg max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
             {searchQuery.length >= 1 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (

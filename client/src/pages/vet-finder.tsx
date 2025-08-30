@@ -392,7 +392,7 @@ export default function VetFinder() {
                       <SelectTrigger className="w-48 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100" data-testid="select-radius">
                         <SelectValue placeholder="Search radius" />
                       </SelectTrigger>
-                      <SelectContent className="bg-cosmic-900 border-cosmic-600 backdrop-blur-sm">
+                      <SelectContent className="bg-cosmic-900 border-cosmic-600">
                         <SelectItem value="5" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">5 miles</SelectItem>
                         <SelectItem value="10" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">10 miles</SelectItem>
                         <SelectItem value="15" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">15 miles</SelectItem>
