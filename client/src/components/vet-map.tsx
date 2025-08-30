@@ -11,7 +11,7 @@ interface VetPractice {
   website?: string;
   rating: number;
   reviewCount: number;
-  services: string[];
+  services?: string[];
   hours: {
     Monday: string;
     Tuesday: string;
@@ -21,8 +21,8 @@ interface VetPractice {
     Saturday: string;
     Sunday: string;
   };
-  specialties: string[];
-  emergencyServices: boolean;
+  specialties?: string[];
+  emergencyServices?: boolean;
   distance?: number;
   latitude?: number;
   longitude?: number;
@@ -228,7 +228,7 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
             ${practice.distance ? `<p style="margin: 4px 0; color: #059669; font-size: 12px; font-weight: 500;">${practice.distance < 1 ? `${(practice.distance * 5280).toFixed(0)}ft` : `${practice.distance.toFixed(1)}mi`} away</p>` : ''}
             <div style="margin: 8px 0 4px 0; display: flex; flex-wrap: gap: 4px;">
               ${practice.emergencyServices ? '<span style="background: #dc2626; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 500;">24/7 Emergency</span>' : ''}
-              ${practice.services.slice(0, 3).map(service => `<span style="background: #e5e7eb; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 11px;">${service}</span>`).join('')}
+              ${(practice.services || []).slice(0, 3).map(service => `<span style="background: #e5e7eb; color: #374151; padding: 2px 6px; border-radius: 4px; font-size: 11px;">${service}</span>`).join('')}
             </div>
             ${practice.website ? `<p style="margin: 8px 0 0 0;"><a href="${practice.website}" target="_blank" rel="noopener noreferrer" style="color: #3b82f6; text-decoration: none; font-size: 12px;">Visit Website →</a></p>` : ''}
           </div>
