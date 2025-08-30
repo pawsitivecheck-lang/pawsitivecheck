@@ -3084,64 +3084,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         ];
 
-        // Enhanced filtering by search query
-        let filteredPractices = practices;
-        if (query && query !== 'veterinarian' && query.trim().length > 0) {
-          const searchTerms = query.toLowerCase().trim();
-          filteredPractices = practices.filter((practice: any) => {
-            // Multi-criteria scoring system
-            let relevanceScore = 0;
-
-            // Name match (highest priority)
-            if (practice.name.toLowerCase().includes(searchTerms)) relevanceScore += 10;
-
-            // Services match
-            const serviceMatches = practice.services.filter((service: string) => 
-              service.toLowerCase().includes(searchTerms)
-            );
-            relevanceScore += serviceMatches.length * 5;
-
-            // Specialties match
-            const specialtyMatches = practice.specialties.filter((specialty: string) => 
-              specialty.toLowerCase().includes(searchTerms)
-            );
-            relevanceScore += specialtyMatches.length * 7;
-
-            // Location match
-            if (practice.city.toLowerCase().includes(searchTerms) || 
-                practice.state.toLowerCase().includes(searchTerms)) {
-              relevanceScore += 3;
-            }
-
-            // Emergency search priority
-            if (searchTerms.includes('emergency') && practice.emergencyServices) {
-              relevanceScore += 15;
-            }
-
-            practice.relevanceScore = relevanceScore;
-            return relevanceScore > 0;
-          });
-
-          // Sort by relevance first, then distance
-          filteredPractices.sort((a: any, b: any) => {
-            const scoreDiff = (b.relevanceScore || 0) - (a.relevanceScore || 0);
-            if (scoreDiff !== 0) return scoreDiff;
-            return (a.distance || 999) - (b.distance || 999);
-          });
-        } else {
-          // Sort by distance and rating when no specific search
-          filteredPractices.sort((a: any, b: any) => {
-            const distanceWeight = a.distance || 999;
-            const ratingBonus = (a.rating - 4.0) * 2; // Bonus for higher ratings
-            const aScore = distanceWeight - ratingBonus;
-
-            const bDistanceWeight = b.distance || 999;
-            const bRatingBonus = (b.rating - 4.0) * 2;
-            const bScore = bDistanceWeight - bRatingBonus;
-
-            return aScore - bScore;
-          });
-        }
+        // Simple sorting for fast response
+        const filteredPractices = practices.sort((a: any, b: any) => (a.distance || 999) - (b.distance || 999));
 
         res.json({
           practices: filteredPractices,
