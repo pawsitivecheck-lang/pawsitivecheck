@@ -34,7 +34,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
   });
 
   // Fetch product details for each saved product
-  const { data: productsData = [] } = useQuery({
+  const { data: productsData = [] as Product[] } = useQuery({
     queryKey: [`/api/products/batch`, (savedProducts as SavedProduct[]).map((sp: SavedProduct) => sp.productId)],
     enabled: (savedProducts as SavedProduct[]).length > 0,
     queryFn: async () => {
@@ -42,13 +42,14 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
       const products = await Promise.all(
         productIds.map(async (id: number) => {
           try {
-            return await apiRequest(`/api/products/${id}`, "GET");
+            const response = await apiRequest(`/api/products/${id}`, "GET");
+            return response as unknown as Product;
           } catch {
             return null;
           }
         })
       );
-      return products.filter(Boolean);
+      return products.filter(Boolean) as Product[];
     },
   });
 
@@ -172,7 +173,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
 
   // Merge saved products with product details
   const savedProductsWithDetails: SavedProductWithProduct[] = (savedProducts as SavedProduct[]).map((savedProduct: SavedProduct) => {
-    const product = productsData.find((p: Product) => p.id === savedProduct.productId);
+    const product = (productsData as Product[]).find((p: Product) => p.id === savedProduct.productId);
     return { ...savedProduct, product };
   });
 
@@ -235,7 +236,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-gray-600 dark:text-gray-400">Safety Score:</span>
                         <span className="font-bold">{savedProduct.product.cosmicScore}/100</span>
-                        <span className={`capitalize ${getCosmicClarityColor(savedProduct.product.cosmicClarity)}`}>
+                        <span className={`capitalize ${getCosmicClarityColor(savedProduct.product.cosmicClarity || 'neutral')}`}>
                           ({savedProduct.product.cosmicClarity})
                         </span>
                       </div>
@@ -281,7 +282,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
               <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  Saved {new Date(savedProduct.createdAt).toLocaleDateString()}
+                  Saved {savedProduct.createdAt ? new Date(savedProduct.createdAt).toLocaleDateString() : 'Unknown date'}
                 </div>
                 {savedProduct.lastUsed && (
                   <div className="flex items-center gap-1">
