@@ -2595,14 +2595,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let searchData = { results: [] };
 
-      // Try multiple search approaches using the new Places API format
+      // Use single search query for faster response
       const searchQueries = [
         {
           method: 'POST',
           url: 'https://places.googleapis.com/v1/places:searchNearby',
           body: {
             includedTypes: ['veterinary_care'],
-            maxResultCount: 20,
+            maxResultCount: 10, // Reduced for faster response
             locationRestriction: {
               circle: {
                 center: { latitude: lat, longitude: lng },
@@ -2611,36 +2611,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           },
           description: 'nearby veterinary_care'
-        },
-        {
-          method: 'POST', 
-          url: 'https://places.googleapis.com/v1/places:searchText',
-          body: {
-            textQuery: `veterinarian near ${lat},${lng}`,
-            maxResultCount: 20,
-            locationBias: {
-              circle: {
-                center: { latitude: lat, longitude: lng },
-                radius: searchRadius
-              }
-            }
-          },
-          description: 'text search veterinarian'
-        },
-        {
-          method: 'POST',
-          url: 'https://places.googleapis.com/v1/places:searchText', 
-          body: {
-            textQuery: `animal hospital near ${lat},${lng}`,
-            maxResultCount: 20,
-            locationBias: {
-              circle: {
-                center: { latitude: lat, longitude: lng },
-                radius: searchRadius
-              }
-            }
-          },
-          description: 'text search animal hospital'
         }
       ];
 
@@ -2679,7 +2649,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               }
               // Convert new API format to match our expected format
               searchData = { 
-                results: responseData.places.map(place => ({
+                results: responseData.places.map((place: any) => ({
                   place_id: place.id,
                   name: place.displayName?.text || 'Veterinary Office',
                   formatted_address: place.formattedAddress,
@@ -2697,10 +2667,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               break;
             }
 
-            // Small delay between requests
-            await new Promise(resolve => setTimeout(resolve, 200));
+            // Removed delay to speed up response
 
-          } catch (error) {
+          } catch (error: any) {
             console.warn(`Search query failed:`, error.message);
             continue;
           }
@@ -2762,10 +2731,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         // Step 2: Process the search results (we already have the essential information)
         const detailedPractices = [];
-        const maxResults = Math.min(searchData.results.length, 20); // Limit to prevent excessive results
+        const maxResults = Math.min(searchData.results.length, 10); // Limit for fast response
 
         for (let i = 0; i < maxResults; i++) {
-          const place = searchData.results[i];
+          const place: any = searchData.results[i];
 
           try {
             // Use the data we already have from the search results
@@ -2858,10 +2827,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.log(`Added: ${practice.name} (${practice.distance}mi away, ${practice.rating}⭐)`);
             }
 
-            // Small delay between API requests to avoid rate limiting
-            if (i < maxResults - 1) {
-              await new Promise(resolve => setTimeout(resolve, 100));
-            }
+            // Removed delay to speed up response
 
           } catch (detailError) {
             console.warn(`Error getting details for ${place.name}:`, detailError);
