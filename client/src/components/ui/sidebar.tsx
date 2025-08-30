@@ -540,7 +540,7 @@ const SidebarMenuButton = React.forwardRef<
   React.ComponentProps<"button"> & {
     asChild?: boolean
     isActive?: boolean
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    tooltip?: string
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -573,22 +573,13 @@ const SidebarMenuButton = React.forwardRef<
       return button
     }
 
-    if (typeof tooltip === "string") {
-      tooltip = {
-        children: tooltip,
-      }
-    }
+    // Simple tooltip fallback - just return button with title attribute
+    return (
+      <div title={typeof tooltip === "string" ? tooltip : ""} style={{ display: 'inline-block' }}>
+        {button}
+      </div>
+    )
 
-    // Temporarily disabled tooltips to fix React hook errors
-    // if (state === "collapsed" && !isMobile && typeof tooltip === "object" && tooltip.children) {
-    //   return (
-    //     <SimpleTooltip content={String(tooltip.children)} side="right">
-    //       {button}
-    //     </SimpleTooltip>
-    //   )
-    // }
-    
-    return button
   }
 )
 SidebarMenuButton.displayName = "SidebarMenuButton"
