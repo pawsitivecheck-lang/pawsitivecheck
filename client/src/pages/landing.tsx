@@ -480,14 +480,16 @@ export default function Landing() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {featuredProducts?.slice(0, 3).map((product: any) => (
-              <Link to={`/product/${product.id}`} key={product.id}>
-                <ProductCard 
-                  product={product}
-                  onClick={() => {}}
-                />
-              </Link>
-            )) || (
+            {(Array.isArray(featuredProducts) && featuredProducts.length > 0) ? (
+              featuredProducts.slice(0, 3).map((product: any) => (
+                <Link to={`/product/${product.id}`} key={product.id}>
+                  <ProductCard 
+                    product={product}
+                    onClick={() => {}}
+                  />
+                </Link>
+              ))
+            ) : (
               // Empty state
               [...Array(3)].map((_, i) => (
                 <Card key={i} className="bg-card border border-border hover:shadow-lg transition-shadow" data-testid={`card-product-placeholder-${i}`}>
@@ -523,9 +525,11 @@ export default function Landing() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {recalls?.slice(0, 2).map((recall: any) => (
-                <RecallAlert key={recall.id} recall={recall} />
-              )) || (
+              {(Array.isArray(recalls) && recalls.length > 0) ? (
+                recalls.slice(0, 2).map((recall: any) => (
+                  <RecallAlert key={recall.id} recall={recall} />
+                ))
+              ) : (
                 <div className="col-span-full text-center py-6 sm:py-8">
                   <Shield className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-muted-foreground text-sm sm:text-base" data-testid="text-no-recalls">No active safety alerts at this time</p>
@@ -577,7 +581,7 @@ export default function Landing() {
                 <p className="text-red-500 text-sm sm:text-base">Unable to load community reviews</p>
                 <p className="text-red-400 text-xs sm:text-sm mt-1">Please try again later</p>
               </div>
-            ) : communityReviews?.length > 0 ? (
+            ) : (Array.isArray(communityReviews) && communityReviews.length > 0) ? (
               // Real reviews data
               communityReviews.map((review: any) => (
                 <UserReview 
@@ -708,7 +712,7 @@ export default function Landing() {
                   <div className="bg-card rounded-lg p-2 sm:p-3 border border-border">
                     <div className="text-xs text-muted-foreground mb-1">Latest Recall:</div>
                     <div className="text-sm text-red-600 font-medium" data-testid="text-latest-recall">
-                      {recalls?.length > 0 ? recalls[0].productName : 'No active recalls'}
+                      {(Array.isArray(recalls) && recalls.length > 0) ? recalls[0].productName : 'No active recalls'}
                     </div>
                   </div>
                   <Button 
