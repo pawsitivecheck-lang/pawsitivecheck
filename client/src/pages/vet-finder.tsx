@@ -64,6 +64,7 @@ export default function VetFinder() {
   const [locationError, setLocationError] = useState("");
   const [vetPractices, setVetPractices] = useState<VetPractice[]>([]);
   const [searchRadius, setSearchRadius] = useState(15); // Default 15 miles
+  const [visibleResults, setVisibleResults] = useState(6); // Show 6 results initially
 
   // Get user's current location
   const getCurrentLocation = () => {
@@ -124,6 +125,7 @@ export default function VetFinder() {
     },
     onSuccess: (data) => {
       setVetPractices(data.practices || []);
+      setVisibleResults(6); // Reset to show first 6 results
       toast({
         title: "Cosmic Healers Found!",
         description: `Found ${data.practices?.length || 0} mystical veterinary guardians near you`,
@@ -180,6 +182,10 @@ export default function VetFinder() {
     }
     
     return todayHours;
+  };
+
+  const handleLoadMore = () => {
+    setVisibleResults(prev => Math.min(prev + 6, vetPractices.length));
   };
 
   const getCurrentDay = () => {
@@ -445,9 +451,14 @@ export default function VetFinder() {
           {/* Results */}
           {vetPractices.length > 0 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-mystical text-starlight-400 mb-4" data-testid="text-results-header">
-                Mystical Veterinary Guardians ({vetPractices.length})
-              </h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-mystical text-starlight-400" data-testid="text-results-header">
+                  Mystical Veterinary Guardians
+                </h2>
+                <div className="text-cosmic-300 text-sm">
+                  Showing {Math.min(visibleResults, vetPractices.length)} of {vetPractices.length} results
+                </div>
+              </div>
               
               {/* Interactive Map */}
               <Card className="cosmic-card" data-testid="card-vet-map">
@@ -473,7 +484,7 @@ export default function VetFinder() {
               </Card>
               
               <div className="grid gap-6">
-                {vetPractices.map((vet) => (
+                {vetPractices.slice(0, visibleResults).map((vet) => (
                   <Card key={vet.id} className="cosmic-card" data-testid={`vet-card-${vet.id}`}>
                     <CardContent className="p-6">
                       <div className="grid md:grid-cols-3 gap-6">
@@ -607,6 +618,21 @@ export default function VetFinder() {
                     </CardContent>
                   </Card>
                 ))}
+                
+                {/* Load More Button */}
+                {visibleResults < vetPractices.length && (
+                  <div className="text-center mt-8">
+                    <Button
+                      onClick={handleLoadMore}
+                      variant="outline"
+                      size="lg"
+                      className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10 px-8"
+                      data-testid="button-load-more-vets"
+                    >
+                      Load More Healers ({vetPractices.length - visibleResults} remaining)
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           )}
