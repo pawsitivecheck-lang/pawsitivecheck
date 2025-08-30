@@ -34,6 +34,16 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
   isAdmin: boolean("is_admin").default(false),
+  // Notification preferences
+  emailNotifications: boolean("email_notifications").default(true),
+  recallAlerts: boolean("recall_alerts").default(true),
+  safetyAlerts: boolean("safety_alerts").default(true),
+  productUpdates: boolean("product_updates").default(false),
+  communityUpdates: boolean("community_updates").default(false),
+  marketingEmails: boolean("marketing_emails").default(false),
+  // Data retention preferences
+  dataRetentionDays: integer("data_retention_days").default(365),
+  lastActiveAt: timestamp("last_active_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -69,6 +79,27 @@ export const productReviews = pgTable("product_reviews", {
   title: varchar("title", { length: 255 }),
   content: text("content").notNull(),
   isVerified: boolean("is_verified").default(false),
+  // Moderation fields
+  moderationStatus: varchar("moderation_status", { length: 20 }).default('pending'), // pending, approved, rejected, flagged
+  moderationReason: text("moderation_reason"),
+  moderatedAt: timestamp("moderated_at"),
+  moderatedBy: varchar("moderated_by").references(() => users.id),
+  flaggedCount: integer("flagged_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Content moderation table for tracking user reports
+export const contentModerationReports = pgTable("content_moderation_reports", {
+  id: serial("id").primaryKey(),
+  reportedContentType: varchar("reported_content_type", { length: 50 }).notNull(), // review, comment, product_submission
+  reportedContentId: integer("reported_content_id").notNull(),
+  reporterId: varchar("reporter_id").references(() => users.id).notNull(),
+  reason: varchar("reason", { length: 50 }).notNull(), // spam, inappropriate, safety_concern, fake, other
+  description: text("description"),
+  status: varchar("status", { length: 20 }).default('pending'), // pending, reviewed, resolved, dismissed
+  reviewedBy: varchar("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -865,6 +896,28 @@ export const insertFarmProductReviewSchema = createInsertSchema(farmProductRevie
   updatedAt: true,
 });
 
+export const insertContentModerationReportSchema = createInsertSchema(contentModerationReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Updated user schema with notification preferences
+export const updateUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const userNotificationPreferencesSchema = z.object({
+  emailNotifications: z.boolean(),
+  recallAlerts: z.boolean(),
+  safetyAlerts: z.boolean(),
+  productUpdates: z.boolean(),
+  communityUpdates: z.boolean(),
+  marketingEmails: z.boolean(),
+  dataRetentionDays: z.number().min(30).max(2555), // 30 days to 7 years
+});
+
 // Livestock types
 export type LivestockOperation = typeof livestockOperations.$inferSelect;
 export type InsertLivestockOperation = z.infer<typeof insertLivestockOperationSchema>;
@@ -890,3 +943,6 @@ export type InformationalResource = typeof informationalResources.$inferSelect;
 export type InsertInformationalResource = z.infer<typeof insertInformationalResourceSchema>;
 export type FarmProductReview = typeof farmProductReviews.$inferSelect;
 export type InsertFarmProductReview = z.infer<typeof insertFarmProductReviewSchema>;
+export type ContentModerationReport = typeof contentModerationReports.$inferSelect;
+export type InsertContentModerationReport = z.infer<typeof insertContentModerationReportSchema>;
+export type UserNotificationPreferences = z.infer<typeof userNotificationPreferencesSchema>;

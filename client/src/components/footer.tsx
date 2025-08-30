@@ -115,6 +115,13 @@ export default function Footer() {
             >
               Terms of Service
             </Link>
+            <Link 
+              to="/terms" 
+              className="text-gray-400 hover:text-white text-sm transition-colors"
+              data-testid="link-footer-community-guidelines"
+            >
+              Community Guidelines
+            </Link>
             <button 
               onClick={() => {
                 // Re-show cookie consent by clearing stored consent

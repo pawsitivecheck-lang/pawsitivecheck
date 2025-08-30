@@ -19,6 +19,7 @@ import Profile from "@/pages/profile";
 import PetProfiles from "@/pages/pet-profiles";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
+import Terms from "@/pages/terms";
 import PetHealthProtection from "@/pages/pet-health-protection";
 import CorporateAccountability from "@/pages/corporate-accountability";
 import IngredientTransparency from "@/pages/ingredient-transparency";
@@ -48,6 +49,7 @@ function Router() {
           <Route path="/" component={Landing} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
+          <Route path="/terms" component={Terms} />
           <Route path="/pet-health-protection" component={PetHealthProtection} />
           <Route path="/corporate-accountability" component={CorporateAccountability} />
           <Route path="/ingredient-transparency" component={IngredientTransparency} />

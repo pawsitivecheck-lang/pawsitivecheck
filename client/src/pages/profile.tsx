@@ -16,7 +16,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp, PlusCircle, Heart, Dog, Cat, Bird, Fish, Weight, Stethoscope, Edit, Trash2, Settings, AlertTriangle, Database } from "lucide-react";
+import { NotificationPreferences } from "@/components/notification-preferences";
+import { User, Star, Crown, Eye, Calendar, Package, MessageCircle, Shield, TrendingUp, PlusCircle, Heart, Dog, Cat, Bird, Fish, Weight, Stethoscope, Edit, Trash2, Settings, AlertTriangle, Database, Bell } from "lucide-react";
 import type { PetProfile } from "@shared/schema";
 
 export default function Profile() {
@@ -654,7 +655,7 @@ export default function Profile() {
 
           {/* Profile Tabs */}
           <Tabs defaultValue="reviews" className="w-full" data-testid="tabs-profile">
-            <TabsList className="grid w-full grid-cols-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <TabsList className="grid w-full grid-cols-5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/20 data-[state=active]:text-blue-600 dark:data-[state=active]:text-blue-400" data-testid="tab-reviews">
                 My Reviews
               </TabsTrigger>
@@ -663,6 +664,10 @@ export default function Profile() {
               </TabsTrigger>
               <TabsTrigger value="achievements" className="data-[state=active]:bg-purple-100 dark:data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-600 dark:data-[state=active]:text-purple-400" data-testid="tab-achievements">
                 Achievements
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="data-[state=active]:bg-orange-100 dark:data-[state=active]:bg-orange-900/20 data-[state=active]:text-orange-600 dark:data-[state=active]:text-orange-400" data-testid="tab-notifications">
+                <Bell className="h-4 w-4 mr-1" />
+                Notifications
               </TabsTrigger>
               <TabsTrigger value="data-management" className="data-[state=active]:bg-red-100 dark:data-[state=active]:bg-red-900/20 data-[state=active]:text-red-600 dark:data-[state=active]:text-red-400" data-testid="tab-data-management">
                 Data Management
@@ -885,6 +890,10 @@ export default function Profile() {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+
+            <TabsContent value="notifications" className="mt-6" data-testid="content-notifications">
+              <NotificationPreferences />
             </TabsContent>
 
             <TabsContent value="data-management" className="mt-6" data-testid="content-data-management">

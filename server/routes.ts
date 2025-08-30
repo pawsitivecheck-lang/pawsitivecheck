@@ -5184,6 +5184,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user notification preferences
+  app.get('/api/user/notification-preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = (req as any).user?.claims?.sub;
+      const preferences = await storage.getUserNotificationPreferences(userId);
+      res.json(preferences);
+    } catch (error) {
+      console.error("Error getting user notification preferences:", error);
+      res.status(500).json({ error: "Failed to get notification preferences" });
+    }
+  });
+
+  // Update user notification preferences
+  app.put('/api/user/notification-preferences', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = (req as any).user?.claims?.sub;
+      const preferences = req.body;
+
+      const success = await storage.updateUserNotificationPreferences(userId, preferences);
+
+      if (!success) {
+        return res.status(500).json({ error: "Failed to update notification preferences" });
+      }
+
+      res.json({ message: "Notification preferences updated successfully" });
+    } catch (error) {
+      console.error("Error updating notification preferences:", error);
+      res.status(500).json({ error: "Failed to update notification preferences" });
+    }
+  });
+
+  // Report user content for moderation
+  app.post('/api/moderation/report', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = (req as any).user?.claims?.sub;
+      const { contentType, contentId, reason, description } = req.body;
+
+      const success = await storage.flagUserContent(contentType, contentId, userId, reason, description);
+
+      if (!success) {
+        return res.status(500).json({ error: "Failed to report content" });
+      }
+
+      res.json({ message: "Content reported successfully" });
+    } catch (error) {
+      console.error("Error reporting content:", error);
+      res.status(500).json({ error: "Failed to report content" });
+    }
+  });
+
+  // Get moderation reports (admin only)
+  app.get('/api/admin/moderation/reports', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { status } = req.query;
+      const reports = await storage.getModerationReports(status as string);
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching moderation reports:", error);
+      res.status(500).json({ error: "Failed to fetch moderation reports" });
+    }
+  });
+
+  // Update moderation report status (admin only)
+  app.put('/api/admin/moderation/reports/:id', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const userId = (req as any).user?.claims?.sub;
+      const updates = req.body;
+
+      const report = await storage.updateModerationReport(id, updates, userId);
+
+      if (!report) {
+        return res.status(404).json({ error: "Moderation report not found" });
+      }
+
+      res.json(report);
+    } catch (error) {
+      console.error("Error updating moderation report:", error);
+      res.status(500).json({ error: "Failed to update moderation report" });
+    }
+  });
+
   app.post('/api/farm-product-reviews/:id/vote-helpful', async (req: any, res) => {
     try {
       const reviewId = parseInt(req.params.id);

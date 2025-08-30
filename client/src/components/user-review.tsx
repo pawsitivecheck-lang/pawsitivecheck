@@ -1,8 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ContentFlagButton } from "@/components/content-flag-button";
 import { ReactNode } from "react";
 
 interface UserReviewProps {
+  id?: number; // Review ID for flagging functionality
   username: string;
   userType: string;
   content: string;
@@ -12,9 +14,11 @@ interface UserReviewProps {
   productName?: string;
   productBrand?: string;
   verified?: boolean;
+  showFlagButton?: boolean; // Allow disabling flag button for certain contexts
 }
 
 export default function UserReview({ 
+  id,
   username, 
   userType, 
   content, 
@@ -23,7 +27,8 @@ export default function UserReview({
   icon,
   productName,
   productBrand,
-  verified = false
+  verified = false,
+  showFlagButton = true
 }: UserReviewProps) {
   return (
     <Card className="cosmic-card hover:border-starlight-500/40 transition-all" data-testid={`user-review-${username}`}>
@@ -99,6 +104,18 @@ export default function UserReview({
             {/* Footer */}
             <div className="flex items-center justify-between text-xs text-cosmic-500">
               <span data-testid="text-time-ago">{timeAgo}</span>
+              
+              {/* Content Flagging Button */}
+              {showFlagButton && id && (
+                <ContentFlagButton
+                  contentType="review"
+                  contentId={id}
+                  variant="ghost"
+                  size="sm"
+                  className="text-cosmic-400 hover:text-red-400"
+                  showIcon={false}
+                />
+              )}
               <div className="flex items-center gap-3">
                 <button className="hover:text-mystical-green transition-colors" data-testid="button-helpful">
                   ✨ Helpful

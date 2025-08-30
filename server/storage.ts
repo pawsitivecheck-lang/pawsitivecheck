@@ -298,6 +298,16 @@ export interface IStorage {
     reviews: number;
     scans: number;
   }>;
+
+  // Notification preferences methods
+  getUserNotificationPreferences(userId: string): Promise<UserNotificationPreferences>;
+  updateUserNotificationPreferences(userId: string, preferences: UserNotificationPreferences): Promise<boolean>;
+
+  // Content moderation methods
+  createModerationReport(report: InsertContentModerationReport): Promise<ContentModerationReport>;
+  getModerationReports(status?: string): Promise<ContentModerationReport[]>;
+  updateModerationReport(id: number, updates: Partial<InsertContentModerationReport>, reviewerId: string): Promise<ContentModerationReport | undefined>;
+  flagUserContent(contentType: string, contentId: number, reporterId: string, reason: string, description?: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1626,6 +1636,11 @@ export class DatabaseStorage implements IStorage {
           .delete(farmProductReviews)
           .where(eq(farmProductReviews.userId, userId));
 
+        // Delete content moderation reports
+        await tx
+          .delete(contentModerationReports)
+          .where(eq(contentModerationReports.reporterId, userId));
+
         // Finally, delete the user account itself
         await tx
           .delete(users)
@@ -1635,6 +1650,109 @@ export class DatabaseStorage implements IStorage {
       return true;
     } catch (error) {
       console.error('Error deleting user data:', error);
+      return false;
+    }
+  }
+
+  // =============================== NOTIFICATION PREFERENCES METHODS ===============================
+
+  async getUserNotificationPreferences(userId: string): Promise<UserNotificationPreferences> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    return {
+      emailNotifications: user.emailNotifications ?? true,
+      recallAlerts: user.recallAlerts ?? true,
+      safetyAlerts: user.safetyAlerts ?? true,
+      productUpdates: user.productUpdates ?? false,
+      communityUpdates: user.communityUpdates ?? false,
+      marketingEmails: user.marketingEmails ?? false,
+      dataRetentionDays: user.dataRetentionDays ?? 365,
+    };
+  }
+
+  async updateUserNotificationPreferences(userId: string, preferences: UserNotificationPreferences): Promise<boolean> {
+    try {
+      const result = await db
+        .update(users)
+        .set({
+          emailNotifications: preferences.emailNotifications,
+          recallAlerts: preferences.recallAlerts,
+          safetyAlerts: preferences.safetyAlerts,
+          productUpdates: preferences.productUpdates,
+          communityUpdates: preferences.communityUpdates,
+          marketingEmails: preferences.marketingEmails,
+          dataRetentionDays: preferences.dataRetentionDays,
+          updatedAt: new Date(),
+          lastActiveAt: new Date(),
+        })
+        .where(eq(users.id, userId));
+      
+      return (result.rowCount ?? 0) > 0;
+    } catch (error) {
+      console.error('Error updating user notification preferences:', error);
+      return false;
+    }
+  }
+
+  // =============================== CONTENT MODERATION METHODS ===============================
+
+  async createModerationReport(report: InsertContentModerationReport): Promise<ContentModerationReport> {
+    const [newReport] = await db.insert(contentModerationReports).values(report).returning();
+    return newReport;
+  }
+
+  async getModerationReports(status?: string): Promise<ContentModerationReport[]> {
+    let query = db.select().from(contentModerationReports);
+    
+    if (status) {
+      query = query.where(eq(contentModerationReports.status, status)) as typeof query;
+    }
+    
+    return await query.orderBy(desc(contentModerationReports.createdAt));
+  }
+
+  async updateModerationReport(id: number, updates: Partial<InsertContentModerationReport>, reviewerId: string): Promise<ContentModerationReport | undefined> {
+    const [report] = await db
+      .update(contentModerationReports)
+      .set({ 
+        ...updates, 
+        reviewedBy: reviewerId,
+        reviewedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(contentModerationReports.id, id))
+      .returning();
+    return report;
+  }
+
+  async flagUserContent(contentType: string, contentId: number, reporterId: string, reason: string, description?: string): Promise<boolean> {
+    try {
+      await db.insert(contentModerationReports).values({
+        reportedContentType: contentType,
+        reportedContentId: contentId,
+        reporterId,
+        reason,
+        description,
+        status: 'pending'
+      });
+
+      // If it's a review, increment the flagged count
+      if (contentType === 'review') {
+        await db
+          .update(productReviews)
+          .set({ 
+            flaggedCount: sql`${productReviews.flaggedCount} + 1`,
+            updatedAt: new Date() 
+          })
+          .where(eq(productReviews.id, contentId));
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error flagging user content:', error);
       return false;
     }
   }
