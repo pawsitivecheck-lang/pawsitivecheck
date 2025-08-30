@@ -537,69 +537,6 @@ export default function DatabaseSync() {
         </Card>
       </div>
 
-      {/* Admin Actions */}
-      <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-admin-actions">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Crown className="h-5 w-5 text-blue-600" />
-            Administrative Actions
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <Button 
-              className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
-              data-testid="button-enhance-analysis"
-            >
-              <ChartLine className="mr-2 h-4 w-4" />
-              Enhance Analysis
-            </Button>
-            <Button 
-              className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
-              data-testid="button-update-database"
-            >
-              <Package className="mr-2 h-4 w-4" />
-              Update Database
-            </Button>
-            <Button 
-              className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
-              onClick={() => window.location.href = "/admin/product-submissions"}
-              data-testid="button-review-submissions"
-            >
-              <Eye className="mr-2 h-4 w-4" />
-              Review Submissions
-            </Button>
-            <Button 
-              className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
-              data-testid="button-issue-recall"
-            >
-              <AlertTriangle className="mr-2 h-4 w-4" />
-              Issue Recall
-            </Button>
-            <Button 
-              className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
-              data-testid="button-approve-product"
-            >
-              <Shield className="mr-2 h-4 w-4" />
-              Approve Product
-            </Button>
-            <Button 
-              className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
-              onClick={handleUpdateLegal}
-              disabled={isUpdatingLegal}
-              data-testid="button-update-legal"
-            >
-              {isUpdatingLegal ? (
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <FileText className="mr-2 h-4 w-4" />
-              )}
-              {isUpdatingLegal ? "Updating..." : "Update Legal Docs"}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Status Overview */}
       <Card className="cosmic-card">
         <CardHeader>
@@ -669,16 +606,81 @@ export default function DatabaseSync() {
         </CardContent>
       </Card>
 
-      {/* Sync Controls */}
+      {/* Administrative Actions & Data Synchronization */}
       <Card className="cosmic-card">
         <CardHeader>
           <CardTitle className="font-mystical flex items-center gap-2">
-            <RefreshCw className="h-5 w-5 text-starlight-500" />
-            Data Synchronization
+            <Crown className="h-5 w-5 text-blue-600" />
+            Administrative Actions & Data Synchronization
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+          {/* Administrative Actions Section */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-cosmic-200 mb-4 flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Administrative Actions
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <Button 
+                className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
+                data-testid="button-enhance-analysis"
+              >
+                <ChartLine className="mr-2 h-4 w-4" />
+                Enhance Analysis
+              </Button>
+              <Button 
+                className="bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900"
+                data-testid="button-update-database"
+              >
+                <Package className="mr-2 h-4 w-4" />
+                Update Database
+              </Button>
+              <Button 
+                className="bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900"
+                onClick={() => window.location.href = "/admin/product-submissions"}
+                data-testid="button-review-submissions"
+              >
+                <Eye className="mr-2 h-4 w-4" />
+                Review Submissions
+              </Button>
+              <Button 
+                className="bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900"
+                data-testid="button-issue-recall"
+              >
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                Issue Recall
+              </Button>
+              <Button 
+                className="bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900"
+                data-testid="button-approve-product"
+              >
+                <Shield className="mr-2 h-4 w-4" />
+                Approve Product
+              </Button>
+              <Button 
+                className="bg-orange-50 dark:bg-orange-950 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900"
+                onClick={handleUpdateLegal}
+                disabled={isUpdatingLegal}
+                data-testid="button-update-legal"
+              >
+                {isUpdatingLegal ? (
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <FileText className="mr-2 h-4 w-4" />
+                )}
+                {isUpdatingLegal ? "Updating..." : "Update Legal Docs"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Data Synchronization Section */}
+          <div>
+            <h3 className="text-lg font-semibold text-cosmic-200 mb-4 flex items-center gap-2">
+              <RefreshCw className="h-4 w-4 text-starlight-500" />
+              Data Synchronization
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
             <div className="space-y-3">
               <Button
                 onClick={() => syncProductsMutation.mutate()}
@@ -988,6 +990,7 @@ export default function DatabaseSync() {
               <div className="text-center text-xs text-cosmic-500 bg-cosmic-800/30 p-2 rounded border border-cosmic-700">
                 <strong className="text-mystical-purple">Full Sync:</strong> Performs complete synchronization of all databases - products, recalls, ingredients, livestock, farm animals, exotic pets, and cosmic scoring.
               </div>
+            </div>
             </div>
           </div>
           
