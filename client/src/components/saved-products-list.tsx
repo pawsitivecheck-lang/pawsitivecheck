@@ -28,31 +28,19 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<"saved" | "favorite" | "avoid" | "tried">("saved");
 
-  const { data: savedProducts = [], isLoading } = useQuery({
+  const { data: savedProducts = [] as SavedProduct[], isLoading } = useQuery({
     queryKey: [`/api/pets/${petId}/saved-products`],
     enabled: !!petId,
-    onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-      }
-    },
   });
 
   // Fetch product details for each saved product
   const { data: productsData = [] } = useQuery({
-    queryKey: [`/api/products/batch`, savedProducts.map((sp: SavedProduct) => sp.productId)],
-    enabled: savedProducts.length > 0,
+    queryKey: [`/api/products/batch`, (savedProducts as SavedProduct[]).map((sp: SavedProduct) => sp.productId)],
+    enabled: (savedProducts as SavedProduct[]).length > 0,
     queryFn: async () => {
-      const productIds = savedProducts.map((sp: SavedProduct) => sp.productId);
+      const productIds = (savedProducts as SavedProduct[]).map((sp: SavedProduct) => sp.productId);
       const products = await Promise.all(
-        productIds.map(async (id) => {
+        productIds.map(async (id: number) => {
           try {
             return await apiRequest(`/api/products/${id}`, "GET");
           } catch {
@@ -183,7 +171,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
   };
 
   // Merge saved products with product details
-  const savedProductsWithDetails: SavedProductWithProduct[] = savedProducts.map((savedProduct: SavedProduct) => {
+  const savedProductsWithDetails: SavedProductWithProduct[] = (savedProducts as SavedProduct[]).map((savedProduct: SavedProduct) => {
     const product = productsData.find((p: Product) => p.id === savedProduct.productId);
     return { ...savedProduct, product };
   });
@@ -198,7 +186,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
     );
   }
 
-  if (savedProducts.length === 0) {
+  if ((savedProducts as SavedProduct[]).length === 0) {
     return (
       <Card className="text-center py-8">
         <CardContent>
@@ -226,9 +214,9 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
                     <CardTitle className="text-lg">
                       {savedProduct.product?.name || "Unknown Product"}
                     </CardTitle>
-                    <Badge className={getStatusBadgeColor(savedProduct.status)}>
+                    <Badge className={getStatusBadgeColor(savedProduct.status || 'saved')}>
                       <div className="flex items-center gap-1">
-                        {getStatusIcon(savedProduct.status)}
+                        {getStatusIcon(savedProduct.status || 'saved')}
                         {savedProduct.status}
                       </div>
                     </Badge>

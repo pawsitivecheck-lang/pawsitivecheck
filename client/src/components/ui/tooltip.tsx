@@ -9,7 +9,7 @@ export const Tooltip = ({ children, content }: { children: React.ReactNode; cont
 
 export const TooltipTrigger = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 export const TooltipContent = ({ children }: { children: React.ReactNode }) => <>{children}</>;
-export const TooltipProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export { Provider as TooltipProvider } from "@radix-ui/react-tooltip";
 
 // Legacy simple tooltip for backwards compatibility
 export interface TooltipProps {

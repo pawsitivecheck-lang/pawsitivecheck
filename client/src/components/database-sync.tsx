@@ -1188,7 +1188,7 @@ function SyncScheduleDialog({ onScheduleCreated }: { onScheduleCreated: () => vo
 function SyncScheduleList() {
   const { toast } = useToast();
 
-  const { data: schedules = [] } = useQuery({
+  const { data: schedules = [] as any[] } = useQuery({
     queryKey: ['/api/admin/sync/schedules'],
   });
 
@@ -1226,7 +1226,7 @@ function SyncScheduleList() {
     }
   };
 
-  if (schedules.length === 0) {
+  if ((schedules as any[]).length === 0) {
     return (
       <div className="text-center py-8 text-purple-200">
         <Clock className="h-12 w-12 mx-auto mb-4 text-purple-400" />
@@ -1239,11 +1239,11 @@ function SyncScheduleList() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Active Sync Schedules ({schedules.length})</h3>
+        <h3 className="text-lg font-semibold text-white">Active Sync Schedules ({(schedules as any[]).length})</h3>
       </div>
       
       <div className="grid gap-3">
-        {schedules.map((schedule: any) => (
+        {(schedules as any[]).map((schedule: any) => (
           <Card key={schedule.id} className="bg-slate-800/50 border-purple-500/20" data-testid={`schedule-${schedule.id}`}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
