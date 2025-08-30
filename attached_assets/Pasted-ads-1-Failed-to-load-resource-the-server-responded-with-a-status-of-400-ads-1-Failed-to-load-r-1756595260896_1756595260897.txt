@@ -1,0 +1,61 @@
+ads:1  Failed to load resource: the server responded with a status of 400 ()
+ads:1  Failed to load resource: the server responded with a status of 400 ()
+ads:1  Failed to load resource: the server responded with a status of 400 ()
+index-DuMB-uOG.js:655 PWA: Service Worker registered successfully: ServiceWorkerRegistration
+corporate-accountability:1 Error while trying to use the following icon from the Manifest: https://pawsitivecheck.com/icon-192.png (Download error or resource isn't a valid image)
+api/auth/user:1  Failed to load resource: the server responded with a status of 401 ()
+ Third-party cookie is blocked in Chrome either because of Chrome flags or browser configuration.
+Navigated to https://pawsitivecheck.com/corporate-accountability
+ Third-party cookie is blocked in Chrome either because of Chrome flags or browser configuration.
+ads:1  Failed to load resource: the server responded with a status of 400 ()
+index-DuMB-uOG.js:655 PWA: Service Worker registered successfully: ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'https://pawsitivecheck.com/', …}
+corporate-accountability:1 Error while trying to use the following icon from the Manifest: https://pawsitivecheck.com/icon-192.png (Download error or resource isn't a valid image)
+show_ads_impl_fy2021.js:103 XHR finished loading: GET "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20250827&st=env".
+(anonymous) @ show_ads_impl_fy2021.js:103
+Aj @ show_ads_impl_fy2021.js:103
+zj @ show_ads_impl_fy2021.js:102
+Bj @ show_ads_impl_fy2021.js:104
+MZ @ show_ads_impl_fy2021.js:587
+(anonymous) @ show_ads_impl_fy2021.js:587
+sw.js:76 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+(anonymous) @ sw.js:76
+index-DuMB-uOG.js:533  GET https://pawsitivecheck.com/api/auth/user 401 (Unauthorized)
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
+index-DuMB-uOG.js:533 Fetch failed loading: GET "https://pawsitivecheck.com/api/auth/user".
+queryFn @ index-DuMB-uOG.js:533
+o @ index-DuMB-uOG.js:48
+M @ index-DuMB-uOG.js:48
+start @ index-DuMB-uOG.js:48
+fetch @ index-DuMB-uOG.js:48
+Dm @ index-DuMB-uOG.js:48
+onSubscribe @ index-DuMB-uOG.js:48
+subscribe @ index-DuMB-uOG.js:48
+(anonymous) @ index-DuMB-uOG.js:48
+i2 @ index-DuMB-uOG.js:38
+o0 @ index-DuMB-uOG.js:40
+ju @ index-DuMB-uOG.js:40
+rN @ index-DuMB-uOG.js:40
+Vl @ index-DuMB-uOG.js:38
+NO @ index-DuMB-uOG.js:40
+od @ index-DuMB-uOG.js:40
+sN @ index-DuMB-uOG.js:40
+G @ index-DuMB-uOG.js:25
+he @ index-DuMB-uOG.js:25
