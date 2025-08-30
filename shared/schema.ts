@@ -58,6 +58,7 @@ export const products = pgTable("products", {
   imageUrl: varchar("image_url"),
   barcode: varchar("barcode", { length: 50 }),
   sourceUrl: varchar("source_url", { length: 500 }),
+  sourceUrls: text("source_urls").array(), // Array of source URLs explaining safety concerns
   cosmicScore: integer("cosmic_score").default(0), // 0-100
   cosmicClarity: varchar("cosmic_clarity", { length: 20 }).default('unknown'), // blessed, questionable, cursed, unknown
   transparencyLevel: varchar("transparency_level", { length: 20 }).default('unknown'),

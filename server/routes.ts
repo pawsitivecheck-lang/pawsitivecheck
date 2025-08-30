@@ -813,10 +813,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const analysis = {
         cosmicScore: finalScore,
-        cosmicClarity: finalScore >= 80 ? 'blessed' : finalScore >= 50 ? 'questionable' : 'cursed',
+        cosmicClarity: aiAnalysis.cosmicClarity === 'cursed' ? 'cursed' : (finalScore >= 80 ? 'blessed' : finalScore >= 50 ? 'questionable' : 'cursed'),
         transparencyLevel: aiAnalysis.transparencyLevel,
         suspiciousIngredients: allSuspiciousIngredients,
         disposalInstructions: aiAnalysis.disposalInstructions,
+        sourceUrls: aiAnalysis.sourceUrls || [],
         userGuidance: guidance,
         lastAnalyzed: new Date(),
       };

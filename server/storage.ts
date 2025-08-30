@@ -381,6 +381,8 @@ export class DatabaseStorage implements IStorage {
     cosmicClarity: string;
     transparencyLevel: string;
     suspiciousIngredients: string[];
+    disposalInstructions?: string;
+    sourceUrls?: string[];
     lastAnalyzed: Date;
   }): Promise<Product | undefined> {
     const [product] = await db

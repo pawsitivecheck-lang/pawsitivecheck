@@ -16,6 +16,31 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Brands that should NEVER be recommended due to safety issues
+const NEVER_RECOMMEND_BRANDS = [
+  'Adams',
+  'Hartz',
+  'adams', 
+  'hartz',
+  'ADAMS',
+  'HARTZ'
+];
+
+// Sources explaining why these brands are problematic
+const BRAND_SAFETY_SOURCES = {
+  'Adams': [
+    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products',
+    'https://www.epa.gov/pets/pet-product-recalls',
+    'https://www.avma.org/resources-tools/pet-owners/petcare/flea-and-tick-products'
+  ],
+  'Hartz': [
+    'https://www.nytimes.com/2009/09/01/business/01flea.html',
+    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products',
+    'https://www.epa.gov/pets/pet-product-recalls',
+    'https://www.hartzvictims.org'
+  ]
+};
+
 export async function analyzeProductSafety(productData: {
   name: string;
   brand: string;
@@ -29,7 +54,26 @@ export async function analyzeProductSafety(productData: {
   suspiciousIngredients: string[];
   disposalInstructions: string;
   analysis: string;
+  sourceUrls?: string[];
 }> {
+  // Check if this is a never-recommend brand (Adams or Hartz)
+  const isNeverRecommendBrand = NEVER_RECOMMEND_BRANDS.some(brand => 
+    productData.brand.toLowerCase().includes(brand.toLowerCase())
+  );
+
+  if (isNeverRecommendBrand) {
+    const brandKey = productData.brand.toLowerCase().includes('adams') ? 'Adams' : 'Hartz';
+    return {
+      cosmicScore: 5, // Extremely low score
+      cosmicClarity: 'cursed',
+      transparencyLevel: 'poor',
+      suspiciousIngredients: ['Multiple safety concerns documented'],
+      disposalInstructions: 'STOP USING IMMEDIATELY. Dispose of safely according to hazardous waste guidelines. Do not use on pets. Consult veterinarian if already used.',
+      analysis: `WARNING: ${brandKey} products have a documented history of serious safety issues and pet injuries/deaths. Multiple regulatory warnings and recalls have been issued. This brand is not recommended for pet safety. Consult your veterinarian for safe alternatives.`,
+      sourceUrls: BRAND_SAFETY_SOURCES[brandKey] || []
+    };
+  }
+
   try {
     const prompt = `Analyze this pet product for safety and provide detailed assessment:
 
@@ -76,7 +120,8 @@ Consider:
       transparencyLevel: analysis.transparencyLevel,
       suspiciousIngredients: analysis.suspiciousIngredients || [],
       disposalInstructions: analysis.disposalInstructions,
-      analysis: analysis.analysis
+      analysis: analysis.analysis,
+      sourceUrls: []
     };
   } catch (error) {
     console.error('AI analysis failed:', error);
@@ -86,7 +131,8 @@ Consider:
       transparencyLevel: 'unknown',
       suspiciousIngredients: [],
       disposalInstructions: 'Dispose of according to local waste management guidelines. Do not flush or pour down drains.',
-      analysis: 'Unable to analyze product safety at this time.'
+      analysis: 'Unable to analyze product safety at this time.',
+      sourceUrls: []
     };
   }
 }

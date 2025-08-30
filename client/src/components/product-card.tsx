@@ -18,6 +18,7 @@ interface ProductCardProps {
     isBlacklisted?: boolean;
     imageUrl?: string;
     sourceUrl?: string;
+    sourceUrls?: string[];
     suspiciousIngredients?: string[];
     disposalInstructions?: string;
   };
@@ -178,6 +179,40 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
                   </p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Safety Sources for Cursed Products */}
+          {product.cosmicClarity === 'cursed' && product.sourceUrls && product.sourceUrls.length > 0 && (
+            <div className="bg-mystical-red/5 border border-mystical-red/20 rounded-lg p-3" data-testid="safety-sources-section">
+              <div className="flex items-center gap-2 mb-2">
+                <XCircle className="text-mystical-red h-4 w-4" />
+                <p className="text-sm font-semibold text-mystical-red">Why This Product is Not Recommended:</p>
+              </div>
+              <div className="space-y-1">
+                {product.sourceUrls.map((url, index) => (
+                  <div key={index} className="text-xs">
+                    <a 
+                      href={url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 underline transition-colors cursor-pointer"
+                      onClick={(e) => e.stopPropagation()}
+                      data-testid={`source-link-${index}`}
+                    >
+                      {url.includes('fda.gov') ? 'FDA Safety Warning' :
+                       url.includes('epa.gov') ? 'EPA Safety Alert' :
+                       url.includes('nytimes.com') ? 'News Investigation' :
+                       url.includes('hartzvictims.org') ? 'Safety Report Database' :
+                       url.includes('avma.org') ? 'Veterinary Association Warning' :
+                       'Safety Information'}
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-cosmic-400 mt-2 italic">
+                Click links above for detailed safety information and regulatory warnings.
+              </p>
             </div>
           )}
 
