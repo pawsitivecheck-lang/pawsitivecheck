@@ -2513,29 +2513,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         lng = location.lng;
       }
 
-      // Try Google Places API first for nationwide coverage
+      // Fallback to database if no Google API key
       if (!googleApiKey) {
-        console.warn('Google Places API key not found, falling back to local data');
-        // Don't throw error, just fall through to fallback data
-      } else {
-        // Step 1: Search for veterinary places with multiple approaches
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
-        }
+        console.warn('Google Places API key not found, using database fallback');
+        throw new Error('Google Places API key not found');
+      }
 
-        let searchData = { results: [] };
+      // Use Google Places API for search
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Searching for veterinarians near ${lat}, ${lng} with radius ${searchRadius}m`);
+      }
 
-        // Try multiple search approaches to find veterinary offices
-        const searchQueries = [
-          // Primary veterinary care search
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`,
-          // Text search for veterinarians
-          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=veterinarian+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
-          // Text search for animal hospitals
-          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=animal+hospital+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
-          // Text search for vet clinics
-          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=vet+clinic+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`
-        ];
+      let searchData = { results: [] };
+
+      // Try multiple search approaches to find veterinary offices
+      const searchQueries = [
+        // Primary veterinary care search
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${searchRadius}&type=veterinary_care&key=${googleApiKey}`,
+        // Text search for veterinarians
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=veterinarian+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
+        // Text search for animal hospitals
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=animal+hospital+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`,
+        // Text search for vet clinics
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=vet+clinic+near+${lat},${lng}&radius=${searchRadius}&key=${googleApiKey}`
+      ];
 
         for (const searchUrl of searchQueries) {
           try {
@@ -2999,7 +3000,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             longitude: -84.4655
           }
         ];
-        }
 
         // Enhanced filtering by search query
         let filteredPractices = practices;
@@ -3066,82 +3066,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           searchQuery: query || 'veterinarian',
           location: location || null,
           source: 'Google Places API'
-        });
-
-      } catch (googleError) {
-        console.log("Google Places API failed, using fallback:", googleError);
-
-        // Database fallback for other locations
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Using database fallback for location search');
-        }
-        const offices = await storage.getVeterinaryOffices();
-
-        if (!offices || offices.length === 0) {
-          return res.status(404).json({
-            practices: [],
-            total: 0,
-            searchQuery: query || 'veterinarian',
-            location: location || null,
-            source: 'Database (Empty)',
-            message: 'No veterinary practices found. Please try a different location.'
-          });
-        }
-
-        // Convert database records to our standard format and calculate distances
-        const practices = offices.map((office: any, index: number) => {
-          // Calculate distance if coordinates are available
-          let distance = 999; // Default large distance
-          if (office.latitude && office.longitude) {
-            const R = 3959; // Earth's radius in miles
-            const dLat = (office.latitude - lat) * Math.PI / 180;
-            const dLng = (office.longitude - lng) * Math.PI / 180;
-            const a = 
-              Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat * Math.PI / 180) * Math.cos(office.latitude * Math.PI / 180) * 
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            distance = R * c;
-          }
-
-          return {
-            id: `db-${office.id || index}`,
-            name: office.name || `Veterinary Practice ${index + 1}`,
-            address: office.address || 'Address not available',
-            city: office.city || 'City not specified',
-            state: office.state || 'State not specified',
-            zipCode: office.zipCode || '',
-            phone: office.phone || '(Contact for phone)',
-            website: office.website || '',
-            rating: office.rating || 4.2,
-            reviewCount: office.reviewCount || 0,
-            services: office.services || ['General Veterinary Care'],
-            hours: office.hours || {
-              'Monday': 'Call for hours',
-              'Tuesday': 'Call for hours',
-              'Wednesday': 'Call for hours',
-              'Thursday': 'Call for hours',
-              'Friday': 'Call for hours',
-              'Saturday': 'Call for hours',
-              'Sunday': 'Call for hours'
-            },
-            specialties: office.specialties || ['General Veterinary Care'],
-            emergencyServices: office.emergencyServices || false,
-            distance: Math.round(distance * 10) / 10,
-            latitude: office.latitude || null,
-            longitude: office.longitude || null
-          };
-        });
-
-        // Sort by distance
-        practices.sort((a: any, b: any) => (a.distance || 999) - (b.distance || 999));
-
-        res.json({
-          practices,
-          total: practices.length,
-          searchQuery: query || 'veterinarian',
-          location: location || null,
-          source: 'Database'
         });
       }
     } catch (error) {
