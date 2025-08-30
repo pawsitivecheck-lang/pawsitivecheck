@@ -29,15 +29,15 @@ const NEVER_RECOMMEND_BRANDS = [
 // Sources explaining why these brands are problematic
 const BRAND_SAFETY_SOURCES = {
   'Adams': [
-    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products',
-    'https://www.epa.gov/pets/pet-product-recalls',
-    'https://www.avma.org/resources-tools/pet-owners/petcare/flea-and-tick-products'
+    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products-pets',
+    'https://www.epa.gov/pesticides/pesticides-and-pets',
+    'https://www.avma.org/resources-tools/pet-owners/petcare/external-parasites'
   ],
   'Hartz': [
-    'https://www.nytimes.com/2009/09/01/business/01flea.html',
-    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products',
-    'https://www.epa.gov/pets/pet-product-recalls',
-    'https://www.hartzvictims.org'
+    'https://www.fda.gov/animal-veterinary/animal-health-literacy/flea-and-tick-products-pets',
+    'https://www.epa.gov/pesticides/pesticides-and-pets',
+    'https://www.avma.org/resources-tools/pet-owners/petcare/external-parasites',
+    'https://www.consumeraffairs.com/pets/hartz.html'
   ]
 };
 

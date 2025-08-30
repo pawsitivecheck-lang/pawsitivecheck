@@ -94,7 +94,7 @@ export default function RecallSystemInfo() {
                   </p>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <p className="text-sm text-red-700">
-                      <strong>Critical Tracking:</strong> Includes <a href="https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigates-animal-illnesses-linked-jerky-pet-treats" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">contamination outbreaks</a>, <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">toxic ingredient recalls like Hill's vitamin D crisis</a>, and Salmonella/Listeria contaminations.
+                      <strong>Critical Tracking:</strong> Includes <a href="https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigates-animal-illnesses-linked-jerky-pet-treats" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">contamination outbreaks</a>, <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">toxic ingredient recalls like Hill's vitamin D crisis</a>, and Salmonella/Listeria contaminations.
                     </p>
                   </div>
                 </div>

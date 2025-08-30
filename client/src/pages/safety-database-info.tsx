@@ -68,7 +68,7 @@ export default function SafetyDatabaseInfo() {
                   </div>
                   <h3 className="font-bold text-gray-900 mb-3">15K+ Ingredients</h3>
                   <p className="text-gray-600 text-sm">
-                    Comprehensive ingredient safety profiles cross-referenced with <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology research</a> and <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed safety studies</a>.
+                    Comprehensive ingredient safety profiles cross-referenced with <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology research</a> and <a href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed safety studies</a>.
                   </p>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function SafetyDatabaseInfo() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">Scientific Research Integration</h3>
                   <p className="text-gray-700 mb-4">
-                    Automated indexing of peer-reviewed research from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">NCBI's veterinary toxicology database</a>, <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Nature Scientific Reports on pet nutrition</a>, and <a href="https://www.tandfonline.com/doi/full/10.1080/1745039X.2018.1520019" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Journal of Animal Science studies</a>. Our algorithms process over 2,000 new research papers monthly for safety-relevant findings.
+                    Automated indexing of peer-reviewed research from <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">NCBI's veterinary toxicology database</a>, <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Nature Scientific Reports on pet nutrition</a>, and <a href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Journal of Animal Science studies</a>. Our algorithms process over 2,000 new research papers monthly for safety-relevant findings.
                   </p>
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function SafetyDatabaseInfo() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">Corporate Accountability Records</h3>
                   <p className="text-gray-700 mb-4">
-                    Comprehensive tracking of legal violations, settlements, and transparency violations. This includes <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Hill's $16M settlement for vitamin D toxicity</a>, <a href="https://topclassactions.com/lawsuit-settlements/consumer-products/pet-products/blue-buffalo-settles-class-action-over-false-natural-claims/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo's $32M false advertising case</a>, and ongoing monitoring of <a href="https://www.petfoodscam.com/pet-food-lawsuits/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">class action lawsuits</a> across the industry.
+                    Comprehensive tracking of legal violations, settlements, and transparency violations. This includes <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Hill's vitamin D toxicity investigation</a>, <a href="https://www.consumeraffairs.com/pets/pet_food.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo false advertising settlement</a>, and ongoing monitoring of <a href="https://www.consumeraffairs.com/pets/pet_food.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">class action lawsuits</a> across the industry.
                   </p>
                 </div>
               </div>
@@ -285,7 +285,7 @@ export default function SafetyDatabaseInfo() {
                         <div>
                           <p className="font-medium text-gray-900">Corporate Accountability Tracking</p>
                           <p className="text-sm text-gray-600">
-                            Complete legal violation history including settlements like <a href="https://topclassactions.com/lawsuit-settlements/consumer-products/pet-products/blue-buffalo-settles-class-action-over-false-natural-claims/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo's $32M false advertising case</a>
+                            Complete legal violation history including settlements like <a href="https://www.consumeraffairs.com/pets/pet_food.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo false advertising settlement</a>
                           </p>
                         </div>
                       </div>

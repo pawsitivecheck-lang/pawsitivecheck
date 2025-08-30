@@ -7,7 +7,7 @@ export default function TermsOfService() {
   return (
     <div className="min-h-screen text-cosmic-100">
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+<div className="bg-background dark:bg-background border-b border-border dark:border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="terms-header" />
         </div>

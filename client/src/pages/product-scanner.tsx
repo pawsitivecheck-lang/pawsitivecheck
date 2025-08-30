@@ -268,28 +268,28 @@ export default function ProductScanner() {
             <CardContent className="space-y-6">
               <div className="text-gray-700">
                 <p className="text-lg mb-6">
-                  Pet product safety has become increasingly critical as <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA recalls increased 300% over the past decade</a>, affecting millions of pets. Comprehensive safety analysis helps identify potential hazards before they reach your beloved companions.
+                  Pet product safety has become increasingly critical as <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA animal food recalls have increased significantly</a>, affecting millions of pets. Comprehensive safety analysis helps identify potential hazards before they reach your beloved companions.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                     <h4 className="font-semibold text-green-700 mb-2">🔬 Scientific Foundation</h4>
                     <p className="text-sm text-gray-700">
-                      Our analysis incorporates <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed research on pet nutrition toxicity</a> and <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AAFCO ingredient safety standards</a> to provide evidence-based safety ratings.
+                      Our analysis incorporates <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed research on pet nutrition toxicity</a> and <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AAFCO ingredient safety standards</a> to provide evidence-based safety ratings.
                     </p>
                   </div>
 
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                     <h4 className="font-semibold text-red-700 mb-2">⚠️ Corporate Accountability</h4>
                     <p className="text-sm text-gray-700">
-                      Major violations include <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Hill's toxic vitamin D scandal affecting 1,000+ dogs</a> and <a href="https://topclassactions.com/lawsuit-settlements/consumer-products/pet-products/blue-buffalo-settles-class-action-over-false-natural-claims/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo's $32M settlement for ingredient deception</a>.
+                      Major violations include <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA investigations into pet food safety issues</a> and <a href="https://www.consumeraffairs.com/pets/pet_food.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">consumer complaints about pet food quality</a>.
                     </p>
                   </div>
 
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <h4 className="font-semibold text-blue-700 mb-2">📊 Transparency Database</h4>
                     <p className="text-sm text-gray-700">
-                      Our database tracks ingredient transparency across brands, revealing that <a href="https://www.petfoodindustry.com/articles/8698-pet-food-transparency-survey-results" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">only 23% of pet food manufacturers provide complete sourcing information</a> to consumers.
+                      Our database tracks ingredient transparency across brands, revealing that <a href="https://www.petfoodindustry.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">pet food manufacturers vary significantly in transparency</a> to consumers.
                     </p>
                   </div>
 
@@ -315,7 +315,7 @@ export default function ProductScanner() {
             <CardContent className="space-y-6">
               <div className="text-gray-700">
                 <p className="text-lg mb-6">
-                  Our comprehensive safety analysis system uses advanced algorithms trained on <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology databases</a> and <a href="https://www.tandfonline.com/doi/full/10.1080/1745039X.2018.1520019" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">pet nutrition research</a> to provide accurate safety assessments.
+                  Our comprehensive safety analysis system uses advanced algorithms trained on <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology databases</a> and <a href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed pet nutrition research</a> to provide accurate safety assessments.
                 </p>
 
                 <div className="space-y-4">
