@@ -38,7 +38,7 @@ export default function PrivacyPolicy() {
               Your cosmic data protection and mystical privacy rights
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: December 26, 2025
+              Last updated: August 30, 2025
             </p>
           </div>
         </div>
@@ -56,24 +56,25 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Personal Information</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Account information through secure authentication (email, name, profile image)</li>
+                  <li>• Account information through secure Replit authentication (email, name, profile image)</li>
                   <li>• Pet profile data including names, species, breeds, age, weight, medical conditions, allergies, and health history</li>
-                  <li>• Animal preferences, tagging selections, and species-specific requirements (38+ supported species)</li>
-                  <li>• Communication preferences, notification settings, and email marketing consent</li>
+                  <li>• Animal preferences, tagging selections, and species-specific requirements for comprehensive animal care</li>
+                  <li>• Notification preferences including product recalls, safety alerts, and system updates</li>
+                  <li>• Content moderation data when users flag inappropriate content or reviews</li>
                   <li>• Device identifiers and installation data for PWA functionality</li>
-                  <li>• Biometric data (camera scans) processed locally for barcode scanning features</li>
+                  <li>• Biometric data (camera scans) processed locally for barcode and image scanning features</li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Usage Information</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Barcode scans and product image uploads for identification</li>
-                  <li>• Product safety analysis history and cosmic scores</li>
-                  <li>• Community reviews, ratings, and health tracking data</li>
-                  <li>• Search queries for products across 38+ animal species</li>
+                  <li>• Barcode scans and product image uploads for identification using camera and file upload</li>
+                  <li>• Product safety analysis history and cosmic scores from our curated database</li>
+                  <li>• Community reviews, ratings, content flags, and health tracking data</li>
+                  <li>• Search queries for products from our curated U.S. & Canada animal care database</li>
                   <li>• Animal tag associations and product suitability preferences</li>
-                  <li>• Recall alert subscription preferences</li>
+                  <li>• Recall alert subscription preferences and notification settings</li>
                 </ul>
               </div>
 
@@ -103,12 +104,12 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Service Provision</h3>
                 <ul className="space-y-1 ml-4">
-                  <li>• Provide AI-powered product safety analysis and cosmic scoring</li>
-                  <li>• Enable barcode scanning and image-based product identification</li>
-                  <li>• Maintain pet profiles and animal-specific product recommendations</li>
-                  <li>• Process community reviews with health tracking capabilities</li>
-                  <li>• Deliver targeted recall alerts based on your pet species and products</li>
-                  <li>• Provide offline PWA functionality and push notifications</li>
+                  <li>• Provide AI-powered product safety analysis and cosmic scoring for our curated database</li>
+                  <li>• Enable multi-modal scanning: barcode, image recognition, and file upload identification</li>
+                  <li>• Maintain pet profiles and animal-specific product recommendations from verified U.S. & Canada products</li>
+                  <li>• Process community reviews with content moderation and health tracking capabilities</li>
+                  <li>• Deliver targeted recall alerts and safety notifications based on your pets and preferences</li>
+                  <li>• Provide offline PWA functionality, push notifications, and data synchronization</li>
                 </ul>
               </div>
               
@@ -150,7 +151,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-semibold text-mystical-purple mb-2">Service Providers</h3>
                 <p className="ml-4">
-                  We share information with trusted third-party providers including authentication services (Replit), advertising networks (Google AdSense), external product databases (Open Pet Food Facts, FDA databases), cloud storage providers for PWA functionality, AI/ML service providers for product analysis, mapping services for veterinary finder functionality, and analytics providers. All partnerships operate under strict data processing agreements compliant with GDPR, CCPA, and other applicable privacy regulations.
+                  We share information with trusted third-party providers including authentication services (Replit), external product databases (Open Pet Food Facts, FDA databases) for U.S. & Canada market products, cloud storage providers for file uploads and PWA functionality, AI/ML service providers for product analysis, mapping services for veterinary finder functionality, and analytics providers for system improvement. All partnerships operate under strict data processing agreements compliant with GDPR, CCPA, and other applicable privacy regulations.
                 </p>
               </div>
               
@@ -223,7 +224,7 @@ export default function PrivacyPolicy() {
               </div>
               
               <p className="text-sm text-cosmic-300 mt-4">
-                To exercise these rights, please contact us at pawsitivecheck@gmail.com with proper identity verification. We will respond within 30 days as required by applicable privacy laws. Note that some data required for PWA offline functionality may be stored locally on your device and can be managed through your browser settings. For residents of California, Virginia, Colorado, and other states with comprehensive privacy laws, additional rights may apply.
+                To exercise these rights, please contact us through the platform's support system with proper identity verification. We will respond within 30 days as required by applicable privacy laws. Note that some data required for PWA offline functionality may be stored locally on your device and can be managed through your browser settings. For residents of California, Virginia, Colorado, and other states with comprehensive privacy laws, additional rights may apply.
               </p>
             </CardContent>
           </Card>
@@ -333,10 +334,10 @@ export default function PrivacyPolicy() {
             </CardHeader>
             <CardContent className="text-cosmic-200">
               <p className="mb-4">
-                If you have any questions about this Privacy Policy or our data practices, please contact us:
+                If you have any questions about this Privacy Policy or our data practices, please contact us through the platform's built-in support system or reach out via our official channels:
               </p>
               <div className="space-y-2">
-                <p>Email: pawsitivecheck@gmail.com</p>
+                <p>Platform: Use the contact form in your account settings</p>
                 <p>We typically respond within 24-48 hours</p>
               </div>
             </CardContent>

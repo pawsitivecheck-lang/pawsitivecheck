@@ -38,7 +38,7 @@ export default function TermsOfService() {
               Cosmic agreement for the mystical analysis realm
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: December 26, 2025
+              Last updated: August 30, 2025
             </p>
           </div>
         </div>
@@ -69,19 +69,19 @@ export default function TermsOfService() {
             </CardHeader>
             <CardContent className="space-y-4 text-cosmic-200">
               <p>
-                PawsitiveCheck provides comprehensive pet product safety analysis for traditional pets, farm animals, and exotic species (38+ supported species), including:
+                PawsitiveCheck provides comprehensive pet product safety analysis for traditional pets, farm animals, and exotic species using our curated database of animal care products sold in the U.S. & Canada, including:
               </p>
               <ul className="space-y-2 ml-4">
-                <li>• Advanced barcode scanning, image recognition, and multi-modal product identification</li>
+                <li>• Multi-modal product identification: barcode scanning, image recognition, and file upload capabilities</li>
                 <li>• AI-powered cosmic safety analysis, algorithmic scoring, and transparency assessments</li>
-                <li>• Comprehensive animal tagging system for species, breeds, subspecies, and specialized care requirements</li>
-                <li>• Community reviews with advanced health tracking, pet welfare monitoring, and peer insights</li>
-                <li>• Real-time product recall alerts, safety notifications, and regulatory compliance tracking</li>
-                <li>• Progressive Web App (PWA) with offline functionality, push notifications, and cross-device synchronization</li>
-                <li>• Comprehensive database of analyzed pet products across all animal types with continuous updates</li>
-                <li>• Veterinary finder services with location-based practice recommendations and specialization matching</li>
-                <li>• Corporate accountability tracking and brand transparency monitoring for ethical purchasing decisions</li>
-                <li>• API access for developers and integration with third-party pet care services</li>
+                <li>• Comprehensive animal care database with verified products from U.S. & Canada markets only</li>
+                <li>• Community reviews with content moderation, health tracking, and peer insights</li>
+                <li>• Real-time product recall alerts, customizable notifications, and safety monitoring</li>
+                <li>• Progressive Web App (PWA) with offline functionality, push notifications, and data synchronization</li>
+                <li>• Curated database of 45+ high-quality animal care products with continuous quality control</li>
+                <li>• User-generated content moderation system with community flagging and admin review</li>
+                <li>• Notification preferences system with granular control over alerts and communications</li>
+                <li>• Data management tools for comprehensive user privacy and account control</li>
               </ul>
               <p className="mt-4 text-cosmic-300 text-sm">
                 Our PWA can be installed on your device and provides offline access to cached data. By installing our PWA, you consent to local data storage and push notification capabilities.
