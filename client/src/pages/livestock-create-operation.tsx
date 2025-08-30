@@ -143,7 +143,7 @@ export default function LivestockCreateOperation() {
                 <SelectTrigger data-testid="select-operation-type">
                   <SelectValue placeholder="Select operation type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="beef-cattle">Beef Cattle</SelectItem>
                   <SelectItem value="dairy-cattle">Dairy Cattle</SelectItem>
                   <SelectItem value="swine">Swine</SelectItem>

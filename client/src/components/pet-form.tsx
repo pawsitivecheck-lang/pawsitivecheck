@@ -135,7 +135,7 @@ export function PetForm({ initialData, onSubmit, isLoading }: PetFormProps) {
                       <SelectValue placeholder="Select species" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-popover border-border">
                     {/* Traditional Pets */}
                     <SelectItem value="dog">Dog</SelectItem>
                     <SelectItem value="cat">Cat</SelectItem>
@@ -251,7 +251,7 @@ export function PetForm({ initialData, onSubmit, isLoading }: PetFormProps) {
                       <SelectValue />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-popover border-border">
                     <SelectItem value="lbs">Pounds (lbs)</SelectItem>
                     <SelectItem value="kg">Kilograms (kg)</SelectItem>
                   </SelectContent>
@@ -273,7 +273,7 @@ export function PetForm({ initialData, onSubmit, isLoading }: PetFormProps) {
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-popover border-border">
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="unknown">Unknown</SelectItem>

@@ -300,7 +300,7 @@ export default function OperationProfile() {
                         <SelectTrigger>
                           <SelectValue placeholder="Select species" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-popover border-border">
                           <SelectItem value="cattle">Cattle</SelectItem>
                           <SelectItem value="pigs">Pigs</SelectItem>
                           <SelectItem value="chickens">Chickens</SelectItem>
@@ -323,7 +323,7 @@ export default function OperationProfile() {
                         <SelectTrigger>
                           <SelectValue placeholder="Select purpose" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-popover border-border">
                           <SelectItem value="breeding">Breeding</SelectItem>
                           <SelectItem value="dairy">Dairy</SelectItem>
                           <SelectItem value="meat">Meat</SelectItem>
@@ -338,7 +338,7 @@ export default function OperationProfile() {
                         <SelectTrigger>
                           <SelectValue placeholder="Select housing" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-popover border-border">
                           <SelectItem value="pasture">Pasture</SelectItem>
                           <SelectItem value="barn">Barn</SelectItem>
                           <SelectItem value="feedlot">Feedlot</SelectItem>
@@ -357,7 +357,7 @@ export default function OperationProfile() {
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-popover border-border">
                           <SelectItem value="lbs">Pounds (lbs)</SelectItem>
                           <SelectItem value="kg">Kilograms (kg)</SelectItem>
                         </SelectContent>

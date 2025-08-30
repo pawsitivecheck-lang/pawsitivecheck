@@ -324,7 +324,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
                 <SelectTrigger data-testid="select-product-status">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="saved">Saved</SelectItem>
                   <SelectItem value="favorite">Favorite</SelectItem>
                   <SelectItem value="tried">Tried</SelectItem>

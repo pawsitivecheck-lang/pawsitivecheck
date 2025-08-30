@@ -185,7 +185,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
                     <SelectTrigger>
                       <SelectValue placeholder="Select feed type" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-popover border-border">
                       {feedTypes.map(type => (
                         <SelectItem key={type} value={type}>
                           {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -228,7 +228,7 @@ export default function PetFeedTracking({ petId, petName, species }: PetFeedTrac
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-popover border-border">
                       {defaultUnits.map(unit => (
                         <SelectItem key={unit} value={unit}>
                           {unit === 'half_tray' ? 'Half Tray' : unit.charAt(0).toUpperCase() + unit.slice(1)}

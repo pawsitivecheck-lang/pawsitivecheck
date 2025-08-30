@@ -228,7 +228,7 @@ export default function FeedTracking() {
             <SelectTrigger data-testid="select-herd">
               <SelectValue placeholder="Select a herd to track feed" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-popover border-border">
               {herds?.map((herd) => (
                 <SelectItem key={herd.id} value={herd.id.toString()}>
                   {herd.herdName} - {herd.species} ({herd.headCount} animals)
@@ -323,7 +323,7 @@ export default function FeedTracking() {
                             <SelectTrigger>
                               <SelectValue placeholder="Select feed type" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-popover border-border">
                               <SelectItem value="grain">Grain</SelectItem>
                               <SelectItem value="grass">Grass</SelectItem>
                               <SelectItem value="hay">Hay</SelectItem>
@@ -368,7 +368,7 @@ export default function FeedTracking() {
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-popover border-border">
                               <SelectItem value="lbs">Pounds (lbs)</SelectItem>
                               <SelectItem value="kg">Kilograms (kg)</SelectItem>
                               <SelectItem value="bushels">Bushels</SelectItem>

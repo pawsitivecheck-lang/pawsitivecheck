@@ -153,7 +153,7 @@ export function SaveToPetButton({
             Save for Pet
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 bg-popover border-border">
           <DropdownMenuLabel>Save to which pet?</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {pets.map((pet: PetProfile) => (
@@ -204,7 +204,7 @@ export function SaveToPetButton({
                 <SelectTrigger className="mt-1" data-testid="select-product-status">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="saved">💾 Saved for later</SelectItem>
                   <SelectItem value="favorite">❤️ Favorite product</SelectItem>
                   <SelectItem value="tried">✅ Tried this product</SelectItem>

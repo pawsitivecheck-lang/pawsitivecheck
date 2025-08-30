@@ -128,7 +128,7 @@ export function ContentFlagButton({
               <SelectTrigger data-testid="select-report-reason">
                 <SelectValue placeholder="Select a reason..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-popover border-border">
                 {reasons.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
