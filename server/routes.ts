@@ -50,7 +50,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid user session" });
       }
       
+      console.log("Fetching user from database with ID:", userId);
       const user = await storage.getUser(userId);
+      if (!user) {
+        console.log("User not found in database, returning user data from session");
+        // Return user data from session if not found in database
+        return res.json({
+          id: userId,
+          email: req.user.claims.email,
+          firstName: req.user.claims.first_name,
+          lastName: req.user.claims.last_name,
+          profileImageUrl: req.user.claims.profile_image_url,
+          isAdmin: false,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
+      
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
