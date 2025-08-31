@@ -245,17 +245,82 @@ export default function ProductScanner() {
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-12 text-center">
+          <div className="mb-8 text-center">
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
               <Camera className="text-3xl text-white" />
             </div>
-            <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-scanner-title">
-              Comprehensive Safety Analysis
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-blue-600 mb-4" data-testid="text-scanner-title">
+              Product Scanner
             </h1>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4" data-testid="text-scanner-description">
-              Professional pet product safety evaluation using scientific research, veterinary expertise, and regulatory compliance data
+              Scan, photograph, or search for pet products to get instant safety analysis
             </p>
           </div>
+
+          {/* Scanner Options */}
+          <Card className="mb-8" data-testid="card-scanner-options">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-600">
+                <Scan className="h-5 w-5" />
+                Choose Your Scanning Method
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                {/* Barcode Scanner */}
+                <Button
+                  onClick={() => setShowBarcodeScanner(true)}
+                  className="h-24 flex-col gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                  data-testid="button-barcode-scanner"
+                >
+                  <Scan className="h-8 w-8" />
+                  <span className="font-semibold">Barcode Scanner</span>
+                  <span className="text-xs opacity-90">Use camera to scan UPC/barcode</span>
+                </Button>
+
+                {/* Image Scanner */}
+                <Button
+                  onClick={() => setShowImageScanner(true)}
+                  variant="outline"
+                  className="h-24 flex-col gap-2 border-blue-200 hover:bg-blue-50"
+                  data-testid="button-image-scanner"
+                >
+                  <Image className="h-8 w-8 text-blue-600" />
+                  <span className="font-semibold text-blue-600">Photo Scanner</span>
+                  <span className="text-xs text-blue-600">Take or upload product photo</span>
+                </Button>
+
+                {/* Manual Search */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Search className="h-5 w-5 text-blue-600" />
+                    <span className="font-semibold text-blue-600">Manual Search</span>
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder="Enter barcode or product name"
+                    value={barcode}
+                    onChange={(e) => setBarcode(e.target.value)}
+                    className="mb-2"
+                    data-testid="input-manual-search"
+                  />
+                  <Button
+                    onClick={() => scanProductMutation.mutate(barcode)}
+                    disabled={!barcode.trim() || scanProductMutation.isPending}
+                    className="w-full bg-green-600 hover:bg-green-700"
+                    data-testid="button-manual-search"
+                  >
+                    {scanProductMutation.isPending ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Search className="mr-2 h-4 w-4" />
+                    )}
+                    Search Product
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Why Safety Analysis Matters */}
           <Card className="mb-8" data-testid="card-safety-analysis-info">
