@@ -147,14 +147,7 @@ export default function Landing() {
             {/* Navigation Links */}
             <div className="px-4 py-4 space-y-2">
               
-              <button 
-                onClick={() => scrollToSection('database')}
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
-                data-testid="mobile-nav-database"
-              >
-                <Database className="mr-3 h-5 w-5" />
-                Safety Database
-              </button>
+              
               <button 
                 onClick={() => scrollToSection('recalls')}
                 className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
