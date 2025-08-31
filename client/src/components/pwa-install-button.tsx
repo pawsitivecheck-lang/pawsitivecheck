@@ -32,11 +32,25 @@ export default function PWAInstallButton() {
       console.log('PWA: Service worker not supported');
     }
 
-    // Check manifest
-    fetch('/manifest.json')
+    // Check manifest (bypass cache)
+    fetch('/manifest.json?t=' + Date.now())
       .then(response => response.json())
       .then(manifest => {
-        console.log('PWA: Manifest loaded:', manifest);
+        console.log('PWA: Fresh manifest loaded:', manifest);
+        
+        // Check if manifest meets PWA requirements
+        const hasName = manifest.name && manifest.short_name;
+        const hasIcons = manifest.icons && manifest.icons.length >= 2;
+        const hasStartUrl = manifest.start_url;
+        const hasDisplay = manifest.display === 'standalone';
+        
+        console.log('PWA: Manifest check - Name:', hasName, 'Icons:', hasIcons, 'StartUrl:', hasStartUrl, 'Display:', hasDisplay);
+        
+        if (hasName && hasIcons && hasStartUrl && hasDisplay) {
+          console.log('PWA: Manifest requirements met! ✅');
+        } else {
+          console.log('PWA: Manifest requirements NOT met! ❌');
+        }
       })
       .catch(error => {
         console.error('PWA: Manifest error:', error);
@@ -59,11 +73,21 @@ export default function PWAInstallButton() {
     window.addEventListener('beforeinstallprompt', handleInstallPrompt);
     window.addEventListener('appinstalled', handleInstalled);
 
-    // Force check after delay (some browsers are slow)
-    setTimeout(() => {
+    // Multiple checks for install prompt (browsers have different timing)
+    const checkInstallPrompt = () => {
       console.log('PWA: Checking if install prompt is available...');
       if (!installPrompt) {
         console.log('PWA: No install prompt available yet');
+        console.log('PWA: Common reasons:');
+        console.log('  - Browser needs user engagement (click around, wait 30+ seconds)');
+        console.log('  - Already considered installed');
+        console.log('  - Browser cache (try Ctrl+Shift+R)');
+        console.log('  - Browser-specific requirements not met');
+        
+        // Check if already meets engagement criteria
+        if (document.visibilityState === 'visible') {
+          console.log('PWA: Page is visible, good for engagement');
+        }
         
         // Try to manually trigger installability check
         if ('getInstalledRelatedApps' in navigator) {
@@ -75,9 +99,14 @@ export default function PWAInstallButton() {
           });
         }
       } else {
-        console.log('PWA: Install prompt is available!');
+        console.log('PWA: Install prompt is available! 🎉');
       }
-    }, 3000);
+    };
+
+    // Check multiple times (browsers are unpredictable)
+    setTimeout(checkInstallPrompt, 2000);
+    setTimeout(checkInstallPrompt, 5000);
+    setTimeout(checkInstallPrompt, 10000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
