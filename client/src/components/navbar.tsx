@@ -20,7 +20,6 @@ export default function Navbar() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const navigation = [
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
@@ -62,17 +61,6 @@ export default function Navbar() {
             {/* PWA Install Button */}
             <PWAInstallButton />
             
-            {/* Mobile Search Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden text-muted-foreground p-2 border border-border"
-              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              data-testid="nav-mobile-search"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-            
             {/* Theme Toggle */}
             <ThemeToggle />
             
@@ -93,7 +81,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-muted-foreground p-2 border border-border ml-2"
+              className="md:hidden text-muted-foreground p-2 border border-border"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
             >
@@ -385,61 +373,6 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-        )}
-
-        {/* Mobile Search Modal */}
-        {isMobileSearchOpen && (
-          <>
-            {/* Backdrop */}
-            <div 
-              className="fixed inset-0 bg-black/50 z-40"
-              onClick={() => setIsMobileSearchOpen(false)}
-              data-testid="mobile-search-backdrop"
-            />
-            
-            {/* Mobile Search Dropdown */}
-            <div className="fixed top-16 left-0 right-0 bg-card border-b border-border shadow-xl z-50 p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-foreground">Search Products</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsMobileSearchOpen(false)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              
-              {/* Mobile Search Component */}
-              <HeaderSearch isMobile={true} />
-              
-              {/* Quick Action Buttons */}
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                <Link href="/product-scanner">
-                  <Button 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={() => setIsMobileSearchOpen(false)}
-                    data-testid="mobile-scanner-button"
-                  >
-                    <Camera className="mr-2 h-4 w-4" />
-                    Scan Product
-                  </Button>
-                </Link>
-                <Link href="/product-database">
-                  <Button 
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setIsMobileSearchOpen(false)}
-                    data-testid="mobile-database-button"
-                  >
-                    <Search className="mr-2 h-4 w-4" />
-                    Browse Database
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </>
         )}
       </div>
     </nav>
