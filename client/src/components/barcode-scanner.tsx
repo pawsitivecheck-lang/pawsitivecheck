@@ -223,9 +223,14 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           ) : (
             <div>
               <div className="text-center mb-4">
-                <p className="text-cosmic-300 text-sm" data-testid="text-scanner-instructions">
+                <p className="text-cosmic-300 text-sm mb-2" data-testid="text-scanner-instructions">
                   Point your camera at a barcode. The cosmic scanner will automatically detect and analyze the mystical signature.
                 </p>
+                <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mt-3">
+                  <p className="text-blue-700 dark:text-blue-300 text-xs font-medium" data-testid="text-permission-reminder">
+                    📱 <strong>Important:</strong> When your browser asks for camera permission, please tap/click <strong>"Allow"</strong> or <strong>"Request Camera Permissions"</strong> to start scanning.
+                  </p>
+                </div>
               </div>
               
               <div 
