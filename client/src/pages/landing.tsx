@@ -273,29 +273,7 @@ export default function Landing() {
         )}
       </nav>
 
-      {/* Hero Banner */}
-      <section className="relative bg-gradient-to-r from-primary/10 to-primary/20 py-12 sm:py-16 lg:py-20" id="hero">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            
-            <div className="relative order-first lg:order-last">
-              <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-green-500 text-white rounded-full w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 flex items-center justify-center shadow-lg">
-                <div className="text-center">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 mx-auto mb-1" />
-                  <div className="text-xs sm:text-sm font-bold">SAFETY</div>
-                  <div className="text-xs sm:text-sm">FIRST</div>
-                </div>
-              </div>
-              <div className="bg-gradient-to-br from-muted to-muted/80 rounded-lg h-64 sm:h-80 flex items-center justify-center shadow-inner">
-                <div className="text-center">
-                  <Camera className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground text-sm sm:text-base">Product scanning technology</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Mid-page Banner Ad */}
       <div className="bg-muted py-4">
