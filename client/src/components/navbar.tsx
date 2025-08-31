@@ -179,6 +179,16 @@ export default function Navbar() {
                 })}
               </div>
 
+              {/* Install App Section */}
+              <div className="p-4 border-t border-border bg-card">
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                  Install App
+                </div>
+                <div className="flex justify-center">
+                  <PWAInstallButton />
+                </div>
+              </div>
+
               {/* Profile Items */}
               <div className="p-4 border-t border-border bg-card">
                 <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
