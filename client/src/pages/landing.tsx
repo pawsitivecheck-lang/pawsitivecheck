@@ -289,7 +289,7 @@ export default function Landing() {
                 <div className="bg-card rounded-2xl shadow-xl border-2 border-primary/20 p-6">
                   <div className="text-center mb-4">
                     <h3 className="text-lg font-semibold text-foreground mb-2">Check Any Pet Product for Safety</h3>
-                    <p className="text-sm text-muted-foreground">Search our database, scan barcodes, or analyze ingredients instantly</p>
+                    <p className="text-sm text-muted-foreground">Search our database or check for recalls instantly</p>
                   </div>
                   
                   {/* Search Input */}
@@ -304,7 +304,7 @@ export default function Landing() {
                   </div>
                   
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Button 
                       asChild
                       className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
@@ -313,17 +313,6 @@ export default function Landing() {
                       <Link to="/product-database">
                         <Search className="mr-2 h-5 w-5" />
                         Search Database
-                      </Link>
-                    </Button>
-                    
-                    <Button 
-                      asChild
-                      className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
-                      data-testid="button-scan-barcode"
-                    >
-                      <Link to="/product-scanner">
-                        <Camera className="mr-2 h-5 w-5" />
-                        Scan Barcode
                       </Link>
                     </Button>
                     
