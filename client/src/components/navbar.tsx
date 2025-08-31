@@ -46,9 +46,9 @@ export default function Navbar() {
           </div>
           
           {/* Center Section - Search */}
-          <div className="flex-1 flex items-center justify-center">
-            {/* Header Search - Center on desktop */}
-            <div className="hidden md:block">
+          <div className="flex-1 flex items-center justify-center px-2 sm:px-4">
+            {/* Header Search - Now visible on all devices */}
+            <div className="w-full max-w-md">
               <HeaderSearch />
             </div>
           </div>
