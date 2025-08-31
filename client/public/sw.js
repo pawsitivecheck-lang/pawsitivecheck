@@ -1,7 +1,8 @@
 // PawsitiveCheck Service Worker
-const CACHE_NAME = 'pawsitivecheck-v1.0.0';
-const STATIC_CACHE = 'pawsitivecheck-static-v1';
-const DYNAMIC_CACHE = 'pawsitivecheck-dynamic-v1';
+const CACHE_VERSION = Date.now(); // Use timestamp for automatic cache invalidation
+const STATIC_CACHE = `pawsitivecheck-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `pawsitivecheck-dynamic-${CACHE_VERSION}`;
+const API_CACHE = `pawsitivecheck-api-${CACHE_VERSION}`;
 
 // Files to cache immediately
 const STATIC_FILES = [
@@ -45,7 +46,8 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+            // Delete ALL old caches to prevent stale content
+            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE && cacheName !== API_CACHE) {
               console.log('PWA: Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
@@ -53,7 +55,16 @@ self.addEventListener('activate', (event) => {
         );
       })
       .then(() => {
+        // Force immediate control of all clients
         return self.clients.claim();
+      })
+      .then(() => {
+        // Notify all clients to reload for fresh content
+        return self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage({ type: 'CACHE_UPDATED' });
+          });
+        });
       })
   );
 });
@@ -75,21 +86,39 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache successful API responses (only GET requests)
+          // Cache successful API responses with short TTL
           if (response.ok && request.method === 'GET' && API_CACHE_PATTERNS.some(pattern => url.pathname.startsWith(pattern))) {
             const responseClone = response.clone();
-            caches.open(DYNAMIC_CACHE)
+            // Add cache timestamp for TTL management
+            const cachedResponse = new Response(responseClone.body, {
+              status: responseClone.status,
+              statusText: responseClone.statusText,
+              headers: {
+                ...Object.fromEntries(responseClone.headers.entries()),
+                'sw-cached-at': Date.now().toString(),
+                'cache-control': 'max-age=300' // 5 minute TTL for API responses
+              }
+            });
+            caches.open(API_CACHE)
               .then((cache) => {
-                cache.put(request, responseClone);
+                cache.put(request, cachedResponse);
               });
           }
           return response;
         })
         .catch(() => {
-          // Serve from cache when offline
+          // Serve from cache when offline, but check TTL
           return caches.match(request)
             .then((cachedResponse) => {
               if (cachedResponse) {
+                const cachedAt = cachedResponse.headers.get('sw-cached-at');
+                if (cachedAt) {
+                  const age = Date.now() - parseInt(cachedAt);
+                  // If cached response is older than 5 minutes, don't use it
+                  if (age > 300000) {
+                    return null;
+                  }
+                }
                 return cachedResponse;
               }
               // Return offline fallback for critical API endpoints
@@ -124,14 +153,18 @@ self.addEventListener('fetch', (event) => {
               return response;
             }
 
-            // Cache new resources (only same-origin)
-            if (url.origin === self.location.origin) {
+            // Cache new resources with versioning (only same-origin)
+            if (url.origin === self.location.origin && !url.pathname.startsWith('/api/')) {
               const responseClone = response.clone();
-              caches.open(DYNAMIC_CACHE)
-                .then((cache) => {
-                  cache.put(request, responseClone);
-                })
-                .catch(() => {}); // Silently fail cache operations
+              // Don't cache if response indicates no-cache
+              const cacheControl = response.headers.get('cache-control');
+              if (!cacheControl || !cacheControl.includes('no-cache')) {
+                caches.open(DYNAMIC_CACHE)
+                  .then((cache) => {
+                    cache.put(request, responseClone);
+                  })
+                  .catch(() => {}); // Silently fail cache operations
+              }
             }
 
             return response;
@@ -146,6 +179,13 @@ self.addEventListener('fetch', (event) => {
           });
       })
   );
+});
+
+// Listen for skip waiting message
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Background sync for offline actions

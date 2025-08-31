@@ -20,6 +20,40 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
 
+// Cache control middleware
+app.use((req, res, next) => {
+  const path = req.path;
+  
+  // Static assets get aggressive caching with content-based headers
+  if (path.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    // If file has hash in name, cache for 1 year
+    if (path.match(/-[a-f0-9]{8,}\./)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else {
+      // Regular static assets cache for 1 hour with must-revalidate
+      res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+    }
+    res.setHeader('ETag', `"${Date.now()}"`);
+  }
+  // HTML files should not be cached aggressively
+  else if (path.match(/\.html$/) || path === '/') {
+    res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    res.setHeader('ETag', `"${Date.now()}"`);
+  }
+  // API endpoints get short cache with validation
+  else if (path.startsWith('/api/')) {
+    res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+  }
+  // Service worker and manifest should never be cached
+  else if (path.match(/\/(sw\.js|manifest\.json)$/)) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  
+  next();
+});
+
 // Redirect specific .replit.app domain to custom domain
 app.use((req, res, next) => {
   const host = req.get('host');
