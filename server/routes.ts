@@ -43,7 +43,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      // Use claims.sub directly since user.id might not be set properly
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        console.error("No user ID found in session:", req.user);
+        return res.status(401).json({ message: "Invalid user session" });
+      }
+      
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
