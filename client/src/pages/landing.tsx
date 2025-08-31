@@ -277,67 +277,7 @@ export default function Landing() {
       <section className="relative bg-gradient-to-r from-primary/10 to-primary/20 py-12 sm:py-16 lg:py-20" id="hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="text-center lg:text-left">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6 leading-tight" data-testid="text-welcome-title">
-                Keep Your Pets Safe!
-              </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
-                Scan any pet product to get instant safety analysis, ingredient breakdown, and recall alerts. Make informed decisions for your pet's health.
-              </p>
-              {/* Comprehensive Search/Scan Bar */}
-              <div className="w-full max-w-4xl mx-auto lg:mx-0">
-                <div className="bg-card rounded-2xl shadow-xl border-2 border-primary/20 p-6">
-                  <div className="text-center mb-4">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">Check Any Pet Product for Safety</h3>
-                    <p className="text-sm text-muted-foreground">Search our database or check for recalls instantly</p>
-                  </div>
-                  
-                  {/* Search Input */}
-                  <div className="relative mb-4">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-6 w-6" />
-                    <Input 
-                      type="text" 
-                      placeholder="Search by product name, brand, ingredient, or barcode..."
-                      className="w-full pl-12 pr-4 py-4 border-2 border-border rounded-xl focus:ring-3 focus:ring-primary/20 focus:border-primary text-lg placeholder:text-muted-foreground"
-                      data-testid="input-comprehensive-search"
-                    />
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <Button 
-                      asChild
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105 shadow-lg"
-                      data-testid="button-search-database"
-                    >
-                      <Link to="/product-database">
-                        <Search className="mr-2 h-5 w-5" />
-                        Search Database
-                      </Link>
-                    </Button>
-                    
-                    <Button 
-                      asChild
-                      variant="outline"
-                      className="border-2 border-red-500 text-red-600 hover:bg-red-50 font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center min-h-[52px] transition-all transform hover:scale-105"
-                      data-testid="button-check-recalls"
-                    >
-                      <Link to="/recalls">
-                        <AlertTriangle className="mr-2 h-5 w-5" />
-                        Check Recalls
-                      </Link>
-                    </Button>
-                  </div>
-                  
-                  {/* Quick Tips */}
-                  <div className="mt-4 text-center">
-                    <p className="text-xs text-muted-foreground">
-                      💡 <span className="font-medium">Pro tip:</span> Take a photo of ingredients list for instant analysis, or search by product name
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
             <div className="relative order-first lg:order-last">
               <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-green-500 text-white rounded-full w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 flex items-center justify-center shadow-lg">
                 <div className="text-center">
