@@ -54,13 +54,6 @@ export default function PWAInstallButton() {
       setShowInstallButton(true);
     };
 
-    // Additional event listener for Samsung Internet and other browsers
-    const handleAppBannerPrompt = (e: Event) => {
-      console.log('PWA: app banner prompt detected');
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallButton(true);
-    };
 
     const handleAppInstalled = () => {
       console.log('PWA: App installed');
@@ -69,16 +62,13 @@ export default function PWAInstallButton() {
       setDeferredPrompt(null);
     };
 
-    // Standard PWA install events
+    // PWA install events
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
     
-    // Additional events for broader browser support
-    window.addEventListener('beforeinstallprompt', handleAppBannerPrompt);
-    
-    // Force check for install capability after a delay
-    setTimeout(() => {
-      if (!deferredPrompt && (browserInfo.isChrome || browserInfo.isEdge || browserInfo.isSamsung)) {
+    // Force check for install capability after browser detection is complete
+    const timeoutId = setTimeout(() => {
+      if (!deferredPrompt && (isChrome || isEdge || isSamsung)) {
         console.log('PWA: Manual check for install capability');
         // Some browsers don't fire the event immediately
         setShowInstallButton(true);
@@ -88,7 +78,7 @@ export default function PWAInstallButton() {
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
-      window.removeEventListener('beforeinstallprompt', handleAppBannerPrompt);
+      clearTimeout(timeoutId);
     };
   }, []);
 
@@ -209,20 +199,9 @@ For best PWA experience, we recommend Chrome, Edge, or Samsung Internet.`;
       }
     }
 
-    // Check if we can trigger install through other methods
-    if (browserInfo.isSamsung || browserInfo.isChrome || browserInfo.isEdge) {
-      // Try to trigger browser-specific install
-      try {
-        // For browsers that support it, we can try to programmatically trigger install
-        const event = new Event('beforeinstallprompt');
-        if (window.dispatchEvent && window.dispatchEvent(event)) {
-          console.log('PWA: Attempted to trigger install event');
-          return;
-        }
-      } catch (error) {
-        console.log('PWA: Could not trigger programmatic install');
-      }
-    }
+    // Log browser info for debugging
+    console.log('PWA: Browser info:', browserInfo);
+    console.log('PWA: No deferred prompt available, showing instructions');
 
     // Fallback: Show detailed instructions based on browser
     const instructions = getInstallInstructions();
