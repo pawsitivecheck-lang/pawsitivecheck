@@ -44,7 +44,11 @@ export default function PWAInstallButton() {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      // Fallback for browsers that don't support the install prompt
+      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
+      return;
+    }
 
     try {
       // Show the install prompt
@@ -64,11 +68,19 @@ export default function PWAInstallButton() {
       setShowInstallButton(false);
     } catch (error) {
       console.error('PWA: Error during installation:', error);
+      // Fallback instructions
+      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
     }
   };
 
-  // Don't show button if already installed or prompt not available
-  if (isInstalled || !showInstallButton) {
+  // Don't show button if already installed, but show for testing in development
+  if (isInstalled) {
+    return null;
+  }
+  
+  // In development/Replit environment, always show the button for testing
+  const isDevelopment = import.meta.env.DEV || window.location.hostname.includes('replit');
+  if (!showInstallButton && !isDevelopment) {
     return null;
   }
 

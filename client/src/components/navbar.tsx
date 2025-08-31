@@ -68,7 +68,12 @@ export default function Navbar() {
   }, []);
 
   const handleInstallApp = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      // Fallback for browsers that don't support the install prompt
+      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
+      setIsHamburgerMenuOpen(false);
+      return;
+    }
 
     try {
       await deferredPrompt.prompt();
@@ -83,6 +88,8 @@ export default function Navbar() {
       setIsHamburgerMenuOpen(false);
     } catch (error) {
       console.error('PWA: Error during installation:', error);
+      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
+      setIsHamburgerMenuOpen(false);
     }
   };
 
@@ -235,23 +242,21 @@ export default function Navbar() {
               </div>
 
               {/* Install App Section */}
-              {showInstallOption && (
-                <div className="p-4 border-t border-border bg-card">
-                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-                    App
-                  </div>
-                  <div className="space-y-2">
-                    <div 
-                      className="flex items-center gap-3 px-3 py-3 rounded-lg text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
-                      onClick={handleInstallApp}
-                      data-testid="hamburger-install-app"
-                    >
-                      <Smartphone className="h-5 w-5" />
-                      <span className="font-medium">Install App</span>
-                    </div>
+              <div className="p-4 border-t border-border bg-card">
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                  App
+                </div>
+                <div className="space-y-2">
+                  <div 
+                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
+                    onClick={handleInstallApp}
+                    data-testid="hamburger-install-app"
+                  >
+                    <Smartphone className="h-5 w-5" />
+                    <span className="font-medium">Install App</span>
                   </div>
                 </div>
-              )}
+              </div>
 
               {/* Profile Items */}
               <div className="p-4 border-t border-border bg-card">
