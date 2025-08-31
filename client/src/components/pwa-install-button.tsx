@@ -16,19 +16,27 @@ export default function PWAInstallButton() {
     isSafari: false, 
     isFirefox: false, 
     isEdge: false,
-    isMobile: false
+    isSamsung: false,
+    isOpera: false,
+    isMobile: false,
+    isAndroid: false,
+    isIOS: false
   });
 
   useEffect(() => {
     // Detect browser and platform
     const userAgent = navigator.userAgent;
-    const isChrome = /Chrome/i.test(userAgent) && !/Edg/i.test(userAgent);
-    const isSafari = /Safari/i.test(userAgent) && !/Chrome/i.test(userAgent);
+    const isChrome = /Chrome/i.test(userAgent) && !/Edg/i.test(userAgent) && !/SamsungBrowser/i.test(userAgent);
+    const isSafari = /Safari/i.test(userAgent) && !/Chrome/i.test(userAgent) && !/SamsungBrowser/i.test(userAgent);
     const isFirefox = /Firefox/i.test(userAgent);
     const isEdge = /Edg/i.test(userAgent);
+    const isSamsung = /SamsungBrowser/i.test(userAgent);
+    const isOpera = /OPR|Opera/i.test(userAgent);
     const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+    const isAndroid = /Android/i.test(userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
     
-    setBrowserInfo({ isChrome, isSafari, isFirefox, isEdge, isMobile });
+    setBrowserInfo({ isChrome, isSafari, isFirefox, isEdge, isSamsung, isOpera, isMobile, isAndroid, isIOS });
 
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches || 
@@ -46,6 +54,14 @@ export default function PWAInstallButton() {
       setShowInstallButton(true);
     };
 
+    // Additional event listener for Samsung Internet and other browsers
+    const handleAppBannerPrompt = (e: Event) => {
+      console.log('PWA: app banner prompt detected');
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setShowInstallButton(true);
+    };
+
     const handleAppInstalled = () => {
       console.log('PWA: App installed');
       setIsInstalled(true);
@@ -53,27 +69,39 @@ export default function PWAInstallButton() {
       setDeferredPrompt(null);
     };
 
+    // Standard PWA install events
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
+    
+    // Additional events for broader browser support
+    window.addEventListener('beforeinstallprompt', handleAppBannerPrompt);
+    
+    // Force check for install capability after a delay
+    setTimeout(() => {
+      if (!deferredPrompt && (browserInfo.isChrome || browserInfo.isEdge || browserInfo.isSamsung)) {
+        console.log('PWA: Manual check for install capability');
+        // Some browsers don't fire the event immediately
+        setShowInstallButton(true);
+      }
+    }, 2000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener('beforeinstallprompt', handleAppBannerPrompt);
     };
   }, []);
 
   const getInstallInstructions = () => {
-    const currentUrl = window.location.href;
-    
     if (browserInfo.isSafari) {
       if (browserInfo.isMobile) {
-        return `To install PawsitiveCheck:
+        return `To install PawsitiveCheck on Safari:
         
 1. Tap the Share button (${String.fromCharCode(8593)}) at the bottom of your screen
 2. Scroll down and tap "Add to Home Screen"
 3. Tap "Add" to confirm
         
-The app will appear on your home screen!`;
+The app will appear on your home screen with a custom icon!`;
       } else {
         return `To install PawsitiveCheck on Safari:
         
@@ -83,37 +111,82 @@ The app will appear on your home screen!`;
         
 Note: PWA support varies in Safari desktop.`;
       }
-    } else if (browserInfo.isChrome || browserInfo.isEdge) {
-      return `To install PawsitiveCheck:
+    } else if (browserInfo.isSamsung) {
+      return `To install PawsitiveCheck on Samsung Internet:
       
+1. Tap the menu button (three lines) at the bottom
+2. Select "Add page to" → "Home screen"
+3. Customize the name and tap "Add"
+      
+Or:
+1. Look for the install icon in the address bar
+2. Tap it and follow the prompts
+        
+The app will appear on your home screen!`;
+    } else if (browserInfo.isChrome || browserInfo.isEdge) {
+      if (browserInfo.isMobile) {
+        return `To install PawsitiveCheck:
+        
+1. Tap the menu button (three dots) in the browser
+2. Select "Add to Home screen" or "Install app"
+3. Confirm the installation
+        
+Or look for the install icon (+) in the address bar and tap it.
+        
+The app will appear on your home screen!`;
+      } else {
+        return `To install PawsitiveCheck:
+        
 1. Look for the install icon (+) in the address bar
 2. Click it and select "Install"
 3. Or click the three dots menu and select "Install PawsitiveCheck"
         
 The app will open in its own window and appear in your applications!`;
-    } else if (browserInfo.isFirefox) {
-      return `To install PawsitiveCheck on Firefox:
+      }
+    } else if (browserInfo.isOpera) {
+      return `To install PawsitiveCheck on Opera:
       
+1. Look for the install icon in the address bar
+2. Or open the Opera menu and look for "Install"
+3. Follow the prompts to add to applications
+        
+Opera has good PWA support for most features.`;
+    } else if (browserInfo.isFirefox) {
+      if (browserInfo.isMobile) {
+        return `To install PawsitiveCheck on Firefox Mobile:
+        
+1. Tap the menu button (three dots)
+2. Select "Add to Home screen"
+3. Confirm the installation
+        
+Note: PWA features may be limited in Firefox.`;
+      } else {
+        return `To install PawsitiveCheck on Firefox:
+        
 1. Look for the install icon in the address bar
 2. Or open the Firefox menu and look for "Install"
 3. Follow the prompts to add to applications
         
-Note: PWA support may vary in Firefox.`;
+Note: PWA support may vary in Firefox desktop.`;
+      }
     } else {
       return `To install PawsitiveCheck:
       
-• Chrome/Edge: Look for the + icon in address bar
-• Safari Mobile: Share menu → "Add to Home Screen"  
-• Firefox: Look for install option in menu
+• Chrome/Edge: Look for + icon in address bar or menu → "Install"
+• Samsung Internet: Menu → "Add page to" → "Home screen"
+• Safari Mobile: Share menu → "Add to Home Screen"
+• Opera: Install icon in address bar
+• Firefox: Menu → "Add to Home screen" (mobile)
         
-Having trouble? Try refreshing the page or using Chrome/Edge for best PWA support.`;
+For best PWA experience, we recommend Chrome, Edge, or Samsung Internet.`;
     }
   };
 
   const handleInstallClick = async () => {
+    // Try native install first
     if (deferredPrompt) {
       try {
-        console.log('PWA: Triggering install prompt');
+        console.log('PWA: Triggering native install prompt');
         // Show the install prompt
         await deferredPrompt.prompt();
         
@@ -122,16 +195,32 @@ Having trouble? Try refreshing the page or using Chrome/Edge for best PWA suppor
         
         if (choiceResult.outcome === 'accepted') {
           console.log('PWA: User accepted the install prompt');
+          setIsInstalled(true);
         } else {
           console.log('PWA: User dismissed the install prompt');
         }
         
         // Clear the deferred prompt
         setDeferredPrompt(null);
-        setShowInstallButton(false);
         return;
       } catch (error) {
         console.error('PWA: Error during installation:', error);
+        // Continue to fallback instructions
+      }
+    }
+
+    // Check if we can trigger install through other methods
+    if (browserInfo.isSamsung || browserInfo.isChrome || browserInfo.isEdge) {
+      // Try to trigger browser-specific install
+      try {
+        // For browsers that support it, we can try to programmatically trigger install
+        const event = new Event('beforeinstallprompt');
+        if (window.dispatchEvent && window.dispatchEvent(event)) {
+          console.log('PWA: Attempted to trigger install event');
+          return;
+        }
+      } catch (error) {
+        console.log('PWA: Could not trigger programmatic install');
       }
     }
 
@@ -159,13 +248,21 @@ Having trouble? Try refreshing the page or using Chrome/Edge for best PWA suppor
   // Choose appropriate icon based on browser and prompt availability
   const getIcon = () => {
     if (deferredPrompt) return Download;
-    if (browserInfo.isSafari) return Share;
-    if (browserInfo.isChrome || browserInfo.isEdge) return Plus;
+    if (browserInfo.isSafari && browserInfo.isMobile) return Share;
+    if (browserInfo.isSamsung) return Download;
+    if (browserInfo.isChrome || browserInfo.isEdge || browserInfo.isOpera) return Plus;
     return Smartphone;
   };
 
   const Icon = getIcon();
-  const buttonText = deferredPrompt ? 'Install App' : 'Install App';
+  const getButtonText = () => {
+    if (deferredPrompt) return 'Install App';
+    if (browserInfo.isSamsung) return 'Add to Home';
+    if (browserInfo.isSafari && browserInfo.isMobile) return 'Add to Home';
+    return 'Install App';
+  };
+  
+  const buttonText = getButtonText();
 
   return (
     <Button
