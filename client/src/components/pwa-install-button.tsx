@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 
@@ -10,10 +10,83 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAInstallButton() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showInstall, setShowInstall] = useState(false);
+
+  const checkInstallCapability = useCallback(async () => {
+    console.log('PWA: Checking installability requirements...');
+
+    // Check if already installed
+    if (isInstalled) {
+      console.log('PWA: App is already installed');
+      return;
+    }
+
+    // Check if service worker is ready
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        console.log('PWA: Service worker is ready');
+      } catch (error) {
+        console.log('PWA: Service worker not ready:', error);
+        return;
+      }
+    }
+
+    // Check manifest
+    try {
+      const manifestResponse = await fetch('/manifest.json');
+      const manifest = await manifestResponse.json();
+      console.log('PWA: Fresh manifest loaded:', manifest);
+
+      // Validate manifest requirements
+      const hasName = manifest.name && manifest.name.length > 0;
+      const hasIcons = manifest.icons && manifest.icons.length > 0;
+      const hasStartUrl = manifest.start_url;
+      const hasDisplay = manifest.display && ['standalone', 'fullscreen', 'minimal-ui'].includes(manifest.display);
+
+      console.log('PWA: Manifest check - Name:', manifest.name, 'Icons:', hasIcons, 'StartUrl:', hasStartUrl, 'Display:', hasDisplay);
+
+      if (hasName && hasIcons && hasStartUrl && hasDisplay) {
+        console.log('PWA: Manifest requirements met! ✅');
+      } else {
+        console.log('PWA: Manifest requirements not met');
+        return;
+      }
+    } catch (error) {
+      console.log('PWA: Error loading manifest:', error);
+      return;
+    }
+
+    // Check if install prompt is available
+    console.log('PWA: Checking if install prompt is available...');
+    if (installPrompt) {
+      console.log('PWA: Install prompt available');
+      if (!showInstall) {
+        setShowInstall(true);
+      }
+    } else {
+      console.log('PWA: No install prompt available yet');
+      console.log('PWA: Common reasons:');
+      console.log('  - Browser needs user engagement (click around, wait 30+ seconds)');
+      console.log('  - Already considered installed');
+      console.log('  - Browser cache (try Ctrl+Shift+R)');
+      console.log('  - Browser-specific requirements not met');
+
+      // Check page visibility
+      if (document.visibilityState === 'visible') {
+        console.log('PWA: Page is visible, good for engagement');
+      }
+
+      if (showInstall) {
+        setShowInstall(false);
+      }
+    }
+  }, [isInstalled, installPrompt, showInstall]);
+
 
   useEffect(() => {
     // Check if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches || 
+    if (window.matchMedia('(display-mode: standalone)').matches ||
         (window.navigator as any).standalone === true) {
       console.log('PWA: App is already installed');
       setIsInstalled(true);
@@ -22,7 +95,7 @@ export default function PWAInstallButton() {
 
     // Debug PWA installability
     console.log('PWA: Checking installability requirements...');
-    
+
     // Check service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then(() => {
@@ -37,15 +110,15 @@ export default function PWAInstallButton() {
       .then(response => response.json())
       .then(manifest => {
         console.log('PWA: Fresh manifest loaded:', manifest);
-        
+
         // Check if manifest meets PWA requirements
         const hasName = manifest.name && manifest.short_name;
         const hasIcons = manifest.icons && manifest.icons.length >= 2;
         const hasStartUrl = manifest.start_url;
         const hasDisplay = manifest.display === 'standalone';
-        
+
         console.log('PWA: Manifest check - Name:', hasName, 'Icons:', hasIcons, 'StartUrl:', hasStartUrl, 'Display:', hasDisplay);
-        
+
         if (hasName && hasIcons && hasStartUrl && hasDisplay) {
           console.log('PWA: Manifest requirements met! ✅');
         } else {
@@ -83,12 +156,12 @@ export default function PWAInstallButton() {
         console.log('  - Already considered installed');
         console.log('  - Browser cache (try Ctrl+Shift+R)');
         console.log('  - Browser-specific requirements not met');
-        
+
         // Check if already meets engagement criteria
         if (document.visibilityState === 'visible') {
           console.log('PWA: Page is visible, good for engagement');
         }
-        
+
         // Try to manually trigger installability check
         if ('getInstalledRelatedApps' in navigator) {
           // @ts-ignore
@@ -108,11 +181,18 @@ export default function PWAInstallButton() {
     setTimeout(checkInstallPrompt, 5000);
     setTimeout(checkInstallPrompt, 10000);
 
+    // Call checkInstallCapability after initial setup
+    checkInstallCapability();
+
+    // Set up periodic checks
+    const interval = setInterval(checkInstallCapability, 5000);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
       window.removeEventListener('appinstalled', handleInstalled);
+      clearInterval(interval);
     };
-  }, [installPrompt]);
+  }, [installPrompt, isInstalled, showInstall]); // Include dependencies that are used in the effect
 
   const getBrowserInfo = () => {
     const userAgent = navigator.userAgent;
