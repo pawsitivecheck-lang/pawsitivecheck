@@ -174,18 +174,17 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   return (
     <div 
-      className="fixed inset-0 bg-black/80 flex items-start justify-center z-50 cursor-pointer p-4 overflow-y-auto" 
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer p-4 overflow-y-auto" 
       data-testid="modal-barcode-scanner"
       onClick={handleBackdropClick}
     >
-      <div className="flex items-center justify-center min-h-full w-full">
-        <Card className="cosmic-card w-full max-w-lg cursor-default my-auto">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-starlight-400">
+      <Card className="cosmic-card w-full max-w-lg cursor-default m-auto">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-starlight-400">
             <Camera className="h-5 w-5" />
             Mystical Barcode Scanner
-            </CardTitle>
-            <div className="flex gap-2">
+          </CardTitle>
+          <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -204,9 +203,9 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             >
               <X className="h-4 w-4" />
             </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
+          </div>
+        </CardHeader>
+        <CardContent>
           {cameraError ? (
             <div className="text-center py-8">
               <div className="text-mystical-red mb-4" data-testid="text-camera-error">
@@ -250,9 +249,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               )}
             </div>
           )}
-          </CardContent>
-        </Card>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
