@@ -4,113 +4,88 @@ import { Download } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
 export default function PWAInstallButton() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      console.log('PWA: Install prompt available');
+    // Check if already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+      return;
+    }
+
+    // Listen for install prompt
+    const handleInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setInstallPrompt(e as BeforeInstallPromptEvent);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    // Listen for successful install
+    const handleInstalled = () => {
+      setIsInstalled(true);
+      setInstallPrompt(null);
+    };
 
-    // Force check if PWA is installable
-    setTimeout(() => {
-      console.log('PWA: Checking if app is installable...');
-      if (!deferredPrompt) {
-        // Trigger a custom event to force check installability
-        try {
-          const event = new Event('beforeinstallprompt');
-          window.dispatchEvent(event);
-        } catch (e) {
-          console.log('PWA: Could not trigger install check');
-        }
-      }
-    }, 1000);
+    window.addEventListener('beforeinstallprompt', handleInstallPrompt);
+    window.addEventListener('appinstalled', handleInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
+      window.removeEventListener('appinstalled', handleInstalled);
     };
   }, []);
 
-  const handleInstallClick = async () => {
-    console.log('PWA: Install button clicked');
-    
-    // Try native install first
-    if (deferredPrompt) {
-      console.log('PWA: Using native install prompt');
+  const handleClick = async () => {
+    if (installPrompt) {
+      // Use native install prompt
       try {
-        await deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        if (choiceResult.outcome === 'accepted') {
-          console.log('PWA: Install accepted');
-          alert('App installed successfully!');
-        } else {
-          console.log('PWA: Install dismissed');
+        await installPrompt.prompt();
+        const result = await installPrompt.userChoice;
+        if (result.outcome === 'accepted') {
+          setIsInstalled(true);
         }
-        setDeferredPrompt(null);
-        return;
+        setInstallPrompt(null);
       } catch (error) {
-        console.error('PWA: Install error:', error);
+        console.error('Install failed:', error);
       }
-    }
-
-    // Try to force the browser's install interface
-    console.log('PWA: Attempting to trigger browser install interface');
-    
-    // For Chrome/Edge - try to access the install interface
-    if ('serviceWorker' in navigator && 'getInstalledRelatedApps' in navigator) {
-      try {
-        // @ts-ignore
-        const relatedApps = await navigator.getInstalledRelatedApps();
-        console.log('Related apps:', relatedApps);
-        if (relatedApps.length === 0) {
-          // App is not installed, try to show install UI
-          console.log('App not installed, should show install option');
-        }
-      } catch (e) {
-        console.log('Could not check installed apps');
-      }
-    }
-
-    // Show install instructions as last resort
-    const userAgent = navigator.userAgent;
-    const isChrome = /Chrome/.test(userAgent);
-    const isFirefox = /Firefox/.test(userAgent);
-    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
-    const isEdge = /Edg/.test(userAgent);
-    const isMobile = /Android|iPhone|iPad|iPod/.test(userAgent);
-
-    let message = 'Install this app for a better experience!\n\n';
-    
-    if (isChrome || isEdge) {
-      message += isMobile 
-        ? '1. Tap the menu (⋮) button\n2. Select "Add to Home screen" or "Install app"'
-        : '1. Look for the install icon (⊕) in the address bar\n2. Or go to Menu → "Install PawsitiveCheck"';
-    } else if (isSafari) {
-      message += isMobile
-        ? '1. Tap the Share button (□↗)\n2. Select "Add to Home Screen"'
-        : '1. Go to File menu → "Add to Dock"\n2. Or look for install icon in address bar';
-    } else if (isFirefox) {
-      message += '1. Look for install icon in address bar\n2. Or go to Menu → "Install"';
     } else {
-      message += 'Look for an "Install" or "Add to Home Screen" option in your browser menu.';
+      // Show manual instructions
+      const userAgent = navigator.userAgent;
+      const isMobile = /Android|iPhone|iPad|iPod/.test(userAgent);
+      const isIOS = /iPhone|iPad|iPod/.test(userAgent);
+      const isChrome = /Chrome/.test(userAgent) && !/Edg/.test(userAgent);
+      
+      let message = 'To install this app:\n\n';
+      
+      if (isIOS) {
+        message += '1. Tap the Share button (□↗)\n2. Select "Add to Home Screen"';
+      } else if (isChrome && isMobile) {
+        message += '1. Tap the menu (⋮)\n2. Select "Add to Home screen"';
+      } else if (isChrome) {
+        message += '1. Look for the install icon (⊕) in the address bar\n2. Or use Menu → "Install PawsitiveCheck"';
+      } else {
+        message += 'Look for "Install" or "Add to Home Screen" in your browser menu';
+      }
+      
+      alert(message);
     }
-
-    alert(message);
   };
+
+  // Don't show button if already installed
+  if (isInstalled) {
+    return null;
+  }
 
   return (
     <Button
-      onClick={handleInstallClick}
+      onClick={handleClick}
       variant="outline"
       size="sm"
-      className="gap-2 text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900/20 transition-all cursor-pointer active:scale-95"
+      className="gap-2 text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900/20"
       data-testid="pwa-install-button"
     >
       <Download className="h-4 w-4" />
