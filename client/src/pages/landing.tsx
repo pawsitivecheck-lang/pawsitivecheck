@@ -421,29 +421,7 @@ export default function Landing() {
               <p className="text-xs sm:text-sm text-muted-foreground mb-4">Get comprehensive safety scores and ingredient breakdowns</p>
             </Card>
             
-            <Card className="p-4 sm:p-6 text-center border-2 border-blue-200 bg-blue-50 hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-scanner">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                <Camera className="text-white h-6 w-6 sm:h-7 sm:w-7" />
-              </div>
-              <div className="flex items-center justify-center gap-1 mb-2">
-                <h3 className="font-semibold text-foreground text-sm sm:text-base">📱 Product Scanner</h3>
-                <HelpTooltip 
-                  content="Advanced multi-modal scanning technology: (1) Barcode scanning for instant product database lookup, (2) Photo recognition using AI to identify products from images, (3) Internet search integration for new product discovery. All connected to our real-time safety analysis engine."
-                  side="top"
-                />
-              </div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-4">Scan barcodes or take photos to check product safety instantly</p>
-              <Button 
-                asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
-                data-testid="button-scan-now"
-              >
-                <Link to="/product-scanner">
-                  <Camera className="mr-2 h-4 w-4" />
-                  Scan Now
-                </Link>
-              </Button>
-            </Card>
+            
             
             <Card className="p-4 sm:p-6 text-center border border-border hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-alerts">
               <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-red-600 rounded-lg flex items-center justify-center mb-4">
