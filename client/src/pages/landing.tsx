@@ -92,9 +92,16 @@ export default function Landing() {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                 <PawPrint className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary">PawsitiveCheck</h1>
+              <h1 className="hidden md:block text-lg sm:text-xl lg:text-2xl font-bold text-primary">PawsitiveCheck</h1>
             </div>
             
+            {/* Center Section - Search */}
+            <div className="flex-1 flex items-center justify-center px-2 sm:px-4">
+              {/* Header Search - Now visible on all devices */}
+              <div className="w-full max-w-md">
+                <HeaderSearch />
+              </div>
+            </div>
             
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* DNT Indicator */}

@@ -41,7 +41,7 @@ export default function Navbar() {
               <div className="w-10 h-10 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
                 <PawPrint className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">PawsitiveCheck</h1>
+              <h1 className="hidden md:block text-2xl font-bold text-foreground">PawsitiveCheck</h1>
             </Link>
           </div>
           
