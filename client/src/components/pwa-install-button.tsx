@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -11,6 +12,11 @@ export default function PWAInstallButton() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [showInstall, setShowInstall] = useState(false);
+
+  // Don't show install button in native app
+  if (Capacitor.isNativePlatform()) {
+    return null;
+  }
 
   const checkInstallCapability = useCallback(async () => {
     console.log('PWA: Checking installability requirements...');
