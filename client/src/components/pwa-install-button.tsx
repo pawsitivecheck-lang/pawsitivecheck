@@ -9,80 +9,56 @@ interface BeforeInstallPromptEvent extends Event {
 
 export default function PWAInstallButton() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [canInstall, setCanInstall] = useState(false);
 
   useEffect(() => {
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-      return;
+      return; // Already installed, don't show button
     }
 
     // Listen for install prompt
     const handleInstallPrompt = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-
-    // Listen for successful install
-    const handleInstalled = () => {
-      setIsInstalled(true);
-      setInstallPrompt(null);
+      setCanInstall(true);
     };
 
     window.addEventListener('beforeinstallprompt', handleInstallPrompt);
-    window.addEventListener('appinstalled', handleInstalled);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
-      window.removeEventListener('appinstalled', handleInstalled);
     };
   }, []);
 
-  const handleClick = async () => {
-    if (installPrompt) {
-      // Use native install prompt
-      try {
-        await installPrompt.prompt();
-        const result = await installPrompt.userChoice;
-        if (result.outcome === 'accepted') {
-          setIsInstalled(true);
-        }
-        setInstallPrompt(null);
-      } catch (error) {
-        console.error('Install failed:', error);
-      }
-    } else {
-      // Show manual instructions
-      const userAgent = navigator.userAgent;
-      const isMobile = /Android|iPhone|iPad|iPod/.test(userAgent);
-      const isIOS = /iPhone|iPad|iPod/.test(userAgent);
-      const isChrome = /Chrome/.test(userAgent) && !/Edg/.test(userAgent);
+  const handleInstall = async () => {
+    if (!installPrompt) {
+      alert('To install: Look for install option in your browser menu or address bar');
+      return;
+    }
+
+    try {
+      await installPrompt.prompt();
+      const result = await installPrompt.userChoice;
       
-      let message = 'To install this app:\n\n';
-      
-      if (isIOS) {
-        message += '1. Tap the Share button (□↗)\n2. Select "Add to Home Screen"';
-      } else if (isChrome && isMobile) {
-        message += '1. Tap the menu (⋮)\n2. Select "Add to Home screen"';
-      } else if (isChrome) {
-        message += '1. Look for the install icon (⊕) in the address bar\n2. Or use Menu → "Install PawsitiveCheck"';
-      } else {
-        message += 'Look for "Install" or "Add to Home Screen" in your browser menu';
+      if (result.outcome === 'accepted') {
+        setCanInstall(false);
       }
       
-      alert(message);
+      setInstallPrompt(null);
+    } catch (error) {
+      console.error('Install failed:', error);
     }
   };
 
-  // Don't show button if already installed
-  if (isInstalled) {
+  // Only show if we can install
+  if (!canInstall) {
     return null;
   }
 
   return (
     <Button
-      onClick={handleClick}
+      onClick={handleInstall}
       variant="outline"
       size="sm"
       className="gap-2 text-blue-600 border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-600 dark:hover:bg-blue-900/20"
