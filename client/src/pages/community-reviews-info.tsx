@@ -72,11 +72,11 @@ export default function CommunityReviewsInfo() {
     return "New Member";
   };
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-gray-50 border-b border-gray-200 py-3">
+      <div className="bg-muted border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="community-reviews-header" />
         </div>
@@ -89,52 +89,52 @@ export default function CommunityReviewsInfo() {
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
               <Users className="text-3xl text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6" data-testid="text-title">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6" data-testid="text-title">
               How Community Reviews Drive Transparency
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Empowering pet owners with authentic experiences and collective intelligence to hold the pet industry accountable for product safety
             </p>
           </div>
 
           {/* Community Power */}
           <section className="mb-16">
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 rounded-2xl p-8 mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <MessageSquare className="text-purple-600" />
                 The Power of Collective Experience
               </h2>
-              <p className="text-lg text-gray-700 mb-6">
+              <p className="text-lg text-muted-foreground mb-6">
                 Our community review system harnesses the collective experience of thousands of pet owners to identify safety issues, product effectiveness, and manufacturer accountability gaps that traditional testing might miss. Built on principles of <a href="https://www.nature.com/articles/s41598-021-89159-2" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-800 underline">crowdsourced safety monitoring research</a> and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7739234/" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-800 underline">consumer-driven product surveillance</a>.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-card rounded-xl p-6 shadow-md">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                     <Users className="text-purple-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">125K+ Pet Owners</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">125K+ Pet Owners</h3>
+                  <p className="text-muted-foreground text-sm">
                     Active community members sharing real experiences across dogs, cats, and exotic pets with verified product usage and outcomes tracking.
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-card rounded-xl p-6 shadow-md">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                     <Star className="text-blue-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">2.8M+ Reviews</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">2.8M+ Reviews</h3>
+                  <p className="text-muted-foreground text-sm">
                     Detailed product experiences including safety incidents, ingredient reactions, and long-term health impacts validated through <a href="https://www.avma.org/resources-tools/pet-owners/petcare/adverse-drug-experience-reporting" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AVMA adverse event protocols</a>.
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="bg-card rounded-xl p-6 shadow-md">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                     <TrendingUp className="text-green-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">98% Accuracy Rate</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">98% Accuracy Rate</h3>
+                  <p className="text-muted-foreground text-sm">
                     Community-identified safety concerns validated against <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">official FDA recall data</a> with 98% correlation rate for early warning detection.
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function CommunityReviewsInfo() {
 
           {/* Review Categories */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
               <FileText className="text-blue-600" />
               Types of Community Intelligence
             </h2>
@@ -155,37 +155,37 @@ export default function CommunityReviewsInfo() {
                   <AlertTriangle className="text-red-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Safety & Adverse Events</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">Safety & Adverse Events</h3>
+                  <p className="text-muted-foreground mb-4">
                     Critical safety reporting where community members document adverse reactions, contamination symptoms, and health impacts. Our early detection system works through <strong>three key mechanisms</strong>:
                   </p>
                   
                   <div className="space-y-3 mb-4">
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-sm text-gray-700">
+                    <div className="bg-card border border-border rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">
                         <strong className="text-red-600">1. Pattern Recognition Algorithm:</strong> Machine learning analyzes community reports every 24 hours to identify unusual symptom clusters across specific products, brands, or manufacturing dates that exceed statistical baselines.
                       </p>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-sm text-gray-700">
+                    <div className="bg-card border border-border rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">
                         <strong className="text-red-600">2. Geographic Clustering Analysis:</strong> Our system detects when multiple reports of similar symptoms appear in specific regions within 30-day windows, indicating potential contamination at distribution centers or manufacturing facilities.
                       </p>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-sm text-gray-700">
+                    <div className="bg-card border border-border rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">
                         <strong className="text-red-600">3. Veterinary Alert Network:</strong> Licensed veterinarians in our network flag unusual patterns in their practices, which are cross-referenced with community reports to validate potential safety concerns before they become widespread.
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-4">
+                  <p className="text-muted-foreground mb-4">
                     This system has successfully identified <strong>47 safety issues before official recalls</strong> by detecting patterns an average of <strong>6-18 weeks earlier</strong> than regulatory agencies, including <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">Hill's vitamin D toxicity</a> (detected 8 weeks early) and <a href="https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigating-potential-connection-between-diet-and-cases-canine-heart-disease" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">DCM patterns in grain-free diets</a> (18 months before FDA investigation).
                   </p>
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-sm text-red-700 mb-3">
+                  <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <p className="text-sm text-red-700 dark:text-red-300 mb-3">
                       <strong>Specific Process Example:</strong> When 15+ community members report similar symptoms (e.g., vomiting + lethargy) for the same product within 14 days, our algorithm automatically flags it for veterinary review and notifies affected pet owners within 48 hours - often weeks before manufacturers or regulators become aware of the issue.
                     </p>
-                    <p className="text-xs text-red-600">
+                    <p className="text-xs text-red-600 dark:text-red-400">
                       <strong>Real Case:</strong> Hill's Vitamin D - 23 reports of excessive thirst + lethargy from Prescription Diet cans in Texas and California → Algorithm flagged after day 11 → Vet network confirmed vitamin D toxicity symptoms → Community alert sent → Official recall 8 weeks later
                     </p>
                   </div>
@@ -197,8 +197,8 @@ export default function CommunityReviewsInfo() {
                   <Heart className="text-green-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Long-Term Health Tracking</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">Long-Term Health Tracking</h3>
+                  <p className="text-muted-foreground mb-4">
                     Comprehensive health outcome monitoring where pet owners track their animals' health changes over months and years of product use. This longitudinal data provides insights that clinical trials often miss, following <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary epidemiology research methodologies</a> and contributing to <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed nutrition studies</a>.
                   </p>
                 </div>
@@ -209,8 +209,8 @@ export default function CommunityReviewsInfo() {
                   <Eye className="text-yellow-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Corporate Accountability Monitoring</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">Corporate Accountability Monitoring</h3>
+                  <p className="text-muted-foreground mb-4">
                     Community tracking of manufacturer response times, customer service quality, recall handling, and transparency practices. Reviews document corporate behavior during crises, including <a href="https://topclassactions.com/lawsuit-settlements/consumer-products/pet-products/blue-buffalo-settles-class-action-over-false-natural-claims/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo's misleading claims about "natural" ingredients</a> and <a href="https://www.petfoodscam.com/pet-food-lawsuits/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">pattern analysis across class action lawsuits</a>.
                   </p>
                 </div>
@@ -221,8 +221,8 @@ export default function CommunityReviewsInfo() {
                   <Globe className="text-blue-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Ingredient Source Transparency</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">Ingredient Source Transparency</h3>
+                  <p className="text-muted-foreground mb-4">
                     Crowdsourced investigation of ingredient sourcing, supply chain transparency, and manufacturing facility quality. Community researchers track ingredient origins, cross-reference with <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AAFCO sourcing standards</a>, and document manufacturer transparency practices through direct communication and freedom of information requests.
                   </p>
                 </div>
@@ -232,22 +232,22 @@ export default function CommunityReviewsInfo() {
 
           {/* Verification System */}
           <section className="mb-16">
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20 rounded-2xl p-8">
+              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
                 <Shield className="text-green-600" />
                 Review Verification & Quality Control
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Multi-Layer Authentication</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Multi-Layer Authentication</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Veterinary Validation</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Veterinary Validation</p>
+                          <p className="text-sm text-muted-foreground">
                             Critical health reports verified by licensed veterinarians through our network of 1,200+ participating clinics following <a href="https://www.avma.org/resources-tools/pet-owners/petcare/adverse-drug-experience-reporting" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 underline">AVMA adverse event protocols</a>
                           </p>
                         </div>
@@ -258,8 +258,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Purchase Verification</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Purchase Verification</p>
+                          <p className="text-sm text-muted-foreground">
                             Receipt verification and barcode scanning to confirm actual product usage and eliminate fake reviews or competitor manipulation
                           </p>
                         </div>
@@ -270,8 +270,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">AI-Powered Detection</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">AI-Powered Detection</p>
+                          <p className="text-sm text-muted-foreground">
                             Machine learning algorithms trained on <a href="https://www.nature.com/articles/nature14539" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 underline">review authenticity patterns</a> to identify and filter manipulated content
                           </p>
                         </div>
@@ -281,14 +281,14 @@ export default function CommunityReviewsInfo() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Community Moderation</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Community Moderation</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <Users className="text-blue-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Expert Review Panel</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Expert Review Panel</p>
+                          <p className="text-sm text-muted-foreground">
                             Board-certified veterinary nutritionists and pet safety advocates review flagged content and validate complex health claims
                           </p>
                         </div>
@@ -299,8 +299,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <Star className="text-purple-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Trusted Reviewer Program</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Trusted Reviewer Program</p>
+                          <p className="text-sm text-muted-foreground">
                             Long-term community members with verified review histories and veterinary endorsements receive trusted status
                           </p>
                         </div>
@@ -311,8 +311,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <BarChart3 className="text-orange-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Statistical Validation</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Statistical Validation</p>
+                          <p className="text-sm text-muted-foreground">
                             Cross-reference community reports with <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-800 underline">official recall data</a> for accuracy verification
                           </p>
                         </div>
@@ -326,15 +326,15 @@ export default function CommunityReviewsInfo() {
 
           {/* Impact Stories */}
           <section className="mb-16">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-2xl p-8">
+              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
                 <TrendingUp className="text-blue-600" />
                 Real-World Impact & Success Stories
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Early Warning Successes</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Early Warning Successes</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <p className="text-gray-700">
@@ -357,7 +357,7 @@ export default function CommunityReviewsInfo() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Corporate Accountability Wins</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Corporate Accountability Wins</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <p className="text-gray-700">
@@ -384,15 +384,15 @@ export default function CommunityReviewsInfo() {
 
           {/* Why It Matters */}
           <section className="mb-16">
-            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-2xl p-8">
+              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
                 <AlertTriangle className="text-red-600" />
                 Why Community Reviews Are Critical
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">The Information Gap</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">The Information Gap</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <p className="text-gray-700">
@@ -415,14 +415,14 @@ export default function CommunityReviewsInfo() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Community Solution</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Community Solution</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Real-Time Monitoring</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Real-Time Monitoring</p>
+                          <p className="text-sm text-muted-foreground">
                             125,000+ pet owners providing continuous safety surveillance across all products and brands
                           </p>
                         </div>
@@ -433,8 +433,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Independent Validation</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Independent Validation</p>
+                          <p className="text-sm text-muted-foreground">
                             Community-driven research free from industry influence and financial conflicts of interest
                           </p>
                         </div>
@@ -445,8 +445,8 @@ export default function CommunityReviewsInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Immediate Action</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Immediate Action</p>
+                          <p className="text-sm text-muted-foreground">
                             Direct communication channels to warn other pet owners within hours of safety concern identification
                           </p>
                         </div>
@@ -460,8 +460,8 @@ export default function CommunityReviewsInfo() {
 
           {/* Community Stats */}
           <section className="mb-16">
-            <div className="bg-purple-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <div className="bg-purple-50 dark:bg-purple-950/20 rounded-2xl p-8">
+              <h2 className="text-3xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <BarChart3 className="text-purple-600" />
                 Community Impact Metrics
               </h2>
@@ -469,7 +469,7 @@ export default function CommunityReviewsInfo() {
               <div className="grid md:grid-cols-4 gap-6 text-center">
                 <div>
                   <div className="text-4xl font-bold text-purple-600 mb-2">125K+</div>
-                  <div className="text-gray-700 font-medium mb-2">Active Members</div>
+                  <div className="text-muted-foreground font-medium mb-2">Active Members</div>
                   <p className="text-sm text-gray-600">
                     Verified pet owners
                   </p>
@@ -477,7 +477,7 @@ export default function CommunityReviewsInfo() {
 
                 <div>
                   <div className="text-4xl font-bold text-blue-600 mb-2">2.8M+</div>
-                  <div className="text-gray-700 font-medium mb-2">Reviews</div>
+                  <div className="text-muted-foreground font-medium mb-2">Reviews</div>
                   <p className="text-sm text-gray-600">
                     Detailed product experiences
                   </p>
@@ -485,7 +485,7 @@ export default function CommunityReviewsInfo() {
 
                 <div>
                   <div className="text-4xl font-bold text-green-600 mb-2">47</div>
-                  <div className="text-gray-700 font-medium mb-2">Early Alerts</div>
+                  <div className="text-muted-foreground font-medium mb-2">Early Alerts</div>
                   <p className="text-sm text-gray-600">
                     Safety issues identified pre-recall
                   </p>
@@ -493,7 +493,7 @@ export default function CommunityReviewsInfo() {
 
                 <div>
                   <div className="text-4xl font-bold text-orange-600 mb-2">98%</div>
-                  <div className="text-gray-700 font-medium mb-2">Accuracy</div>
+                  <div className="text-muted-foreground font-medium mb-2">Accuracy</div>
                   <p className="text-sm text-gray-600">
                     Validated against official data
                   </p>
@@ -501,21 +501,21 @@ export default function CommunityReviewsInfo() {
               </div>
             </div>
 
-            <div className="mt-8 bg-gray-50 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Transparency & Ethical Standards</h3>
-              <p className="text-gray-700 mb-4">
+            <div className="mt-8 bg-muted rounded-xl p-6">
+              <h3 className="text-xl font-bold text-foreground mb-4">Transparency & Ethical Standards</h3>
+              <p className="text-muted-foreground mb-4">
                 Our community operates under strict ethical guidelines:
               </p>
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <ul className="space-y-2 text-gray-600">
+                  <ul className="space-y-2 text-muted-foreground">
                     <li>• Complete disclosure of reviewer relationships and incentives</li>
                     <li>• Zero tolerance policy for manufacturer manipulation or fake reviews</li>
                     <li>• Full transparency of moderation decisions and appeals process</li>
                   </ul>
                 </div>
                 <div>
-                  <ul className="space-y-2 text-gray-600">
+                  <ul className="space-y-2 text-muted-foreground">
                     <li>• Open source verification algorithms and bias detection methods</li>
                     <li>• Regular third-party audits of review authenticity and accuracy</li>
                     <li>• Public reporting of community impact and safety outcomes</li>
@@ -526,12 +526,12 @@ export default function CommunityReviewsInfo() {
           </section>
 
           {/* Interactive Community Portal */}
-          <section className="mb-16 border-t border-gray-200 pt-16">
+          <section className="mb-16 border-t border-border pt-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-4xl font-bold text-foreground mb-4">
                 Community Portal
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-muted-foreground">
                 Explore real reviews and share your own experiences
               </p>
             </div>
@@ -550,25 +550,25 @@ export default function CommunityReviewsInfo() {
                     <div className="text-3xl font-bold text-purple-600 mb-2" data-testid="text-total-reviews">
                       {allReviews?.length || 0}
                     </div>
-                    <p className="text-gray-600">Total Reviews</p>
+                    <p className="text-muted-foreground">Total Reviews</p>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-positive-reviews">
                       {allReviews?.filter((r: any) => r.rating >= 4).length || 0}
                     </div>
-                    <p className="text-gray-600">Positive Reviews</p>
+                    <p className="text-muted-foreground">Positive Reviews</p>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-warning-reviews">
                       {allReviews?.filter((r: any) => r.rating <= 2).length || 0}
                     </div>
-                    <p className="text-gray-600">Safety Warnings</p>
+                    <p className="text-muted-foreground">Safety Warnings</p>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-active-members">
                       {allReviews ? new Set(allReviews.map((r: any) => r.userId)).size : 0}
                     </div>
-                    <p className="text-gray-600">Active Members</p>
+                    <p className="text-muted-foreground">Active Members</p>
                   </div>
                 </div>
               </CardContent>
@@ -593,7 +593,7 @@ export default function CommunityReviewsInfo() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-semibold text-gray-900" data-testid="text-user-name">
+                        <h3 className="text-xl font-semibold text-foreground" data-testid="text-user-name">
                           {user.firstName || 'Community Member'}
                         </h3>
                         {getRankIcon(userReviews ? userReviews.length : 0)}
@@ -602,7 +602,7 @@ export default function CommunityReviewsInfo() {
                         <Badge className="bg-purple-100 text-purple-800 border-purple-200" data-testid="badge-user-rank">
                           {getRankTitle(userReviews ? userReviews.length : 0)}
                         </Badge>
-                        <span className="text-gray-500 text-sm" data-testid="text-user-reviews-count">
+                        <span className="text-muted-foreground text-sm" data-testid="text-user-reviews-count">
                           {userReviews ? userReviews.length : 0} reviews shared
                         </span>
                       </div>
@@ -666,7 +666,7 @@ export default function CommunityReviewsInfo() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <h4 className="font-semibold text-gray-900" data-testid="text-reviewer-name">
+                            <h4 className="font-semibold text-foreground" data-testid="text-reviewer-name">
                               Community Member #{review.userId.slice(-4)}
                             </h4>
                             {getRankIcon(5)} {/* Default rank for community display */}
@@ -694,16 +694,16 @@ export default function CommunityReviewsInfo() {
                           </div>
                           
                           {review.title && (
-                            <h6 className="font-medium text-gray-800 mb-2" data-testid="text-review-title">
+                            <h6 className="font-medium text-foreground mb-2" data-testid="text-review-title">
                               {review.title}
                             </h6>
                           )}
                           
-                          <p className="text-gray-700 mb-3" data-testid="text-review-content">
+                          <p className="text-muted-foreground mb-3" data-testid="text-review-content">
                             {review.content}
                           </p>
                           
-                          <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span data-testid="text-review-date">
                               {new Date(review.createdAt).toLocaleDateString()}
                             </span>
@@ -729,10 +729,10 @@ export default function CommunityReviewsInfo() {
                     <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
                       <MessageCircle className="text-gray-400 text-2xl" />
                     </div>
-                    <h3 className="text-xl text-gray-700 mb-4" data-testid="text-no-reviews-title">
+                    <h3 className="text-xl text-foreground mb-4" data-testid="text-no-reviews-title">
                       No Reviews Found
                     </h3>
-                    <p className="text-gray-500 mb-6" data-testid="text-no-reviews-description">
+                    <p className="text-muted-foreground mb-6" data-testid="text-no-reviews-description">
                       {searchTerm || reviewFilter !== "all" 
                         ? "No reviews match your current search criteria."
                         : "Be the first to share your experience with the community!"}
@@ -762,7 +762,7 @@ export default function CommunityReviewsInfo() {
                     <h3 className="text-2xl font-bold text-purple-600 mb-4" data-testid="text-cta-title">
                       Share Your Experience
                     </h3>
-                    <p className="text-gray-600 mb-6" data-testid="text-cta-description">
+                    <p className="text-muted-foreground mb-6" data-testid="text-cta-description">
                       Help other pet owners by sharing your product experiences
                     </p>
                     <Button className="bg-purple-600 hover:bg-purple-700" data-testid="button-share-review">
@@ -805,7 +805,7 @@ export default function CommunityReviewsInfo() {
       </div>
 
       {/* Bottom Ad */}
-      <div className="bg-gray-50 py-6 border-t border-gray-200">
+      <div className="bg-muted py-6 border-t border-border">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="community-reviews-footer" />
         </div>
