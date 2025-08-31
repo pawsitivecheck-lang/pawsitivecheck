@@ -19,6 +19,24 @@ import { ObjectStorageService } from "./objectStorage";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint that bypasses session middleware for deployment
+  app.get('/health', (req, res) => {
+    res.status(200).json({ 
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  });
+  
+  // Additional health check for load balancers
+  app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  });
+
   // Auth middleware
   await setupAuth(app);
 

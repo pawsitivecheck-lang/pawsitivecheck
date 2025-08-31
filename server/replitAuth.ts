@@ -24,21 +24,33 @@ const getOidcConfig = memoize(
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  
+  // Generate a fallback secret for development/deployment scenarios
+  const sessionSecret = process.env.SESSION_SECRET || 
+    `fallback-secret-${process.env.REPL_ID || 'dev'}-${Date.now()}`;
+  
+  // Check for DATABASE_URL and provide fallback handling
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    console.warn('DATABASE_URL environment variable is not set. Session store will use memory fallback.');
+  }
+  
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
+    conString: databaseUrl,
     createTableIfMissing: false,
     ttl: sessionTtl,
     tableName: "sessions",
   });
+  
   return session({
-    secret: process.env.SESSION_SECRET!,
+    secret: sessionSecret,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: sessionTtl,
     },
   });
