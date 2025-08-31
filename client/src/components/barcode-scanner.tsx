@@ -43,36 +43,52 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   useEffect(() => {
     if (isActive && !scannerRef.current) {
-      try {
-        const scanner = new Html5QrcodeScanner(
-          "barcode-scanner-container",
-          {
-            fps: 10,
-            qrbox: { width: 300, height: 200 },
-            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-            formatsToSupport: [
-              Html5QrcodeSupportedFormats.CODE_128,
-              Html5QrcodeSupportedFormats.CODE_39,
-              Html5QrcodeSupportedFormats.EAN_13,
-              Html5QrcodeSupportedFormats.EAN_8,
-              Html5QrcodeSupportedFormats.UPC_A,
-              Html5QrcodeSupportedFormats.UPC_E,
-              Html5QrcodeSupportedFormats.QR_CODE
-            ],
-            aspectRatio: 1.777778, // 16:9
-            disableFlip: false,
-          },
-          false // verbose
-        );
+      // Add a small delay to ensure DOM is ready
+      const initScanner = async () => {
+        try {
+          // Clear any existing scanner first
+          const existingScanner = document.getElementById("barcode-scanner-container");
+          if (existingScanner) {
+            existingScanner.innerHTML = '';
+          }
 
-        scanner.render(onScanSuccess, onScanFailure);
-        scannerRef.current = scanner;
-        setIsScannerReady(true);
-      } catch (error) {
-        console.error('Error initializing scanner:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setCameraError(`Failed to initialize camera scanner: ${errorMessage}. Please ensure camera permissions are granted and try refreshing the page.`);
-      }
+          const scanner = new Html5QrcodeScanner(
+            "barcode-scanner-container",
+            {
+              fps: 10,
+              qrbox: { width: 250, height: 150 },
+              supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+              formatsToSupport: [
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.CODE_39,
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.UPC_A,
+                Html5QrcodeSupportedFormats.UPC_E,
+                Html5QrcodeSupportedFormats.QR_CODE
+              ],
+              aspectRatio: 1.0,
+              disableFlip: false,
+              rememberLastUsedCamera: true,
+              showTorchButtonIfSupported: true,
+            },
+            false // verbose
+          );
+
+          await scanner.render(onScanSuccess, onScanFailure);
+          scannerRef.current = scanner;
+          setIsScannerReady(true);
+          setCameraError(""); // Clear any previous errors
+        } catch (error) {
+          console.error('Error initializing scanner:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          setCameraError(`Camera access failed: ${errorMessage}. Please allow camera permissions and try again.`);
+          setIsScannerReady(false);
+        }
+      };
+
+      // Small delay to ensure the container is mounted
+      setTimeout(initScanner, 100);
     }
 
     return () => {
@@ -80,7 +96,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         try {
           scannerRef.current.clear();
         } catch (error) {
-          console.error('Error clearing scanner:', error instanceof Error ? error.message : error);
+          console.debug('Scanner cleanup error (normal):', error);
         }
         scannerRef.current = null;
         setIsScannerReady(false);
@@ -88,46 +104,63 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
     };
   }, [isActive, onScanSuccess, onScanFailure]);
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    // Clear existing scanner
     if (scannerRef.current) {
       try {
         scannerRef.current.clear();
-        scannerRef.current = null;
-        setIsScannerReady(false);
-        setCameraError("");
-        
-        // Re-initialize after a short delay
-        setTimeout(() => {
-          if (isActive) {
-            const scanner = new Html5QrcodeScanner(
-              "barcode-scanner-container",
-              {
-                fps: 10,
-                qrbox: { width: 300, height: 200 },
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-                formatsToSupport: [
-                  Html5QrcodeSupportedFormats.CODE_128,
-                  Html5QrcodeSupportedFormats.CODE_39,
-                  Html5QrcodeSupportedFormats.EAN_13,
-                  Html5QrcodeSupportedFormats.EAN_8,
-                  Html5QrcodeSupportedFormats.UPC_A,
-                  Html5QrcodeSupportedFormats.UPC_E,
-                  Html5QrcodeSupportedFormats.QR_CODE
-                ],
-              },
-              false
-            );
-            scanner.render(onScanSuccess, onScanFailure);
-            scannerRef.current = scanner;
-            setIsScannerReady(true);
-          }
-        }, 500);
       } catch (error) {
-        console.error('Error resetting scanner:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setCameraError(`Failed to reset scanner: ${errorMessage}. Please try closing and reopening the scanner.`);
+        console.debug('Scanner clear error (normal):', error);
       }
+      scannerRef.current = null;
     }
+    
+    setIsScannerReady(false);
+    setCameraError("");
+    
+    // Clear the container
+    const container = document.getElementById("barcode-scanner-container");
+    if (container) {
+      container.innerHTML = '';
+    }
+    
+    // Re-initialize after a delay
+    setTimeout(async () => {
+      if (isActive) {
+        try {
+          const scanner = new Html5QrcodeScanner(
+            "barcode-scanner-container",
+            {
+              fps: 10,
+              qrbox: { width: 250, height: 150 },
+              supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+              formatsToSupport: [
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.CODE_39,
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.UPC_A,
+                Html5QrcodeSupportedFormats.UPC_E,
+                Html5QrcodeSupportedFormats.QR_CODE
+              ],
+              aspectRatio: 1.0,
+              disableFlip: false,
+              rememberLastUsedCamera: true,
+              showTorchButtonIfSupported: true,
+            },
+            false
+          );
+          
+          await scanner.render(onScanSuccess, onScanFailure);
+          scannerRef.current = scanner;
+          setIsScannerReady(true);
+        } catch (error) {
+          console.error('Error resetting scanner:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          setCameraError(`Failed to reset scanner: ${errorMessage}. Please check camera permissions.`);
+        }
+      }
+    }, 300);
   };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
