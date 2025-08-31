@@ -258,6 +258,12 @@ export default function Navbar() {
               <div className="text-sm text-muted-foreground mb-2">Search Products</div>
               <HeaderSearch isMobile={true} />
             </div>
+            
+            {/* Mobile Install App Button */}
+            <div className="px-4 pb-4 border-b border-border mb-4">
+              <div className="text-sm text-muted-foreground mb-2">Install App</div>
+              <PWAInstallButton />
+            </div>
             <div className="space-y-2">
               {navigation.map((item) => {
                 const Icon = item.icon;
