@@ -49,7 +49,7 @@ export default function Recalls() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-muted border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="recalls-header" />
         </div>

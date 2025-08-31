@@ -84,7 +84,7 @@ export default function Community() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-muted border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="community-header" />
         </div>
@@ -100,7 +100,7 @@ export default function Community() {
             <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-community-title">
               Community Portal
             </h1>
-            <p className="text-gray-600 text-lg" data-testid="text-community-description">
+            <p className="text-muted-foreground text-lg" data-testid="text-community-description">
               Pet owners sharing experiences and product reviews for safer pet care
             </p>
           </div>
