@@ -11,6 +11,7 @@ import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
 import DNTIndicator from "@/components/dnt-indicator";
 import Footer from "@/components/footer";
+import PWAInstallButton from "@/components/pwa-install-button";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
@@ -189,6 +190,12 @@ export default function Landing() {
               <div className="flex items-center py-3 px-3">
                 <span className="mr-3 text-foreground font-medium">Theme:</span>
                 <ThemeToggle />
+              </div>
+              
+              {/* Install App Button in Mobile */}
+              <div className="px-3 py-3 border-t border-border">
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Install App</div>
+                <PWAInstallButton />
               </div>
               
               {/* Account Section in Mobile */}
