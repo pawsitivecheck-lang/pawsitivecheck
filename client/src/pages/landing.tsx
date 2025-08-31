@@ -298,18 +298,6 @@ export default function Landing() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Button 
-                asChild
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 min-h-[56px]"
-                data-testid="button-get-started"
-              >
-                <Link to="/product-database">
-                  <Shield className="mr-2 h-5 w-5" />
-                  Start Checking Products
-                </Link>
-              </Button>
-              
-              <Button 
                 variant="outline"
                 size="lg"
                 onClick={() => scrollToSection('scanner')}
