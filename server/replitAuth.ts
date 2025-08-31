@@ -213,9 +213,15 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   console.log("User object:", user);
   console.log("User ID:", user?.id);
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user || !user.expires_at) {
     console.log("Authentication failed: not authenticated or no expires_at");
     return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // Ensure user.id is set if it's missing but claims.sub exists
+  if (!user.id && user.claims?.sub) {
+    user.id = user.claims.sub;
+    console.log("Fixed missing user.id:", user.id);
   }
 
   const now = Math.floor(Date.now() / 1000);
