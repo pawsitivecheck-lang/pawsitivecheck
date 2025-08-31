@@ -2,12 +2,16 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-// Simple service worker registration
+// Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('SW: Service Worker registered successfully'))
-      .catch(() => console.log('SW: Service Worker registration failed'));
+      .then((registration) => {
+        console.log('PWA: Service Worker registered successfully:', registration);
+      })
+      .catch((error) => {
+        console.log('PWA: Service Worker registration failed:', error);
+      });
   });
 }
 
