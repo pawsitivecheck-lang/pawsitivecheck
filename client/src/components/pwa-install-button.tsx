@@ -88,7 +88,7 @@ export default function PWAInstallButton() {
       if (browser.isChrome) {
         instructions = 'Chrome:\n1. Tap the menu (⋮) in the top-right\n2. Select "Add to Home screen"\n3. Tap "Add" to install';
       } else if (browser.isSamsung) {
-        instructions = 'Samsung Internet:\n1. Tap the menu (≡) button\n2. Select "Add page to"\n3. Choose "Home screen"';
+        instructions = 'Samsung Internet:\n1. Look for the install icon (⊕) in the address bar\n2. Or tap the menu (≡) button\n3. Look for "Install" or "Add to Apps" (NOT "Add page to")\n4. If not available, try Chrome for better PWA support';
       } else if (browser.isFirefox) {
         instructions = 'Firefox:\n1. Tap the menu (⋮)\n2. Select "Install"\n3. Tap "Add to Home screen"';
       } else {
