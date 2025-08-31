@@ -12,11 +12,26 @@ export default function PWAInstallButton() {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
+      console.log('PWA: Install prompt available');
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Force check if PWA is installable
+    setTimeout(() => {
+      console.log('PWA: Checking if app is installable...');
+      if (!deferredPrompt) {
+        // Trigger a custom event to force check installability
+        try {
+          const event = new Event('beforeinstallprompt');
+          window.dispatchEvent(event);
+        } catch (e) {
+          console.log('PWA: Could not trigger install check');
+        }
+      }
+    }, 1000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -24,34 +39,70 @@ export default function PWAInstallButton() {
   }, []);
 
   const handleInstallClick = async () => {
+    console.log('PWA: Install button clicked');
+    
+    // Try native install first
     if (deferredPrompt) {
+      console.log('PWA: Using native install prompt');
       try {
         await deferredPrompt.prompt();
         const choiceResult = await deferredPrompt.userChoice;
         if (choiceResult.outcome === 'accepted') {
-          console.log('PWA installed successfully');
+          console.log('PWA: Install accepted');
+          alert('App installed successfully!');
+        } else {
+          console.log('PWA: Install dismissed');
         }
         setDeferredPrompt(null);
         return;
       } catch (error) {
-        console.error('Install failed:', error);
+        console.error('PWA: Install error:', error);
       }
     }
 
-    // Fallback instructions
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isSamsung = /SamsungBrowser/.test(navigator.userAgent);
+    // Try to force the browser's install interface
+    console.log('PWA: Attempting to trigger browser install interface');
     
-    let instructions = '';
-    if (isIOS) {
-      instructions = 'To install: Tap Share button → "Add to Home Screen"';
-    } else if (isSamsung) {
-      instructions = 'To install: Menu → "Add page to" → "Home screen"';
-    } else {
-      instructions = 'To install: Look for the install (+) icon in your browser address bar, or check browser menu for "Install" option';
+    // For Chrome/Edge - try to access the install interface
+    if ('serviceWorker' in navigator && 'getInstalledRelatedApps' in navigator) {
+      try {
+        // @ts-ignore
+        const relatedApps = await navigator.getInstalledRelatedApps();
+        console.log('Related apps:', relatedApps);
+        if (relatedApps.length === 0) {
+          // App is not installed, try to show install UI
+          console.log('App not installed, should show install option');
+        }
+      } catch (e) {
+        console.log('Could not check installed apps');
+      }
     }
+
+    // Show install instructions as last resort
+    const userAgent = navigator.userAgent;
+    const isChrome = /Chrome/.test(userAgent);
+    const isFirefox = /Firefox/.test(userAgent);
+    const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+    const isEdge = /Edg/.test(userAgent);
+    const isMobile = /Android|iPhone|iPad|iPod/.test(userAgent);
+
+    let message = 'Install this app for a better experience!\n\n';
     
-    alert(instructions);
+    if (isChrome || isEdge) {
+      message += isMobile 
+        ? '1. Tap the menu (⋮) button\n2. Select "Add to Home screen" or "Install app"'
+        : '1. Look for the install icon (⊕) in the address bar\n2. Or go to Menu → "Install PawsitiveCheck"';
+    } else if (isSafari) {
+      message += isMobile
+        ? '1. Tap the Share button (□↗)\n2. Select "Add to Home Screen"'
+        : '1. Go to File menu → "Add to Dock"\n2. Or look for install icon in address bar';
+    } else if (isFirefox) {
+      message += '1. Look for install icon in address bar\n2. Or go to Menu → "Install"';
+    } else {
+      message += 'Look for an "Install" or "Add to Home Screen" option in your browser menu.';
+    }
+
+    alert(message);
   };
 
   return (
