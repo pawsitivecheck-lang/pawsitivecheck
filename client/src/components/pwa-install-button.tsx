@@ -15,18 +15,43 @@ export default function PWAInstallButton() {
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches || 
         (window.navigator as any).standalone === true) {
+      console.log('PWA: App is already installed');
       setIsInstalled(true);
       return;
     }
 
+    // Debug PWA installability
+    console.log('PWA: Checking installability requirements...');
+    
+    // Check service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(() => {
+        console.log('PWA: Service worker is ready');
+      });
+    } else {
+      console.log('PWA: Service worker not supported');
+    }
+
+    // Check manifest
+    fetch('/manifest.json')
+      .then(response => response.json())
+      .then(manifest => {
+        console.log('PWA: Manifest loaded:', manifest);
+      })
+      .catch(error => {
+        console.error('PWA: Manifest error:', error);
+      });
+
     // Listen for install prompt (Chrome, Edge, Samsung, Opera)
     const handleInstallPrompt = (e: Event) => {
+      console.log('PWA: Install prompt event received!');
       e.preventDefault();
       setInstallPrompt(e as BeforeInstallPromptEvent);
     };
 
     // Listen for successful install
     const handleInstalled = () => {
+      console.log('PWA: App installed successfully');
       setIsInstalled(true);
       setInstallPrompt(null);
     };
@@ -34,11 +59,31 @@ export default function PWAInstallButton() {
     window.addEventListener('beforeinstallprompt', handleInstallPrompt);
     window.addEventListener('appinstalled', handleInstalled);
 
+    // Force check after delay (some browsers are slow)
+    setTimeout(() => {
+      console.log('PWA: Checking if install prompt is available...');
+      if (!installPrompt) {
+        console.log('PWA: No install prompt available yet');
+        
+        // Try to manually trigger installability check
+        if ('getInstalledRelatedApps' in navigator) {
+          // @ts-ignore
+          navigator.getInstalledRelatedApps().then((apps: any[]) => {
+            console.log('PWA: Related apps check:', apps);
+          }).catch((e: any) => {
+            console.log('PWA: Related apps check failed:', e);
+          });
+        }
+      } else {
+        console.log('PWA: Install prompt is available!');
+      }
+    }, 3000);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
       window.removeEventListener('appinstalled', handleInstalled);
     };
-  }, []);
+  }, [installPrompt]);
 
   const getBrowserInfo = () => {
     const userAgent = navigator.userAgent;
