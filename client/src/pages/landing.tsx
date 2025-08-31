@@ -274,64 +274,76 @@ export default function Landing() {
       </nav>
 
       {/* Welcome Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950/20 dark:via-background dark:to-purple-950/20">
+      <section className="py-8 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950/20 dark:via-background dark:to-purple-950/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <PawPrint className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <PawPrint className="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-white" />
               </div>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6" data-testid="text-welcome-title">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-4 sm:mb-6" data-testid="text-welcome-title">
               Welcome to <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">PawsitiveCheck</span>
             </h1>
             
-            <p className="text-xl sm:text-2xl text-muted-foreground mb-4 max-w-4xl mx-auto leading-relaxed" data-testid="text-welcome-subtitle">
+            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-3 sm:mb-4 max-w-4xl mx-auto leading-relaxed" data-testid="text-welcome-subtitle">
               Your trusted companion for pet product safety analysis
             </p>
             
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto" data-testid="text-welcome-description">
+            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-3xl mx-auto" data-testid="text-welcome-description">
               From everyday treats to specialized nutrition, we help you make informed decisions about what's best for your beloved pets. 
               Get instant safety scores, detailed ingredient analysis, and stay updated on the latest product recalls.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8">
+              <Button 
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 min-h-[48px] sm:min-h-[56px] w-full sm:w-auto"
+                data-testid="button-get-started"
+              >
+                <Link to="/product-database">
+                  <Shield className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  Start Checking Products
+                </Link>
+              </Button>
+              
               <Button 
                 variant="outline"
                 size="lg"
                 onClick={() => scrollToSection('scanner')}
-                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-8 py-4 text-lg font-semibold rounded-xl min-h-[56px] transition-all transform hover:scale-105"
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl min-h-[48px] sm:min-h-[56px] transition-all transform hover:scale-105 w-full sm:w-auto"
                 data-testid="button-learn-more"
               >
-                <Eye className="mr-2 h-5 w-5" />
+                <Eye className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Learn How It Works
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12">
               <div className="text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mb-3">
-                  <Shield className="w-6 h-6 text-green-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Instant Safety Analysis</h3>
-                <p className="text-sm text-muted-foreground">Get comprehensive safety scores in seconds</p>
+                <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Instant Safety Analysis</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Get comprehensive safety scores in seconds</p>
               </div>
               
               <div className="text-center">
-                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-3">
-                  <AlertTriangle className="w-6 h-6 text-blue-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Real-time Recall Alerts</h3>
-                <p className="text-sm text-muted-foreground">Stay updated on safety issues and recalls</p>
+                <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Real-time Recall Alerts</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Stay updated on safety issues and recalls</p>
               </div>
               
               <div className="text-center">
-                <div className="w-12 h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mb-3">
-                  <Users className="w-6 h-6 text-purple-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Community Powered</h3>
-                <p className="text-sm text-muted-foreground">Learn from fellow pet owners' experiences</p>
+                <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Community Powered</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">Learn from fellow pet owners' experiences</p>
               </div>
             </div>
           </div>
