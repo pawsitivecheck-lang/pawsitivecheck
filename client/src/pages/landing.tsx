@@ -97,8 +97,10 @@ export default function Landing() {
             
             
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* DNT Indicator */}
-              <DNTIndicator />
+              {/* DNT Indicator - Hidden on mobile for better layout */}
+              <div className="hidden sm:block">
+                <DNTIndicator />
+              </div>
               
               {/* Theme Toggle - Always visible */}
               <ThemeToggle />
@@ -281,7 +283,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero Banner */}
-      <section className="relative bg-gradient-to-r from-primary/10 to-primary/20 py-12 sm:py-16 lg:py-20" id="hero">
+      <section className="relative bg-gradient-to-r from-primary/10 to-primary/20 py-12 sm:py-16 lg:py-20 mt-2" id="hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left">
@@ -293,7 +295,7 @@ export default function Landing() {
               </p>
               {/* Comprehensive Search/Scan Bar */}
               <div className="w-full max-w-4xl mx-auto lg:mx-0">
-                <div className="bg-card rounded-2xl shadow-xl border-2 border-primary/20 p-6">
+                <div className="bg-card rounded-2xl shadow-xl border-2 border-primary/20 p-4 sm:p-6">
                   <div className="text-center mb-4">
                     <h3 className="text-lg font-semibold text-foreground mb-2">Check Any Pet Product for Safety</h3>
                     <p className="text-sm text-muted-foreground">Search our database, scan barcodes, or analyze ingredients instantly</p>
