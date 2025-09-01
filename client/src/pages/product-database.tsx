@@ -422,6 +422,7 @@ export default function ProductDatabase() {
             <div className="mb-8 text-center">
               <Button 
                 variant="outline"
+                onClick={() => setLocation('/product-scanner')}
                 className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
                 data-testid="button-add-product"
               >
