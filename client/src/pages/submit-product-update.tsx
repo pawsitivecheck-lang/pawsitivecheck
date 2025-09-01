@@ -23,6 +23,17 @@ const submitUpdateSchema = insertProductUpdateSubmissionSchema.extend({
   productName: z.string().optional(), // For display purposes
   productBrand: z.string().optional(), // For display purposes
   productBarcode: z.string().optional(), // For display purposes
+}).refine((data) => {
+  // Make title and description required with proper error messages
+  return data.title && data.title.trim().length > 0;
+}, {
+  message: "Title is required",
+  path: ["title"]
+}).refine((data) => {
+  return data.description && data.description.trim().length > 0;
+}, {
+  message: "Description is required", 
+  path: ["description"]
 });
 
 type SubmitUpdateData = z.infer<typeof submitUpdateSchema>;
@@ -117,6 +128,27 @@ export default function SubmitProductUpdate() {
   const onSubmit = (data: SubmitUpdateData) => {
     console.log("Form submitted with data:", data);
     console.log("Form errors:", form.formState.errors);
+    console.log("Form is valid:", form.formState.isValid);
+    
+    // Validate required fields before submitting
+    if (!data.title || data.title.trim().length === 0) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter a title for your submission",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!data.description || data.description.trim().length === 0) {
+      toast({
+        title: "Validation Error", 
+        description: "Please enter a description for your submission",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     submitMutation.mutate(data);
   };
 
