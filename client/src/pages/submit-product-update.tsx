@@ -60,10 +60,7 @@ export default function SubmitProductUpdate() {
       };
       delete submitData.productName;
       delete submitData.productBrand;
-      return apiRequest("/api/product-update-submissions", {
-        method: "POST",
-        body: JSON.stringify(submitData),
-      });
+      return apiRequest("POST", "/api/product-update-submissions", submitData);
     },
     onSuccess: () => {
       toast({
@@ -85,12 +82,11 @@ export default function SubmitProductUpdate() {
 
   const handleGetUploadParameters = async () => {
     try {
-      const response = await apiRequest("/api/objects/upload", {
-        method: "POST",
-      }) as { uploadURL: string };
+      const response = await apiRequest("POST", "/api/objects/upload");
+      const uploadData = await response.json() as { uploadURL: string };
       return {
         method: "PUT" as const,
-        url: response.uploadURL,
+        url: uploadData.uploadURL,
       };
     } catch (error) {
       console.error("Error getting upload URL:", error);
