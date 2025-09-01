@@ -1,0 +1,80 @@
+ # Set merge strategy and pull the remote changes
+git config pull.rebase false
+git pull origin main
+
+# Check what files are actually in your directory
+ls -la
+
+# Check git status again
+git status
+
+# If files still aren't being tracked, check gitignore
+cat .gitignore
+
+# Force add everything including hidden files
+git add . -A
+git add .github/ -f
+
+# Check status after forcing add
+git status
+
+# If there are changes, commit them
+git commit -m "Add PawsitiveCheck app with GitHub Actions workflows"
+
+# Push to GitHub
+git push origin main
+From https://github.com/pawsitivecheck-lang/pawsitivecheck
+ * branch            main       -> FETCH_HEAD
+fatal: refusing to merge unrelated histories
+total 2652
+drwxr-xr-x 1 runner runner    708 Sep  1 05:50 .
+drwxrwxrwx 1 runner runner     92 Sep  1 06:17 ..
+-rw-r--r-- 1 runner runner   3557 Aug 25 15:41 ADSENSE_SETUP.md
+drwxr-xr-x 1 runner runner    324 Sep  1 05:39 android
+-rw-r--r-- 1 runner runner 748428 Sep  1 05:02 android-compatible.tar.gz
+-rw-r--r-- 1 runner runner 748934 Sep  1 01:46 android.tar.gz
+drwxr-xr-x 1 runner runner  13444 Sep  1 06:31 attached_assets
+drwxr-xr-x 1 runner runner     32 Aug 25 19:58 .cache
+-rw-r--r-- 1 runner runner    205 Aug 31 22:08 capacitor.config.ts
+drwxr-xr-x 1 runner runner     38 Aug 30 23:37 client
+-rw-r--r-- 1 runner runner    459 Aug 24 21:27 components.json
+drwxr-xr-x 1 runner runner     38 Sep  1 05:29 .config
+drwxr-xr-x 1 runner runner     28 Aug 30 21:55 dist
+-rw-r--r-- 1 runner runner    325 Aug 24 21:27 drizzle.config.ts
+-rw-r--r-- 1 runner runner    632 Aug 30 14:33 .env.example
+drwxr-xr-x 1 runner runner    166 Sep  1 06:32 .git
+drwxr-xr-x 1 runner runner     18 Sep  1 05:50 .github
+-rw-r--r-- 1 runner runner     67 Aug 24 21:27 .gitignore
+drwxr-xr-x 1 runner runner     10 Aug 24 21:09 .local
+drwxr-xr-x 1 runner runner   9864 Sep  1 06:01 node_modules
+-rw-r--r-- 1 runner runner   4061 Aug 31 22:07 package.json
+-rw-r--r-- 1 runner runner 395978 Sep  1 06:01 package-lock.json
+-rw-r--r-- 1 runner runner 748934 Sep  1 00:59 pawsitivecheck-android.tar.gz
+-rw-r--r-- 1 runner runner     80 Aug 24 21:27 postcss.config.js
+-rw-r--r-- 1 runner runner   1034 Sep  1 06:15 .replit
+-rw-r--r-- 1 runner runner   8671 Aug 30 14:30 replit.md
+drwxr-xr-x 1 runner runner    210 Aug 31 01:07 server
+drwxr-xr-x 1 runner runner     18 Aug 30 17:45 shared
+-rw-r--r-- 1 runner runner   4364 Aug 26 18:22 tailwind.config.ts
+-rw-r--r-- 1 runner runner    723 Aug 25 08:15 tsconfig.json
+drwxr-xr-x 1 runner runner     20 Sep  1 05:39 .upm
+-rw-r--r-- 1 runner runner    971 Aug 26 17:16 vite.config.ts
+On branch main
+nothing to commit, working tree clean
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gzOn branch main
+nothing to commit, working tree clean
+On branch main
+nothing to commit, working tree clean
+To https://github.com/pawsitivecheck-lang/pawsitivecheck.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/pawsitivecheck-lang/pawsitivecheck.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace$ 
