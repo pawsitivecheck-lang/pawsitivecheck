@@ -47,7 +47,6 @@ export default function Landing() {
     },
   });
 
-  // Real data queries to replace mock data
   const { data: communityReviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
     queryKey: ['/api/reviews'],
     queryFn: async () => {
