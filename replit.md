@@ -80,6 +80,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+### September 1, 2025 - Automated CI/CD Pipeline for Android Builds
+- **GitHub Actions Integration**: Set up automated Android APK builds eliminating need for local Android SDK
+- **Dual Workflow System**: 
+  - `android-build.yml`: Automatic debug builds on every push to main/master with 30-day artifact retention
+  - `android-release.yml`: Signed release builds triggered by version tags with automatic GitHub releases
+- **Capacitor Configuration**: Enhanced config with androidScheme and allowMixedContent for better compatibility
+- **Build Pipeline**: Complete web app → Android APK pipeline using Node.js 20, Java 17, and Android SDK
+- **Documentation**: Comprehensive setup guide in `.github/ANDROID_BUILD_SETUP.md` with usage instructions
+- **React Application Fixes**: Resolved critical "Invalid hook call" errors that were preventing app loading
+- **Production Build Verification**: Confirmed successful build process (1,261.90 kB bundle, 13.57s build time)
+
+## Recent Changes
+
 ### August 30, 2025 - Database Curation & Geographic Filtering
 - **Product Database Cleanup**: Removed 16 non-animal care products including human food items (hot dogs) and unverified "Unknown Brand" entries
 - **Geographic Market Focus**: Updated product sync logic to prioritize products sold in U.S. & Canada markets only
