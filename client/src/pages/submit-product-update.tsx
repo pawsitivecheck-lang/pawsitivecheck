@@ -82,14 +82,22 @@ export default function SubmitProductUpdate() {
 
   const handleGetUploadParameters = async () => {
     try {
+      console.log("handleGetUploadParameters called");
       const response = await apiRequest("POST", "/api/objects/upload");
+      console.log("Upload response received:", response);
       const uploadData = await response.json() as { uploadURL: string };
+      console.log("Upload data parsed:", uploadData);
       return {
         method: "PUT" as const,
         url: uploadData.uploadURL,
       };
     } catch (error) {
       console.error("Error getting upload URL:", error);
+      toast({
+        title: "Upload Error",
+        description: "Failed to get upload URL. Please try again.",
+        variant: "destructive",
+      });
       throw error;
     }
   };
