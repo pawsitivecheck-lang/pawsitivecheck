@@ -68,10 +68,7 @@ export function ObjectUploader({
   return (
     <div>
       <Button 
-        onClick={() => {
-          console.log("Upload button clicked, opening modal");
-          setShowModal(true);
-        }} 
+        onClick={() => setShowModal(true)} 
         className={buttonClassName}
         disabled={isLoading}
         data-testid="button-upload-image"

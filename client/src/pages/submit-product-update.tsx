@@ -93,11 +93,8 @@ export default function SubmitProductUpdate() {
 
   const handleGetUploadParameters = async () => {
     try {
-      console.log("handleGetUploadParameters called");
       const response = await apiRequest("POST", "/api/objects/upload");
-      console.log("Upload response received:", response);
       const uploadData = await response.json() as { uploadURL: string };
-      console.log("Upload data parsed:", uploadData);
       return {
         method: "PUT" as const,
         url: uploadData.uploadURL,
@@ -126,10 +123,6 @@ export default function SubmitProductUpdate() {
   };
 
   const onSubmit = (data: SubmitUpdateData) => {
-    console.log("Form submitted with data:", data);
-    console.log("Form errors:", form.formState.errors);
-    console.log("Form is valid:", form.formState.isValid);
-    
     // Validate required fields before submitting
     if (!data.title || data.title.trim().length === 0) {
       toast({
@@ -387,11 +380,6 @@ export default function SubmitProductUpdate() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 text-lg"
                   data-testid="button-submit-update"
-                  onClick={() => {
-                    console.log("Submit button clicked");
-                    console.log("Form state:", form.formState);
-                    console.log("Form values:", form.getValues());
-                  }}
                 >
                   {submitMutation.isPending ? (
                     <>
