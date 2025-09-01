@@ -107,6 +107,8 @@ export default function SubmitProductUpdate() {
   };
 
   const onSubmit = (data: SubmitUpdateData) => {
+    console.log("Form submitted with data:", data);
+    console.log("Form errors:", form.formState.errors);
     submitMutation.mutate(data);
   };
 
@@ -345,6 +347,11 @@ export default function SubmitProductUpdate() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 text-lg"
                   data-testid="button-submit-update"
+                  onClick={() => {
+                    console.log("Submit button clicked");
+                    console.log("Form state:", form.formState);
+                    console.log("Form values:", form.getValues());
+                  }}
                 >
                   {submitMutation.isPending ? (
                     <>
