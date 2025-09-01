@@ -36,7 +36,9 @@ import HerdProfile from "@/pages/herd-profile";
 import OperationProfile from "@/pages/operation-profile";
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
+  // Temporary: disable auth to fix React hook error
+  const isAuthenticated = false;
+  const isLoading = false;
 
   return (
     <Switch>

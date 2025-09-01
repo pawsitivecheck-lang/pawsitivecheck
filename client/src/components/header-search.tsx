@@ -671,8 +671,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               <Button
                 type="button"
                 onClick={() => {
-                  console.log('Scanner menu button clicked, current state:', showScannerMenu);
-                  alert('Scanner menu clicked - state: ' + showScannerMenu);
                   setShowScannerMenu(!showScannerMenu);
                 }}
                 variant="ghost"
@@ -697,7 +695,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <div className="space-y-1">
               <Button
                 onClick={() => {
-                  console.log('Barcode scanner button clicked');
                   setShowBarcodeScanner(true);
                   setShowScannerMenu(false);
                 }}
