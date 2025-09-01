@@ -37,7 +37,7 @@ export default function SubmitProductUpdate() {
   const form = useForm<SubmitUpdateData>({
     resolver: zodResolver(submitUpdateSchema),
     defaultValues: {
-      type: "info_correction",
+      type: "new_product",
       title: "",
       description: "",
       proposedChanges: {},
