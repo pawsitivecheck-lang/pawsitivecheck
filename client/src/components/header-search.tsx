@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -637,7 +637,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-background border border-border rounded-full px-10 pr-20 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
+              className="w-full bg-background border border-border rounded-full px-10 pr-24 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -647,7 +647,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 onClick={clearSearch}
                 variant="ghost"
                 size="sm"
-                className="absolute right-16 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                className="absolute right-20 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
@@ -659,7 +659,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               type="submit"
               variant="ghost"
               size="sm"
-              className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
+              className="absolute right-12 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
               disabled={!searchQuery.trim() || isLoading}
               data-testid="button-header-search"
             >
@@ -667,13 +667,17 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             </Button>
             
             {/* Scanner Menu Button */}
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
               <Button
                 type="button"
-                onClick={() => setShowScannerMenu(!showScannerMenu)}
+                onClick={() => {
+                  console.log('Scanner menu button clicked, current state:', showScannerMenu);
+                  alert('Scanner menu clicked - state: ' + showScannerMenu);
+                  setShowScannerMenu(!showScannerMenu);
+                }}
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
+                className="h-8 w-8 p-1 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full border border-blue-500/20"
                 disabled={isLoading}
                 data-testid="button-scanner-menu"
               >
@@ -689,10 +693,11 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Scanner Menu Dropdown */}
         {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-popover border border-border rounded-lg p-2 z-[60] shadow-lg">
+          <div className="absolute right-0 top-12 w-48 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg p-2 z-[60] shadow-xl">
             <div className="space-y-1">
               <Button
                 onClick={() => {
+                  console.log('Barcode scanner button clicked');
                   setShowBarcodeScanner(true);
                   setShowScannerMenu(false);
                 }}
