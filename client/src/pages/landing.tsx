@@ -131,7 +131,6 @@ export default function Landing() {
         <div className="hidden lg:block bg-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-center space-x-8 py-3">
-              <button onClick={() => scrollToSection('scanner')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-scan">Product Scanner</button>
               <button onClick={() => scrollToSection('database')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</button>
               <button onClick={() => scrollToSection('recalls')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</button>
               <Link to="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</Link>
@@ -319,7 +318,7 @@ export default function Landing() {
               <Button 
                 variant="outline"
                 size="lg"
-                onClick={() => scrollToSection('scanner')}
+                onClick={() => scrollToSection('database')}
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl min-h-[48px] sm:min-h-[56px] transition-all transform hover:scale-105 w-full sm:w-auto"
                 data-testid="button-learn-more"
               >
@@ -365,7 +364,7 @@ export default function Landing() {
       </div>
 
       {/* Service Cards */}
-      <section className="py-12 sm:py-16 bg-card" id="scanner">
+      <section className="py-12 sm:py-16 bg-card" id="features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Card className="p-4 sm:p-6 text-center border border-border hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-instant">

@@ -3,12 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { BarcodeScanner } from "@/components/barcode-scanner";
-import { ImageScanner } from "@/components/image-scanner";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock } from "lucide-react";
+import { Search, Globe, Loader2, X, Clock } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface HeaderSearchProps {
@@ -23,10 +21,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [showResults, setShowResults] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
-  const [showImageScanner, setShowImageScanner] = useState(false);
   const [showInternetSearch, setShowInternetSearch] = useState(false);
-  const [showScannerMenu, setShowScannerMenu] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -505,110 +500,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
   };
 
-  const scanProductMutation = useMutation({
-    mutationFn: async (barcodeInput: string) => {
-      try {
-        // First try to find existing product by barcode
-        const localRes = await fetch(`/api/products/barcode/${barcodeInput}`);
-        if (localRes.ok) {
-          const product = await localRes.json();
-          return { source: 'local', product };
-        }
-        
-        // If not found locally, search the internet
-        const internetRes = await apiRequest('POST', '/api/products/internet-search', {
-          type: 'barcode',
-          query: barcodeInput
-        });
-        
-        if (internetRes.ok) {
-          const result = await internetRes.json();
-          return result;
-        }
-        
-        return null;
-      } catch (error) {
-        throw error;
-      }
-    },
-    onSuccess: (result) => {
-      if (result?.product) {
-        // Navigate to scanner page with product
-        setLocation('/product-scanner');
-        toast({
-          title: `Product Found!`,
-          description: result.source === 'local' 
-            ? "Found in product database" 
-            : "Discovered through internet search",
-        });
-      } else {
-        toast({
-          title: "Product Not Found",
-          description: "Product not found in our database",
-          variant: "destructive",
-        });
-      }
-    },
-    onError: () => {
-      toast({
-        title: "Scan Failed",
-        description: "Unable to scan product barcode",
-        variant: "destructive",
-      });
-    },
-  });
 
-  const imageSearchMutation = useMutation({
-    mutationFn: async (imageData: string) => {
-      const res = await apiRequest('POST', '/api/products/internet-search', {
-        type: 'image',
-        query: imageData
-      });
-      
-      if (res.ok) {
-        const result = await res.json();
-        return result;
-      }
-      
-      return null;
-    },
-    onSuccess: (result) => {
-      if (result?.product) {
-        setLocation('/product-scanner');
-        toast({
-          title: "Product Identified!",
-          description: "Product successfully identified from image",
-        });
-      } else {
-        toast({
-          title: "Product Not Recognized",
-          description: "Unable to identify product from image",
-          variant: "destructive",
-        });
-      }
-    },
-    onError: () => {
-      toast({
-        title: "Image Analysis Failed",
-        description: "Unable to analyze product image",
-        variant: "destructive",
-      });
-    },
-  });
 
-  const handleBarcodeScanned = (barcode: string) => {
-    setShowBarcodeScanner(false);
-    setShowScannerMenu(false);
-    scanProductMutation.mutate(barcode);
-  };
 
-  const handleImageScanned = (imageData: string) => {
-    setShowImageScanner(false);
-    setShowScannerMenu(false);
-    imageSearchMutation.mutate(imageData);
-  };
-
-  const isLoading = searchMutation.isPending || scanProductMutation.isPending || imageSearchMutation.isPending;
+  const isLoading = searchMutation.isPending || internetSearchMutation.isPending;
 
   return (
     <>
@@ -619,7 +514,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products or scan... (Press Tab to autofill)"
+              placeholder="Search products... (Press Tab to autofill)"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -634,7 +529,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-background border border-border rounded-full px-10 pr-20 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
+              className="w-full bg-background border border-border rounded-full px-10 pr-12 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
@@ -663,73 +558,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               <Search className="h-4 w-4" />
             </Button>
             
-            {/* Scanner Menu Button */}
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-              <Button
-                type="button"
-                onClick={() => setShowScannerMenu(!showScannerMenu)}
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full"
-                disabled={isLoading}
-                data-testid="button-scanner-menu"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Camera className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
           </div>
         </form>
 
-        {/* Scanner Menu Dropdown */}
-        {showScannerMenu && (
-          <div className="absolute right-0 top-12 w-48 bg-popover border border-border rounded-lg p-2 z-[60] shadow-lg">
-            <div className="space-y-1">
-              <Button
-                onClick={() => {
-                  setShowBarcodeScanner(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-barcode-scanner"
-              >
-                <Scan className="mr-2 h-4 w-4" />
-                Barcode Scanner
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowImageScanner(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-image-scanner"
-              >
-                <Image className="mr-2 h-4 w-4" />
-                Image Scanner
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowInternetSearch(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-internet-search"
-              >
-                <Globe className="mr-2 h-4 w-4" />
-                Internet Search
-              </Button>
-            </div>
-          </div>
-        )}
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || (searchQuery.length === 0 && recentSearches.length > 0)) && (
@@ -862,18 +693,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
       </div>
 
-      {/* Scanner Modals */}
-      <BarcodeScanner
-        isActive={showBarcodeScanner}
-        onScan={handleBarcodeScanned}
-        onClose={() => setShowBarcodeScanner(false)}
-      />
-      
-      <ImageScanner
-        isActive={showImageScanner}
-        onScan={handleImageScanned}
-        onClose={() => setShowImageScanner(false)}
-      />
 
       {/* Internet Search Modal */}
       {showInternetSearch && (
