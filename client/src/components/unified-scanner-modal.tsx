@@ -250,7 +250,6 @@ export function UnifiedScannerModal({
           Html5QrcodeSupportedFormats.UPC_E,
           Html5QrcodeSupportedFormats.QR_CODE
         ],
-        rememberLastUsedCamera: false,
       });
 
       // Get camera constraints based on device
