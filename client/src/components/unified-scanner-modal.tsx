@@ -175,10 +175,9 @@ export function UnifiedScannerModal({
     
     try {
       // For mobile apps (Capacitor), use Capacitor Camera permission
-      if (typeof (window as any).Capacitor !== 'undefined') {
-        // Dynamically import Capacitor Camera to avoid breaking web version
-        const { Camera: CapacitorCamera } = await import('@capacitor/camera');
-        const permissions = await CapacitorCamera.requestPermissions();
+      if (typeof window !== 'undefined' && (window as any).Capacitor && (window as any).CapacitorCamera) {
+        // Use already available Capacitor Camera API
+        const permissions = await (window as any).CapacitorCamera.requestPermissions();
         if (permissions.camera === 'granted') {
           setShowScanner(true);
           toast({
