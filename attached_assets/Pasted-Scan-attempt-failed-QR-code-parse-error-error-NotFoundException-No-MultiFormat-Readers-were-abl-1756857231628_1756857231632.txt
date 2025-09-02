@@ -1,0 +1,35 @@
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Toast: Login Required
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.

@@ -34,6 +34,8 @@ export function UnifiedScannerModal({
   const [permissionRequested, setPermissionRequested] = useState(false);
   const [cameraError, setCameraError] = useState<string>("");
   const [isScannerReady, setIsScannerReady] = useState(false);
+  const [lastScannedCode, setLastScannedCode] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcode: string) => {
@@ -58,6 +60,8 @@ export function UnifiedScannerModal({
       return null;
     },
     onSuccess: (result) => {
+      setIsProcessing(false);
+      
       if (result?.product) {
         const successMessage = result.source === 'local' 
           ? "Found in safety database" 
@@ -91,6 +95,8 @@ export function UnifiedScannerModal({
       }
     },
     onError: (error: any) => {
+      setIsProcessing(false);
+      
       // Check if it's an authentication error
       if (error?.message?.includes('401') || error?.message?.includes('Unauthorized')) {
         toast({
@@ -104,17 +110,35 @@ export function UnifiedScannerModal({
       }
       
       toast({
-        title: "Scan Failed",
+        title: "Scan Failed", 
         description: "Unable to scan this product barcode",
         variant: "destructive",
       });
       
-      // Restart scanner after error
+      // Reset state and restart scanner after error
+      setLastScannedCode("");
       setShowScanner(true);
     },
   });
 
   const onScanSuccess = useCallback((decodedText: string) => {
+    // Prevent duplicate scans of the same code
+    if (isProcessing || lastScannedCode === decodedText) {
+      return;
+    }
+
+    setIsProcessing(true);
+    setLastScannedCode(decodedText);
+    
+    // Stop scanner immediately to prevent more scans
+    if (scannerRef.current) {
+      try {
+        scannerRef.current.stop();
+      } catch (e) {
+        console.debug('Scanner stop error:', e);
+      }
+    }
+    
     // Immediate feedback for successful scan
     playSuccessSound();
     showScanSuccess();
@@ -124,7 +148,7 @@ export function UnifiedScannerModal({
       setShowScanner(false);
       scanProductMutation.mutate(decodedText);
     }, 500);
-  }, [scanProductMutation]);
+  }, [scanProductMutation, isProcessing, lastScannedCode]);
 
   const playSuccessSound = () => {
     // Create a brief success beep
@@ -345,10 +369,13 @@ export function UnifiedScannerModal({
       .then(stream => stream.getTracks().forEach(track => track.stop()))
       .catch(() => {}); // Ignore errors
     
+    // Reset all states
     setShowScanner(false);
     setPermissionRequested(false);
     setCameraError("");
     setIsScannerReady(false);
+    setIsProcessing(false);
+    setLastScannedCode("");
     onClose();
   };
 
