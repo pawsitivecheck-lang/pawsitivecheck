@@ -52,6 +52,19 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
+          // First explicitly request camera permission
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+              video: { 
+                facingMode: 'environment' // Prefer rear camera on mobile
+              } 
+            });
+            // Permission granted - close the test stream
+            stream.getTracks().forEach(track => track.stop());
+          } catch (permissionError) {
+            throw new Error('Camera permission denied. Please allow camera access and try again.');
+          }
+
           // Check if camera is available
           const devices = await navigator.mediaDevices.enumerateDevices();
           const hasCamera = devices.some(device => device.kind === 'videoinput');
@@ -106,8 +119,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           
           // Provide more specific error messages
           let friendlyMessage = errorMessage;
-          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied')) {
-            friendlyMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
+          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied') || errorMessage.includes('Camera permission denied')) {
+            friendlyMessage = 'Camera permission denied. Please allow camera access in your browser settings and refresh the page.';
           } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
             friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
           } else if (errorMessage.includes('NotReadableError')) {
