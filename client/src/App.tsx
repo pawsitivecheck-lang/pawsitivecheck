@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useAuth } from "./hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
@@ -35,9 +36,7 @@ import HerdProfile from "@/pages/herd-profile";
 import OperationProfile from "@/pages/operation-profile";
 
 function Router() {
-  // Simplified for troubleshooting - disable auth temporarily
-  const isAuthenticated = false;
-  const isLoading = false;
+  const { isAuthenticated, isLoading } = useAuth();
 
   return (
     <Switch>
