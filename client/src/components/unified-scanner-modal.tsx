@@ -395,7 +395,7 @@ export function UnifiedScannerModal({
               <div className="space-y-2">
                 <p className="text-gray-700">Requesting camera permission...</p>
                 <p className="text-sm text-gray-500">
-                  Please allow camera access in your browser
+                  Please allow camera access to scan barcodes
                 </p>
               </div>
             </div>
