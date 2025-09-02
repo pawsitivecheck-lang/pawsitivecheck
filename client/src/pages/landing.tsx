@@ -12,16 +12,14 @@ import HelpTooltip from "@/components/help-tooltip";
 import DNTIndicator from "@/components/dnt-indicator";
 import Footer from "@/components/footer";
 import PWAInstallButton from "@/components/pwa-install-button";
-// Temporarily remove useQuery and useAuth imports to isolate React errors
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 
 export default function Landing() {
-  // Temporarily use static values to isolate React errors
-  const user = null;
-  const isAuthenticated = false;
-  const isLoading = false;
+  const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Smooth scroll to section function
@@ -33,15 +31,41 @@ export default function Landing() {
     setIsMobileMenuOpen(false);
   };
   
-  // Use static data temporarily
-  const featuredProducts = [];
-  const recalls = [];
-  const communityReviews = [];
-  const reviewsLoading = false;
-  const reviewsError = null;
-  const analytics = { productsAnalyzed: 80, activeUsers: 1250, totalReviews: 3200 };
-  const analyticsLoading = false;
-  const analyticsError = null;
+  const { data: featuredProducts } = useQuery({
+    queryKey: ['/api/products'],
+    queryFn: async () => {
+      const res = await fetch('/api/products?limit=3');
+      return await res.json();
+    },
+  });
+
+  const { data: recalls } = useQuery({
+    queryKey: ['/api/recalls'],
+    queryFn: async () => {
+      const res = await fetch('/api/recalls');
+      return await res.json();
+    },
+  });
+
+  const { data: communityReviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
+    queryKey: ['/api/reviews'],
+    queryFn: async () => {
+      const res = await fetch('/api/reviews?limit=3&featured=true');
+      if (!res.ok) throw new Error('Failed to fetch reviews');
+      return await res.json();
+    },
+    retry: 1,
+  });
+
+  const { data: analytics, isLoading: analyticsLoading, error: analyticsError } = useQuery({
+    queryKey: ['/api/analytics'],
+    queryFn: async () => {
+      const res = await fetch('/api/analytics/dashboard');
+      if (!res.ok) throw new Error('Failed to fetch analytics');
+      return await res.json();
+    },
+    retry: 1,
+  });
 
   return (
     <div className="min-h-screen bg-background w-full overflow-x-hidden">
@@ -603,7 +627,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Admin Dashboard Preview */}
+      {/* Admin Dashboard Preview - Only visible to admins */}
+      {isAdmin && (
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-muted" id="admin">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
@@ -697,6 +722,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      )}
 
       {/* Pre-footer Ad */}
       <div className="bg-card py-6 border-t border-border">
