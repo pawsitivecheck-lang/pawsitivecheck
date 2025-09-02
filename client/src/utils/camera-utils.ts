@@ -58,20 +58,15 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
         // ChromeOS: Use simplest possible constraints
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
       } else {
-        // Other platforms: Try rear camera first, fallback to any camera
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { 
-              facingMode: 'environment',
-              frameRate: { ideal: 30 },
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            }
-          });
-        } catch (facingModeError) {
-          console.log('Rear camera failed, trying any camera:', facingModeError);
-          stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        }
+        // Force rear camera on mobile devices without fallback
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: { exact: 'environment' }, // Force rear camera
+            frameRate: { ideal: 30 },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        });
       }
       
       // Close test stream immediately

@@ -272,15 +272,15 @@ export function UnifiedScannerModal({
             Html5QrcodeSupportedFormats.QR_CODE
           ],
           aspectRatio: isMobile ? 1.0 : 1.777778,
-          disableFlip: false,
-          rememberLastUsedCamera: true,
+          disableFlip: true, // Disable camera flip to force rear camera
+          rememberLastUsedCamera: false, // Don't remember to avoid conflicts
           showTorchButtonIfSupported: true,
           showZoomSliderIfSupported: true,
           defaultZoomValueIfSupported: 1,
-          // ChromeOS compatible camera constraints
+          // Force rear camera for all devices except ChromeOS
           videoConstraints: /CrOS/.test(navigator.userAgent) 
             ? {} // No constraints for ChromeOS 
-            : { facingMode: 'environment' }, // Prefer rear camera on mobile
+            : { facingMode: { exact: 'environment' } }, // Force rear camera on mobile
         },
         false // verbose
       );
