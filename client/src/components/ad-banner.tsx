@@ -12,11 +12,16 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    try {
-      // Initialize AdSense ads
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-    } catch (err) {
-      console.error("AdSense error:", err);
+    // Only initialize AdSense in production or when explicitly enabled
+    if (import.meta.env.VITE_ADSENSE_CLIENT_ID && typeof window !== 'undefined') {
+      try {
+        // Ensure adsbygoogle array exists before pushing
+        if ((window as any).adsbygoogle) {
+          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+        }
+      } catch (err) {
+        console.warn("AdSense initialization skipped:", err);
+      }
     }
   }, []);
 
