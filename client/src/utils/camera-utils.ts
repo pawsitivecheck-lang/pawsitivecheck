@@ -47,16 +47,32 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       };
     }
     
-    // Request camera access with rear camera preference
+    // Request camera access with ChromeOS compatibility
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment', // Prefer rear camera with fallback
-          frameRate: { ideal: 30 },
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        } 
-      });
+      // Detect ChromeOS
+      const isChromebook = /CrOS/.test(navigator.userAgent);
+      console.log('ChromeOS detected:', isChromebook);
+      
+      let stream;
+      if (isChromebook) {
+        // ChromeOS: Use simplest possible constraints
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      } else {
+        // Other platforms: Try rear camera first, fallback to any camera
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { 
+              facingMode: 'environment',
+              frameRate: { ideal: 30 },
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          });
+        } catch (facingModeError) {
+          console.log('Rear camera failed, trying any camera:', facingModeError);
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+      }
       
       // Close test stream immediately
       stream.getTracks().forEach(track => track.stop());

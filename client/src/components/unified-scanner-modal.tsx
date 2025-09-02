@@ -277,10 +277,10 @@ export function UnifiedScannerModal({
           showTorchButtonIfSupported: true,
           showZoomSliderIfSupported: true,
           defaultZoomValueIfSupported: 1,
-          // Prefer rear camera for barcode scanning (flexible fallback)
-          videoConstraints: {
-            facingMode: 'environment' // Prefer rear camera but allow fallback
-          },
+          // ChromeOS compatible camera constraints
+          videoConstraints: /CrOS/.test(navigator.userAgent) 
+            ? {} // No constraints for ChromeOS 
+            : { facingMode: 'environment' }, // Prefer rear camera on mobile
         },
         false // verbose
       );
