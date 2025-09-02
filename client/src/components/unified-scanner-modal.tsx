@@ -279,7 +279,6 @@ export function UnifiedScannerModal({
           Html5QrcodeSupportedFormats.RSS_EXPANDED,
         ],
         useBarCodeDetectorIfSupported: true,
-        rememberLastUsedCamera: true,
       });
 
       // Get camera constraints based on device
@@ -301,7 +300,6 @@ export function UnifiedScannerModal({
           },
           aspectRatio: isMobile ? 1.0 : 1.777778,
           disableFlip: false, // Allow image flipping for better detection
-          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
         },
         onScanSuccess,
         onScanFailure
