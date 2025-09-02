@@ -68,26 +68,25 @@ export function UnifiedScannerModal({
           description: successMessage,
         });
 
-        // Handle different modes
-        if (mode === "quick") {
-          // Quick mode: navigate directly to product detail
-          onProductFound?.(result.product);
-        } else if (mode === "full") {
-          // Full mode: navigate to product scanner page
-          setLocation('/product-scanner');
-        } else if (mode === "search") {
-          // Search mode: trigger search callback
-          onSearchResult?.(result.product.name, result.product);
-        }
-        
+        // Navigate to product detail page
+        setLocation(`/product/${result.product.id}`);
         onClose();
       } else {
+        // Product not found - offer to add it
         toast({
           title: "Product Not Found",
-          description: mode === "quick" 
-            ? "This product is not in our database yet."
-            : "Product not found in our database",
+          description: "Would you like to add this product to our database?",
           variant: "destructive",
+          action: (
+            <div className="space-x-2">
+              <Button size="sm" onClick={() => {
+                onClose();
+                setLocation('/add-product');
+              }}>
+                Add Product
+              </Button>
+            </div>
+          ),
         });
       }
     },
