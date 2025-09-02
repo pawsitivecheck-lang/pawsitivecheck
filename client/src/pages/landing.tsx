@@ -25,6 +25,11 @@ export default function Landing() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showMobileAuth, setShowMobileAuth] = useState(false);
   const { isMobile } = useMobile();
+  
+  // Debug mobile detection
+  useEffect(() => {
+    console.log('Landing page - isMobile:', isMobile);
+  }, [isMobile]);
 
   // Smooth scroll to section function
   const scrollToSection = (sectionId: string) => {
