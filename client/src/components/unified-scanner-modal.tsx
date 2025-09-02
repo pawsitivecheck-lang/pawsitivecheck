@@ -7,6 +7,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
 type ScannerMode = "quick" | "full" | "search";
@@ -174,48 +175,23 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
-      // Check if we're in a Capacitor app (Android)
-      if (typeof window !== 'undefined' && (window as any).Capacitor) {
-        try {
-          // Try to use Capacitor camera permissions for Android
-          const { Camera } = await import('@capacitor/camera');
-          const permissions = await Camera.requestPermissions();
-          
-          if (permissions.camera === 'granted') {
-            setShowScanner(true);
-            toast({
-              title: "Camera Access Granted",
-              description: "Point your camera at a product barcode to scan",
-            });
-            return;
-          } else {
-            throw new Error('Camera permission denied by user');
-          }
-        } catch (capacitorError) {
-          console.log('Capacitor camera not available, falling back to standard web API');
-          // Fall through to standard web API
-        }
-      }
+      const permissionGranted = await utilsRequestCameraPermission();
       
-      // Standard web browser camera permission
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment' // Prefer rear camera on mobile
-        } 
-      });
-      // Permission granted - close the test stream
-      stream.getTracks().forEach(track => track.stop());
-      setShowScanner(true);
-      toast({
-        title: "Camera Access Granted",
-        description: "Point your camera at a product barcode to scan",
-      });
+      if (permissionGranted) {
+        setShowScanner(true);
+        toast({
+          title: "Camera Access Granted",
+          description: `Point your camera at a product barcode to scan${isCapacitorApp() ? ' (Android)' : ' (Web)'}`,
+        });
+      } else {
+        throw new Error('Camera permission denied by user');
+      }
     } catch (error) {
       console.error('Camera permission error:', error);
       setCameraError("Camera permission denied. Please allow camera access and try again.");
       setPermissionRequested(false);
       toast({
-        title: "Camera Permission Denied",
+        title: "Camera Permission Denied", 
         description: "Please allow camera access to scan barcodes",
         variant: "destructive",
       });
