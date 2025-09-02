@@ -288,16 +288,11 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               </Button>
             </div>
           ) : (
-            <div>
+            <div className="relative">
               <div className="text-center mb-4">
                 <p className="text-foreground text-sm mb-2" data-testid="text-scanner-instructions">
                   🔮 Point your camera at a barcode. The cosmic scanner will automatically detect and analyze the mystical signature.
                 </p>
-                <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mt-3">
-                  <p className="text-blue-700 dark:text-blue-300 text-xs font-medium" data-testid="text-permission-reminder">
-                    📱 <strong>Important:</strong> When your browser asks for camera permission, please tap/click <strong>"Allow"</strong> or <strong>"Request Camera Permissions"</strong> to start scanning.
-                  </p>
-                </div>
               </div>
               
               <div 
@@ -307,11 +302,14 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               />
 
               {!isScannerReady && (
-                <div className="absolute inset-0 flex items-center justify-center bg-background/90">
+                <div className="absolute inset-0 flex items-center justify-center bg-background/90 rounded-lg">
                   <div className="text-center">
                     <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
                     <p className="text-foreground font-medium" data-testid="text-scanner-loading">
                       🔮 Initializing cosmic scanner...
+                    </p>
+                    <p className="text-muted-foreground text-xs mt-2" data-testid="text-permission-hint">
+                      Your browser may ask for camera permissions
                     </p>
                   </div>
                 </div>
