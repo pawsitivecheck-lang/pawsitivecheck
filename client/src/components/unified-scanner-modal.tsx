@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2, Shield, Clock, Ban } from "lucide-react";
+import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import type { Product } from "@shared/schema";
 
@@ -31,7 +31,6 @@ export function UnifiedScannerModal({
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
   const [showScanner, setShowScanner] = useState(false);
   const [permissionRequested, setPermissionRequested] = useState(false);
-  const [showPermissionDialog, setShowPermissionDialog] = useState(false);
   const [cameraError, setCameraError] = useState<string>("");
   const [isScannerReady, setIsScannerReady] = useState(false);
 
@@ -110,12 +109,7 @@ export function UnifiedScannerModal({
     console.debug('Scan attempt failed:', error);
   }, []);
 
-  const checkStoredPermission = () => {
-    const storedPermission = localStorage.getItem('camera-permission-preference');
-    return storedPermission === 'always-allow';
-  };
-
-  const requestCameraPermission = async (skipDialog = false) => {
+  const requestCameraPermission = async () => {
     setPermissionRequested(true);
     setCameraError("");
     
@@ -128,7 +122,6 @@ export function UnifiedScannerModal({
       // Permission granted - close the test stream
       stream.getTracks().forEach(track => track.stop());
       setShowScanner(true);
-      setShowPermissionDialog(false);
       toast({
         title: "Camera Access Granted",
         description: "Point your camera at a product barcode to scan",
@@ -137,41 +130,11 @@ export function UnifiedScannerModal({
       console.error('Camera permission error:', error);
       setCameraError("Camera permission denied. Please allow camera access and try again.");
       setPermissionRequested(false);
-      setShowPermissionDialog(false);
       toast({
         title: "Camera Permission Denied",
         description: "Please allow camera access to scan barcodes",
         variant: "destructive",
       });
-    }
-  };
-
-  const handlePermissionChoice = async (choice: 'always' | 'once' | 'deny') => {
-    switch (choice) {
-      case 'always':
-        localStorage.setItem('camera-permission-preference', 'always-allow');
-        await requestCameraPermission(true);
-        break;
-      case 'once':
-        await requestCameraPermission(true);
-        break;
-      case 'deny':
-        setShowPermissionDialog(false);
-        toast({
-          title: "Camera Access Denied",
-          description: "Camera access is required to scan barcodes",
-          variant: "destructive",
-        });
-        break;
-    }
-  };
-
-  const initiatePermissionFlow = () => {
-    // Check if user has previously selected "Always Allow"
-    if (checkStoredPermission()) {
-      requestCameraPermission(true);
-    } else {
-      setShowPermissionDialog(true);
     }
   };
 
@@ -255,7 +218,6 @@ export function UnifiedScannerModal({
   const handleClose = () => {
     setShowScanner(false);
     setPermissionRequested(false);
-    setShowPermissionDialog(false);
     setCameraError("");
     setIsScannerReady(false);
     onClose();
@@ -265,7 +227,6 @@ export function UnifiedScannerModal({
     setCameraError("");
     setPermissionRequested(false);
     setShowScanner(false);
-    setShowPermissionDialog(false);
     setIsScannerReady(false);
   };
 
@@ -290,20 +251,16 @@ export function UnifiedScannerModal({
     }
   }, [isOpen]);
 
-  // Reset state when modal opens
+  // Reset state when modal opens and auto-request camera permission
   useEffect(() => {
     if (isOpen) {
       setShowScanner(false);
       setPermissionRequested(false);
-      setShowPermissionDialog(false);
       setCameraError("");
       setIsScannerReady(false);
       
-      // Auto-request if user previously chose "Always Allow"
-      if (checkStoredPermission()) {
-        requestCameraPermission(true);
-      }
-      // Otherwise, the default state will show the permission dialog automatically
+      // Automatically request camera permission when modal opens
+      requestCameraPermission();
     }
   }, [isOpen]);
 
@@ -357,55 +314,18 @@ export function UnifiedScannerModal({
               </Button>
             </div>
           ) : !permissionRequested && !showScanner ? (
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-4">
               <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <Shield className="h-8 w-8 text-white" />
+                <Camera className="h-8 w-8 text-white" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">Camera Permission Required</h3>
-                <p className="text-gray-600">
-                  {getModeDescription()}
+                <p className="text-gray-700">
+                  Requesting camera access...
                 </p>
                 <p className="text-sm text-gray-500">
-                  How would you like to grant camera access?
+                  {getModeDescription()}
                 </p>
               </div>
-              
-              <div className="space-y-3">
-                <Button 
-                  onClick={() => handlePermissionChoice('always')}
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
-                  data-testid="button-always-allow"
-                >
-                  <Shield className="mr-2 h-4 w-4" />
-                  Always Allow
-                  <span className="ml-2 text-xs opacity-80">(Recommended)</span>
-                </Button>
-                
-                <Button 
-                  onClick={() => handlePermissionChoice('once')}
-                  variant="outline"
-                  className="w-full border-blue-300 text-blue-600 hover:bg-blue-50"
-                  data-testid="button-just-once"
-                >
-                  <Clock className="mr-2 h-4 w-4" />
-                  Just This Time
-                </Button>
-                
-                <Button 
-                  onClick={() => handlePermissionChoice('deny')}
-                  variant="outline"
-                  className="w-full border-red-300 text-red-600 hover:bg-red-50"
-                  data-testid="button-deny"
-                >
-                  <Ban className="mr-2 h-4 w-4" />
-                  Deny Access
-                </Button>
-              </div>
-              
-              <p className="text-xs text-gray-400 mt-4">
-                You can change this preference later in your browser settings
-              </p>
             </div>
           ) : permissionRequested && !showScanner ? (
             <div className="text-center space-y-4">
