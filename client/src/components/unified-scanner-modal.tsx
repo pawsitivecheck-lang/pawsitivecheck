@@ -169,21 +169,14 @@ export function UnifiedScannerModal({
   }, []);
 
   const requestCameraPermission = async () => {
-    setPermissionRequested(true);
     setCameraError("");
     
     try {
-      // Reset any cached permission state before requesting fresh permission
-      setShowScanner(false);
-      setPermissionRequested(false);
-      
-      // Small delay to ensure state is reset
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      setPermissionRequested(true);
       const result = await utilsRequestCameraPermission();
       
       if (result.granted) {
+        // Immediately show scanner without permission screen
+        setPermissionRequested(false);
         setShowScanner(true);
         
         // Different message based on permission type
@@ -367,10 +360,19 @@ export function UnifiedScannerModal({
       setCameraError("");
       setIsScannerReady(false);
       
-      // Small delay then automatically request fresh camera permission
-      const timer = setTimeout(() => {
-        requestCameraPermission();
-      }, 200);
+      // Automatically start scanner without permission screen delay
+      const timer = setTimeout(async () => {
+        const result = await utilsRequestCameraPermission();
+        if (result.granted) {
+          setShowScanner(true);
+          toast({
+            title: "Camera Access Granted",
+            description: "Point your camera at a product barcode to scan.",
+          });
+        } else {
+          setCameraError(result.message || 'Camera permission denied');
+        }
+      }, 100);
       
       return () => clearTimeout(timer);
     }
