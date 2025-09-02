@@ -30,23 +30,25 @@ export default function AdminProductSubmissions() {
   const [adminNotes, setAdminNotes] = useState('');
 
   // Hooks must always be called, use enabled to control when query runs
-  const { data: submissions, isLoading } = useQuery({
+  const { data: submissions = [], isLoading } = useQuery({
     queryKey: ['/api/admin/product-update-submissions', selectedStatus],
-    queryFn: () => {
+    queryFn: async () => {
       const url = selectedStatus === 'all' 
         ? '/api/admin/product-update-submissions'
         : `/api/admin/product-update-submissions?status=${selectedStatus}`;
-      return apiRequest(url);
+      const response = await apiRequest('GET', url);
+      return response.json();
     },
-    enabled: !authLoading && user?.isAdmin,
+    enabled: !authLoading && !!user?.isAdmin,
   });
 
   const reviewMutation = useMutation({
     mutationFn: async ({ id, status, adminNotes }: { id: number; status: string; adminNotes: string }) => {
-      return apiRequest(`/api/admin/product-update-submissions/${id}/review`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status, adminNotes }),
+      const response = await apiRequest('PATCH', `/api/admin/product-update-submissions/${id}/review`, {
+        status, 
+        adminNotes,
       });
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -178,7 +180,7 @@ export default function AdminProductSubmissions() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mx-auto"></div>
             <p className="text-purple-200 mt-4">Loading submissions...</p>
           </div>
-        ) : submissions?.length === 0 ? (
+        ) : submissions.length === 0 ? (
           <Card className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
             <CardContent className="pt-8 text-center">
               <FileText className="h-12 w-12 text-purple-400 mx-auto mb-4" />
@@ -188,19 +190,19 @@ export default function AdminProductSubmissions() {
           </Card>
         ) : (
           <div className="space-y-6">
-            {submissions?.map((submission: ProductUpdateSubmission) => (
+            {submissions.map((submission: ProductUpdateSubmission) => (
               <Card key={submission.id} className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-white flex items-center gap-3">
                         <Package className="h-5 w-5 text-purple-400" />
-                        {submission.title}
-                        {getStatusBadge(submission.status)}
+                        {submission.title || 'Untitled Submission'}
+                        {getStatusBadge(submission.status || 'pending')}
                       </CardTitle>
                       <CardDescription className="text-purple-200 mt-2">
                         Type: {submission.type.replace('_', ' ').toUpperCase()} • 
-                        Submitted {formatDistanceToNow(new Date(submission.submittedAt), { addSuffix: true })}
+                        Submitted {submission.submittedAt ? formatDistanceToNow(new Date(submission.submittedAt), { addSuffix: true }) : 'Recently'}
                       </CardDescription>
                     </div>
                     <Button
@@ -238,7 +240,7 @@ export default function AdminProductSubmissions() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4" />
-                        {new Date(submission.submittedAt).toLocaleDateString()}
+                        {submission.submittedAt ? new Date(submission.submittedAt).toLocaleDateString() : 'N/A'}
                       </div>
                     </div>
 
