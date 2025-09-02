@@ -216,6 +216,14 @@ export function UnifiedScannerModal({
     if (!showScanner || scannerRef.current) return;
     
     try {
+      // First, release any existing camera streams to prevent conflicts
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop());
+      } catch (e) {
+        // Ignore errors - no existing stream
+      }
+
       // Clear any existing scanner first
       const existingScanner = document.getElementById("unified-barcode-scanner-container");
       if (existingScanner) {
@@ -226,8 +234,8 @@ export function UnifiedScannerModal({
       setPermissionRequested(false);
       setCameraError("");
       
-      // Small delay to ensure DOM is ready
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Small delay to ensure camera is released and DOM is ready
+      await new Promise(resolve => setTimeout(resolve, 300));
 
       // Check if camera is available
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -260,15 +268,6 @@ export function UnifiedScannerModal({
             };
           },
           aspectRatio: isMobile ? 1.0 : 1.777778,
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.CODE_128,
-            Html5QrcodeSupportedFormats.CODE_39,
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E,
-            Html5QrcodeSupportedFormats.QR_CODE
-          ],
         },
         onScanSuccess,
         onScanFailure
@@ -394,12 +393,15 @@ export function UnifiedScannerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="scanner-dialog-description">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5 text-blue-600" />
             {getModeTitle()}
           </DialogTitle>
+          <p id="scanner-dialog-description" className="sr-only">
+            {getModeDescription()}
+          </p>
         </DialogHeader>
 
         <div className="space-y-4">
