@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
-import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp, triggerHapticFeedback } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
@@ -29,7 +29,7 @@ export function UnifiedScannerModal({
 }: UnifiedScannerModalProps) {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const scannerRef = useRef<Html5Qrcode | null>(null);
   const [showScanner, setShowScanner] = useState(false);
   const [permissionRequested, setPermissionRequested] = useState(false);
   const [cameraError, setCameraError] = useState<string>("");
@@ -240,8 +240,26 @@ export function UnifiedScannerModal({
       // Better configuration for mobile devices
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      const scanner = new Html5QrcodeScanner(
-        "unified-barcode-scanner-container",
+      const scanner = new Html5Qrcode("unified-barcode-scanner-container", {
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.CODE_128,
+          Html5QrcodeSupportedFormats.CODE_39,
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+          Html5QrcodeSupportedFormats.QR_CODE
+        ],
+        rememberLastUsedCamera: false,
+      });
+
+      // Get camera constraints based on device
+      const cameraConstraints = /CrOS/.test(navigator.userAgent) 
+        ? { facingMode: "environment" } // ChromeOS - flexible
+        : { facingMode: { ideal: "environment" } }; // Mobile - prefer rear
+
+      await scanner.start(
+        cameraConstraints,
         {
           fps: isMobile ? 5 : 10,
           qrbox: function(viewfinderWidth, viewfinderHeight) {
@@ -252,31 +270,11 @@ export function UnifiedScannerModal({
               height: Math.floor(qrboxSize * 0.6) // Rectangle for barcodes
             };
           },
-          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.CODE_128,
-            Html5QrcodeSupportedFormats.CODE_39,
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E,
-            Html5QrcodeSupportedFormats.QR_CODE
-          ],
           aspectRatio: isMobile ? 1.0 : 1.777778,
-          disableFlip: true, // Disable camera flip to force rear camera
-          rememberLastUsedCamera: false, // Don't remember to avoid conflicts
-          showTorchButtonIfSupported: true,
-          showZoomSliderIfSupported: true,
-          defaultZoomValueIfSupported: 1,
-          // Force rear camera for all devices except ChromeOS
-          videoConstraints: /CrOS/.test(navigator.userAgent) 
-            ? {} // No constraints for ChromeOS 
-            : { facingMode: { exact: 'environment' } }, // Force rear camera on mobile
         },
-        false // verbose
+        onScanSuccess,
+        onScanFailure
       );
-
-      await scanner.render(onScanSuccess, onScanFailure);
       scannerRef.current = scanner;
       setIsScannerReady(true);
       setPermissionRequested(false); // Clear permission state
