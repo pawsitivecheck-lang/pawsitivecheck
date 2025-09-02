@@ -130,19 +130,6 @@ export default function Landing() {
           </div>
         </div>
         
-        {/* Category Navigation Bar - Hidden on mobile */}
-        <div className="hidden lg:block bg-blue-600 text-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-center space-x-8 py-3">
-              <button onClick={() => scrollToSection('database')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-database">Safety Database</button>
-              <button onClick={() => scrollToSection('recalls')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-recalls">Recall Alerts</button>
-              <Link to="/vet-finder" className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-vets">Veterinary Network</Link>
-              <button onClick={() => scrollToSection('community')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-community">Community Reviews</button>
-              <button onClick={() => scrollToSection('resources')} className="hover:bg-blue-700 px-3 py-2 rounded text-sm font-medium transition-colors min-h-[44px] flex items-center" data-testid="nav-resources">Safety Resources</button>
-            </div>
-          </div>
-        </div>
-        
         {/* Enhanced Mobile menu */}
         {isMobileMenuOpen && (
           <div className="bg-card border-b border-border shadow-lg">
