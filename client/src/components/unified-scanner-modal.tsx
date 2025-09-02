@@ -7,7 +7,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
-import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp } from "@/utils/camera-utils";
+import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp, triggerHapticFeedback } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
 type ScannerMode = "quick" | "full" | "search";
@@ -159,10 +159,8 @@ export function UnifiedScannerModal({
       }, 400);
     }
 
-    // Vibrate on mobile devices
-    if ('vibrate' in navigator) {
-      navigator.vibrate(100);
-    }
+    // Trigger haptic feedback
+    triggerHapticFeedback();
   };
 
   const onScanFailure = useCallback((error: string) => {

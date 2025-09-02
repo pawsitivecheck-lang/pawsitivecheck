@@ -9,19 +9,25 @@ export const isCapacitorApp = (): boolean => {
 export const requestCameraPermission = async (): Promise<boolean> => {
   try {
     if (isCapacitorApp()) {
-      // Android/Capacitor environment
+      // Android/Capacitor environment - request native permissions
       try {
-        // Safe dynamic import for Capacitor Camera
-        const capacitorCamera = await import('@capacitor/camera');
-        const permissions = await capacitorCamera.Camera.requestPermissions();
-        return permissions.camera === 'granted';
+        // Safe dynamic import for Capacitor Camera (only in Android)
+        const capacitorModule = await import('@capacitor/camera');
+        const permissions = await capacitorModule.Camera.requestPermissions();
+        
+        if (permissions.camera === 'granted') {
+          return true;
+        } else {
+          console.error('Camera permission denied by Android system');
+          return false;
+        }
       } catch (capacitorError) {
-        console.log('Capacitor Camera not available, using web fallback');
+        console.log('Capacitor Camera import failed, using web fallback:', capacitorError);
         // Fall through to web API
       }
     }
     
-    // Web browser environment (or fallback)
+    // Web browser environment (or Android fallback)
     const stream = await navigator.mediaDevices.getUserMedia({ 
       video: { 
         facingMode: 'environment'
@@ -35,6 +41,29 @@ export const requestCameraPermission = async (): Promise<boolean> => {
   } catch (error) {
     console.error('Camera permission error:', error);
     return false;
+  }
+};
+
+// Safe haptic feedback for both platforms
+export const triggerHapticFeedback = async (): Promise<void> => {
+  try {
+    if (isCapacitorApp()) {
+      // Android haptic feedback
+      try {
+        const haptics = await import('@capacitor/haptics');
+        await haptics.Haptics.vibrate({ duration: 100 });
+        return;
+      } catch (error) {
+        console.log('Capacitor Haptics not available');
+      }
+    }
+    
+    // Web vibration API fallback
+    if ('vibrate' in navigator) {
+      navigator.vibrate(100);
+    }
+  } catch (error) {
+    console.log('Haptic feedback not available on this platform');
   }
 };
 
