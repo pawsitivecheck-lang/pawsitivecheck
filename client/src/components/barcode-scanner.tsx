@@ -241,11 +241,11 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   return (
     <div 
-      className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] cursor-pointer p-4 overflow-y-auto" 
+      className="fixed inset-0 bg-black/80 flex items-start justify-center z-[9999] cursor-pointer p-4 overflow-y-auto pt-8 pb-8" 
       data-testid="modal-barcode-scanner"
       onClick={handleBackdropClick}
     >
-      <Card className="w-full max-w-lg cursor-default m-auto bg-card border-border shadow-xl">
+      <Card className="w-full max-w-lg cursor-default bg-card border-border shadow-xl my-auto">
         <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
           <CardTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5" />
