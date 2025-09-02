@@ -19,6 +19,7 @@ import Footer from "@/components/footer";
 type SubmissionStatus = 'pending' | 'approved' | 'rejected' | 'in_review';
 
 export default function AdminProductSubmissions() {
+  // All hooks must be called at the top of the component
   const { user, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -28,29 +29,7 @@ export default function AdminProductSubmissions() {
   const [reviewStatus, setReviewStatus] = useState<SubmissionStatus>('pending');
   const [adminNotes, setAdminNotes] = useState('');
 
-  // Check if user is admin
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400"></div>
-      </div>
-    );
-  }
-
-  if (!user?.isAdmin) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <Card className="bg-slate-800/50 border-red-500/20">
-          <CardContent className="pt-6 text-center">
-            <XCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">Access Denied</h2>
-            <p className="text-gray-300">You don't have permission to access this page.</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
+  // Hooks must always be called, use enabled to control when query runs
   const { data: submissions, isLoading } = useQuery({
     queryKey: ['/api/admin/product-update-submissions', selectedStatus],
     queryFn: () => {
@@ -59,7 +38,7 @@ export default function AdminProductSubmissions() {
         : `/api/admin/product-update-submissions?status=${selectedStatus}`;
       return apiRequest(url);
     },
-    enabled: user?.isAdmin,
+    enabled: !authLoading && user?.isAdmin,
   });
 
   const reviewMutation = useMutation({
@@ -88,6 +67,29 @@ export default function AdminProductSubmissions() {
       });
     },
   });
+
+  // Conditional logic after all hooks are called
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400"></div>
+      </div>
+    );
+  }
+
+  if (!user?.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <Card className="bg-slate-800/50 border-red-500/20">
+          <CardContent className="pt-6 text-center">
+            <XCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-white mb-2">Access Denied</h2>
+            <p className="text-gray-300">You don't have permission to access this page.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
