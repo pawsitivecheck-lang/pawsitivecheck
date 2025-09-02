@@ -91,12 +91,27 @@ export function UnifiedScannerModal({
         });
       }
     },
-    onError: () => {
+    onError: (error: any) => {
+      // Check if it's an authentication error
+      if (error?.message?.includes('401') || error?.message?.includes('Unauthorized')) {
+        toast({
+          title: "Login Required",
+          description: "Please log in to scan and analyze products",
+          variant: "destructive",
+        });
+        // Close scanner and redirect to login
+        onClose();
+        return;
+      }
+      
       toast({
         title: "Scan Failed",
         description: "Unable to scan this product barcode",
         variant: "destructive",
       });
+      
+      // Restart scanner after error
+      setShowScanner(true);
     },
   });
 
