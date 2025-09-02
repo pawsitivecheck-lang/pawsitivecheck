@@ -16,10 +16,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
+import { useMobile } from "@/hooks/useMobile";
+import MobileAuth from "@/components/mobile-auth";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function Landing() {
   const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showMobileAuth, setShowMobileAuth] = useState(false);
+  const { isMobile } = useMobile();
 
   // Smooth scroll to section function
   const scrollToSection = (sectionId: string) => {
@@ -254,24 +259,60 @@ export default function Landing() {
                   </>
                 ) : (
                   <>
-                    <a 
-                      href="/api/login"
-                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      data-testid="mobile-nav-sign-in"
-                    >
-                      <UserCheck className="mr-3 h-5 w-5" />
-                      Sign In
-                    </a>
-                    <a 
-                      href="/api/register"
-                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      data-testid="mobile-nav-register"
-                    >
-                      <Users className="mr-3 h-5 w-5" />
-                      Create Account
-                    </a>
+                    {isMobile ? (
+                      <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
+                        <DialogTrigger asChild>
+                          <button
+                            className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            data-testid="mobile-nav-sign-in"
+                          >
+                            <UserCheck className="mr-3 h-5 w-5" />
+                            Sign In
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <a 
+                        href="/api/login"
+                        className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        data-testid="mobile-nav-sign-in"
+                      >
+                        <UserCheck className="mr-3 h-5 w-5" />
+                        Sign In
+                      </a>
+                    )}
+                    {isMobile ? (
+                      <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
+                        <DialogTrigger asChild>
+                          <button
+                            className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            data-testid="mobile-nav-register"
+                          >
+                            <Users className="mr-3 h-5 w-5" />
+                            Create Account
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <a 
+                        href="/api/register"
+                        className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        data-testid="mobile-nav-register"
+                      >
+                        <Users className="mr-3 h-5 w-5" />
+                        Create Account
+                      </a>
+                    )}
                   </>
                 )}
               </div>
@@ -499,16 +540,33 @@ export default function Landing() {
             </div>
             
             <div className="text-center mt-6 sm:mt-8">
-              <Button 
-                asChild
-                className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
-                data-testid="button-view-warnings"
-              >
-                <a href="/api/login">
-                  <Shield className="mr-2 h-4 w-4" />
-                  View All Safety Alerts
-                </a>
-              </Button>
+              {isMobile ? (
+                <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                      data-testid="button-view-warnings"
+                    >
+                      <Shield className="mr-2 h-4 w-4" />
+                      View All Safety Alerts
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <Button 
+                  asChild
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                  data-testid="button-view-warnings"
+                >
+                  <a href="/api/login">
+                    <Shield className="mr-2 h-4 w-4" />
+                    View All Safety Alerts
+                  </a>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -565,16 +623,33 @@ export default function Landing() {
           </div>
           
           <div className="text-center mt-8 sm:mt-12">
-            <Button 
-              asChild
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
-              data-testid="button-join-community"
-            >
-              <a href="/api/login">
-                <Users className="mr-2 h-4 w-4" />
-                Join Safety Community
-              </a>
-            </Button>
+            {isMobile ? (
+              <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
+                <DialogTrigger asChild>
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                    data-testid="button-join-community"
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Join Safety Community
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <Button 
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                data-testid="button-join-community"
+              >
+                <a href="/api/login">
+                  <Users className="mr-2 h-4 w-4" />
+                  Join Safety Community
+                </a>
+              </Button>
+            )}
           </div>
         </div>
       </section>
