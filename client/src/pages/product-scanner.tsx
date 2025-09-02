@@ -370,6 +370,75 @@ export default function ProductScanner() {
             </CardContent>
           </Card>
 
+          {/* Scanning Interface */}
+          {!scannedProduct && !isSearching && (
+            <Card className="mb-8" data-testid="card-scanning-interface">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-600">
+                  <Scan className="h-5 w-5" />
+                  Multi-Modal Product Scanner
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid sm:grid-cols-3 gap-4 mb-6">
+                  <Button
+                    onClick={() => setShowBarcodeScanner(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white p-6 h-auto flex flex-col items-center gap-3"
+                    data-testid="button-barcode-scanner"
+                  >
+                    <Scan className="h-8 w-8" />
+                    <div className="text-center">
+                      <div className="font-semibold">Barcode Scanner</div>
+                      <div className="text-xs opacity-90">Scan product barcode with camera</div>
+                    </div>
+                  </Button>
+                  
+                  <Button
+                    onClick={() => setShowImageScanner(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white p-6 h-auto flex flex-col items-center gap-3"
+                    data-testid="button-image-scanner"
+                  >
+                    <Image className="h-8 w-8" />
+                    <div className="text-center">
+                      <div className="font-semibold">Image Scanner</div>
+                      <div className="text-xs opacity-90">Analyze product photos</div>
+                    </div>
+                  </Button>
+                  
+                  <div className="space-y-3">
+                    <div className="text-center">
+                      <Globe className="h-8 w-8 mx-auto text-purple-600 mb-2" />
+                      <div className="font-semibold text-purple-600">Internet Search</div>
+                      <div className="text-xs text-gray-600">Enter product name or barcode</div>
+                    </div>
+                    <form onSubmit={(e) => { e.preventDefault(); handleScan(); }} className="space-y-2">
+                      <Input
+                        value={barcode}
+                        onChange={(e) => setBarcode(e.target.value)}
+                        placeholder="Enter barcode or product name..."
+                        className="text-center"
+                        data-testid="input-barcode-manual"
+                      />
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className="w-full border-purple-600 text-purple-600 hover:bg-purple-50"
+                        data-testid="button-manual-search"
+                      >
+                        <Search className="mr-2 h-4 w-4" />
+                        Search
+                      </Button>
+                    </form>
+                  </div>
+                </div>
+                
+                <div className="text-center text-sm text-gray-600">
+                  Choose your preferred scanning method. Barcode scanning works best in good lighting conditions.
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Loading State */}
           {(isSearching || scanProductMutation.isPending || imageSearchMutation.isPending) && (
             <Card className="mb-8 border-blue-200" data-testid="card-searching">

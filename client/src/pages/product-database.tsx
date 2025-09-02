@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Plus, X } from "lucide-react";
+import { Search, Filter, Plus, X, Scan, Camera } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 export default function ProductDatabase() {
@@ -130,9 +130,26 @@ export default function ProductDatabase() {
             <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-database-title">
               Product Database
             </h1>
-            <p className="text-gray-600 text-lg" data-testid="text-database-description">
+            <p className="text-gray-600 text-lg mb-6" data-testid="text-database-description">
               Search our comprehensive database of pet product safety information
             </p>
+            
+            {/* Quick Scan Access */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <Button 
+                asChild
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                data-testid="button-quick-scan"
+              >
+                <Link to="/product-scanner">
+                  <Scan className="mr-2 h-5 w-5" />
+                  Scan Product Barcode
+                </Link>
+              </Button>
+              <p className="text-sm text-gray-500">
+                Can't find a product? Try scanning its barcode instead
+              </p>
+            </div>
           </div>
 
           {/* Current Search Display */}
