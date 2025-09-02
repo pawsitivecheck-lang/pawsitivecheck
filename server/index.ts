@@ -4,18 +4,21 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
-// Production security headers
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
+// Security headers
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://ep2.adtrafficquality.google https://securepubads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self' https://www.google.com https://www.youtube.com https://ep2.adtrafficquality.google https://securepubads.g.doubleclick.net https://googleads.g.doubleclick.net; child-src 'self'");
-    next();
-  });
-}
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self'; child-src 'self'");
+  } else {
+    // Development mode - disable CSP to prevent conflicts with Vite/Replit tools
+    res.removeHeader('Content-Security-Policy');
+  }
+  next();
+});
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
