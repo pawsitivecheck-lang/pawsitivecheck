@@ -241,7 +241,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   return (
     <div 
-      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 cursor-pointer p-4 overflow-y-auto" 
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] cursor-pointer p-4 overflow-y-auto" 
       data-testid="modal-barcode-scanner"
       onClick={handleBackdropClick}
     >
