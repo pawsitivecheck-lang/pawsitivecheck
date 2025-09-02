@@ -575,7 +575,7 @@ export default function DatabaseSync() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Products</span>
-                <Badge variant="secondary">
+                <Badge className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                   {syncStatus?.database?.products?.count || 0}
                 </Badge>
               </div>
@@ -587,7 +587,7 @@ export default function DatabaseSync() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Recalls</span>
-                <Badge variant="secondary">
+                <Badge className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                   {syncStatus?.database?.recalls?.count || 0}
                 </Badge>
               </div>
@@ -599,7 +599,7 @@ export default function DatabaseSync() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-cosmic-300">Ingredients</span>
-                <Badge variant="secondary">
+                <Badge className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                   {syncStatus?.database?.ingredients?.count || 0}
                 </Badge>
               </div>
