@@ -471,48 +471,6 @@ export default function DatabaseSync() {
           </CardContent>
         </Card>
 
-        {/* Blacklist Management */}
-        <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-blacklist-management">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-600">
-              <Ban className="h-5 w-5" />
-              Ingredient Blacklist
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
-                <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
-                  <span className="text-gray-800 dark:text-gray-200 text-sm">{ingredient.ingredientName}</span>
-                  <Badge 
-                    className={
-                      ingredient.severity === 'high' 
-                        ? 'bg-red-100 text-red-600' 
-                        : ingredient.severity === 'medium'
-                        ? 'bg-yellow-100 text-yellow-600'
-                        : 'bg-gray-100 text-gray-600'
-                    }
-                    data-testid="badge-ingredient-severity"
-                  >
-                    {ingredient.severity || 'low'}
-                  </Badge>
-                </div>
-              )) || (
-                <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-blacklisted-ingredients">
-                  No blacklisted ingredients
-                </p>
-              )}
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
-              data-testid="button-manage-blacklist"
-            >
-              Manage Blacklist
-            </Button>
-          </CardContent>
-        </Card>
 
         {/* Recent Products */}
         <Card className="border border-gray-200 hover:shadow-lg transition-shadow" data-testid="card-recent-products">
