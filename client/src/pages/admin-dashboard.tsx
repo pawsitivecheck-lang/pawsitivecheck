@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/navbar";
@@ -7,10 +7,57 @@ import AdBanner from "@/components/ad-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery, useQueries } from "@tanstack/react-query";
+import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import DatabaseSync from "@/components/database-sync";
+
+// Reusable Components for Better Performance
+const StatCard = React.memo(({ icon: Icon, title, value, color, isLoading }: {
+  icon: React.ComponentType<any>;
+  title: string;
+  value: number | string;
+  color: string;
+  isLoading: boolean;
+}) => {
+  if (isLoading) {
+    return (
+      <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <CardContent className="p-6 text-center">
+          <Skeleton className="w-12 h-12 mx-auto mb-4 rounded-full" />
+          <Skeleton className="h-8 w-16 mx-auto mb-2" />
+          <Skeleton className="h-4 w-24 mx-auto" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow">
+      <CardContent className="p-6 text-center">
+        <div className={`w-12 h-12 mx-auto ${color} rounded-full flex items-center justify-center mb-4`}>
+          <Icon className="text-current" />
+        </div>
+        <div className="text-3xl font-bold mb-2 text-current">
+          {value}
+        </div>
+        <p className="text-gray-600 dark:text-gray-400">{title}</p>
+      </CardContent>
+    </Card>
+  );
+});
+
+const LoadingSpinner = React.memo(() => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
+        <Crown className="text-2xl text-white" />
+      </div>
+      <p className="text-gray-600 dark:text-gray-400">Loading admin dashboard...</p>
+    </div>
+  </div>
+));
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, isAdmin, isLoading } = useAuth();
@@ -43,42 +90,81 @@ export default function AdminDashboard() {
     }
   }, [isAuthenticated, isLoading, isAdmin, toast]);
 
-  const { data: analytics = {} } = useQuery({
-    queryKey: ['/api/admin/analytics'],
-    enabled: !!isAdmin,
+  // Optimized data fetching with useQueries for better performance
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['/api/admin/analytics'],
+        enabled: !!isAdmin,
+        staleTime: 5 * 60 * 1000, // 5 minutes
+      },
+      {
+        queryKey: ['/api/recalls'],
+        enabled: !!isAdmin,
+        staleTime: 2 * 60 * 1000, // 2 minutes
+      },
+      {
+        queryKey: ['/api/blacklist'],
+        enabled: !!isAdmin,
+        staleTime: 10 * 60 * 1000, // 10 minutes
+      },
+      {
+        queryKey: ['/api/products?limit=10'],
+        enabled: !!isAdmin,
+        staleTime: 1 * 60 * 1000, // 1 minute
+      },
+    ],
   });
 
-  const { data: recentRecalls = [] } = useQuery({
-    queryKey: ['/api/recalls'],
-    enabled: !!isAdmin,
-  });
+  const [analyticsQuery, recallsQuery, blacklistQuery, productsQuery] = queries;
+  const analytics = analyticsQuery.data || {};
+  const recentRecalls = recallsQuery.data || [];
+  const blacklistedIngredients = blacklistQuery.data || [];
+  const recentProducts = productsQuery.data || [];
 
-  const { data: blacklistedIngredients = [] } = useQuery({
-    queryKey: ['/api/blacklist'],
-    enabled: !!isAdmin,
-  });
+  const isLoadingData = queries.some(query => query.isLoading);
+  const hasErrors = queries.some(query => query.isError);
 
-  const { data: recentProducts } = useQuery({
-    queryKey: ['/api/products'],
-    queryFn: async () => {
-      const res = await fetch('/api/products?limit=10');
-      return await res.json();
-    },
-    enabled: !!isAdmin,
-  });
 
+  // Memoized helper functions for better performance
+  const getSeverityBadgeClass = useMemo(() => {
+    return (severity: string) => {
+      switch (severity) {
+        case 'critical':
+          return 'bg-red-600 dark:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg';
+        case 'high':
+          return 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400';
+        case 'medium':
+          return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400';
+        default:
+          return 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400';
+      }
+    };
+  }, []);
+
+  const getClarityBadgeClass = useMemo(() => {
+    return (clarity: string) => {
+      switch (clarity) {
+        case 'blessed':
+          return 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400';
+        case 'cursed':
+          return 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400';
+        default:
+          return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400';
+      }
+    };
+  }, []);
+
+  const formatClarityText = useCallback((clarity: string) => {
+    switch (clarity) {
+      case 'blessed': return 'Safe';
+      case 'cursed': return 'Unsafe';
+      default: return 'Unknown';
+    }
+  }, []);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
-            <Crown className="text-2xl text-white" />
-          </div>
-          <p className="text-gray-600 dark:text-gray-400">Loading admin dashboard...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!user?.isAdmin) {
@@ -111,6 +197,21 @@ export default function AdminDashboard() {
             </p>
           </div>
 
+          {/* Error Banner */}
+          {hasErrors && (
+            <Card className="border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 mb-8">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  <div>
+                    <p className="text-red-800 dark:text-red-200 font-medium">Data Loading Issues</p>
+                    <p className="text-red-600 dark:text-red-400 text-sm">Some dashboard data couldn't be loaded. Please refresh the page.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Welcome Message */}
           <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 mb-8" data-testid="card-admin-welcome">
             <CardContent className="p-6">
@@ -120,10 +221,10 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-1" data-testid="text-welcome-admin">
-                    Welcome, Administrator {user.firstName}
+                    Welcome, Administrator {user?.firstName}
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400" data-testid="text-admin-status">
-                    Manage your pet safety platform from here
+                    {isLoadingData ? "Loading dashboard data..." : "Manage your pet safety platform from here"}
                   </p>
                 </div>
               </div>
@@ -132,53 +233,42 @@ export default function AdminDashboard() {
 
           {/* Analytics Overview */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-products">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
-                  <Package className="text-blue-600" />
-                </div>
-                <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-products">
-                  {(analytics as any)?.totalProducts || 0}
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">Products Analyzed</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-users">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
-                  <Users className="text-green-600" />
-                </div>
-                <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-total-users">
-                  {(analytics as any)?.totalUsers || 0}
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">Active Users</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-unsafe">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mb-4">
-                  <AlertTriangle className="text-red-600" />
-                </div>
-                <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-unsafe-products">
-                  {(analytics as any)?.cursedProducts || 0}
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">Unsafe Products</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow" data-testid="card-stat-safe">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="text-green-600" />
-                </div>
-                <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-safe-products">
-                  {(analytics as any)?.blessedProducts || 0}
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">Safe Products</p>
-              </CardContent>
-            </Card>
+            <div className="text-blue-600" data-testid="card-stat-products">
+              <StatCard 
+                icon={Package}
+                title="Products Analyzed"
+                value={(analytics as any)?.totalProducts || 0}
+                color="bg-blue-100 dark:bg-blue-900 text-blue-600"
+                isLoading={analyticsQuery.isLoading}
+              />
+            </div>
+            <div className="text-green-600" data-testid="card-stat-users">
+              <StatCard 
+                icon={Users}
+                title="Active Users"
+                value={(analytics as any)?.totalUsers || 0}
+                color="bg-green-100 dark:bg-green-900 text-green-600"
+                isLoading={analyticsQuery.isLoading}
+              />
+            </div>
+            <div className="text-red-600" data-testid="card-stat-unsafe">
+              <StatCard 
+                icon={AlertTriangle}
+                title="Unsafe Products"
+                value={(analytics as any)?.cursedProducts || 0}
+                color="bg-red-100 dark:bg-red-900 text-red-600"
+                isLoading={analyticsQuery.isLoading}
+              />
+            </div>
+            <div className="text-green-600" data-testid="card-stat-safe">
+              <StatCard 
+                icon={Shield}
+                title="Safe Products"
+                value={(analytics as any)?.blessedProducts || 0}
+                color="bg-green-100 dark:bg-green-900 text-green-600"
+                isLoading={analyticsQuery.isLoading}
+              />
+            </div>
           </div>
 
           {/* Main Dashboard Grid */}
@@ -193,7 +283,17 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(recentRecalls as any[]).slice(0, 3).map((recall: any) => (
+                  {recallsQuery.isLoading ? (
+                    Array.from({ length: 2 }).map((_, i) => (
+                      <div key={i} className="p-3 bg-red-50 dark:bg-red-950 border-l-2 border-red-500 rounded">
+                        <div className="flex justify-between items-start mb-1">
+                          <Skeleton className="h-4 w-48" />
+                          <Skeleton className="h-5 w-12 rounded-full" />
+                        </div>
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                    ))
+                  ) : (recentRecalls as any[]).slice(0, 3).map((recall: any) => (
                     <div key={recall.id} className="p-3 bg-red-50 dark:bg-red-950 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
                       <div className="flex justify-between items-start mb-1">
                         <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{recall.reason}</p>
@@ -205,7 +305,8 @@ export default function AdminDashboard() {
                         {new Date(recall.recallDate).toLocaleDateString()}
                       </p>
                     </div>
-                  )) || (
+                  ))}
+                  {!recallsQuery.isLoading && recentRecalls.length === 0 && (
                     <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-active-recalls">
                       No active recalls
                     </p>
