@@ -39,25 +39,31 @@ export function UnifiedScannerModal({
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcode: string) => {
-      // First try to find existing product by barcode
+      // First try to find existing product by barcode (works for everyone)
       const localRes = await fetch(`/api/products/barcode/${barcode}`);
       if (localRes.ok) {
         const product = await localRes.json();
         return { source: 'local', product };
       }
       
-      // If not found locally, search the internet
-      const internetRes = await apiRequest('POST', '/api/products/internet-search', {
-        type: 'barcode',
-        query: barcode
-      });
-      
-      if (internetRes.ok) {
-        const result = await internetRes.json();
-        return result;
+      // If not found locally, try internet search (for logged-in users)
+      try {
+        const internetRes = await apiRequest('POST', '/api/products/internet-search', {
+          type: 'barcode',
+          query: barcode
+        });
+        
+        if (internetRes.ok) {
+          const result = await internetRes.json();
+          return result;
+        }
+      } catch (error) {
+        // Internet search failed (likely auth issue), but that's okay
+        console.debug('Internet search unavailable:', error);
       }
       
-      return null;
+      // Product not found anywhere - still allow "Add Product" flow
+      return { source: 'none', product: null, barcode };
     },
     onSuccess: (result) => {
       setIsProcessing(false);
@@ -76,7 +82,7 @@ export function UnifiedScannerModal({
         setLocation(`/product/${result.product.id}`);
         onClose();
       } else {
-        // Product not found - offer to add it
+        // Product not found - offer to add it (for everyone)
         toast({
           title: "Product Not Found",
           description: "Would you like to add this product to our database?",
