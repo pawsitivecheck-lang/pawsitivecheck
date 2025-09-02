@@ -114,10 +114,10 @@ export default function Landing() {
               {/* Theme Toggle - Always visible */}
               <ThemeToggle />
               
-              {/* Mobile menu button */}
+              {/* Menu button - visible on all devices */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-3 rounded-lg hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-3 rounded-lg hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 data-testid="button-mobile-menu"
               >
                 {isMobileMenuOpen ? (
@@ -145,7 +145,7 @@ export default function Landing() {
         
         {/* Enhanced Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-card border-b border-border shadow-lg">
+          <div className="bg-card border-b border-border shadow-lg">
             
             {/* Navigation Links */}
             <div className="px-4 py-4 space-y-2">
