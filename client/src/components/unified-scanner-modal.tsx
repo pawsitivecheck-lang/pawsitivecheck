@@ -298,6 +298,12 @@ export function UnifiedScannerModal({
       setShowPermissionDialog(false);
       setCameraError("");
       setIsScannerReady(false);
+      
+      // Auto-request if user previously chose "Always Allow"
+      if (checkStoredPermission()) {
+        requestCameraPermission(true);
+      }
+      // Otherwise, the default state will show the permission dialog automatically
     }
   }, [isOpen]);
 
@@ -350,7 +356,7 @@ export function UnifiedScannerModal({
                 Try Again
               </Button>
             </div>
-          ) : showPermissionDialog ? (
+          ) : !permissionRequested && !showScanner ? (
             <div className="text-center space-y-6">
               <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <Shield className="h-8 w-8 text-white" />
@@ -400,28 +406,6 @@ export function UnifiedScannerModal({
               <p className="text-xs text-gray-400 mt-4">
                 You can change this preference later in your browser settings
               </p>
-            </div>
-          ) : !permissionRequested && !showScanner ? (
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <Camera className="h-8 w-8 text-white" />
-              </div>
-              <div className="space-y-2">
-                <p className="text-gray-700">
-                  We need access to your camera to scan product barcodes
-                </p>
-                <p className="text-sm text-gray-500">
-                  {getModeDescription()}
-                </p>
-              </div>
-              <Button 
-                onClick={initiatePermissionFlow}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                data-testid="button-request-camera"
-              >
-                <Camera className="mr-2 h-4 w-4" />
-                Request Camera Access
-              </Button>
             </div>
           ) : permissionRequested && !showScanner ? (
             <div className="text-center space-y-4">
