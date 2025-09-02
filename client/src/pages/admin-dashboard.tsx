@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database } from "lucide-react";
+import { Link } from "wouter";
 import DatabaseSync from "@/components/database-sync";
 
 export default function AdminDashboard() {
@@ -211,12 +212,13 @@ export default function AdminDashboard() {
                   )}
                 </div>
                 <Button 
+                  asChild
                   variant="outline" 
                   size="sm" 
                   className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
                   data-testid="button-manage-recalls"
                 >
-                  Manage Recalls
+                  <Link to="/recalls">Manage Recalls</Link>
                 </Button>
               </CardContent>
             </Card>

@@ -636,7 +636,18 @@ export default function Landing() {
               <Crown className="text-xl sm:text-2xl text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-admin-title">Admin Dashboard</h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto" data-testid="text-admin-description">Comprehensive tools for managing safety data and community oversight</p>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-4" data-testid="text-admin-description">Comprehensive tools for managing safety data and community oversight</p>
+            <Button 
+              asChild
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              data-testid="button-admin-dashboard"
+            >
+              <Link to="/admin">
+                <Crown className="mr-2 h-5 w-5" />
+                Access Full Dashboard
+              </Link>
+            </Button>
           </div>
           
           <div className="bg-card rounded-lg p-4 sm:p-6 lg:p-8 border border-border shadow-lg">
@@ -683,12 +694,13 @@ export default function Landing() {
                     </div>
                   </div>
                   <Button 
+                    asChild
                     variant="outline" 
                     size="sm" 
                     className="w-full bg-red-50 text-red-600 border-red-200 hover:bg-red-100 min-h-[40px] text-sm"
                     data-testid="button-manage-recalls"
                   >
-                    Manage Recalls
+                    <Link to="/recalls">Manage Recalls</Link>
                   </Button>
                 </div>
               </div>
@@ -701,20 +713,22 @@ export default function Landing() {
                 <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-system-title">System Management</h3>
                 <div className="space-y-2 sm:space-y-3">
                   <Button 
+                    asChild
                     variant="outline" 
                     size="sm" 
                     className="w-full bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100 min-h-[40px] text-sm"
                     data-testid="button-update-ai"
                   >
-                    Update AI Analysis
+                    <Link to="/admin">Update AI Analysis</Link>
                   </Button>
                   <Button 
+                    asChild
                     variant="outline" 
                     size="sm" 
                     className="w-full bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 min-h-[40px] text-sm"
                     data-testid="button-update-database"
                   >
-                    Update Safety Database
+                    <Link to="/admin">Update Safety Database</Link>
                   </Button>
                 </div>
               </div>
