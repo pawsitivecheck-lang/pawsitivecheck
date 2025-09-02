@@ -28,7 +28,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       }
     }
     
-    // Web browser environment - check permission state first
+    // Web browser environment
     let permissionState = 'prompt';
     try {
       const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
@@ -38,7 +38,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       console.log('Permissions API not supported, proceeding with getUserMedia');
     }
     
-    // Handle different permission states
+    // Handle denied state
     if (permissionState === 'denied') {
       return { 
         granted: false, 
@@ -47,41 +47,44 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       };
     }
     
-    if (permissionState === 'granted') {
-      // User previously selected "Allow always" - use camera directly
+    // Always request fresh permission (browsers can't reliably distinguish temporary vs permanent)
+    try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: { exact: 'environment' } } // Force rear camera
+        video: { 
+          facingMode: { exact: 'environment' }, // Force rear camera explicitly
+          frameRate: { ideal: 30 },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        } 
       });
+      
+      // Close test stream immediately
       stream.getTracks().forEach(track => track.stop());
-      return { granted: true, permanent: true };
-    }
-    
-    // Permission state is 'prompt' (user selected "Allow this time" or first time)
-    // Request fresh permission
-    const stream = await navigator.mediaDevices.getUserMedia({ 
-      video: { 
-        facingMode: { exact: 'environment' }, // Force rear camera explicitly
-        frameRate: { ideal: 30 },
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
-      } 
-    });
-    
-    // Close test stream immediately
-    stream.getTracks().forEach(track => track.stop());
-    return { granted: true, permanent: false }; // Temporary permission
-    
-  } catch (error: any) {
-    console.error('Camera permission error:', error);
-    
-    if (error.name === 'NotAllowedError') {
+      
+      // Always treat as temporary permission since we can't reliably detect permanent grants
+      // This ensures fresh prompts each time unless user manually sets "Allow always" in browser
+      return { granted: true, permanent: false }; // Always treat as temporary
+      
+    } catch (error: any) {
+      console.error('Camera permission error:', error);
+      
+      if (error.name === 'NotAllowedError') {
+        return { 
+          granted: false, 
+          permanent: false, 
+          message: 'Camera access denied. Try again to get a fresh permission prompt.' 
+        };
+      }
+      
       return { 
         granted: false, 
         permanent: false, 
-        message: 'Camera access denied. Try again to get a fresh permission prompt.' 
+        message: 'Camera not available. Please check your device has a camera.' 
       };
     }
     
+  } catch (error: any) {
+    console.error('Camera permission error:', error);
     return { 
       granted: false, 
       permanent: false, 
