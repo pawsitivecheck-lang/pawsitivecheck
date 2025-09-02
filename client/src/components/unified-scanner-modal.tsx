@@ -100,9 +100,69 @@ export function UnifiedScannerModal({
   });
 
   const onScanSuccess = useCallback((decodedText: string) => {
-    setShowScanner(false);
-    scanProductMutation.mutate(decodedText);
+    // Immediate feedback for successful scan
+    playSuccessSound();
+    showScanSuccess();
+    
+    // Brief delay to show success feedback before processing
+    setTimeout(() => {
+      setShowScanner(false);
+      scanProductMutation.mutate(decodedText);
+    }, 500);
   }, [scanProductMutation]);
+
+  const playSuccessSound = () => {
+    // Create a brief success beep
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.2);
+    } catch (error) {
+      console.debug('Audio feedback not available:', error);
+    }
+  };
+
+  const showScanSuccess = () => {
+    // Show success overlay
+    const successOverlay = document.getElementById("scan-success-overlay");
+    if (successOverlay) {
+      successOverlay.style.opacity = "1";
+      
+      setTimeout(() => {
+        successOverlay.style.opacity = "0";
+      }, 400);
+    }
+
+    // Add visual flash effect to container
+    const scannerContainer = document.getElementById("unified-barcode-scanner-container");
+    if (scannerContainer) {
+      scannerContainer.style.transition = "all 0.2s ease";
+      scannerContainer.style.boxShadow = "0 0 20px #10b981";
+      scannerContainer.style.borderColor = "#10b981";
+      
+      setTimeout(() => {
+        scannerContainer.style.boxShadow = "";
+        scannerContainer.style.borderColor = "";
+      }, 400);
+    }
+
+    // Vibrate on mobile devices
+    if ('vibrate' in navigator) {
+      navigator.vibrate(100);
+    }
+  };
 
   const onScanFailure = useCallback((error: string) => {
     // Ignore scan failures - they happen constantly during scanning
@@ -351,7 +411,7 @@ export function UnifiedScannerModal({
               <div className="relative">
                 <div 
                   id="unified-barcode-scanner-container" 
-                  className="w-full min-h-[300px] bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden"
+                  className="w-full min-h-[300px] bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border-2 border-transparent"
                   data-testid="container-unified-barcode-scanner"
                 />
 
@@ -368,6 +428,23 @@ export function UnifiedScannerModal({
                     </div>
                   </div>
                 )}
+                
+                {/* Scan success overlay */}
+                <div 
+                  id="scan-success-overlay"
+                  className="absolute inset-0 bg-green-500/20 rounded-lg flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200"
+                  data-testid="overlay-scan-success"
+                >
+                  <div className="text-center">
+                    <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-2" />
+                    <p className="text-green-700 font-semibold text-lg">
+                      ✅ Barcode Scanned!
+                    </p>
+                    <p className="text-green-600 text-sm">
+                      Analyzing product...
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           ) : null}
