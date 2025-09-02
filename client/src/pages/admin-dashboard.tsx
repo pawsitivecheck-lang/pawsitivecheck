@@ -238,7 +238,9 @@ export default function AdminDashboard() {
                       <span className="text-gray-800 dark:text-gray-200 text-sm">{ingredient.ingredientName}</span>
                       <Badge 
                         className={
-                          ingredient.severity === 'high' 
+                          ingredient.severity === 'critical' 
+                            ? 'bg-red-600 dark:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg' 
+                            : ingredient.severity === 'high' 
                             ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400' 
                             : ingredient.severity === 'medium'
                             ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400'
