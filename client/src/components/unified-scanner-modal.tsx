@@ -240,17 +240,7 @@ export function UnifiedScannerModal({
       // Better configuration for mobile devices
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      const scanner = new Html5Qrcode("unified-barcode-scanner-container", {
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats.CODE_128,
-          Html5QrcodeSupportedFormats.CODE_39,
-          Html5QrcodeSupportedFormats.EAN_13,
-          Html5QrcodeSupportedFormats.EAN_8,
-          Html5QrcodeSupportedFormats.UPC_A,
-          Html5QrcodeSupportedFormats.UPC_E,
-          Html5QrcodeSupportedFormats.QR_CODE
-        ],
-      });
+      const scanner = new Html5Qrcode("unified-barcode-scanner-container");
 
       // Get camera constraints based on device
       const cameraConstraints = /CrOS/.test(navigator.userAgent) 
@@ -270,6 +260,15 @@ export function UnifiedScannerModal({
             };
           },
           aspectRatio: isMobile ? 1.0 : 1.777778,
+          formatsToSupport: [
+            Html5QrcodeSupportedFormats.CODE_128,
+            Html5QrcodeSupportedFormats.CODE_39,
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E,
+            Html5QrcodeSupportedFormats.QR_CODE
+          ],
         },
         onScanSuccess,
         onScanFailure
