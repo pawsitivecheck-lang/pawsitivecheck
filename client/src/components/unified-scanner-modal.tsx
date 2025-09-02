@@ -189,7 +189,7 @@ export function UnifiedScannerModal({
         // Different message based on permission type
         const message = result.permanent 
           ? `Camera access granted${isCapacitorApp() ? ' (Android)' : ' (Always allowed)'}`
-          : `Camera access granted for this session${isCapacitorApp() ? ' (Android)' : ' (This time only)'}`;
+          : `Camera access granted${isCapacitorApp() ? ' (Android)' : ' (Until browser closes)'}`;
           
         toast({
           title: "Camera Access Granted",

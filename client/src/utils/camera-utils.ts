@@ -6,9 +6,6 @@ export const isCapacitorApp = (): boolean => {
          (window as any).Capacitor !== undefined;
 };
 
-// Track scan attempts to force fresh prompts
-let scanAttemptCounter = 0;
-
 export const requestCameraPermission = async (): Promise<{ granted: boolean; permanent: boolean; message?: string }> => {
   try {
     if (isCapacitorApp()) {
@@ -31,11 +28,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       }
     }
     
-    // Web browser environment - force fresh permission prompt each time
-    scanAttemptCounter++;
-    console.log('Scan attempt #', scanAttemptCounter);
-    
-    // Check permission state
+    // Web browser environment
     let permissionState = 'prompt';
     try {
       const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
@@ -54,32 +47,27 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       };
     }
     
-    // Force fresh permission request by using varied constraints each time
-    // This tricks browsers into showing permission prompt again
+    // Request camera access with rear camera preference
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
-          facingMode: { exact: 'environment' }, // Force rear camera explicitly
-          frameRate: { ideal: 30 + (scanAttemptCounter % 5) }, // Vary frame rate
-          width: { ideal: 1280 + (scanAttemptCounter % 10) }, // Vary width slightly
-          height: { ideal: 720 + (scanAttemptCounter % 8) }, // Vary height slightly
-          // Add random deviceId constraint to force fresh prompt
-          deviceId: { ideal: 'rear-camera-' + scanAttemptCounter }
+          facingMode: { exact: 'environment' }, // Force rear camera
+          frameRate: { ideal: 30 },
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
         } 
       });
       
-      // Close test stream immediately to clean up
-      stream.getTracks().forEach(track => {
-        track.stop();
-        track.enabled = false;
-      });
+      // Close test stream immediately
+      stream.getTracks().forEach(track => track.stop());
       
-      // Clear any lingering media streams
-      if (stream.active) {
-        console.log('Force stopping active stream');
-      }
+      // Determine if permission is likely permanent based on permission state
+      const isPermanent = permissionState === 'granted';
       
-      return { granted: true, permanent: false }; // Always temporary for web
+      return { 
+        granted: true, 
+        permanent: isPermanent 
+      };
       
     } catch (error: any) {
       console.error('Camera permission error:', error);
@@ -88,23 +76,23 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
         return { 
           granted: false, 
           permanent: false, 
-          message: 'Camera access denied. Try again to get a fresh permission prompt.' 
+          message: 'Camera access denied. Try again for a fresh permission prompt.' 
         };
       }
       
       if (error.name === 'OverconstrainedError') {
-        // Try again with basic constraints if our varied ones failed
+        // Try again with basic rear camera constraint
         try {
           const basicStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: { exact: 'environment' } }
+            video: { facingMode: 'environment' }
           });
           basicStream.getTracks().forEach(track => track.stop());
-          return { granted: true, permanent: false };
+          return { granted: true, permanent: permissionState === 'granted' };
         } catch (basicError) {
           return { 
             granted: false, 
             permanent: false, 
-            message: 'Camera not available. Please check your device has a camera.' 
+            message: 'Rear camera not available. Please ensure your device has a rear camera.' 
           };
         }
       }
