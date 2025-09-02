@@ -223,11 +223,20 @@ export function UnifiedScannerModal({
     if (!showScanner || scannerRef.current) return;
     
     try {
-      // Clear any existing scanner first
+      // Stop any existing media streams first to free up camera
+      const existingStreams = await navigator.mediaDevices.getUserMedia({ video: true }).catch(() => null);
+      if (existingStreams) {
+        existingStreams.getTracks().forEach(track => track.stop());
+      }
+      
+      // Clear any existing scanner
       const existingScanner = document.getElementById("unified-barcode-scanner-container");
       if (existingScanner) {
         existingScanner.innerHTML = '';
       }
+
+      // Small delay to allow camera to be released
+      await new Promise(resolve => setTimeout(resolve, 200));
 
       // Check if camera is available
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -268,9 +277,9 @@ export function UnifiedScannerModal({
           showTorchButtonIfSupported: true,
           showZoomSliderIfSupported: true,
           defaultZoomValueIfSupported: 1,
-          // Force rear camera for barcode scanning
+          // Prefer rear camera for barcode scanning (flexible fallback)
           videoConstraints: {
-            facingMode: { exact: 'environment' }
+            facingMode: 'environment' // Prefer rear camera but allow fallback
           },
         },
         false // verbose
@@ -301,6 +310,21 @@ export function UnifiedScannerModal({
   }, [showScanner, onScanSuccess, onScanFailure]);
 
   const handleClose = () => {
+    // Clean up scanner and camera streams
+    if (scannerRef.current) {
+      try {
+        scannerRef.current.clear();
+      } catch (e) {
+        console.log('Scanner cleanup error:', e);
+      }
+      scannerRef.current = null;
+    }
+    
+    // Stop any active camera streams
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => stream.getTracks().forEach(track => track.stop()))
+      .catch(() => {}); // Ignore errors
+    
     setShowScanner(false);
     setPermissionRequested(false);
     setCameraError("");

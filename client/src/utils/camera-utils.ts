@@ -51,7 +51,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
-          facingMode: { exact: 'environment' }, // Force rear camera
+          facingMode: 'environment', // Prefer rear camera with fallback
           frameRate: { ideal: 30 },
           width: { ideal: 1280 },
           height: { ideal: 720 }
