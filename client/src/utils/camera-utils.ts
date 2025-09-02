@@ -6,24 +6,21 @@ export const isCapacitorApp = (): boolean => {
          (window as any).Capacitor !== undefined;
 };
 
-export const requestCameraPermission = async (forcePrompt: boolean = true): Promise<boolean> => {
+export const requestCameraPermission = async (): Promise<{ granted: boolean; permanent: boolean; message?: string }> => {
   try {
     if (isCapacitorApp()) {
-      // Android/Capacitor environment - always request fresh permissions
+      // Android/Capacitor environment
       try {
         // Safe dynamic import for Capacitor Camera (only in Android)
         const capacitorModule = await import('@capacitor/camera');
-        
-        // Force fresh permission request every time
         const permissions = await capacitorModule.Camera.requestPermissions({
           permissions: ['camera']
         });
         
         if (permissions.camera === 'granted') {
-          return true;
+          return { granted: true, permanent: true }; // Android typically grants permanently
         } else {
-          console.error('Camera permission denied by Android system');
-          return false;
+          return { granted: false, permanent: true, message: 'Camera permission denied. Go to Settings > Apps > PawsitiveCheck > Permissions to enable camera access.' };
         }
       } catch (capacitorError) {
         console.log('Capacitor Camera import failed, using web fallback:', capacitorError);
@@ -31,38 +28,65 @@ export const requestCameraPermission = async (forcePrompt: boolean = true): Prom
       }
     }
     
-    // Web browser environment (or Android fallback)
-    // Force fresh permission by trying to revoke existing permissions first
+    // Web browser environment - check permission state first
+    let permissionState = 'prompt';
     try {
-      // Try to get current permissions and revoke them
-      const permissions = await navigator.permissions.query({ name: 'camera' as PermissionName });
-      if (permissions.state === 'granted') {
-        console.log('Attempting to force fresh permission prompt...');
-      }
+      const permission = await navigator.permissions.query({ name: 'camera' as PermissionName });
+      permissionState = permission.state;
+      console.log('Current camera permission state:', permissionState);
     } catch (e) {
-      // Permissions API not supported, continue
+      console.log('Permissions API not supported, proceeding with getUserMedia');
     }
     
-    // Use unique constraints to try to force fresh prompt
-    const uniqueConstraints = { 
+    // Handle different permission states
+    if (permissionState === 'denied') {
+      return { 
+        granted: false, 
+        permanent: true, 
+        message: 'Camera access blocked. Go to your browser settings and allow camera access for this site.' 
+      };
+    }
+    
+    if (permissionState === 'granted') {
+      // User previously selected "Allow always" - use camera directly
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' }
+      });
+      stream.getTracks().forEach(track => track.stop());
+      return { granted: true, permanent: true };
+    }
+    
+    // Permission state is 'prompt' (user selected "Allow this time" or first time)
+    // Request fresh permission
+    const stream = await navigator.mediaDevices.getUserMedia({ 
       video: { 
         facingMode: 'environment',
-        // Vary constraints to potentially trigger fresh prompts
         frameRate: { ideal: 30 },
-        width: { ideal: 1280 + Math.floor(Math.random() * 10) },
-        height: { ideal: 720 + Math.floor(Math.random() * 10) }
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
       } 
-    };
-    
-    const stream = await navigator.mediaDevices.getUserMedia(uniqueConstraints);
+    });
     
     // Close test stream immediately
     stream.getTracks().forEach(track => track.stop());
-    return true;
+    return { granted: true, permanent: false }; // Temporary permission
     
-  } catch (error) {
+  } catch (error: any) {
     console.error('Camera permission error:', error);
-    return false;
+    
+    if (error.name === 'NotAllowedError') {
+      return { 
+        granted: false, 
+        permanent: false, 
+        message: 'Camera access denied. Try again to get a fresh permission prompt.' 
+      };
+    }
+    
+    return { 
+      granted: false, 
+      permanent: false, 
+      message: 'Camera not available. Please check your device has a camera.' 
+    };
   }
 };
 

@@ -181,24 +181,39 @@ export function UnifiedScannerModal({
       await new Promise(resolve => setTimeout(resolve, 100));
       
       setPermissionRequested(true);
-      const permissionGranted = await utilsRequestCameraPermission(true);
+      const result = await utilsRequestCameraPermission();
       
-      if (permissionGranted) {
+      if (result.granted) {
         setShowScanner(true);
+        
+        // Different message based on permission type
+        const message = result.permanent 
+          ? `Camera access granted${isCapacitorApp() ? ' (Android)' : ' (Always allowed)'}`
+          : `Camera access granted for this session${isCapacitorApp() ? ' (Android)' : ' (This time only)'}`;
+          
         toast({
           title: "Camera Access Granted",
-          description: `Point your camera at a product barcode to scan${isCapacitorApp() ? ' (Android)' : ' (Web)'}`,
+          description: `${message}. Point your camera at a product barcode to scan.`,
         });
       } else {
-        throw new Error('Camera permission denied by user');
+        // Handle different denial scenarios
+        const errorMessage = result.message || 'Camera permission denied by user';
+        setCameraError(errorMessage);
+        setPermissionRequested(false);
+        
+        toast({
+          title: "Camera Permission Denied", 
+          description: result.message || "Please allow camera access to scan barcodes",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Camera permission error:', error);
       setCameraError("Camera permission denied. Please allow camera access and try again.");
       setPermissionRequested(false);
       toast({
-        title: "Camera Permission Denied", 
-        description: "Please allow camera access to scan barcodes",
+        title: "Camera Permission Error", 
+        description: "Unable to access camera. Please try again.",
         variant: "destructive",
       });
     }
