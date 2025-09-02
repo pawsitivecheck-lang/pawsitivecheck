@@ -11,11 +11,16 @@ const config: CapacitorConfig = {
     cleartext: true
   },
   android: {
-    allowMixedContent: true
+    allowMixedContent: true,
+    appendUserAgent: 'PawsitiveCheck',
+    overrideUserAgent: 'PawsitiveCheckApp'
   },
   plugins: {
     CapacitorHttp: {
       enabled: true
+    },
+    Permissions: {
+      camera: 'granted'
     }
   }
 };
