@@ -10,18 +10,9 @@ export function useMobile() {
         return false;
       }
       
-      const userAgent = navigator.userAgent;
-      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
-      
-      // Debug logging
-      console.log('Mobile Detection Debug:', {
-        userAgent,
-        isMobileUA,
-        screenWidth: window.innerWidth,
-        isTouchDevice: 'ontouchstart' in window
-      });
-      
-      return isMobileUA;
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
+        navigator.userAgent
+      );
     };
     
     setIsMobile(checkMobile());

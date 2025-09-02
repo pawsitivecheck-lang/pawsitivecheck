@@ -1,5 +1,8 @@
 import * as client from "openid-client";
 import { Strategy, type VerifyFunction } from "openid-client/passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcryptjs";
 
 import passport from "passport";
 import session from "express-session";
@@ -151,10 +154,111 @@ export async function setupAuth(app: Express) {
       console.log(`Authentication strategy registered for domain: ${domain}`);
     }
 
+    // Google OAuth Strategy (if credentials are available)
+    if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+      passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "/api/auth/google/callback"
+      }, async (accessToken, refreshToken, profile, done) => {
+        try {
+          // Check if user exists with this Google ID
+          let user = await storage.getUserByGoogleId(profile.id);
+          
+          if (!user) {
+            // Check if user exists with this email
+            const email = profile.emails?.[0]?.value;
+            if (email) {
+              user = await storage.getUserByEmail(email);
+              
+              if (user) {
+                // Link Google account to existing user
+                await storage.upsertUser({
+                  ...user,
+                  googleId: profile.id,
+                  authProvider: 'google',
+                });
+              } else {
+                // Create new user
+                user = await storage.upsertUser({
+                  email: email,
+                  firstName: profile.name?.givenName,
+                  lastName: profile.name?.familyName,
+                  profileImageUrl: profile.photos?.[0]?.value,
+                  googleId: profile.id,
+                  authProvider: 'google',
+                });
+              }
+            }
+          }
+          
+          if (user) {
+            const sessionUser = {
+              id: user.id,
+              claims: {
+                sub: user.id,
+                email: user.email,
+                first_name: user.firstName,
+                last_name: user.lastName,
+                profile_image_url: user.profileImageUrl,
+                exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60), // 1 week
+              },
+              expires_at: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60),
+            };
+            return done(null, sessionUser);
+          }
+          
+          return done(new Error('Failed to create or find user'), undefined);
+        } catch (error) {
+          return done(error, undefined);
+        }
+      }));
+      console.log('Google OAuth strategy registered');
+    }
+
+    // Local Strategy (email/password)
+    passport.use(new LocalStrategy({
+      usernameField: 'email',
+      passwordField: 'password'
+    }, async (email, password, done) => {
+      try {
+        const user = await storage.getUserByEmail(email);
+        
+        if (!user || !user.passwordHash) {
+          return done(null, false, { message: 'Invalid email or password' });
+        }
+        
+        const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+        if (!isValidPassword) {
+          return done(null, false, { message: 'Invalid email or password' });
+        }
+        
+        const sessionUser = {
+          id: user.id,
+          claims: {
+            sub: user.id,
+            email: user.email,
+            first_name: user.firstName,
+            last_name: user.lastName,
+            profile_image_url: user.profileImageUrl,
+            exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60), // 1 week
+          },
+          expires_at: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60),
+        };
+        
+        return done(null, sessionUser);
+      } catch (error) {
+        return done(error, undefined);
+      }
+    }));
+    console.log('Local authentication strategy registered');
+
     passport.serializeUser((user: Express.User, cb) => cb(null, user));
     passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
     // Set up authentication routes
+    
+    // Replit OAuth routes
     app.get("/api/login", (req, res, next) => {
       passport.authenticate(`replitauth:${req.hostname}`, {
         prompt: "login consent",
@@ -169,6 +273,88 @@ export async function setupAuth(app: Express) {
       })(req, res, next);
     });
 
+    // Google OAuth routes
+    if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+      app.get("/api/auth/google", 
+        passport.authenticate("google", { scope: ["profile", "email"] })
+      );
+
+      app.get("/api/auth/google/callback",
+        passport.authenticate("google", { failureRedirect: "/login" }),
+        (req, res) => {
+          res.redirect("/");
+        }
+      );
+    }
+
+    // Local authentication routes (email/password)
+    app.post("/api/auth/login", (req, res, next) => {
+      passport.authenticate("local", (err, user, info) => {
+        if (err) {
+          return res.status(500).json({ message: "Authentication error" });
+        }
+        if (!user) {
+          return res.status(401).json({ message: info?.message || "Invalid credentials" });
+        }
+        
+        req.logIn(user, (err) => {
+          if (err) {
+            return res.status(500).json({ message: "Login error" });
+          }
+          return res.json({ success: true, user: { id: user.id, email: user.claims.email } });
+        });
+      })(req, res, next);
+    });
+
+    app.post("/api/auth/register", async (req, res) => {
+      try {
+        const { email, password, firstName, lastName } = req.body;
+        
+        if (!email || !password) {
+          return res.status(400).json({ message: "Email and password are required" });
+        }
+        
+        // Check if user already exists
+        const existingUser = await storage.getUserByEmail(email);
+        if (existingUser) {
+          return res.status(409).json({ message: "User already exists with this email" });
+        }
+        
+        // Create new user
+        const user = await storage.createUserWithPassword({
+          email,
+          firstName,
+          lastName,
+        }, password);
+        
+        // Log in the new user
+        const sessionUser = {
+          id: user.id,
+          claims: {
+            sub: user.id,
+            email: user.email,
+            first_name: user.firstName,
+            last_name: user.lastName,
+            profile_image_url: user.profileImageUrl,
+            exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60), // 1 week
+          },
+          expires_at: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60),
+        };
+        
+        req.logIn(sessionUser, (err) => {
+          if (err) {
+            return res.status(500).json({ message: "Registration successful but login failed" });
+          }
+          return res.json({ success: true, user: { id: user.id, email: user.email } });
+        });
+        
+      } catch (error) {
+        console.error("Registration error:", error);
+        res.status(500).json({ message: "Registration failed" });
+      }
+    });
+
+    // Universal logout (works for all auth methods)
     app.get("/api/logout", (req, res) => {
       req.logout(() => {
         res.redirect(

@@ -83,11 +83,17 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
 export interface IStorage {
   // User operations - mandatory for Replit Auth
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  
+  // Additional auth methods
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByGoogleId(googleId: string): Promise<User | undefined>;
+  createUserWithPassword(userData: Omit<UpsertUser, 'passwordHash'>, password: string): Promise<User>;
 
   // Product operations
   getProducts(limit?: number, offset?: number, search?: string): Promise<Product[]>;
@@ -341,6 +347,29 @@ export class DatabaseStorage implements IStorage {
           ...userData,
           updatedAt: new Date(),
         },
+      })
+      .returning();
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.googleId, googleId));
+    return user;
+  }
+
+  async createUserWithPassword(userData: Omit<UpsertUser, 'passwordHash'>, password: string): Promise<User> {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const [user] = await db
+      .insert(users)
+      .values({
+        ...userData,
+        passwordHash: hashedPassword,
+        authProvider: 'local',
       })
       .returning();
     return user;
