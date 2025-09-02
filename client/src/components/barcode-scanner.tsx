@@ -43,7 +43,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   useEffect(() => {
     if (isActive && !scannerRef.current) {
-      // Add a small delay to ensure DOM is ready
+      // Add delay to ensure DOM is ready and prevent race conditions
       const initScanner = async () => {
         try {
           // Clear any existing scanner first
@@ -52,11 +52,30 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
+          // Check if camera is available
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const hasCamera = devices.some(device => device.kind === 'videoinput');
+          
+          if (!hasCamera) {
+            throw new Error('No camera device found. Please ensure your device has a camera and try again.');
+          }
+
+          // Better configuration for mobile devices
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          
           const scanner = new Html5QrcodeScanner(
             "barcode-scanner-container",
             {
-              fps: 10,
-              qrbox: { width: 250, height: 150 },
+              fps: isMobile ? 5 : 10, // Lower FPS on mobile for better performance
+              qrbox: function(viewfinderWidth, viewfinderHeight) {
+                // Square scanning box, responsive to container size
+                const minEdgePercentage = 0.7;
+                const qrboxSize = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * minEdgePercentage);
+                return {
+                  width: qrboxSize,
+                  height: Math.floor(qrboxSize * 0.6) // Rectangle for barcodes
+                };
+              },
               supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
               formatsToSupport: [
                 Html5QrcodeSupportedFormats.CODE_128,
@@ -67,10 +86,12 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
                 Html5QrcodeSupportedFormats.UPC_E,
                 Html5QrcodeSupportedFormats.QR_CODE
               ],
-              aspectRatio: 1.0,
+              aspectRatio: isMobile ? 1.0 : 1.777778, // 16:9 for desktop, square for mobile
               disableFlip: false,
               rememberLastUsedCamera: true,
               showTorchButtonIfSupported: true,
+              showZoomSliderIfSupported: true,
+              defaultZoomValueIfSupported: 1,
             },
             false // verbose
           );
@@ -82,13 +103,26 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         } catch (error) {
           console.error('Error initializing scanner:', error);
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          setCameraError(`Camera access failed: ${errorMessage}. Please allow camera permissions and try again.`);
+          
+          // Provide more specific error messages
+          let friendlyMessage = errorMessage;
+          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied')) {
+            friendlyMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
+          } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
+            friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
+          } else if (errorMessage.includes('NotReadableError')) {
+            friendlyMessage = 'Camera is already in use by another application. Please close other apps and try again.';
+          } else if (errorMessage.includes('OverconstrainedError')) {
+            friendlyMessage = 'Camera configuration not supported. Please try a different device or browser.';
+          }
+          
+          setCameraError(friendlyMessage);
           setIsScannerReady(false);
         }
       };
 
-      // Small delay to ensure the container is mounted
-      setTimeout(initScanner, 100);
+      // Longer delay for better mobile support
+      setTimeout(initScanner, 200);
     }
 
     return () => {
@@ -124,15 +158,33 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
       container.innerHTML = '';
     }
     
-    // Re-initialize after a delay
+    // Re-initialize with improved logic
     setTimeout(async () => {
       if (isActive) {
         try {
+          // Check if camera is available
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const hasCamera = devices.some(device => device.kind === 'videoinput');
+          
+          if (!hasCamera) {
+            throw new Error('No camera device found. Please ensure your device has a camera and try again.');
+          }
+
+          // Better configuration for mobile devices
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          
           const scanner = new Html5QrcodeScanner(
             "barcode-scanner-container",
             {
-              fps: 10,
-              qrbox: { width: 250, height: 150 },
+              fps: isMobile ? 5 : 10,
+              qrbox: function(viewfinderWidth, viewfinderHeight) {
+                const minEdgePercentage = 0.7;
+                const qrboxSize = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * minEdgePercentage);
+                return {
+                  width: qrboxSize,
+                  height: Math.floor(qrboxSize * 0.6)
+                };
+              },
               supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
               formatsToSupport: [
                 Html5QrcodeSupportedFormats.CODE_128,
@@ -143,10 +195,12 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
                 Html5QrcodeSupportedFormats.UPC_E,
                 Html5QrcodeSupportedFormats.QR_CODE
               ],
-              aspectRatio: 1.0,
+              aspectRatio: isMobile ? 1.0 : 1.777778,
               disableFlip: false,
               rememberLastUsedCamera: true,
               showTorchButtonIfSupported: true,
+              showZoomSliderIfSupported: true,
+              defaultZoomValueIfSupported: 1,
             },
             false
           );
@@ -157,7 +211,20 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         } catch (error) {
           console.error('Error resetting scanner:', error);
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          setCameraError(`Failed to reset scanner: ${errorMessage}. Please check camera permissions.`);
+          
+          // Provide more specific error messages
+          let friendlyMessage = errorMessage;
+          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied')) {
+            friendlyMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
+          } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
+            friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
+          } else if (errorMessage.includes('NotReadableError')) {
+            friendlyMessage = 'Camera is already in use by another application. Please close other apps and try again.';
+          } else if (errorMessage.includes('OverconstrainedError')) {
+            friendlyMessage = 'Camera configuration not supported. Please try a different device or browser.';
+          }
+          
+          setCameraError(friendlyMessage);
         }
       }
     }, 300);
@@ -178,18 +245,18 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
       data-testid="modal-barcode-scanner"
       onClick={handleBackdropClick}
     >
-      <Card className="cosmic-card w-full max-w-lg cursor-default m-auto">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-starlight-400">
+      <Card className="w-full max-w-lg cursor-default m-auto bg-card border-border shadow-xl">
+        <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+          <CardTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5" />
-            Mystical Barcode Scanner
+            🔮 Mystical Barcode Scanner
           </CardTitle>
           <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handleReset}
-              className="border-cosmic-600 text-cosmic-300"
+              className="border-white/30 text-white hover:bg-white/20"
               data-testid="button-reset-scanner"
             >
               <RotateCcw className="h-4 w-4" />
@@ -198,22 +265,22 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               variant="outline"
               size="sm"
               onClick={onClose}
-              className="border-cosmic-600 text-cosmic-300"
+              className="border-white/30 text-white hover:bg-white/20"
               data-testid="button-close-scanner"
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           {cameraError ? (
             <div className="text-center py-8">
-              <div className="text-mystical-red mb-4" data-testid="text-camera-error">
-                {cameraError}
+              <div className="text-red-600 mb-4 font-medium" data-testid="text-camera-error">
+                ⚠️ {cameraError}
               </div>
               <Button
                 onClick={handleReset}
-                className="mystical-button"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 data-testid="button-retry-camera"
               >
                 <RotateCcw className="mr-2 h-4 w-4" />
@@ -223,8 +290,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           ) : (
             <div>
               <div className="text-center mb-4">
-                <p className="text-cosmic-300 text-sm mb-2" data-testid="text-scanner-instructions">
-                  Point your camera at a barcode. The cosmic scanner will automatically detect and analyze the mystical signature.
+                <p className="text-foreground text-sm mb-2" data-testid="text-scanner-instructions">
+                  🔮 Point your camera at a barcode. The cosmic scanner will automatically detect and analyze the mystical signature.
                 </p>
                 <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mt-3">
                   <p className="text-blue-700 dark:text-blue-300 text-xs font-medium" data-testid="text-permission-reminder">
@@ -235,16 +302,18 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               
               <div 
                 id="barcode-scanner-container" 
-                className="w-full"
+                className="w-full min-h-[300px] bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden"
                 data-testid="container-barcode-scanner"
               />
 
               {!isScannerReady && (
-                <div className="text-center py-8">
-                  <div className="animate-spin w-8 h-8 border-2 border-starlight-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-cosmic-400" data-testid="text-scanner-loading">
-                    Initializing cosmic scanner...
-                  </p>
+                <div className="absolute inset-0 flex items-center justify-center bg-background/90">
+                  <div className="text-center">
+                    <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p className="text-foreground font-medium" data-testid="text-scanner-loading">
+                      🔮 Initializing cosmic scanner...
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
