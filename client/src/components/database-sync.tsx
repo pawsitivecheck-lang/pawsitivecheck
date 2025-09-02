@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { RefreshCw, Database, CheckCircle, AlertTriangle, Clock, Zap, Crown, ChartLine, Ban, Shield, Users, Package, Eye, TrendingUp, FileText, Plus, Edit, Trash } from "lucide-react";
 
 interface SyncStatus {
@@ -48,6 +48,8 @@ export default function DatabaseSync() {
         description: `Created ${data.totalCreated} sync schedules for twice-daily execution with smart staggering.`,
         duration: 8000,
       });
+      // Refresh the schedules list to show newly created schedules
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/sync/schedules'] });
     },
     onError: () => {
       toast({
@@ -1109,7 +1111,7 @@ export default function DatabaseSync() {
               )}
             </Button>
             
-            <SyncScheduleDialog onScheduleCreated={() => {}} />
+            <SyncScheduleDialog onScheduleCreated={() => queryClient.invalidateQueries({ queryKey: ['/api/admin/sync/schedules'] })} />
           </div>
 
           {/* Sync Schedule List */}
