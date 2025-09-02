@@ -12,6 +12,8 @@ import ProductCard from "@/components/product-card";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Plus, X, Scan, Camera } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { QuickScanModal } from "@/components/quick-scan-modal";
+import type { Product } from "@shared/schema";
 
 export default function ProductDatabase() {
   const { user } = useAuth();
@@ -34,6 +36,7 @@ export default function ProductDatabase() {
   const [sortBy, setSortBy] = useState("newest");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [page, setPage] = useState(0);
+  const [showScanModal, setShowScanModal] = useState(false);
   const limit = 12;
 
   const { data: products, isLoading } = useQuery({
@@ -137,14 +140,12 @@ export default function ProductDatabase() {
             {/* Quick Scan Access */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Button 
-                asChild
+                onClick={() => setShowScanModal(true)}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
                 data-testid="button-quick-scan"
               >
-                <Link to="/product-scanner">
-                  <Scan className="mr-2 h-5 w-5" />
-                  Scan Product Barcode
-                </Link>
+                <Scan className="mr-2 h-5 w-5" />
+                Scan Product Barcode
               </Button>
               <p className="text-sm text-gray-500">
                 Can't find a product? Try scanning its barcode instead
@@ -632,6 +633,16 @@ export default function ProductDatabase() {
         </div>
       </div>
       <Footer />
+      
+      {/* Quick Scan Modal */}
+      <QuickScanModal
+        isOpen={showScanModal}
+        onClose={() => setShowScanModal(false)}
+        onProductFound={(product: Product) => {
+          // Navigate to product detail page
+          setLocation(`/product/${product.id}`);
+        }}
+      />
     </div>
   );
 }
