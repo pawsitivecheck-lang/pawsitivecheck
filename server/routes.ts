@@ -1368,7 +1368,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             lastSync: new Date().toISOString() 
           }
         },
-        health: "healthy",
+        health: "operational",
         lastChecked: new Date().toISOString()
       };
 
