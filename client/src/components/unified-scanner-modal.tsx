@@ -469,19 +469,6 @@ export function UnifiedScannerModal({
                   data-testid="container-unified-barcode-scanner"
                 />
 
-                {!isScannerReady && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-background/90 rounded-lg">
-                    <div className="text-center">
-                      <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-                      <p className="text-foreground font-medium" data-testid="text-scanner-loading">
-                        🔮 Initializing cosmic scanner...
-                      </p>
-                      <p className="text-muted-foreground text-xs mt-2" data-testid="text-permission-hint">
-                        Your browser may ask for camera permissions
-                      </p>
-                    </div>
-                  </div>
-                )}
                 
                 {/* Scan success overlay */}
                 <div 
