@@ -1,0 +1,31 @@
+Navigated to https://pawsitivecheck.com/
+pagead2.googlesyndication.com/:1 Refused to frame 'https://googleads.g.doubleclick.net/' because it violates the following Content Security Policy directive: "frame-src 'self'".
+
+pagead2.googlesyndication.com/:1 Refused to frame 'https://googleads.g.doubleclick.net/' because it violates the following Content Security Policy directive: "frame-src 'self'".
+
+index-TKJ-jXdB.js:40 PWA: Service Worker registered successfully: ServiceWorkerRegistration {installing: null, waiting: null, active: ServiceWorker, navigationPreload: NavigationPreloadManager, scope: 'https://pawsitivecheck.com/', …}
+pawsitivecheck.com/:1 Error while trying to use the following icon from the Manifest: https://pawsitivecheck.com/icon-192.png (Resource size is not correct - typo in the Manifest?)
+show_ads_impl_fy2021.js:102 Refused to load the script 'https://ep2.adtrafficquality.google/sodar/sodar2.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+(anonymous) @ show_ads_impl_fy2021.js:102
+uj @ show_ads_impl_fy2021.js:102
+Bj @ show_ads_impl_fy2021.js:105
+await in Bj
+PZ @ show_ads_impl_fy2021.js:587
+(anonymous) @ show_ads_impl_fy2021.js:587
+show_ads_impl_fy2021.js:102 Uncaught (in promise) undefined
+f.onerror @ show_ads_impl_fy2021.js:102
+script
+(anonymous) @ show_ads_impl_fy2021.js:102
+uj @ show_ads_impl_fy2021.js:102
+Bj @ show_ads_impl_fy2021.js:105
+await in Bj
+PZ @ show_ads_impl_fy2021.js:587
+(anonymous) @ show_ads_impl_fy2021.js:587
+show_ads_impl_fy2021.js:103 XHR finished loading: GET "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20250828&st=env".
+(anonymous) @ show_ads_impl_fy2021.js:103
+Aj @ show_ads_impl_fy2021.js:103
+zj @ show_ads_impl_fy2021.js:102
+Bj @ show_ads_impl_fy2021.js:104
+PZ @ show_ads_impl_fy2021.js:587
+(anonymous) @ show_ads_impl_fy2021.js:587
