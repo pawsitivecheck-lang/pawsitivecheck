@@ -174,8 +174,6 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
-      // Use standard getUserMedia for both web and mobile
-      // Capacitor automatically handles permissions for mobile apps
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
           facingMode: 'environment' // Prefer rear camera on mobile
