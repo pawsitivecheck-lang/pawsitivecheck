@@ -174,34 +174,20 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
-      // For mobile apps (Capacitor), use Capacitor Camera permission
-      if (typeof window !== 'undefined' && (window as any).Capacitor && (window as any).CapacitorCamera) {
-        // Use already available Capacitor Camera API
-        const permissions = await (window as any).CapacitorCamera.requestPermissions();
-        if (permissions.camera === 'granted') {
-          setShowScanner(true);
-          toast({
-            title: "Camera Access Granted",
-            description: "Point your camera at a product barcode to scan",
-          });
-        } else {
-          throw new Error('Camera permission denied by user');
-        }
-      } else {
-        // For web browsers, use standard getUserMedia
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { 
-            facingMode: 'environment' // Prefer rear camera on mobile
-          } 
-        });
-        // Permission granted - close the test stream
-        stream.getTracks().forEach(track => track.stop());
-        setShowScanner(true);
-        toast({
-          title: "Camera Access Granted",
-          description: "Point your camera at a product barcode to scan",
-        });
-      }
+      // Use standard getUserMedia for both web and mobile
+      // Capacitor automatically handles permissions for mobile apps
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: 'environment' // Prefer rear camera on mobile
+        } 
+      });
+      // Permission granted - close the test stream
+      stream.getTracks().forEach(track => track.stop());
+      setShowScanner(true);
+      toast({
+        title: "Camera Access Granted",
+        description: "Point your camera at a product barcode to scan",
+      });
     } catch (error) {
       console.error('Camera permission error:', error);
       setCameraError("Camera permission denied. Please allow camera access and try again.");
