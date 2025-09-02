@@ -50,7 +50,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
     if (permissionState === 'granted') {
       // User previously selected "Allow always" - use camera directly
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' }
+        video: { facingMode: { exact: 'environment' } } // Force rear camera
       });
       stream.getTracks().forEach(track => track.stop());
       return { granted: true, permanent: true };
@@ -60,7 +60,7 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
     // Request fresh permission
     const stream = await navigator.mediaDevices.getUserMedia({ 
       video: { 
-        facingMode: 'environment',
+        facingMode: { exact: 'environment' }, // Force rear camera explicitly
         frameRate: { ideal: 30 },
         width: { ideal: 1280 },
         height: { ideal: 720 }
@@ -120,7 +120,7 @@ export const getCameraConstraints = () => {
   
   return {
     video: {
-      facingMode: 'environment',
+      facingMode: { exact: 'environment' }, // Force rear camera explicitly
       width: isMobile ? { ideal: 1280 } : { ideal: 1920 },
       height: isMobile ? { ideal: 720 } : { ideal: 1080 }
     }

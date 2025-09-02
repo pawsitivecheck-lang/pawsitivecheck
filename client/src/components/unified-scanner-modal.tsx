@@ -268,6 +268,10 @@ export function UnifiedScannerModal({
           showTorchButtonIfSupported: true,
           showZoomSliderIfSupported: true,
           defaultZoomValueIfSupported: 1,
+          // Force rear camera for barcode scanning
+          videoConstraints: {
+            facingMode: { exact: 'environment' }
+          },
         },
         false // verbose
       );
