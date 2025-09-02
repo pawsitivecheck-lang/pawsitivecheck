@@ -1,8 +1,9 @@
 import React from "react";
 
 export default function App() {
+  // Force cache refresh - version 2.0
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50" data-version="2.0">
       {/* Alert Banner */}
       <div className="bg-red-600 text-white py-3 px-4 text-center text-sm font-medium">
         🚨 ALERT: New product recalls updated • Check your pet's products now →
@@ -55,12 +56,18 @@ export default function App() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg">
-                🛡️ Start Checking Products
+              <button 
+                onClick={() => window.location.href = '/product-database'} 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg"
+              >
+                🛡️ Start Checking Products - NO SIGN IN REQUIRED
               </button>
               
-              <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-xl">
-                📱 Learn How It Works
+              <button 
+                onClick={() => window.location.href = '/product-scanner'} 
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-xl"
+              >
+                📱 Scan Products Now
               </button>
             </div>
             
