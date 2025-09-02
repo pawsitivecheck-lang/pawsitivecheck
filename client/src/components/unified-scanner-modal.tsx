@@ -427,32 +427,6 @@ export function UnifiedScannerModal({
                 Try Again
               </Button>
             </div>
-          ) : !permissionRequested && !showScanner ? (
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <Camera className="h-8 w-8 text-white" />
-              </div>
-              <div className="space-y-2">
-                <p className="text-gray-700">
-                  Requesting camera access...
-                </p>
-                <p className="text-sm text-gray-500">
-                  {getModeDescription()}
-                </p>
-              </div>
-            </div>
-          ) : permissionRequested && !showScanner ? (
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center">
-                <AlertCircle className="h-8 w-8 text-yellow-600" />
-              </div>
-              <div className="space-y-2">
-                <p className="text-gray-700">Requesting camera permission...</p>
-                <p className="text-sm text-gray-500">
-                  Please allow camera access to scan barcodes
-                </p>
-              </div>
-            </div>
           ) : showScanner ? (
             <div className="space-y-4">
               <div className="text-center">
