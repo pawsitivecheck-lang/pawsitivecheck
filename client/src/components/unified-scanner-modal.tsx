@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
+import { Camera as CapacitorCamera } from '@capacitor/camera';
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import type { Product } from "@shared/schema";
 
@@ -174,18 +175,33 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment' // Prefer rear camera on mobile
-        } 
-      });
-      // Permission granted - close the test stream
-      stream.getTracks().forEach(track => track.stop());
-      setShowScanner(true);
-      toast({
-        title: "Camera Access Granted",
-        description: "Point your camera at a product barcode to scan",
-      });
+      // For mobile apps (Capacitor), use Capacitor Camera permission
+      if (typeof (window as any).Capacitor !== 'undefined') {
+        const permissions = await CapacitorCamera.requestPermissions();
+        if (permissions.camera === 'granted') {
+          setShowScanner(true);
+          toast({
+            title: "Camera Access Granted",
+            description: "Point your camera at a product barcode to scan",
+          });
+        } else {
+          throw new Error('Camera permission denied by user');
+        }
+      } else {
+        // For web browsers, use standard getUserMedia
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'environment' // Prefer rear camera on mobile
+          } 
+        });
+        // Permission granted - close the test stream
+        stream.getTracks().forEach(track => track.stop());
+        setShowScanner(true);
+        toast({
+          title: "Camera Access Granted",
+          description: "Point your camera at a product barcode to scan",
+        });
+      }
     } catch (error) {
       console.error('Camera permission error:', error);
       setCameraError("Camera permission denied. Please allow camera access and try again.");
