@@ -700,7 +700,7 @@ export default function Landing() {
                     className="w-full bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/30 min-h-[40px] text-sm"
                     data-testid="button-manage-recalls"
                   >
-                    <Link to="/recalls">Manage Recalls</Link>
+                    <Link to="/recalls" className="text-red-600 dark:text-red-400">Manage Recalls</Link>
                   </Button>
                 </div>
               </div>
@@ -719,7 +719,7 @@ export default function Landing() {
                     className="w-full bg-purple-50 dark:bg-purple-950/30 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900/30 min-h-[40px] text-sm"
                     data-testid="button-update-ai"
                   >
-                    <Link to="/admin">Update AI Analysis</Link>
+                    <Link to="/admin" className="text-purple-600 dark:text-purple-400">Update AI Analysis</Link>
                   </Button>
                   <Button 
                     asChild
@@ -728,7 +728,7 @@ export default function Landing() {
                     className="w-full bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 min-h-[40px] text-sm"
                     data-testid="button-update-database"
                   >
-                    <Link to="/admin">Update Safety Database</Link>
+                    <Link to="/admin" className="text-blue-600 dark:text-blue-400">Update Safety Database</Link>
                   </Button>
                 </div>
               </div>
