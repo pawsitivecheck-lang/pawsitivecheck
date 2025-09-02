@@ -1,0 +1,54 @@
+
+> Task :app:packageDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :capacitor-android:extractDeepLinksDebug
+> Task :capacitor-cordova-android-plugins:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:mergeDebugResources
+> Task :capacitor-cordova-android-plugins:processDebugManifest
+> Task :capacitor-android:processDebugManifest
+> Task :capacitor-android:compileDebugLibraryResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :capacitor-cordova-android-plugins:compileDebugLibraryResources
+> Task :capacitor-android:parseDebugLocalResources
+> Task :capacitor-android:javaPreCompileDebug
+> Task :capacitor-cordova-android-plugins:parseDebugLocalResources
+> Task :app:processDebugManifestForPackage
+> Task :capacitor-cordova-android-plugins:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :capacitor-android:generateDebugRFile
+> Task :capacitor-cordova-android-plugins:generateDebugRFile
+> Task :app:processDebugResources
+/home/runner/work/pawsitivecheck/pawsitivecheck/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/CapacitorWebView.java:66: error: cannot find symbol
+
+> Task :capacitor-android:compileDebugJavaWithJavac
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && configEdgeToEdge.equals("auto")) {
+                                                        ^
+  symbol:   variable VANILLA_ICE_CREAM
+  location: class VERSION_CODES
+/home/runner/work/pawsitivecheck/pawsitivecheck/node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/CapacitorWebView.java:68: error: cannot find symbol
+            boolean foundOptOut = getContext().getTheme().resolveAttribute(android.R.attr.windowOptOutEdgeToEdgeEnforcement, value, true);
+                                                                                         ^
+  symbol:   variable windowOptOutEdgeToEdgeEnforcement
+  location: class attr
+Note: Some input files use unchecked or unsafe operations.
+
+Note: Recompile with -Xlint:unchecked for details.
+2 errors
+> Task :capacitor-android:compileDebugJavaWithJavac FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':capacitor-android:compileDebugJavaWithJavac'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 2m 6s
+36 actionable tasks: 36 executed
+Error: Process completed with exit code 1.
