@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Camera, Scan, Eye, AlertTriangle, CheckCircle, XCircle, Image, Search, Globe, Loader2 } from "lucide-react";
-import { BarcodeScanner } from "@/components/barcode-scanner";
+import { UnifiedScannerModal } from "@/components/unified-scanner-modal";
 import { ImageScanner } from "@/components/image-scanner";
 import { getCosmicClarityIcon, getCosmicClarityColor } from "@/utils/cosmic-clarity";
 import type { Product } from "@shared/schema";
@@ -182,16 +182,8 @@ export default function ProductScanner() {
     }
   };
 
-  const handleBarcodeScanned = (scannedBarcode: string) => {
-    setBarcode(scannedBarcode);
+  const handleBarcodeScanned = () => {
     setShowBarcodeScanner(false);
-    scanProductMutation.mutate(scannedBarcode);
-    
-    // Record scan history
-    recordScanMutation.mutate({
-      scannedData: scannedBarcode,
-      analysisResult: null,
-    });
   };
 
   const handleImageScanned = (imageData: string) => {
@@ -671,10 +663,10 @@ export default function ProductScanner() {
       </div>
 
       {/* Scanner Modals */}
-      <BarcodeScanner
-        isActive={showBarcodeScanner}
-        onScan={handleBarcodeScanned}
+      <UnifiedScannerModal
+        isOpen={showBarcodeScanner}
         onClose={() => setShowBarcodeScanner(false)}
+        mode="full"
       />
       
       <ImageScanner

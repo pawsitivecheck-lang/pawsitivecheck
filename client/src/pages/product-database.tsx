@@ -12,7 +12,7 @@ import ProductCard from "@/components/product-card";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Filter, Plus, X, Scan, Camera } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { QuickScanModal } from "@/components/quick-scan-modal";
+import { UnifiedScannerModal } from "@/components/unified-scanner-modal";
 import type { Product } from "@shared/schema";
 
 export default function ProductDatabase() {
@@ -644,10 +644,11 @@ export default function ProductDatabase() {
       </div>
       <Footer />
       
-      {/* Quick Scan Modal */}
-      <QuickScanModal
+      {/* Unified Scanner Modal */}
+      <UnifiedScannerModal
         isOpen={showScanModal}
         onClose={() => setShowScanModal(false)}
+        mode="quick"
         onProductFound={(product: Product) => {
           // Navigate to product detail page
           setLocation(`/product/${product.id}`);

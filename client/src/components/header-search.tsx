@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { BarcodeScanner } from "@/components/barcode-scanner";
+import { UnifiedScannerModal } from "@/components/unified-scanner-modal";
 import { ImageScanner } from "@/components/image-scanner";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
@@ -599,10 +599,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
 
 
-  const handleBarcodeScanned = (barcode: string) => {
+  const handleBarcodeScanned = () => {
     setShowBarcodeScanner(false);
     setShowScannerMenu(false);
-    scanProductMutation.mutate(barcode);
   };
 
   const handleImageScanned = (imageData: string) => {
@@ -869,10 +868,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       </div>
 
       {/* Scanner Modals */}
-      <BarcodeScanner
-        isActive={showBarcodeScanner}
-        onScan={handleBarcodeScanned}
+      <UnifiedScannerModal
+        isOpen={showBarcodeScanner}
         onClose={() => setShowBarcodeScanner(false)}
+        mode="full"
       />
       
       <ImageScanner
