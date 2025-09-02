@@ -1,6 +1,5 @@
 import { PawPrint } from "lucide-react";
 import { Link } from "wouter";
-import PWAInstallButton from "@/components/pwa-install-button";
 
 export default function Footer() {
   return (
@@ -94,10 +93,6 @@ export default function Footer() {
         
         {/* Install App & Legal Links */}
         <div className="border-t border-border pt-6">
-          {/* PWA Install Button - Centered */}
-          <div className="flex justify-center mb-6">
-            <PWAInstallButton />
-          </div>
           
           <div className="flex flex-wrap justify-center items-center gap-4 mb-4">
             <Link 

@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat, Smartphone } from "lucide-react";
+import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat } from "lucide-react";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
-import PWAInstallButton from "@/components/pwa-install-button";
 import DNTIndicator from "@/components/dnt-indicator";
 import {
   DropdownMenu,
@@ -15,18 +14,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-}
 
 export default function Navbar() {
   const { user } = useAuth();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showInstallOption, setShowInstallOption] = useState(false);
 
   const navigation = [
     { name: 'Recall Alerts', href: '/recalls', icon: Shield },
@@ -38,60 +31,8 @@ export default function Navbar() {
 
   const isActivePage = (href: string) => location === href;
 
-  // PWA Install Logic
-  useEffect(() => {
-    // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches || 
-        (window as any).navigator.standalone) {
-      setShowInstallOption(false);
-      return;
-    }
 
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallOption(true);
-    };
 
-    const handleAppInstalled = () => {
-      setShowInstallOption(false);
-      setDeferredPrompt(null);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
-
-  const handleInstallApp = async () => {
-    if (!deferredPrompt) {
-      // Fallback for browsers that don't support the install prompt
-      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
-      setIsHamburgerMenuOpen(false);
-      return;
-    }
-
-    try {
-      await deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
-        console.log('PWA: User accepted the install prompt');
-      }
-      
-      setDeferredPrompt(null);
-      setShowInstallOption(false);
-      setIsHamburgerMenuOpen(false);
-    } catch (error) {
-      console.error('PWA: Error during installation:', error);
-      alert('To install this app:\n\n1. On Chrome/Edge: Click the + icon in the address bar\n2. On Safari: Use "Add to Home Screen" from the share menu\n3. On Firefox: Look for "Install" option in the address bar');
-      setIsHamburgerMenuOpen(false);
-    }
-  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
@@ -120,8 +61,6 @@ export default function Navbar() {
             {/* Do Not Track Indicator */}
             <DNTIndicator />
             
-            {/* PWA Install Button */}
-            <PWAInstallButton />
             
             {/* Theme Toggle */}
             <ThemeToggle />
@@ -241,22 +180,6 @@ export default function Navbar() {
                 })}
               </div>
 
-              {/* Install App Section */}
-              <div className="p-4 border-t border-border bg-card">
-                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-                  App
-                </div>
-                <div className="space-y-2">
-                  <div 
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
-                    onClick={handleInstallApp}
-                    data-testid="hamburger-install-app"
-                  >
-                    <Smartphone className="h-5 w-5" />
-                    <span className="font-medium">Install App</span>
-                  </div>
-                </div>
-              </div>
 
               {/* Profile Items */}
               <div className="p-4 border-t border-border bg-card">
@@ -338,11 +261,6 @@ export default function Navbar() {
               <HeaderSearch isMobile={true} />
             </div>
             
-            {/* Mobile Install App Button */}
-            <div className="px-4 pb-4 border-b border-border mb-4">
-              <div className="text-sm text-muted-foreground mb-2">Install App</div>
-              <PWAInstallButton />
-            </div>
             <div className="space-y-2">
               {navigation.map((item) => {
                 const Icon = item.icon;
