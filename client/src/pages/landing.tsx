@@ -344,31 +344,6 @@ export default function Landing() {
               Get instant safety scores, detailed ingredient analysis, and stay updated on the latest product recalls.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8">
-              <Button 
-                asChild
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 min-h-[48px] sm:min-h-[56px] w-full sm:w-auto"
-                data-testid="button-get-started"
-              >
-                <Link to="/product-database">
-                  <Shield className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                  Start Checking Products
-                </Link>
-              </Button>
-              
-              <Button 
-                variant="outline"
-                size="lg"
-                onClick={() => scrollToSection('database')}
-                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl min-h-[48px] sm:min-h-[56px] transition-all transform hover:scale-105 w-full sm:w-auto"
-                data-testid="button-learn-more"
-              >
-                <Eye className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                Learn How It Works
-              </Button>
-            </div>
-            
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12">
               <div className="text-center">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
