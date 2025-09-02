@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -28,6 +29,7 @@ export function UnifiedScannerModal({
   onSearchResult 
 }: UnifiedScannerModalProps) {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [, setLocation] = useLocation();
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [showScanner, setShowScanner] = useState(false);
@@ -82,22 +84,32 @@ export function UnifiedScannerModal({
         setLocation(`/product/${result.product.id}`);
         onClose();
       } else {
-        // Product not found - offer to add it (for everyone)
-        toast({
-          title: "Product Not Found",
-          description: "Would you like to add this product to our database?",
-          variant: "destructive",
-          action: (
-            <div className="space-x-2">
-              <Button size="sm" onClick={() => {
-                onClose();
-                setLocation('/add-product');
-              }}>
-                Add Product
-              </Button>
-            </div>
-          ),
-        });
+        // Product not found - different message based on auth status
+        if (user) {
+          // Logged-in users get the "Add Product" option
+          toast({
+            title: "Product Not Found",
+            description: "Would you like to add this product to our database?",
+            variant: "destructive",
+            action: (
+              <div className="space-x-2">
+                <Button size="sm" onClick={() => {
+                  onClose();
+                  setLocation('/add-product');
+                }}>
+                  Add Product
+                </Button>
+              </div>
+            ),
+          });
+        } else {
+          // Guest users just get a simple message
+          toast({
+            title: "Product Not Found",
+            description: "This product is not in our database yet. Log in to add new products.",
+            variant: "destructive",
+          });
+        }
       }
     },
     onError: (error: any) => {
