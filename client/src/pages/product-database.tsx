@@ -123,31 +123,31 @@ export default function ProductDatabase() {
         </div>
       </div>
       
-      <div className="pt-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-20 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-6">
-              <Search className="text-3xl text-white" />
+          <div className="mb-6 md:mb-12 text-center px-4">
+            <div className="w-16 h-16 md:w-20 md:h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-4 md:mb-6">
+              <Search className="text-2xl md:text-3xl text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-database-title">
+            <h1 className="text-3xl md:text-6xl font-bold text-blue-600 mb-3 md:mb-4" data-testid="text-database-title">
               Product Database
             </h1>
-            <p className="text-gray-600 text-lg mb-6" data-testid="text-database-description">
+            <p className="text-gray-600 text-base md:text-lg mb-4 md:mb-6 px-2" data-testid="text-database-description">
               Search our comprehensive database of pet product safety information
             </p>
             
-            {/* Quick Scan Access */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            {/* Quick Scan Access - Mobile Optimized */}
+            <div className="space-y-3">
               <Button 
                 onClick={() => setShowScanModal(true)}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
                 data-testid="button-quick-scan"
               >
-                <Scan className="mr-2 h-5 w-5" />
+                <Scan className="mr-3 h-6 w-6" />
                 Scan Product Barcode
               </Button>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 px-4">
                 Can't find a product? Try scanning its barcode instead
               </p>
             </div>
@@ -194,115 +194,124 @@ export default function ProductDatabase() {
             </div>
           )}
 
-          {/* Search and Filters */}
-          <Card className="cosmic-card mb-8" data-testid="card-search-filters">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-starlight-400">
+          {/* Search and Filters - Mobile Optimized */}
+          <Card className="cosmic-card mb-6 md:mb-8" data-testid="card-search-filters">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-starlight-400 text-lg md:text-xl">
                 <Search className="h-5 w-5" />
                 Mystical Search Portal
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSearch} className="space-y-6">
-                <div className="flex gap-4">
+              <form onSubmit={handleSearch} className="space-y-4 md:space-y-6">
+                {/* Mobile-first search bar */}
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Input
                     type="text"
-                    placeholder="Search by product name, brand, or ingredients..."
+                    placeholder="Search products, brands, ingredients..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="flex-1 bg-cosmic-900/50 border border-cosmic-600 text-cosmic-100 placeholder-cosmic-400"
+                    className="flex-1 bg-cosmic-900/50 border border-cosmic-600 text-cosmic-100 placeholder-cosmic-400 text-base py-3"
                     data-testid="input-search"
                   />
                   <Button 
                     type="submit"
-                    className="mystical-button"
+                    className="mystical-button w-full sm:w-auto py-3"
                     data-testid="button-search"
                   >
                     Divine Search
                   </Button>
                 </div>
 
-                {/* Basic Filters Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div>
-                    <label className="text-cosmic-300 text-sm mb-2 block">Cosmic Clarity</label>
-                    <Select value={filterClarity} onValueChange={setFilterClarity} data-testid="select-clarity-filter">
-                      <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
-                        <SelectItem value="all">All Clarity Levels</SelectItem>
-                        <SelectItem value="blessed">✨ Blessed</SelectItem>
-                        <SelectItem value="questionable">⚠️ Questionable</SelectItem>
-                        <SelectItem value="cursed">💀 Cursed</SelectItem>
-                        <SelectItem value="unknown">❓ Unknown</SelectItem>
-                      </SelectContent>
-                    </Select>
+                {/* Mobile-Optimized Quick Filters */}
+                <div className="space-y-3">
+                  {/* Top row - Most used filters on mobile */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-cosmic-300 text-sm mb-2 block">Cosmic Clarity</label>
+                      <Select value={filterClarity} onValueChange={setFilterClarity} data-testid="select-clarity-filter">
+                        <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600 h-12">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-cosmic-800 border-cosmic-600">
+                          <SelectItem value="all">All Clarity Levels</SelectItem>
+                          <SelectItem value="blessed">✨ Blessed</SelectItem>
+                          <SelectItem value="questionable">⚠️ Questionable</SelectItem>
+                          <SelectItem value="cursed">💀 Cursed</SelectItem>
+                          <SelectItem value="unknown">❓ Unknown</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-cosmic-300 text-sm mb-2 block">Sort By</label>
+                      <Select value={sortBy} onValueChange={setSortBy} data-testid="select-sort">
+                        <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600 h-12">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-cosmic-800 border-cosmic-600">
+                          <SelectItem value="newest">🕒 Newest First</SelectItem>
+                          <SelectItem value="oldest">⏰ Oldest First</SelectItem>
+                          <SelectItem value="name-asc">🔤 Name A-Z</SelectItem>
+                          <SelectItem value="name-desc">🔠 Name Z-A</SelectItem>
+                          <SelectItem value="score-high">⭐ Highest Score</SelectItem>
+                          <SelectItem value="score-low">📉 Lowest Score</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   
-                  <div>
-                    <label className="text-cosmic-300 text-sm mb-2 block">Category</label>
-                    <Select value={filterCategory} onValueChange={setFilterCategory} data-testid="select-category-filter">
-                      <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {uniqueCategories.map((category: string) => (
-                          <SelectItem key={category} value={category}>
-                            {category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <label className="text-cosmic-300 text-sm mb-2 block">Brand</label>
-                    <Select value={filterBrand} onValueChange={setFilterBrand} data-testid="select-brand-filter">
-                      <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
-                        <SelectItem value="all">All Brands</SelectItem>
-                        {uniqueBrands.map((brand: string) => (
-                          <SelectItem key={brand} value={brand}>
-                            {brand}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <label className="text-cosmic-300 text-sm mb-2 block">Sort By</label>
-                    <Select value={sortBy} onValueChange={setSortBy} data-testid="select-sort">
-                      <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-cosmic-800 border-cosmic-600">
-                        <SelectItem value="newest">🕒 Newest First</SelectItem>
-                        <SelectItem value="oldest">⏰ Oldest First</SelectItem>
-                        <SelectItem value="name-asc">🔤 Name A-Z</SelectItem>
-                        <SelectItem value="name-desc">🔠 Name Z-A</SelectItem>
-                        <SelectItem value="score-high">⭐ Highest Score</SelectItem>
-                        <SelectItem value="score-low">📉 Lowest Score</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {/* Collapsible additional filters */}
+                  {showAdvancedFilters && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-cosmic-600">
+                      <div>
+                        <label className="text-cosmic-300 text-sm mb-2 block">Category</label>
+                        <Select value={filterCategory} onValueChange={setFilterCategory} data-testid="select-category-filter">
+                          <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600 h-12">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-cosmic-800 border-cosmic-600">
+                            <SelectItem value="all">All Categories</SelectItem>
+                            {uniqueCategories.map((category: string) => (
+                              <SelectItem key={category} value={category}>
+                                {category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <label className="text-cosmic-300 text-sm mb-2 block">Brand</label>
+                        <Select value={filterBrand} onValueChange={setFilterBrand} data-testid="select-brand-filter">
+                          <SelectTrigger className="bg-cosmic-900/50 border-cosmic-600 h-12">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-cosmic-800 border-cosmic-600">
+                            <SelectItem value="all">All Brands</SelectItem>
+                            {uniqueBrands.map((brand: string) => (
+                              <SelectItem key={brand} value={brand}>
+                                {brand}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
-                {/* Advanced Filters Toggle */}
-                <div className="flex justify-between items-center pt-4 border-t border-cosmic-600">
+                {/* Mobile-Optimized Filter Toggle */}
+                <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center pt-3">
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                    className="text-cosmic-300 hover:text-starlight-400"
+                    className="text-cosmic-300 hover:text-starlight-400 w-full sm:w-auto justify-center sm:justify-start"
                     data-testid="button-toggle-advanced"
                   >
                     <Filter className="h-4 w-4 mr-2" />
-                    {showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters
+                    {showAdvancedFilters ? 'Hide' : 'Show'} More Filters
                   </Button>
                   
                   {hasActiveFilters && (
@@ -310,7 +319,7 @@ export default function ProductDatabase() {
                       type="button"
                       variant="outline"
                       onClick={clearAllFilters}
-                      className="border-mystical-red text-mystical-red hover:bg-mystical-red/10"
+                      className="border-mystical-red text-mystical-red hover:bg-mystical-red/10 w-full sm:w-auto"
                       data-testid="button-clear-filters"
                     >
                       Clear Filters
@@ -450,10 +459,10 @@ export default function ProductDatabase() {
             </div>
           )}
 
-          {/* Results Count and Info */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          {/* Results Count and Info - Mobile Optimized */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 md:mb-6 px-2">
             <div>
-              <p className="text-cosmic-300 text-lg font-medium" data-testid="text-results-count">
+              <p className="text-cosmic-300 text-base md:text-lg font-medium" data-testid="text-results-count">
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
               </p>
               {searchTerm && (
@@ -463,24 +472,22 @@ export default function ProductDatabase() {
               )}
             </div>
             
-            <div className="flex items-center gap-4">
-              <div className="text-cosmic-400 text-sm">
-                {filteredProducts.length > 0 && (
-                  <>
-                    Showing {Math.min((page * limit) + 1, filteredProducts.length)}-{Math.min((page + 1) * limit, filteredProducts.length)} of {filteredProducts.length}
-                  </>
-                )}
-              </div>
+            <div className="text-cosmic-400 text-xs md:text-sm">
+              {filteredProducts.length > 0 && (
+                <>
+                  Showing {Math.min((page * limit) + 1, filteredProducts.length)}-{Math.min((page + 1) * limit, filteredProducts.length)} of {filteredProducts.length}
+                </>
+              )}
             </div>
           </div>
 
-          {/* Products Grid */}
+          {/* Products Grid - Mobile Optimized */}
           {isLoading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {[...Array(8)].map((_, i) => (
                 <Card key={i} className="cosmic-card animate-pulse" data-testid={`skeleton-product-${i}`}>
-                  <CardContent className="p-6">
-                    <div className="h-48 bg-cosmic-700 rounded-lg mb-4"></div>
+                  <CardContent className="p-4 md:p-6">
+                    <div className="h-40 md:h-48 bg-cosmic-700 rounded-lg mb-4"></div>
                     <div className="space-y-2">
                       <div className="h-4 bg-cosmic-700 rounded"></div>
                       <div className="h-4 bg-cosmic-700 rounded w-3/4"></div>
@@ -491,8 +498,8 @@ export default function ProductDatabase() {
             </div>
           ) : filteredProducts.length > 0 ? (
             <>
-              <div className="space-y-6">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="space-y-4 md:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                   {(filteredProducts || []).slice(page * limit, (page + 1) * limit).map((product: any, index: number) => (
                     <ProductCard 
                       key={product.id}
@@ -510,25 +517,25 @@ export default function ProductDatabase() {
                 )}
               </div>
 
-              {/* Pagination */}
-              <div className="flex justify-center gap-4">
+              {/* Pagination - Mobile Optimized */}
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6 md:mt-8">
                 <Button 
                   variant="outline"
                   onClick={() => setPage(Math.max(0, page - 1))}
                   disabled={page === 0}
-                  className="border-cosmic-600 text-cosmic-300"
+                  className="border-cosmic-600 text-cosmic-300 w-full sm:w-auto"
                   data-testid="button-prev-page"
                 >
                   Previous
                 </Button>
-                <span className="flex items-center text-cosmic-300" data-testid="text-page-info">
+                <span className="flex items-center text-cosmic-300 text-sm md:text-base" data-testid="text-page-info">
                   Page {page + 1} of {Math.ceil(filteredProducts.length / limit)}
                 </span>
                 <Button 
                   variant="outline"
                   onClick={() => setPage(page + 1)}
                   disabled={(page + 1) * limit >= filteredProducts.length}
-                  className="border-cosmic-600 text-cosmic-300"
+                  className="border-cosmic-600 text-cosmic-300 w-full sm:w-auto"
                   data-testid="button-next-page"
                 >
                   Next
@@ -537,19 +544,19 @@ export default function ProductDatabase() {
             </>
           ) : (
             <Card className="cosmic-card" data-testid="card-no-products">
-              <CardContent className="p-12 text-center">
-                <div className="w-16 h-16 mx-auto bg-cosmic-700 rounded-full flex items-center justify-center mb-6">
-                  <Search className="text-cosmic-500 text-2xl" />
+              <CardContent className="p-6 md:p-12 text-center">
+                <div className="w-16 h-16 mx-auto bg-cosmic-700 rounded-full flex items-center justify-center mb-4 md:mb-6">
+                  <Search className="text-cosmic-500 text-xl md:text-2xl" />
                 </div>
-                <h3 className="font-mystical text-xl text-cosmic-300 mb-4" data-testid="text-no-products-title">
+                <h3 className="font-mystical text-lg md:text-xl text-cosmic-300 mb-3 md:mb-4" data-testid="text-no-products-title">
                   No Products Found
                 </h3>
-                <p className="text-cosmic-400 mb-6" data-testid="text-no-products-description">
+                <p className="text-cosmic-400 mb-4 md:mb-6 text-sm md:text-base px-2" data-testid="text-no-products-description">
                   {searchTerm 
                     ? "The cosmic archive contains no products matching your search."
                     : "The mystical database appears empty. Begin your journey by scanning a product."}
                 </p>
-                <div className="flex gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   {(searchTerm || hasActiveFilters) && (
                     <Button 
                       variant="outline"
@@ -558,34 +565,37 @@ export default function ProductDatabase() {
                         clearAllFilters();
                         setPage(0);
                       }}
-                      className="border-cosmic-600 text-cosmic-300"
+                      className="border-cosmic-600 text-cosmic-300 w-full sm:w-auto"
                       data-testid="button-clear-search"
                     >
                       Clear All Filters
                     </Button>
                   )}
-                  <Link href="/product-scanner">
-                    <Button className="mystical-button" data-testid="button-scan-first-product">
-                      Scan Your First Product
-                    </Button>
-                  </Link>
+                  <Button 
+                    onClick={() => setShowScanModal(true)}
+                    className="mystical-button w-full sm:w-auto" 
+                    data-testid="button-scan-first-product"
+                  >
+                    <Scan className="mr-2 h-4 w-4" />
+                    Scan Your First Product
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
         
-        {/* Data Sources Section */}
-        <div className="mt-16 mb-8">
+        {/* Data Sources Section - Mobile Optimized */}
+        <div className="mt-8 md:mt-16 mb-6 md:mb-8">
           <Card className="cosmic-card" data-testid="card-data-sources">
-            <CardHeader>
-              <CardTitle className="text-xl flex items-center text-cosmic-100">
-                <Search className="w-5 h-5 mr-3" />
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg md:text-xl flex items-center text-cosmic-100">
+                <Search className="w-5 h-5 mr-2 md:mr-3" />
                 Product Data Sources
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-2 gap-6 text-sm">
+              <div className="grid md:grid-cols-2 gap-4 md:gap-6 text-sm">
                 <div>
                   <h4 className="font-semibold text-cosmic-200 mb-3">Primary Data Sources</h4>
                   <ul className="space-y-2 text-cosmic-300">
