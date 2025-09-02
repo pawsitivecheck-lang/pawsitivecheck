@@ -568,9 +568,9 @@ export default function DatabaseSync() {
           </div>
           
           <div className="mt-4 pt-4 border-t border-cosmic-600">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-cosmic-300">System Health</span>
-              <Badge className={`${
+              <Badge className={`ml-2 ${
                 syncStatus?.health === 'operational' 
                   ? 'bg-mystical-green text-cosmic-900 dark:text-cosmic-100'
                   : 'bg-mystical-red text-white dark:text-white'
@@ -578,11 +578,11 @@ export default function DatabaseSync() {
                 {syncStatus?.health === 'operational' ? (
                   <><CheckCircle className="h-3 w-3 mr-1" /> Operational</>
                 ) : (
-                  <><AlertTriangle className="h-3 w-3 mr-1" /> Issues</>
+                  <><AlertTriangle className="h-3 w-3 mr-1" /> Issues Detected</>
                 )}
               </Badge>
             </div>
-            <p className="text-xs text-cosmic-400 mt-1">
+            <p className="text-xs text-cosmic-400">
               Last checked: {formatDate(syncStatus?.lastChecked || null)}
             </p>
           </div>
