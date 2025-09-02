@@ -174,6 +174,30 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
+      // Check if we're in a Capacitor app (Android)
+      if (typeof window !== 'undefined' && (window as any).Capacitor) {
+        try {
+          // Try to use Capacitor camera permissions for Android
+          const { Camera } = await import('@capacitor/camera');
+          const permissions = await Camera.requestPermissions();
+          
+          if (permissions.camera === 'granted') {
+            setShowScanner(true);
+            toast({
+              title: "Camera Access Granted",
+              description: "Point your camera at a product barcode to scan",
+            });
+            return;
+          } else {
+            throw new Error('Camera permission denied by user');
+          }
+        } catch (capacitorError) {
+          console.log('Capacitor camera not available, falling back to standard web API');
+          // Fall through to standard web API
+        }
+      }
+      
+      // Standard web browser camera permission
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
           facingMode: 'environment' // Prefer rear camera on mobile
