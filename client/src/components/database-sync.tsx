@@ -446,7 +446,7 @@ export default function DatabaseSync() {
                 <div key={recall.id} className="p-3 bg-red-50 dark:bg-red-950/20 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
                   <div className="flex justify-between items-start mb-1">
                     <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{recall.reason}</p>
-                    <Badge className="bg-red-100 text-red-600 text-xs" data-testid="badge-recall-severity">
+                    <Badge className="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 text-xs" data-testid="badge-recall-severity">
                       {recall.severity}
                     </Badge>
                   </div>
@@ -533,10 +533,10 @@ export default function DatabaseSync() {
                   <Badge 
                     className={
                       product.cosmicClarity === 'blessed' 
-                        ? 'bg-green-100 text-green-600' 
+                        ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300' 
                         : product.cosmicClarity === 'cursed'
-                        ? 'bg-red-100 text-red-600'
-                        : 'bg-yellow-100 text-yellow-600'
+                        ? 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300'
+                        : 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300'
                     }
                     data-testid="badge-product-clarity"
                   >
@@ -614,8 +614,8 @@ export default function DatabaseSync() {
               <span className="text-sm font-medium text-cosmic-300">System Health</span>
               <Badge className={`${
                 syncStatus?.health === 'operational' 
-                  ? 'bg-mystical-green text-cosmic-900'
-                  : 'bg-mystical-red text-white'
+                  ? 'bg-mystical-green text-cosmic-900 dark:text-cosmic-100'
+                  : 'bg-mystical-red text-white dark:text-white'
               }`}>
                 {syncStatus?.health === 'operational' ? (
                   <><CheckCircle className="h-3 w-3 mr-1" /> Operational</>
@@ -1220,7 +1220,7 @@ function SyncScheduleList() {
     
     switch (schedule.lastResult) {
       case 'success':
-        return <Badge className="bg-green-600 text-xs">Success</Badge>;
+        return <Badge className="bg-green-600 dark:bg-green-700 text-white dark:text-white text-xs">Success</Badge>;
       case 'failure':
         return <Badge variant="destructive" className="text-xs">Failed</Badge>;
       default:
