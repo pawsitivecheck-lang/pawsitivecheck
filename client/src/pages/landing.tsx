@@ -653,27 +653,27 @@ export default function Landing() {
           <div className="bg-card rounded-lg p-4 sm:p-6 lg:p-8 border border-border shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               {/* Safety Analytics */}
-              <div className="text-center p-4 rounded-lg bg-green-50 border border-green-100">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-analytics">
-                  <ChartLine className="text-lg sm:text-2xl text-green-600" />
+              <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-100 dark:border-green-800/30">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-analytics">
+                  <ChartLine className="text-lg sm:text-2xl text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-analytics-title">Safety Analytics</h3>
                 <div className="space-y-2 sm:space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground text-sm sm:text-base">Products Analyzed:</span>
-                    <span className="text-green-600 font-bold text-sm sm:text-base" data-testid="text-products-analyzed">
+                    <span className="text-green-600 dark:text-green-400 font-bold text-sm sm:text-base" data-testid="text-products-analyzed">
                       {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.productsAnalyzed?.toLocaleString() || '0')}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground text-sm sm:text-base">Active Users:</span>
-                    <span className="text-blue-600 font-bold text-sm sm:text-base" data-testid="text-active-users">
+                    <span className="text-blue-600 dark:text-blue-400 font-bold text-sm sm:text-base" data-testid="text-active-users">
                       {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.activeUsers?.toLocaleString() || '0')}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground text-sm sm:text-base">Safety Alerts:</span>
-                    <span className="text-red-600 font-bold text-sm sm:text-base" data-testid="text-safety-alerts">
+                    <span className="text-red-600 dark:text-red-400 font-bold text-sm sm:text-base" data-testid="text-safety-alerts">
                       {analyticsLoading ? 'Loading...' : analyticsError ? 'N/A' : (analytics?.safetyAlerts?.toString() || '0')}
                     </span>
                   </div>
@@ -681,15 +681,15 @@ export default function Landing() {
               </div>
               
               {/* Recall Management */}
-              <div className="text-center p-4 rounded-lg bg-red-50 border border-red-100">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-recalls">
-                  <Ban className="text-lg sm:text-2xl text-red-600" />
+              <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-800/30">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-recalls">
+                  <Ban className="text-lg sm:text-2xl text-red-600 dark:text-red-400" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-recalls-title">Recall Management</h3>
                 <div className="space-y-2 sm:space-y-3">
                   <div className="bg-card rounded-lg p-2 sm:p-3 border border-border">
                     <div className="text-xs text-muted-foreground mb-1">Latest Recall:</div>
-                    <div className="text-sm text-red-600 font-medium" data-testid="text-latest-recall">
+                    <div className="text-sm text-red-600 dark:text-red-400 font-medium" data-testid="text-latest-recall">
                       {(Array.isArray(recalls) && recalls.length > 0) ? recalls[0].productName : 'No active recalls'}
                     </div>
                   </div>
@@ -697,7 +697,7 @@ export default function Landing() {
                     asChild
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-red-50 text-red-600 border-red-200 hover:bg-red-100 min-h-[40px] text-sm"
+                    className="w-full bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900/30 min-h-[40px] text-sm"
                     data-testid="button-manage-recalls"
                   >
                     <Link to="/recalls">Manage Recalls</Link>
@@ -706,9 +706,9 @@ export default function Landing() {
               </div>
               
               {/* System Management */}
-              <div className="text-center p-4 rounded-lg bg-purple-50 border border-purple-100">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-system">
-                  <Database className="text-lg sm:text-2xl text-purple-600" />
+              <div className="text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-800/30">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mb-3 sm:mb-4" data-testid="icon-system">
+                  <Database className="text-lg sm:text-2xl text-purple-600 dark:text-purple-400" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-system-title">System Management</h3>
                 <div className="space-y-2 sm:space-y-3">
@@ -716,7 +716,7 @@ export default function Landing() {
                     asChild
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100 min-h-[40px] text-sm"
+                    className="w-full bg-purple-50 dark:bg-purple-950/30 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900/30 min-h-[40px] text-sm"
                     data-testid="button-update-ai"
                   >
                     <Link to="/admin">Update AI Analysis</Link>
@@ -725,7 +725,7 @@ export default function Landing() {
                     asChild
                     variant="outline" 
                     size="sm" 
-                    className="w-full bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 min-h-[40px] text-sm"
+                    className="w-full bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 min-h-[40px] text-sm"
                     data-testid="button-update-database"
                   >
                     <Link to="/admin">Update Safety Database</Link>
