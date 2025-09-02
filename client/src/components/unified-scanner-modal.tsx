@@ -6,7 +6,6 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
-import { Camera as CapacitorCamera } from '@capacitor/camera';
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import type { Product } from "@shared/schema";
 
@@ -177,6 +176,8 @@ export function UnifiedScannerModal({
     try {
       // For mobile apps (Capacitor), use Capacitor Camera permission
       if (typeof (window as any).Capacitor !== 'undefined') {
+        // Dynamically import Capacitor Camera to avoid breaking web version
+        const { Camera: CapacitorCamera } = await import('@capacitor/camera');
         const permissions = await CapacitorCamera.requestPermissions();
         if (permissions.camera === 'granted') {
           setShowScanner(true);
