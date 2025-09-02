@@ -223,20 +223,18 @@ export function UnifiedScannerModal({
     if (!showScanner || scannerRef.current) return;
     
     try {
-      // Stop any existing media streams first to free up camera
-      const existingStreams = await navigator.mediaDevices.getUserMedia({ video: true }).catch(() => null);
-      if (existingStreams) {
-        existingStreams.getTracks().forEach(track => track.stop());
-      }
-      
-      // Clear any existing scanner
+      // Clear any existing scanner first
       const existingScanner = document.getElementById("unified-barcode-scanner-container");
       if (existingScanner) {
         existingScanner.innerHTML = '';
       }
 
-      // Small delay to allow camera to be released
-      await new Promise(resolve => setTimeout(resolve, 200));
+      // Immediately clear permission state to show camera
+      setPermissionRequested(false);
+      setCameraError("");
+      
+      // Small delay to ensure DOM is ready
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Check if camera is available
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -288,6 +286,7 @@ export function UnifiedScannerModal({
       await scanner.render(onScanSuccess, onScanFailure);
       scannerRef.current = scanner;
       setIsScannerReady(true);
+      setPermissionRequested(false); // Clear permission state
       setCameraError("");
     } catch (error) {
       console.error('Error initializing scanner:', error);
