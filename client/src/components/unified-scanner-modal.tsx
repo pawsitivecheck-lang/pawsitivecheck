@@ -279,6 +279,7 @@ export function UnifiedScannerModal({
           Html5QrcodeSupportedFormats.RSS_EXPANDED,
         ],
         useBarCodeDetectorIfSupported: true,
+        verbose: false, // Required property for configuration
       });
 
       // Get camera constraints based on device
@@ -317,8 +318,8 @@ export function UnifiedScannerModal({
         friendlyMessage = 'Camera permission denied. Please allow camera access in your browser settings and refresh the page.';
       } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
         friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
-      } else if (errorMessage.includes('NotReadableError')) {
-        friendlyMessage = 'Camera is already in use by another application. Please close other apps and try again.';
+      } else if (errorMessage.includes('NotReadableError') || errorMessage.includes('Could not start video source')) {
+        friendlyMessage = 'Camera is busy or unavailable. Please:\n• Close other camera apps (Zoom, Teams, etc.)\n• Refresh this page\n• Try a different browser\n• Check if camera works in other apps';
       } else if (errorMessage.includes('OverconstrainedError')) {
         friendlyMessage = 'Camera configuration not supported. Please try a different device or browser.';
       }
