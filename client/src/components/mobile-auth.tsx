@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { UserCheck, Shield, Loader2 } from 'lucide-react';
-import { Browser } from '@capacitor/browser';
-import { App } from '@capacitor/app';
 
 interface MobileAuthProps {
   onAuthSuccess?: () => void;
@@ -16,64 +14,76 @@ export default function MobileAuth({ onAuthSuccess }: MobileAuthProps) {
     try {
       setIsAuthenticating(true);
       
-      // Get the current server URL from window location
-      const serverUrl = window.location.origin;
-      const loginUrl = `${serverUrl}/api/login`;
+      // Check if we're in a Capacitor environment
+      const isCapacitor = typeof window !== 'undefined' && (window as any).Capacitor;
       
-      // Open authentication in in-app browser
-      await Browser.open({
-        url: loginUrl,
-        windowName: '_self',
-        presentationStyle: 'popover'
-      });
-      
-      // Listen for app URL changes to detect successful authentication
-      const urlListener = await App.addListener('appUrlOpen', async (event) => {
-        console.log('App URL opened:', event.url);
+      if (isCapacitor) {
+        // Mobile app authentication with Capacitor
+        const { Browser } = await import('@capacitor/browser');
+        const { App } = await import('@capacitor/app');
         
-        // Check if we received a successful callback
-        if (event.url.includes('/api/callback') || event.url === serverUrl + '/') {
-          // Close the browser and refresh the app
-          await Browser.close();
+        const serverUrl = window.location.origin;
+        const loginUrl = `${serverUrl}/api/login`;
+        
+        // Open authentication in in-app browser
+        await Browser.open({
+          url: loginUrl,
+          windowName: '_self',
+          presentationStyle: 'popover'
+        });
+        
+        // Listen for app URL changes to detect successful authentication
+        const urlListener = await App.addListener('appUrlOpen', async (event) => {
+          console.log('App URL opened:', event.url);
           
-          // Wait a moment then check authentication status
-          setTimeout(() => {
-            window.location.reload();
-            onAuthSuccess?.();
-          }, 1000);
-          
-          // Remove the listener
-          urlListener.remove();
-        }
-      });
-      
-      // Also listen for successful authentication by polling
-      const pollAuth = setInterval(async () => {
-        try {
-          const response = await fetch('/api/auth/user', {
-            credentials: 'include'
-          });
-          
-          if (response.ok) {
-            // Authentication successful
-            clearInterval(pollAuth);
+          // Check if we received a successful callback
+          if (event.url.includes('/api/callback') || event.url === serverUrl + '/') {
+            // Close the browser and refresh the app
             await Browser.close();
-            setIsAuthenticating(false);
             
-            // Refresh the page to update authentication state
-            window.location.reload();
-            onAuthSuccess?.();
+            // Wait a moment then check authentication status
+            setTimeout(() => {
+              window.location.reload();
+              onAuthSuccess?.();
+            }, 1000);
+            
+            // Remove the listener
+            urlListener.remove();
           }
-        } catch (error) {
-          // Still not authenticated, continue polling
-        }
-      }, 2000);
-      
-      // Stop polling after 5 minutes
-      setTimeout(() => {
-        clearInterval(pollAuth);
-        setIsAuthenticating(false);
-      }, 5 * 60 * 1000);
+        });
+        
+        // Also listen for successful authentication by polling
+        const pollAuth = setInterval(async () => {
+          try {
+            const response = await fetch('/api/auth/user', {
+              credentials: 'include'
+            });
+            
+            if (response.ok) {
+              // Authentication successful
+              clearInterval(pollAuth);
+              await Browser.close();
+              setIsAuthenticating(false);
+              
+              // Refresh the page to update authentication state
+              window.location.reload();
+              onAuthSuccess?.();
+            }
+          } catch (error) {
+            // Still not authenticated, continue polling
+          }
+        }, 2000);
+        
+        // Stop polling after 5 minutes
+        setTimeout(() => {
+          clearInterval(pollAuth);
+          setIsAuthenticating(false);
+        }, 5 * 60 * 1000);
+        
+      } else {
+        // Web environment - just redirect to login
+        window.location.href = '/api/login';
+      }
       
     } catch (error) {
       console.error('Mobile authentication error:', error);
