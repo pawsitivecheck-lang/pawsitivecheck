@@ -122,11 +122,13 @@ export function UnifiedScannerModal({
   });
 
   const onScanSuccess = useCallback((decodedText: string) => {
-    // Prevent duplicate scans of the same code
+    // Prevent duplicate scans of the same code - check this FIRST
     if (isProcessing || lastScannedCode === decodedText) {
+      console.debug('Ignoring duplicate scan:', decodedText);
       return;
     }
 
+    console.log('Processing new barcode scan:', decodedText);
     setIsProcessing(true);
     setLastScannedCode(decodedText);
     
@@ -134,6 +136,7 @@ export function UnifiedScannerModal({
     if (scannerRef.current) {
       try {
         scannerRef.current.stop();
+        scannerRef.current.clear(); // More aggressive cleanup
       } catch (e) {
         console.debug('Scanner stop error:', e);
       }
@@ -384,6 +387,8 @@ export function UnifiedScannerModal({
     setPermissionRequested(false);
     setShowScanner(false);
     setIsScannerReady(false);
+    setIsProcessing(false);
+    setLastScannedCode("");
   };
 
   // Initialize scanner when showScanner becomes true
