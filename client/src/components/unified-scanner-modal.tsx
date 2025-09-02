@@ -173,7 +173,15 @@ export function UnifiedScannerModal({
     setCameraError("");
     
     try {
-      const permissionGranted = await utilsRequestCameraPermission();
+      // Reset any cached permission state before requesting fresh permission
+      setShowScanner(false);
+      setPermissionRequested(false);
+      
+      // Small delay to ensure state is reset
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      setPermissionRequested(true);
+      const permissionGranted = await utilsRequestCameraPermission(true);
       
       if (permissionGranted) {
         setShowScanner(true);
@@ -317,8 +325,12 @@ export function UnifiedScannerModal({
       setCameraError("");
       setIsScannerReady(false);
       
-      // Automatically request camera permission when modal opens
-      requestCameraPermission();
+      // Small delay then automatically request fresh camera permission
+      const timer = setTimeout(() => {
+        requestCameraPermission();
+      }, 200);
+      
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 

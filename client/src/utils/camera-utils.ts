@@ -6,14 +6,18 @@ export const isCapacitorApp = (): boolean => {
          (window as any).Capacitor !== undefined;
 };
 
-export const requestCameraPermission = async (): Promise<boolean> => {
+export const requestCameraPermission = async (forcePrompt: boolean = true): Promise<boolean> => {
   try {
     if (isCapacitorApp()) {
-      // Android/Capacitor environment - request native permissions
+      // Android/Capacitor environment - always request fresh permissions
       try {
         // Safe dynamic import for Capacitor Camera (only in Android)
         const capacitorModule = await import('@capacitor/camera');
-        const permissions = await capacitorModule.Camera.requestPermissions();
+        
+        // Force fresh permission request every time
+        const permissions = await capacitorModule.Camera.requestPermissions({
+          permissions: ['camera']
+        });
         
         if (permissions.camera === 'granted') {
           return true;
@@ -28,11 +32,29 @@ export const requestCameraPermission = async (): Promise<boolean> => {
     }
     
     // Web browser environment (or Android fallback)
-    const stream = await navigator.mediaDevices.getUserMedia({ 
+    // Force fresh permission by trying to revoke existing permissions first
+    try {
+      // Try to get current permissions and revoke them
+      const permissions = await navigator.permissions.query({ name: 'camera' as PermissionName });
+      if (permissions.state === 'granted') {
+        console.log('Attempting to force fresh permission prompt...');
+      }
+    } catch (e) {
+      // Permissions API not supported, continue
+    }
+    
+    // Use unique constraints to try to force fresh prompt
+    const uniqueConstraints = { 
       video: { 
-        facingMode: 'environment'
+        facingMode: 'environment',
+        // Vary constraints to potentially trigger fresh prompts
+        frameRate: { ideal: 30 },
+        width: { ideal: 1280 + Math.floor(Math.random() * 10) },
+        height: { ideal: 720 + Math.floor(Math.random() * 10) }
       } 
-    });
+    };
+    
+    const stream = await navigator.mediaDevices.getUserMedia(uniqueConstraints);
     
     // Close test stream immediately
     stream.getTracks().forEach(track => track.stop());
