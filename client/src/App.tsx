@@ -26,6 +26,7 @@ import RecallSystemInfo from "@/pages/recall-system-info";
 import CommunityReviewsInfo from "@/pages/community-reviews-info";
 import ProductDetail from "@/pages/product-detail";
 import ProductAnalysis from "@/pages/product-analysis";
+import ProductScanner from "@/pages/product-scanner";
 import SubmitProductUpdate from "@/pages/submit-product-update";
 import AdminProductSubmissions from "@/pages/admin-product-submissions";
 import ComprehensiveSafetyAnalysis from "@/pages/comprehensive-safety-analysis";
@@ -66,6 +67,7 @@ function AppRouter() {
             <Route path="/vet-finder" component={VetFinder} />
             <Route path="/livestock-preview" component={LivestockDashboard} />
             <Route path="/product-database" component={ProductDatabase} />
+            <Route path="/product-scanner" component={ProductScanner} />
             <Route path="/recalls" component={Recalls} />
             <Route path="/community" component={Community} />
             <Route path="/product/:id" component={ProductDetail} />
@@ -75,6 +77,7 @@ function AppRouter() {
           <>
             <Route path="/" component={Home} />
             <Route path="/product-database" component={ProductDatabase} />
+            <Route path="/product-scanner" component={ProductScanner} />
             <Route path="/product/:id" component={ProductDetail} />
             <Route path="/product/:id/analysis" component={ProductAnalysis} />
             <Route path="/recalls" component={Recalls} />
