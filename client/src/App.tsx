@@ -39,18 +39,29 @@ import OperationProfile from "@/pages/operation-profile";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppRouter />
+      <AppContent />
     </QueryClientProvider>
   );
 }
 
-function AppRouter() {
+function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
       <Switch>
-        {isLoading || !isAuthenticated ? (
+        {!isAuthenticated ? (
           <>
             <Route path="/" component={Landing} />
             <Route path="/privacy-policy" component={PrivacyPolicy} />
@@ -83,8 +94,20 @@ function AppRouter() {
             <Route path="/recalls" component={Recalls} />
             <Route path="/community" component={Community} />
             <Route path="/vet-finder" component={VetFinder} />
-            <Route path="/pets" component={PetProfiles} />
+            <Route path="/vet-admin" component={VetAdmin} />
+            <Route path="/admin" component={AdminDashboard} />
             <Route path="/profile" component={Profile} />
+            <Route path="/pet-profiles" component={PetProfiles} />
+            <Route path="/submit-product-update" component={SubmitProductUpdate} />
+            <Route path="/admin/product-submissions" component={AdminProductSubmissions} />
+            <Route path="/livestock" component={LivestockDashboard} />
+            <Route path="/livestock/create-operation" component={LivestockCreateOperation} />
+            <Route path="/livestock/feed-tracking" component={FeedTracking} />
+            <Route path="/livestock/herd/:id" component={HerdProfile} />
+            <Route path="/livestock/operation/:id" component={OperationProfile} />
+            <Route path="/privacy-policy" component={PrivacyPolicy} />
+            <Route path="/terms-of-service" component={TermsOfService} />
+            <Route path="/terms" component={Terms} />
             <Route path="/pet-health-protection" component={PetHealthProtection} />
             <Route path="/corporate-accountability" component={CorporateAccountability} />
             <Route path="/ingredient-transparency" component={IngredientTransparency} />
@@ -92,21 +115,9 @@ function AppRouter() {
             <Route path="/safety-database-info" component={SafetyDatabaseInfo} />
             <Route path="/recall-system-info" component={RecallSystemInfo} />
             <Route path="/community-reviews-info" component={CommunityReviewsInfo} />
-            <Route path="/privacy-policy" component={PrivacyPolicy} />
-            <Route path="/terms-of-service" component={TermsOfService} />
-            <Route path="/submit-product-update" component={SubmitProductUpdate} />
             <Route path="/comprehensive-safety-analysis" component={ComprehensiveSafetyAnalysis} />
-            <Route path="/livestock" component={LivestockDashboard} />
-            <Route path="/livestock/create" component={LivestockCreateOperation} />
-            <Route path="/livestock/feed" component={FeedTracking} />
-            <Route path="/livestock/operations/:id" component={OperationProfile} />
-            <Route path="/livestock/herds/:id" component={HerdProfile} />
           </>
         )}
-        {/* Admin routes accessible to all - components handle auth checks */}
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/admin/vets" component={VetAdmin} />
-        <Route path="/admin/product-submissions" component={AdminProductSubmissions} />
         <Route component={NotFound} />
       </Switch>
     </div>

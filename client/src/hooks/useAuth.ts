@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { User } from "@shared/schema";
 
 export function useAuth() {
-  const { data: user, isLoading } = useQuery<User | null>({
+  const { data: user, isLoading, error } = useQuery<User | null>({
     queryKey: ["/api/auth/user"],
     queryFn: async () => {
       try {
@@ -20,6 +20,7 @@ export function useAuth() {
         
         return await res.json();
       } catch (error) {
+        console.warn("Auth check failed:", error);
         return null;
       }
     },
