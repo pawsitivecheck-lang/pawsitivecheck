@@ -35,7 +35,7 @@ export default function Navbar() {
           {/* Left Section - Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
-              <div className="w-10 h-10 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                 <PawPrint className="w-6 h-6 text-white" />
               </div>
               <h1 className="hidden md:block text-2xl font-bold text-foreground">PawsitiveCheck</h1>
@@ -107,7 +107,7 @@ export default function Navbar() {
                           className="w-8 h-8 rounded-full"
                         />
                       ) : (
-                        <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                           <Users className="w-4 h-4 text-white" />
                         </div>
                       )}
