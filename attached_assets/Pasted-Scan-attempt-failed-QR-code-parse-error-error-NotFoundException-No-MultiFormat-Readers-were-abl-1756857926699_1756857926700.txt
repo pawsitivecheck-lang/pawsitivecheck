@@ -1,0 +1,26 @@
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Scan attempt failed: QR code parse error, error = No barcode or QR code detected.
+Scan attempt failed: QR code parse error, error = NotFoundException: No MultiFormat Readers were able to detect the code.
+Processing new barcode scan: 6074700147888
+Scanner stop error: Cannot clear while scan is ongoing, close it first.
+Internet search unavailable: 
+Error {}
+Toast: Product Not Found
+[vite] hot updated: /src/components/unified-scanner-modal.tsx
+[vite] hot updated: /src/index.css?v=4MqocH4GVm0SfKBcFytgo

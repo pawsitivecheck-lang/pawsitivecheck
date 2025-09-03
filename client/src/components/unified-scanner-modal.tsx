@@ -38,6 +38,7 @@ export function UnifiedScannerModal({
   const [isScannerReady, setIsScannerReady] = useState(false);
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [scanResult, setScanResult] = useState<string | null>(null);
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcode: string) => {
@@ -104,6 +105,7 @@ export function UnifiedScannerModal({
           });
         } else {
           // Guest users just get a simple message
+          setScanResult("Product Not Found - This product is not in our database yet. Log in to add new products.");
           toast({
             title: "Product Not Found",
             description: "This product is not in our database yet. Log in to add new products.",
@@ -112,8 +114,9 @@ export function UnifiedScannerModal({
         }
         // Close scanner after a delay so user can see the message
         setTimeout(() => {
+          setScanResult(null);
           onClose();
-        }, 2000);
+        }, 4000);
       }
     },
     onError: (error: any) => {
@@ -441,6 +444,7 @@ export function UnifiedScannerModal({
       setPermissionRequested(false);
       setCameraError("");
       setIsScannerReady(false);
+      setScanResult(null);
       
       // Automatically start scanner without permission screen delay
       const timer = setTimeout(async () => {
@@ -548,6 +552,21 @@ export function UnifiedScannerModal({
               </div>
             </div>
           ) : null}
+
+          {/* Scan Result Display */}
+          {scanResult && (
+            <div className="text-center space-y-4 bg-red-50 dark:bg-red-900/20 p-6 rounded-lg border border-red-200 dark:border-red-800">
+              <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
+                <AlertCircle className="h-8 w-8 text-red-600" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-red-700 font-semibold text-lg">Product Not Found</p>
+                <p className="text-sm text-red-600" data-testid="text-scan-result">
+                  {scanResult}
+                </p>
+              </div>
+            </div>
+          )}
 
           {scanProductMutation.isPending && (
             <div className="text-center py-4">
