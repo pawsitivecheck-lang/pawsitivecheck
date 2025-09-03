@@ -338,41 +338,236 @@ export default function ProductDetail() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               
-              {/* Description */}
-              {product.description && (
-                <Card className="cosmic-card" data-testid="card-description">
+              {/* Active Recalls Section - Show prominently if any exist */}
+              {productRecalls && productRecalls.length > 0 && (
+                <Card className="border-red-500/50 bg-red-950/20" data-testid="card-active-recalls">
                   <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <CardTitle className="text-starlight-400">Product Description</CardTitle>
-                      <HelpTooltip 
-                        content="Official product description provided by the manufacturer. This information helps you understand the product's intended use, target animals, and key features. Always verify with your veterinarian if you have questions about suitability for your specific pet."
-                        side="right"
-                      />
-                    </div>
+                    <CardTitle className="text-red-400 flex items-center gap-2">
+                      <AlertCircle className="h-5 w-5" />
+                      Active Recalls ({productRecalls.length})
+                      <Badge variant="destructive" className="bg-red-600">URGENT</Badge>
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-description">
-                      {product.description}
-                    </p>
+                  <CardContent className="space-y-4">
+                    {productRecalls.map((recall: any) => (
+                      <div key={recall.id} className="border border-red-500/30 rounded-lg p-4 bg-red-950/10">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h4 className="font-semibold text-red-300 mb-1">
+                              Recall #{recall.recallNumber}
+                            </h4>
+                            <p className="text-red-200 text-sm">
+                              Severity: <span className="font-medium capitalize">{recall.severity}</span> • 
+                              Date: {new Date(recall.recallDate).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <Badge className={getSeverityColor(recall.severity)}>
+                            {getSeverityIcon(recall.severity)}
+                            <span className="ml-1 capitalize">{recall.severity}</span>
+                          </Badge>
+                        </div>
+                        
+                        <p className="text-red-100 mb-3">{recall.reason}</p>
+                        
+                        {recall.affectedBatches && recall.affectedBatches.length > 0 && (
+                          <div className="mb-3">
+                            <span className="text-red-300 font-medium">Affected Batches: </span>
+                            <span className="text-red-200">{recall.affectedBatches.join(', ')}</span>
+                          </div>
+                        )}
+                        
+                        {recall.disposalInstructions && (
+                          <div className="mb-3 p-3 bg-red-900/30 rounded border border-red-500/20">
+                            <span className="text-red-300 font-medium">Disposal Instructions: </span>
+                            <p className="text-red-200 mt-1">{recall.disposalInstructions}</p>
+                          </div>
+                        )}
+                        
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-1">
+                            <span className="text-red-300">Source:</span>
+                            <span className="text-red-200">{recall.source || 'FDA'}</span>
+                          </div>
+                          {recall.sourceUrl && (
+                            <a 
+                              href={recall.sourceUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              View Official Recall
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </CardContent>
                 </Card>
               )}
 
-              {/* Ingredients */}
-              <Card className="cosmic-card" data-testid="card-ingredients">
+              {/* Enhanced Product Description */}
+              <Card className="cosmic-card" data-testid="card-description">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-starlight-400">Ingredients</CardTitle>
+                    <CardTitle className="text-starlight-400">Comprehensive Product Information</CardTitle>
                     <HelpTooltip 
-                      content="Complete ingredient list as declared by the manufacturer. Ingredients are typically listed in descending order by weight. Our analysis flags potentially problematic ingredients based on veterinary research, FDA warnings, allergen data, and toxicology studies. Red flags may include artificial preservatives, known toxins, common allergens, or controversial additives."
+                      content="Complete product details including description, target species, disposal instructions, and official sources. This information helps ensure safe and appropriate use for your pets."
                       side="right"
                     />
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-ingredients">
-                    {product.ingredients || 'Ingredient information not available.'}
-                  </p>
+                <CardContent className="space-y-4">
+                  {product.description && (
+                    <div>
+                      <h4 className="font-medium text-purple-200 mb-2">Product Description:</h4>
+                      <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-description">
+                        {product.description}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {/* Target Species */}
+                  {product.targetSpecies && product.targetSpecies.length > 0 && (
+                    <div>
+                      <h4 className="font-medium text-purple-200 mb-2">Designed For:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {product.targetSpecies.map((species: string, index: number) => (
+                          <Badge key={index} variant="secondary" className="bg-cosmic-700 text-cosmic-200">
+                            {species}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Animal Type */}
+                  {product.animalType && product.animalType !== 'pet' && (
+                    <div>
+                      <h4 className="font-medium text-purple-200 mb-2">Animal Category:</h4>
+                      <Badge variant="outline" className="border-purple-500/30 text-purple-300 capitalize">
+                        {product.animalType}
+                      </Badge>
+                    </div>
+                  )}
+                  
+                  {/* Disposal Instructions */}
+                  {product.disposalInstructions && (
+                    <div className="p-4 bg-cosmic-800/30 rounded-lg border border-cosmic-600/30">
+                      <h4 className="font-medium text-purple-200 mb-2">Disposal Instructions:</h4>
+                      <p className="text-cosmic-300 text-sm">{product.disposalInstructions}</p>
+                    </div>
+                  )}
+                  
+                  {/* Source Links */}
+                  {(product.sourceUrl || (product.sourceUrls && product.sourceUrls.length > 0)) && (
+                    <div>
+                      <h4 className="font-medium text-purple-200 mb-2">Sources & References:</h4>
+                      <div className="space-y-2">
+                        {product.sourceUrl && (
+                          <a 
+                            href={product.sourceUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-starlight-400 hover:text-starlight-300 transition-colors"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Official Product Information
+                          </a>
+                        )}
+                        {product.sourceUrls && product.sourceUrls.map((url: string, index: number) => (
+                          <a 
+                            key={index}
+                            href={url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-starlight-400 hover:text-starlight-300 transition-colors"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Safety Analysis Source {index + 1}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Enhanced Ingredients Analysis */}
+              <Card className="cosmic-card" data-testid="card-ingredients">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-starlight-400">Ingredient Analysis</CardTitle>
+                    <HelpTooltip 
+                      content="Complete ingredient list with safety analysis. Ingredients are typically listed in descending order by weight. Our analysis flags potentially problematic ingredients based on veterinary research, FDA warnings, allergen data, and toxicology studies."
+                      side="right"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-purple-200 mb-2">Ingredient List:</h4>
+                    <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-ingredients">
+                      {product.ingredients || 'Ingredient information not available.'}
+                    </p>
+                  </div>
+                  
+                  {/* Suspicious Ingredients Warning */}
+                  {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
+                    <div className="p-4 bg-orange-950/20 border border-orange-500/30 rounded-lg">
+                      <h4 className="font-medium text-orange-300 mb-2 flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4" />
+                        Flagged Ingredients:
+                      </h4>
+                      <div className="space-y-2">
+                        {product.suspiciousIngredients.map((ingredient: string, index: number) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <Badge variant="outline" className="border-orange-500/50 text-orange-300">
+                              {ingredient}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-orange-200 text-sm mt-3">
+                        These ingredients have been flagged based on veterinary research or FDA warnings. 
+                        Consult your veterinarian if you have concerns.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {/* Blacklisted Ingredients Check */}
+                  {blacklistedIngredients && blacklistedIngredients.length > 0 && (
+                    <div>
+                      {(() => {
+                        const productIngredients = product.ingredients?.toLowerCase() || '';
+                        const blacklistedMatches = blacklistedIngredients.filter(ing => 
+                          productIngredients.includes(ing.ingredient.toLowerCase())
+                        );
+                        
+                        if (blacklistedMatches.length > 0) {
+                          return (
+                            <div className="p-4 bg-red-950/20 border border-red-500/30 rounded-lg">
+                              <h4 className="font-medium text-red-300 mb-2 flex items-center gap-2">
+                                <XCircle className="h-4 w-4" />
+                                Blacklisted Ingredients Detected:
+                              </h4>
+                              <div className="space-y-2">
+                                {blacklistedMatches.map((match: any, index: number) => (
+                                  <div key={index} className="space-y-1">
+                                    <Badge variant="destructive" className="bg-red-600">
+                                      {match.ingredient}
+                                    </Badge>
+                                    <p className="text-red-200 text-sm">{match.reason}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -488,27 +683,119 @@ export default function ProductDetail() {
                 </CardContent>
               </Card>
 
-              {/* Quick Stats */}
+              {/* Comprehensive Product Stats */}
               <Card className="cosmic-card" data-testid="card-quick-stats">
                 <CardHeader>
-                  <CardTitle className="text-starlight-400">Quick Stats</CardTitle>
+                  <CardTitle className="text-starlight-400">Product Details</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-cosmic-300">Category:</span>
                     <Badge variant="secondary" className="bg-cosmic-700">{product.category || 'Unknown'}</Badge>
                   </div>
+                  
                   <Separator className="bg-cosmic-700" />
+                  
                   <div className="flex justify-between items-center">
-                    <span className="text-cosmic-300">Barcode:</span>
+                    <span className="text-cosmic-300">UPC/Barcode:</span>
                     <span className="text-cosmic-200 font-mono text-sm">{product.barcode || 'N/A'}</span>
                   </div>
+                  
+                  {product.animalType && (
+                    <>
+                      <Separator className="bg-cosmic-700" />
+                      <div className="flex justify-between items-center">
+                        <span className="text-cosmic-300">Animal Type:</span>
+                        <Badge variant="outline" className="capitalize border-purple-500/30 text-purple-300">
+                          {product.animalType}
+                        </Badge>
+                      </div>
+                    </>
+                  )}
+                  
+                  {product.lastAnalyzed && (
+                    <>
+                      <Separator className="bg-cosmic-700" />
+                      <div className="flex justify-between items-center">
+                        <span className="text-cosmic-300">Last Analyzed:</span>
+                        <span className="text-cosmic-200 text-sm">
+                          {new Date(product.lastAnalyzed).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  
+                  {product.transparencyLevel && product.transparencyLevel !== 'unknown' && (
+                    <>
+                      <Separator className="bg-cosmic-700" />
+                      <div className="flex justify-between items-center">
+                        <span className="text-cosmic-300">Transparency:</span>
+                        <Badge 
+                          variant="outline" 
+                          className={`capitalize ${
+                            product.transparencyLevel === 'excellent' ? 'border-green-500/30 text-green-300' :
+                            product.transparencyLevel === 'good' ? 'border-blue-500/30 text-blue-300' :
+                            product.transparencyLevel === 'pending' ? 'border-yellow-500/30 text-yellow-300' :
+                            'border-cosmic-500/30 text-cosmic-300'
+                          }`}
+                        >
+                          {product.transparencyLevel}
+                        </Badge>
+                      </div>
+                    </>
+                  )}
+                  
+                  {productRecalls && productRecalls.length > 0 && (
+                    <>
+                      <Separator className="bg-cosmic-700" />
+                      <div className="flex items-center gap-2 text-mystical-red">
+                        <AlertCircle className="h-4 w-4" />
+                        <span className="text-sm font-medium">
+                          {productRecalls.length} Active Recall{productRecalls.length > 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  
                   {product.isBlacklisted && (
                     <>
                       <Separator className="bg-cosmic-700" />
                       <div className="flex items-center gap-2 text-mystical-red">
                         <XCircle className="h-4 w-4" />
                         <span className="text-sm font-medium">Contains Blacklisted Ingredients</span>
+                      </div>
+                    </>
+                  )}
+                  
+                  {/* Additional Links */}
+                  {(product.sourceUrl || (product.sourceUrls && product.sourceUrls.length > 0)) && (
+                    <>
+                      <Separator className="bg-cosmic-700" />
+                      <div className="space-y-2">
+                        <span className="text-cosmic-300 text-sm">External Sources:</span>
+                        {product.sourceUrl && (
+                          <a 
+                            href={product.sourceUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-xs text-starlight-400 hover:text-starlight-300 transition-colors"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            Official Info
+                          </a>
+                        )}
+                        {product.sourceUrls && product.sourceUrls.slice(0, 2).map((url: string, index: number) => (
+                          <a 
+                            key={index}
+                            href={url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-xs text-starlight-400 hover:text-starlight-300 transition-colors"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            Source {index + 1}
+                          </a>
+                        ))}
                       </div>
                     </>
                   )}
