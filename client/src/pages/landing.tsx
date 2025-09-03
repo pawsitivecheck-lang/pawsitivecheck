@@ -223,16 +223,6 @@ export default function Landing() {
                     </Link>
                     
                     <Link 
-                      to="/pets"
-                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      data-testid="mobile-nav-pet-profiles"
-                    >
-                      <PawPrint className="mr-3 h-5 w-5" />
-                      Pet Profiles
-                    </Link>
-                    
-                    <Link 
                       to="/product-database"
                       className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
                       onClick={() => setIsMobileMenuOpen(false)}
