@@ -112,7 +112,17 @@ Consider:
     if (content.type !== 'text') {
       throw new Error('Expected text content from Anthropic response');
     }
-    const analysis = JSON.parse(content.text);
+    // Clean the response text to remove markdown formatting
+    let responseText = content.text.trim();
+    
+    // Remove ```json and ``` if present
+    if (responseText.startsWith('```json')) {
+      responseText = responseText.replace(/^```json\s*/, '').replace(/```\s*$/, '');
+    } else if (responseText.startsWith('```')) {
+      responseText = responseText.replace(/^```\s*/, '').replace(/```\s*$/, '');
+    }
+    
+    const analysis = JSON.parse(responseText);
     
     return {
       cosmicScore: Math.max(0, Math.min(100, analysis.cosmicScore)),
