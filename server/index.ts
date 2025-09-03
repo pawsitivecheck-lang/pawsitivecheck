@@ -1,6 +1,10 @@
 import express, { type Request, Response, NextFunction } from "express";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import { sql } from "drizzle-orm";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { logger } from "./logger";
 
 const app = express();
 
@@ -19,6 +23,64 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// CORS configuration
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, server-to-server)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.app',
+      'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.dev', 
+      'https://pawsitivecheck.com',
+      /\.replit\.app$/,
+      /\.replit\.dev$/
+    ];
+    
+    // Development mode - allow localhost
+    if (process.env.NODE_ENV === 'development') {
+      allowedOrigins.push(/^http:\/\/localhost:\d+$/);
+      allowedOrigins.push(/^http:\/\/127\.0\.0\.1:\d+$/);
+    }
+    
+    const isAllowed = allowedOrigins.some(pattern => {
+      if (typeof pattern === 'string') return origin === pattern;
+      if (pattern instanceof RegExp) return pattern.test(origin);
+      return false;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      logger.securityEvent('CORS policy violation', 'medium', { origin });
+      callback(new Error('CORS policy violation'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
+// Rate limiting configuration
+const createRateLimiter = (windowMs: number, max: number, message: string) => rateLimit({
+  windowMs,
+  max,
+  message: { error: message },
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    logger.securityEvent('Rate limit exceeded', 'high', { ip: req.ip, path: req.path });
+    res.status(429).json({ error: message });
+  }
+});
+
+// Apply different rate limits to different endpoints
+app.use('/api/auth', createRateLimiter(15 * 60 * 1000, 20, 'Too many authentication attempts'));
+app.use('/api/reviews', createRateLimiter(15 * 60 * 1000, 30, 'Too many review submissions'));
+app.use('/api/products', createRateLimiter(60 * 1000, 100, 'Too many product requests'));
+app.use('/api/admin', createRateLimiter(5 * 60 * 1000, 50, 'Too many admin requests'));
+app.use('/api', createRateLimiter(15 * 60 * 1000, 200, 'Too many API requests'));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
@@ -113,6 +175,50 @@ app.use((req, res, next) => {
   });
 
   next();
+});
+
+// Health check endpoints
+app.get('/health', async (req, res) => {
+  try {
+    const healthData = {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      version: process.env.npm_package_version || '1.0.0',
+      environment: process.env.NODE_ENV || 'development'
+    };
+    
+    res.status(200).json(healthData);
+  } catch (error) {
+    res.status(503).json({
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+app.get('/health/ready', async (req, res) => {
+  try {
+    // Check database connectivity
+    const { db } = await import('./db');
+    await db.execute(sql`SELECT 1`);
+    
+    res.status(200).json({
+      status: 'ready',
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (error) {
+    logger.healthCheck('unhealthy', 'database', { error: error instanceof Error ? error.message : 'Unknown error' });
+    res.status(503).json({
+      status: 'not ready',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 });
 
 (async () => {
