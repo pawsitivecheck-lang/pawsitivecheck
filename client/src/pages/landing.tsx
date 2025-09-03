@@ -187,7 +187,7 @@ export default function Landing() {
                   <>
                     <Link 
                       to="/profile"
-                      className="flex items-center py-3 px-3 mb-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                      className="flex items-center py-3 px-3 mb-2 hover:bg-blue-900/20 rounded-lg transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="button-profile-link"
                     >
@@ -201,8 +201,8 @@ export default function Landing() {
                         <UserCheck className="mr-3 h-5 w-5 text-blue-600" />
                       )}
                       <div>
-                        <div className="font-medium text-gray-800 dark:text-gray-200">{user?.firstName || 'User'}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</div>
+                        <div className="font-medium text-gray-200">{user?.firstName || 'User'}</div>
+                        <div className="text-xs text-gray-400">{user?.email}</div>
                       </div>
                     </Link>
                     
@@ -210,7 +210,7 @@ export default function Landing() {
                     
                     <a 
                       href="/api/logout"
-                      className="flex items-center w-full py-3 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                      className="flex items-center w-full py-3 px-3 text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-logout"
                     >
@@ -226,7 +226,7 @@ export default function Landing() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-sign-in"
                           >
@@ -245,7 +245,7 @@ export default function Landing() {
                     ) : (
                       <a 
                         href="/api/login"
-                        className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-sign-in"
                       >
@@ -257,7 +257,7 @@ export default function Landing() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-register"
                           >
@@ -276,7 +276,7 @@ export default function Landing() {
                     ) : (
                       <a 
                         href="/api/register"
-                        className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-register"
                       >
@@ -293,7 +293,7 @@ export default function Landing() {
       </nav>
 
       {/* Welcome Hero Section */}
-      <section className="py-8 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950/20 dark:via-background dark:to-purple-950/20">
+      <section className="py-8 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-950/20 via-background to-purple-950/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4 sm:mb-6">
@@ -317,7 +317,7 @@ export default function Landing() {
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12">
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-green-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
                   <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Instant Safety Analysis</h3>
@@ -325,7 +325,7 @@ export default function Landing() {
               </div>
               
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-blue-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
                   <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Real-time Recall Alerts</h3>
@@ -333,7 +333,7 @@ export default function Landing() {
               </div>
               
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-purple-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
                   <Users className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Community Powered</h3>
@@ -394,7 +394,7 @@ export default function Landing() {
               <Button 
                 asChild
                 variant="outline"
-                className="border-2 border-red-600 text-red-600 hover:bg-red-50 text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
+                className="border-2 border-red-400 text-red-400 hover:bg-red-900/20 text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
                 data-testid="button-view-alerts"
               >
                 <Link to="/recalls">
@@ -443,7 +443,7 @@ export default function Landing() {
                   <CardContent className="p-4 sm:p-6">
                     <div className="h-40 sm:h-48 bg-muted rounded-lg mb-4 flex items-center justify-center">
                       <div className="text-center">
-                        <Search className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-2" />
+                        <Search className="h-8 w-8 sm:h-12 sm:w-12 text-gray-500 mx-auto mb-2" />
                         <p className="text-muted-foreground text-sm" data-testid="text-no-products">No products analyzed yet...</p>
                       </div>
                     </div>
@@ -460,7 +460,7 @@ export default function Landing() {
       </section>
 
       {/* Recall Alerts */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-red-50" id="recalls">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-red-950/10" id="recalls">
         <div className="max-w-6xl mx-auto">
           <div className="bg-card rounded-2xl border border-red-200 p-4 sm:p-6 lg:p-8 shadow-sm">
             <div className="text-center mb-6 sm:mb-8">
@@ -478,7 +478,7 @@ export default function Landing() {
                 ))
               ) : (
                 <div className="col-span-full text-center py-6 sm:py-8">
-                  <Shield className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                  <Shield className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-muted-foreground text-sm sm:text-base" data-testid="text-no-recalls">No active safety alerts at this time</p>
                   <p className="text-muted-foreground text-xs sm:text-sm mt-1">We'll notify you immediately if any issues arise</p>
                 </div>
@@ -565,7 +565,7 @@ export default function Landing() {
             ) : (
               // Empty state
               <div className="col-span-full text-center py-8">
-                <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-muted-foreground text-sm sm:text-base">Community reviews will appear here</p>
                 <p className="text-muted-foreground text-xs sm:text-sm mt-1">Join our community to share your safety experiences</p>
               </div>
