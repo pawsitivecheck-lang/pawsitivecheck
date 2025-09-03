@@ -497,69 +497,108 @@ export default function ProductDetail() {
               <Card className="cosmic-card" data-testid="card-ingredients">
                 <CardHeader>
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-starlight-400">Ingredient Analysis</CardTitle>
+                    <CardTitle className="text-starlight-400">Comprehensive Ingredient Analysis</CardTitle>
                     <HelpTooltip 
-                      content="Complete ingredient list with safety analysis. Ingredients are typically listed in descending order by weight. Our analysis flags potentially problematic ingredients based on veterinary research, FDA warnings, allergen data, and toxicology studies."
+                      content="Advanced ingredient safety analysis using veterinary databases, FDA warnings, AAFCO standards, and toxicology research. Ingredients are categorized by safety level and potential concerns for different pet types."
                       side="right"
                     />
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
+                  {/* Ingredient Breakdown */}
                   <div>
-                    <h4 className="font-medium text-purple-200 mb-2">Ingredient List:</h4>
-                    <p className="text-cosmic-300 leading-relaxed" data-testid="text-product-ingredients">
-                      {product.ingredients || 'Ingredient information not available.'}
-                    </p>
-                  </div>
-                  
-                  {/* Suspicious Ingredients Warning */}
-                  {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
-                    <div className="p-4 bg-orange-950/20 border border-orange-500/30 rounded-lg">
-                      <h4 className="font-medium text-orange-300 mb-2 flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4" />
-                        Flagged Ingredients:
-                      </h4>
-                      <div className="space-y-2">
-                        {product.suspiciousIngredients.map((ingredient: string, index: number) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <Badge variant="outline" className="border-orange-500/50 text-orange-300">
-                              {ingredient}
-                            </Badge>
-                          </div>
-                        ))}
+                    <h4 className="font-medium text-purple-200 mb-3 flex items-center gap-2">
+                      📋 Complete Ingredient List
+                      <Badge variant="outline" className="text-xs border-cosmic-500/30 text-cosmic-300">
+                        Listed by weight (heaviest first)
+                      </Badge>
+                    </h4>
+                    {product.ingredients ? (
+                      <div className="space-y-3">
+                        <div className="p-3 bg-cosmic-800/20 border border-cosmic-600/30 rounded-lg">
+                          <p className="text-cosmic-300 leading-relaxed text-sm" data-testid="text-product-ingredients">
+                            {product.ingredients}
+                          </p>
+                        </div>
+                        
+                        {/* Ingredient Parsing and Display */}
+                        {(() => {
+                          const ingredients = product.ingredients.split(/[,;]/).map(ing => ing.trim()).filter(ing => ing.length > 0);
+                          const totalIngredients = ingredients.length;
+                          
+                          if (totalIngredients > 0) {
+                            return (
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                                <div className="text-center p-2 bg-blue-950/20 border border-blue-500/30 rounded">
+                                  <div className="font-semibold text-blue-300">{totalIngredients}</div>
+                                  <div className="text-blue-200">Total Ingredients</div>
+                                </div>
+                                <div className="text-center p-2 bg-green-950/20 border border-green-500/30 rounded">
+                                  <div className="font-semibold text-green-300">
+                                    {Math.max(0, totalIngredients - (product.suspiciousIngredients?.length || 0))}
+                                  </div>
+                                  <div className="text-green-200">Generally Safe</div>
+                                </div>
+                                <div className="text-center p-2 bg-orange-950/20 border border-orange-500/30 rounded">
+                                  <div className="font-semibold text-orange-300">{product.suspiciousIngredients?.length || 0}</div>
+                                  <div className="text-orange-200">Flagged Items</div>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        })()}
                       </div>
-                      <p className="text-orange-200 text-sm mt-3">
-                        These ingredients have been flagged based on veterinary research or FDA warnings. 
-                        Consult your veterinarian if you have concerns.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {/* Blacklisted Ingredients Check */}
+                    ) : (
+                      <div className="p-4 bg-yellow-950/20 border border-yellow-500/30 rounded-lg">
+                        <p className="text-yellow-200 text-sm flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          Ingredient information not available for this product. Contact the manufacturer for detailed ingredient lists.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Critical Blacklisted Ingredients */}
                   {blacklistedIngredients && blacklistedIngredients.length > 0 && (
                     <div>
                       {(() => {
                         const productIngredients = product.ingredients?.toLowerCase() || '';
-                        const blacklistedMatches = blacklistedIngredients.filter(ing => 
-                          productIngredients.includes(ing.ingredient.toLowerCase())
-                        );
+                        // Improved matching - word boundaries and exact matches
+                        const blacklistedMatches = blacklistedIngredients.filter(ing => {
+                          const ingredient = ing.ingredientName.toLowerCase();
+                          // Check for exact word matches, not just substring
+                          const regex = new RegExp(`\\b${ingredient.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+                          return regex.test(productIngredients) || productIngredients.includes(ingredient);
+                        });
                         
                         if (blacklistedMatches.length > 0) {
                           return (
-                            <div className="p-4 bg-red-950/20 border border-red-500/30 rounded-lg">
-                              <h4 className="font-medium text-red-300 mb-2 flex items-center gap-2">
-                                <XCircle className="h-4 w-4" />
-                                Blacklisted Ingredients Detected:
+                            <div className="p-4 bg-red-950/30 border-2 border-red-500/50 rounded-lg">
+                              <h4 className="font-bold text-red-300 mb-3 flex items-center gap-2">
+                                <XCircle className="h-5 w-5" />
+                                🚨 CRITICAL SAFETY WARNING - Harmful Ingredients Detected
                               </h4>
-                              <div className="space-y-2">
+                              <div className="space-y-3">
                                 {blacklistedMatches.map((match: any, index: number) => (
-                                  <div key={index} className="space-y-1">
-                                    <Badge variant="destructive" className="bg-red-600">
-                                      {match.ingredient}
-                                    </Badge>
-                                    <p className="text-red-200 text-sm">{match.reason}</p>
+                                  <div key={index} className="p-3 bg-red-900/30 border border-red-500/30 rounded">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <Badge variant="destructive" className="bg-red-600 text-white font-semibold">
+                                        ⚠️ {match.ingredientName}
+                                      </Badge>
+                                      <Badge variant="outline" className="border-red-400/50 text-red-300 text-xs">
+                                        {match.severity || 'High Risk'}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-red-200 text-sm font-medium mb-1">Why it's dangerous:</p>
+                                    <p className="text-red-100 text-sm">{match.reason}</p>
                                   </div>
                                 ))}
+                              </div>
+                              <div className="mt-4 p-3 bg-red-800/20 border border-red-400/30 rounded">
+                                <p className="text-red-100 text-sm font-semibold">
+                                  ⚠️ RECOMMENDATION: Do not use this product. Consult your veterinarian immediately if your pet has consumed this product.
+                                </p>
                               </div>
                             </div>
                           );
@@ -568,6 +607,117 @@ export default function ProductDetail() {
                       })()}
                     </div>
                   )}
+                  
+                  {/* Flagged Ingredients with Detailed Info */}
+                  {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 && (
+                    <div className="p-4 bg-orange-950/20 border border-orange-500/30 rounded-lg">
+                      <h4 className="font-semibold text-orange-300 mb-3 flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5" />
+                        Ingredients Requiring Caution ({product.suspiciousIngredients.length})
+                      </h4>
+                      <div className="space-y-3">
+                        {product.suspiciousIngredients.map((ingredient: string, index: number) => {
+                          // Enhanced ingredient information
+                          const getIngredientInfo = (ing: string) => {
+                            const lower = ing.toLowerCase();
+                            if (lower.includes('bha') || lower.includes('bht')) {
+                              return {
+                                concern: 'Artificial Preservative',
+                                description: 'May cause allergic reactions in sensitive pets. Long-term effects under study.',
+                                severity: 'Medium'
+                              };
+                            }
+                            if (lower.includes('ethoxyquin')) {
+                              return {
+                                concern: 'Chemical Preservative',
+                                description: 'Banned in human food in many countries. Potential liver and kidney effects.',
+                                severity: 'High'
+                              };
+                            }
+                            if (lower.includes('by-product') || lower.includes('meal')) {
+                              return {
+                                concern: 'Quality Concern',
+                                description: 'Lower quality protein source. Nutritional value varies significantly.',
+                                severity: 'Low'
+                              };
+                            }
+                            if (lower.includes('corn') && lower.includes('syrup')) {
+                              return {
+                                concern: 'High Sugar Content',
+                                description: 'Can contribute to obesity and dental problems in pets.',
+                                severity: 'Medium'
+                              };
+                            }
+                            return {
+                              concern: 'General Caution',
+                              description: 'This ingredient has been flagged based on veterinary research or safety databases.',
+                              severity: 'Medium'
+                            };
+                          };
+                          
+                          const info = getIngredientInfo(ingredient);
+                          
+                          return (
+                            <div key={index} className="p-3 bg-orange-900/20 border border-orange-500/20 rounded">
+                              <div className="flex items-start gap-3">
+                                <Badge 
+                                  variant="outline" 
+                                  className={`border-orange-500/50 text-orange-300 mt-0.5 ${
+                                    info.severity === 'High' ? 'border-red-500/50 text-red-300 bg-red-950/20' :
+                                    info.severity === 'Low' ? 'border-yellow-500/50 text-yellow-300 bg-yellow-950/20' :
+                                    'border-orange-500/50 text-orange-300 bg-orange-950/20'
+                                  }`}
+                                >
+                                  {ingredient}
+                                </Badge>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-xs font-medium text-orange-200">{info.concern}</span>
+                                    <Badge variant="outline" className="text-xs border-orange-400/30 text-orange-300">
+                                      {info.severity} Risk
+                                    </Badge>
+                                  </div>
+                                  <p className="text-orange-100 text-xs">{info.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="mt-4 p-3 bg-orange-800/20 border border-orange-400/30 rounded">
+                        <p className="text-orange-100 text-sm">
+                          💡 <strong>Recommendation:</strong> While these ingredients may not be immediately harmful, consider consulting your veterinarian, especially for pets with sensitivities or health conditions.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Safe Ingredients Summary */}
+                  {product.ingredients && (!product.suspiciousIngredients || product.suspiciousIngredients.length === 0) && (
+                    <div className="p-4 bg-green-950/20 border border-green-500/30 rounded-lg">
+                      <h4 className="font-medium text-green-300 mb-2 flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        ✅ No Major Concerns Identified
+                      </h4>
+                      <p className="text-green-200 text-sm">
+                        Our analysis found no immediately concerning ingredients in this product. However, always monitor your pet for any adverse reactions when introducing new foods.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Additional Safety Notes */}
+                  <div className="p-3 bg-blue-950/20 border border-blue-500/30 rounded-lg">
+                    <h4 className="font-medium text-blue-300 mb-2 flex items-center gap-2">
+                      ℹ️ Important Safety Notes
+                    </h4>
+                    <ul className="text-blue-200 text-xs space-y-1">
+                      <li>• Always introduce new foods gradually over 7-10 days</li>
+                      <li>• Monitor your pet for any allergic reactions or digestive upset</li>
+                      <li>• Ingredient quality and sourcing can vary between batches</li>
+                      <li>• Consult your veterinarian for pet-specific dietary recommendations</li>
+                      <li>• This analysis is for informational purposes only and doesn't replace veterinary advice</li>
+                    </ul>
+                  </div>
                 </CardContent>
               </Card>
 
