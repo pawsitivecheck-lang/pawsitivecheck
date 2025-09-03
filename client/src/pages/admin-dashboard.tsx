@@ -228,17 +228,37 @@ export default function AdminDashboard() {
       
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-12 text-center">
-            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6 shadow-lg">
-              <Crown className="text-3xl text-white" />
+          {/* Compact Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
+                <Crown className="text-white h-6 w-6" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200" data-testid="text-admin-title">
+                  Admin Dashboard
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 text-sm" data-testid="text-admin-description">
+                  Platform management & automation
+                </p>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-200 mb-4" data-testid="text-admin-title">
-              Admin Dashboard
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 text-lg" data-testid="text-admin-description">
-              Manage platform content, users, and safety data
-            </p>
+            
+            {/* Inline Quick Stats */}
+            <div className="hidden md:flex gap-6">
+              <div className="text-center">
+                <div className="text-xl font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
+              </div>
+              <div className="text-center">
+                <div className="text-xl font-bold text-red-600">{(analytics as any)?.cursedProducts || 0}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Unsafe</div>
+              </div>
+            </div>
           </div>
 
           {/* Error Banner */}
@@ -256,63 +276,22 @@ export default function AdminDashboard() {
             </Card>
           )}
 
-          {/* Welcome Message */}
-          <Card className="border border-blue-600/30 bg-blue-900/20 mb-8" data-testid="card-admin-welcome">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
-                  <Crown className="text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-1" data-testid="text-welcome-admin">
-                    Welcome, Administrator {user?.firstName}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400" data-testid="text-admin-status">
-                    {isLoadingData ? "Loading dashboard data..." : "Manage your pet safety platform from here"}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Analytics Overview */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="text-blue-600" data-testid="card-stat-products">
-              <StatCard 
-                icon={Package}
-                title="Products Analyzed"
-                value={(analytics as any)?.totalProducts || 0}
-                color="bg-blue-100 dark:bg-blue-900 text-blue-600"
-                isLoading={analyticsQuery.isLoading}
-              />
-            </div>
-            <div className="text-green-600" data-testid="card-stat-users">
-              <StatCard 
-                icon={Users}
-                title="Active Users"
-                value={(analytics as any)?.totalUsers || 0}
-                color="bg-green-100 dark:bg-green-900 text-green-600"
-                isLoading={analyticsQuery.isLoading}
-              />
-            </div>
-            <div className="text-red-600" data-testid="card-stat-unsafe">
-              <StatCard 
-                icon={AlertTriangle}
-                title="Unsafe Products"
-                value={(analytics as any)?.cursedProducts || 0}
-                color="bg-red-100 dark:bg-red-900 text-red-600"
-                isLoading={analyticsQuery.isLoading}
-              />
-            </div>
-            <div className="text-green-600" data-testid="card-stat-safe">
-              <StatCard 
-                icon={Shield}
-                title="Safe Products"
-                value={(analytics as any)?.blessedProducts || 0}
-                color="bg-green-100 dark:bg-green-900 text-green-600"
-                isLoading={analyticsQuery.isLoading}
-              />
-            </div>
+          {/* Mobile Stats Cards - Only show on mobile */}
+          <div className="grid grid-cols-2 gap-4 mb-8 md:hidden">
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <CardContent className="p-4 text-center">
+                <Package className="h-5 w-5 mx-auto mb-2 text-blue-600" />
+                <div className="text-lg font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
+              </CardContent>
+            </Card>
+            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <CardContent className="p-4 text-center">
+                <Users className="h-5 w-5 mx-auto mb-2 text-green-600" />
+                <div className="text-lg font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Main Dashboard Grid */}
