@@ -104,19 +104,15 @@ export function UnifiedScannerModal({
             ),
           });
         } else {
-          // Guest users just get a simple message
-          setScanResult("Product Not Found - This product is not in our database yet. Log in to add new products.");
+          // Guest users get a message with login link
+          setScanResult("This product is not in our database yet. Log in to add new products.");
           toast({
             title: "Product Not Found",
             description: "This product is not in our database yet. Log in to add new products.",
             variant: "destructive",
           });
         }
-        // Close scanner after a delay so user can see the message
-        setTimeout(() => {
-          setScanResult(null);
-          onClose();
-        }, 4000);
+        // Don't auto-close - let user manually close or take action
       }
     },
     onError: (error: any) => {
@@ -559,11 +555,20 @@ export function UnifiedScannerModal({
               <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center">
                 <AlertCircle className="h-8 w-8 text-red-600" />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p className="text-red-700 font-semibold text-lg">Product Not Found</p>
                 <p className="text-sm text-red-600" data-testid="text-scan-result">
                   {scanResult}
                 </p>
+                <Button 
+                  onClick={() => {
+                    window.location.href = '/api/login';
+                  }}
+                  className="mt-3 bg-blue-600 hover:bg-blue-700 text-white"
+                  data-testid="button-login-to-add"
+                >
+                  Log In to Add Products
+                </Button>
               </div>
             </div>
           )}
