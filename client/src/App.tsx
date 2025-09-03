@@ -19,6 +19,7 @@ const Profile = React.lazy(() => import("@/pages/profile"));
 const Recalls = React.lazy(() => import("@/pages/recalls"));
 const Community = React.lazy(() => import("@/pages/community"));
 const ProductDatabase = React.lazy(() => import("@/pages/product-database"));
+const LivestockDashboard = React.lazy(() => import("@/pages/livestock-dashboard"));
 
 // Loading component for code-split routes
 const LoadingSpinner = () => (
@@ -87,6 +88,16 @@ function App() {
         <Route path="/products" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
             <ProductDatabase />
+          </Suspense>
+        )} />
+        <Route path="/livestock" component={() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <LivestockDashboard />
+          </Suspense>
+        )} />
+        <Route path="/livestock-preview" component={() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <LivestockDashboard />
           </Suspense>
         )} />
         
