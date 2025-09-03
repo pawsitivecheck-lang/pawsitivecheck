@@ -168,7 +168,7 @@ export default function Community() {
                       {getRankIcon(userReviews ? userReviews.length : 0)}
                     </div>
                     <div className="flex items-center gap-4">
-                      <Badge className="bg-purple-50 text-purple-600 border-purple-600" data-testid="badge-user-rank">
+                      <Badge className="bg-purple-500/20 text-purple-400 border-purple-500" data-testid="badge-user-rank">
                         {getRankTitle(userReviews ? userReviews.length : 0)}
                       </Badge>
                       <span className="text-gray-600 text-sm" data-testid="text-user-reviews-count">
@@ -178,7 +178,7 @@ export default function Community() {
                   </div>
                   <Button 
                     variant="outline"
-                    className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                    className="border-blue-600 text-blue-600 hover:bg-blue-600/10"
                     data-testid="button-view-profile"
                   >
                     View Full Profile
@@ -216,7 +216,7 @@ export default function Community() {
                     onClick={() => setReviewFilter(rating)}
                     className={reviewFilter === rating 
                       ? "bg-blue-600 text-white" 
-                      : "border-blue-600 text-blue-600 hover:bg-blue-50"
+                      : "border-blue-600 text-blue-600 hover:bg-blue-600/10"
                     }
                     data-testid={`button-filter-${rating}`}
                   >
@@ -343,7 +343,7 @@ export default function Community() {
                         setSearchTerm("");
                         setReviewFilter("all");
                       }}
-                      className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                      className="border-blue-600 text-blue-600 hover:bg-blue-600/10"
                       data-testid="button-clear-filters"
                     >
                       Clear Filters

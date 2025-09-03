@@ -123,10 +123,10 @@ export default function ProductDetail() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'urgent': return 'bg-red-500/20 text-red-400 border-red-500/30';
+      case 'urgent': return 'bg-mystical-red/20 text-mystical-red border-mystical-red/30';
       case 'moderate': 
-      case 'medium': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      case 'low': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'medium': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
+      case 'low': return 'bg-mystical-green/20 text-mystical-green border-mystical-green/30';
       default: return 'bg-cosmic-600/20 text-cosmic-400 border-cosmic-600/30';
     }
   };

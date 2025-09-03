@@ -243,7 +243,7 @@ export default function AdminDashboard() {
 
           {/* Error Banner */}
           {hasErrors && (
-            <Card className="border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 mb-8">
+            <Card className="border border-red-600/30 bg-red-900/20 mb-8">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
           )}
 
           {/* Welcome Message */}
-          <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 mb-8" data-testid="card-admin-welcome">
+          <Card className="border border-blue-600/30 bg-blue-900/20 mb-8" data-testid="card-admin-welcome">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
@@ -329,7 +329,7 @@ export default function AdminDashboard() {
                 <div className="space-y-3">
                   {recallsQuery.isLoading ? (
                     Array.from({ length: 2 }).map((_, i) => (
-                      <div key={i} className="p-3 bg-red-50 dark:bg-red-950 border-l-2 border-red-500 rounded">
+                      <div key={i} className="p-3 bg-red-900/20 border-l-2 border-red-500 rounded">
                         <div className="flex justify-between items-start mb-1">
                           <Skeleton className="h-4 w-48" />
                           <Skeleton className="h-5 w-12 rounded-full" />
@@ -338,7 +338,7 @@ export default function AdminDashboard() {
                       </div>
                     ))
                   ) : (recentRecalls as any[]).slice(0, 3).map((recall: any) => (
-                    <div key={recall.id} className="p-3 bg-red-50 dark:bg-red-950 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
+                    <div key={recall.id} className="p-3 bg-red-900/20 border-l-2 border-red-500 rounded" data-testid={`recall-item-${recall.id}`}>
                       <div className="flex justify-between items-start mb-1">
                         <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{recall.reason}</p>
                         <Badge className="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 text-xs" data-testid="badge-recall-severity">
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
                   asChild
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                  className="w-full mt-4 border-red-500 text-red-600 hover:bg-red-900/30"
                   data-testid="button-manage-recalls"
                 >
                   <Link to="/recalls">Manage Recalls</Link>
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1 border-red-500 text-red-600 hover:bg-red-50 dark:hover:bg-red-950 text-xs"
+                    className="flex-1 border-red-500 text-red-600 hover:bg-red-900/30 text-xs"
                     data-testid="button-add-ingredient"
                   >
                     Add Ingredient
@@ -463,7 +463,7 @@ export default function AdminDashboard() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  className="w-full mt-4 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950"
+                  className="w-full mt-4 border-blue-500 text-blue-600 hover:bg-blue-900/30"
                   data-testid="button-view-all-activity"
                 >
                   View All Activity
@@ -486,7 +486,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Quick Product Management */}
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="mb-6 p-4 bg-red-900/20 border border-red-600/30 rounded-lg">
               <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">Quick Product Actions</h3>
               <Button
                 onClick={handleQuickDelete}
@@ -513,7 +513,7 @@ export default function AdminDashboard() {
 
           {/* Admin Guidelines */}
           <div className="mt-12">
-            <Card className="border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950" data-testid="card-admin-guidelines">
+            <Card className="border border-blue-600/30 bg-blue-900/20" data-testid="card-admin-guidelines">
               <CardContent className="p-8">
                 <div className="text-center max-w-2xl mx-auto">
                   <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-6">
