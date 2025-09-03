@@ -61,10 +61,12 @@ export default function VetFinder() {
   const [searchQuery, setSearchQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState(""); // For manual location entry
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [manualLocation, setManualLocation] = useState<{lat: number, lng: number} | null>(null);
   const [locationError, setLocationError] = useState("");
   const [vetPractices, setVetPractices] = useState<VetPractice[]>([]);
   const [searchRadius, setSearchRadius] = useState(15); // Default 15 miles
   const [visibleResults, setVisibleResults] = useState(6); // Show 6 results initially
+  const [isGeocodingLocation, setIsGeocodingLocation] = useState(false);
 
   // Get user's current location
   const getCurrentLocation = () => {
@@ -79,6 +81,7 @@ export default function VetFinder() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         });
+        setManualLocation(null); // Clear manual location when GPS is used
         setLocationError("");
         toast({
           title: "Location Found",
@@ -94,6 +97,40 @@ export default function VetFinder() {
         });
       }
     );
+  };
+
+  // Geocode manually entered location
+  const geocodeLocation = async (locationString: string): Promise<{lat: number, lng: number} | null> => {
+    if (!locationString.trim()) return null;
+    
+    try {
+      setIsGeocodingLocation(true);
+      
+      // Use Google Maps Geocoding API
+      const response = await fetch('/api/google-maps-key');
+      const { key } = await response.json();
+      
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(locationString)}&key=${key}`;
+      const geocodeResponse = await fetch(geocodeUrl);
+      const geocodeData = await geocodeResponse.json();
+      
+      if (geocodeData.status === 'OK' && geocodeData.results.length > 0) {
+        const location = geocodeData.results[0].geometry.location;
+        return { lat: location.lat, lng: location.lng };
+      } else {
+        throw new Error('Location not found');
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      toast({
+        title: "Location Error",
+        description: "Could not find the specified location. Please try a different address.",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setIsGeocodingLocation(false);
+    }
   };
 
   const searchVetsMutation = useMutation({
@@ -141,26 +178,63 @@ export default function VetFinder() {
     },
   });
 
-  const handleSearch = () => {
-    // Always prioritize GPS location if available
+  const handleSearch = async () => {
+    // Priority 1: Use GPS location if available
     if (userLocation) {
-      // Use GPS location with just the services search query
       searchVetsMutation.mutate({
         query: searchQuery || "veterinarian",
         location: userLocation,
         radius: searchRadius
       });
-    } else {
-      // No GPS location, so use manual location + services
-      let fullQuery = searchQuery || "veterinarian";
-      if (locationQuery.trim()) {
-        fullQuery = `${fullQuery} ${locationQuery.trim()}`;
-      }
+      return;
+    }
+
+    // Priority 2: Use previously geocoded manual location
+    if (manualLocation) {
       searchVetsMutation.mutate({
-        query: fullQuery,
+        query: searchQuery || "veterinarian",
+        location: manualLocation,
         radius: searchRadius
       });
+      return;
     }
+
+    // Priority 3: Geocode manually entered location if provided
+    if (locationQuery.trim()) {
+      const geocodedLocation = await geocodeLocation(locationQuery.trim());
+      if (geocodedLocation) {
+        setManualLocation(geocodedLocation);
+        setUserLocation(null); // Clear GPS location when manual location is used
+        toast({
+          title: "Location Geocoded",
+          description: `Found coordinates for: ${locationQuery}`,
+        });
+        
+        searchVetsMutation.mutate({
+          query: searchQuery || "veterinarian",
+          location: geocodedLocation,
+          radius: searchRadius
+        });
+        return;
+      } else {
+        // Geocoding failed, fall back to text search
+        toast({
+          title: "Using Text Search",
+          description: "Searching with location as text instead of coordinates",
+          variant: "default",
+        });
+      }
+    }
+
+    // Fallback: Use text-based search (less accurate)
+    const fullQuery = locationQuery.trim() 
+      ? `${searchQuery || "veterinarian"} ${locationQuery.trim()}`
+      : searchQuery || "veterinarian";
+      
+    searchVetsMutation.mutate({
+      query: fullQuery,
+      radius: searchRadius
+    });
   };
 
   // Removed auto-search - user must manually trigger search
@@ -375,12 +449,33 @@ export default function VetFinder() {
                   
                   {userLocation && (
                     <p className="text-cosmic-400 text-sm mt-2">
-                      ✨ Cosmic coordinates acquired: {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
+                      ✨ GPS coordinates acquired: {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
                     </p>
+                  )}
+
+                  {manualLocation && (
+                    <div className="text-cosmic-400 text-sm mt-2 flex items-center justify-between">
+                      <span>📍 Manual location set: {manualLocation.lat.toFixed(4)}, {manualLocation.lng.toFixed(4)}</span>
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={() => {setManualLocation(null); setLocationQuery("");}}
+                        className="text-xs h-6 px-2"
+                      >
+                        Clear
+                      </Button>
+                    </div>
                   )}
                   
                   {locationError && (
                     <p className="text-mystical-red text-sm mt-2">{locationError}</p>
+                  )}
+
+                  {isGeocodingLocation && (
+                    <p className="text-starlight-400 text-sm mt-2 flex items-center">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Finding location coordinates...
+                    </p>
                   )}
                 </div>
 
@@ -471,7 +566,11 @@ export default function VetFinder() {
                 <CardContent>
                   <VetMap
                     practices={vetPractices}
-                    center={userLocation ? [userLocation.lat, userLocation.lng] : [42.3314, -84.5467]}
+                    center={
+                      userLocation ? [userLocation.lat, userLocation.lng] :
+                      manualLocation ? [manualLocation.lat, manualLocation.lng] :
+                      [42.3314, -84.5467] // Default to Lansing, MI
+                    }
                     zoom={12}
                     onMarkerClick={(practice) => {
                       toast({
