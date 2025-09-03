@@ -5,6 +5,7 @@ import { queryClient } from "./lib/queryClient";
 import Landing from "@/pages/landing";
 import ProductDetail from "@/pages/product-detail";
 import AddProduct from "@/pages/add-product";
+import SubmitProductUpdate from "@/pages/submit-product-update";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" component={Landing} />
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/add-product" component={AddProduct} />
+        <Route path="/submit-product-update" component={SubmitProductUpdate} />
         <Route component={Landing} /> {/* Default fallback */}
       </Switch>
     </QueryClientProvider>
