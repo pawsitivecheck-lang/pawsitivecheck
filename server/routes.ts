@@ -23,6 +23,9 @@ import { PetcoScraper } from "./services/petco-scraper";
 import { PetSuppliesPlusScraper } from "./services/petsuppliesplus-scraper";
 import { TractorSupplyScraper } from "./services/tractorsupply-scraper";
 import { FamilyFarmAndHomeScraper } from "./services/familyfarmandhome-scraper";
+import { KrogerScraper } from "./services/kroger-scraper";
+import { MeijerScraper } from "./services/meijer-scraper";
+import { TargetScraper } from "./services/target-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
 
@@ -2810,6 +2813,228 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error('api', 'Error during Family Farm & Home scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
       res.status(500).json({ message: "Failed to scrape Family Farm & Home products" });
+    }
+  });
+
+  // Kroger product scraping endpoint
+  app.post('/api/admin/sync/kroger-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Kroger pet product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new KrogerScraper();
+      
+      // Scrape products from Kroger
+      const scrapingResult = await scraper.scrapePetProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Kroger scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0);
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Kroger product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Kroger scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Kroger. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "kroger.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Kroger scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Kroger products" });
+    }
+  });
+
+  // Meijer product scraping endpoint
+  app.post('/api/admin/sync/meijer-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Meijer pet product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new MeijerScraper();
+      
+      // Scrape products from Meijer
+      const scrapingResult = await scraper.scrapePetProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Meijer scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0);
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Meijer product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Meijer scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Meijer. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "meijer.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Meijer scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Meijer products" });
+    }
+  });
+
+  // Target product scraping endpoint
+  app.post('/api/admin/sync/target-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Target pet product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new TargetScraper();
+      
+      // Scrape products from Target
+      const scrapingResult = await scraper.scrapePetProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Target scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0);
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Target product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Target scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Target. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "target.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Target scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Target products" });
     }
   });
 
