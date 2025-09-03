@@ -57,7 +57,17 @@ export default function AddProduct() {
         title: "Product Added!",
         description: "Your product has been added to our database and will be analyzed soon.",
       });
+      // Comprehensive cache invalidation for new products
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/analytics/dashboard'] });
+      
+      // Invalidate paginated queries
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey as string[];
+          return key.length > 0 && key[0] === "/api/products";
+        }
+      });
       setLocation(`/product/${product.id}`);
     },
     onError: (error: any) => {

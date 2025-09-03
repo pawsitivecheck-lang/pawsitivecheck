@@ -55,7 +55,20 @@ export default function AdminProductSubmissions() {
         title: "Review submitted",
         description: "The submission has been reviewed successfully",
       });
+      
+      // Comprehensive cache invalidation for product update approvals
       queryClient.invalidateQueries({ queryKey: ['/api/admin/product-update-submissions'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/analytics/dashboard'] });
+      
+      // Invalidate all product-related caches since updates might affect any product
+      queryClient.invalidateQueries({ 
+        predicate: (query) => {
+          const key = query.queryKey as string[];
+          return key.length > 0 && key[0] === "/api/products";
+        }
+      });
+      
       setReviewDialogOpen(false);
       setSelectedSubmission(null);
       setAdminNotes('');
@@ -227,7 +240,7 @@ export default function AdminProductSubmissions() {
                         <h4 className="font-medium text-purple-200 mb-2">Proposed Changes:</h4>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
                           <pre className="text-sm text-gray-300 whitespace-pre-wrap">
-                            {JSON.stringify(submission.proposedChanges, null, 2)}
+                            {JSON.stringify(submission.proposedChanges, null, 2) as string}
                           </pre>
                         </div>
                       </div>

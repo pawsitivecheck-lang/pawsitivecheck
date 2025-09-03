@@ -47,6 +47,7 @@ export function ContentFlagButton({
       queryClient.invalidateQueries({ queryKey: ['/api/reviews'] });
       queryClient.invalidateQueries({ queryKey: ['/api/user/reviews'] });
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/analytics/dashboard'] });
       
       toast({
         title: "Content Reported",
