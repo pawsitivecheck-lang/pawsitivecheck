@@ -151,14 +151,6 @@ export default function Landing() {
                 Safety Database
               </button>
               
-              <button 
-                onClick={() => scrollToSection('recalls')}
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
-                data-testid="mobile-nav-recalls"
-              >
-                <AlertTriangle className="mr-3 h-5 w-5" />
-                Recall Alerts
-              </button>
               <Link 
                 to="/vet-finder" 
                 className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
