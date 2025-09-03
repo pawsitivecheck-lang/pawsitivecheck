@@ -81,7 +81,11 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 ### September 3, 2025 - Multi-Retailer Product Integration
-- **Three-Retailer Expansion**: Added comprehensive product scraping for Walmart, Sam's Club, and PetSmart
+- **Four-Retailer Expansion**: Added comprehensive product scraping for Walmart, Sam's Club, PetSmart, and Petco
+- **PetcoScraper Service**: Built dedicated scraper for premium pet specialty store products including:
+  - Exclusive brands (WholeHearted, So Phresh, You & Me, Well & Good)
+  - Premium lines (Merrick, Wellness CORE, Fluker's reptile products)
+  - Multi-species coverage (dogs, cats, birds, fish, reptiles, small animals)
 - **PetSmartScraper Service**: Built dedicated scraper for specialty pet store products including:
   - Premium brands (Hill's Science Diet, Royal Canin, Wellness CORE, Blue Buffalo)
   - Specialty items (FURminator grooming tools, KONG toys, Nylabone chews)
@@ -95,8 +99,9 @@ Preferred communication style: Simple, everyday language.
   - `/api/admin/sync/walmart-products` for mass market products
   - `/api/admin/sync/samsclub-products` for warehouse club inventory  
   - `/api/admin/sync/petsmart-products` for premium specialty products
-- **Database Integration**: Successfully integrated 21+ new retail products (IDs 229-249) spanning three major pet retailers
-- **Testing Verification**: Confirmed complete scraping pipeline from product collection through database storage for all three retailers
+  - `/api/admin/sync/petco-products` for exclusive specialty brands
+- **Database Integration**: Successfully integrated 33+ new retail products (IDs 229-261) spanning four major pet retailers
+- **Testing Verification**: Confirmed complete scraping pipeline from product collection through database storage for all four retailers
 
 ### September 3, 2025 - Production Readiness Improvements
 - **Security Enhancements**: Added CORS configuration with domain allowlisting and express-rate-limit middleware to prevent API abuse
