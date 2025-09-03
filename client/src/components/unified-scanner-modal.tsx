@@ -331,9 +331,7 @@ export function UnifiedScannerModal({
       });
 
       // Get camera constraints based on device
-      const cameraConstraints = /CrOS/.test(navigator.userAgent) 
-        ? { facingMode: "environment" } // ChromeOS - flexible
-        : { facingMode: { ideal: "environment" } }; // Mobile - prefer rear
+      const cameraConstraints = { facingMode: "environment" }; // Use rear camera without constraints
 
       await scanner.start(
         cameraConstraints,
