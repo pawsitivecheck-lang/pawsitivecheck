@@ -810,8 +810,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
           message: 'Product identified through mystical image analysis'
         });
 
+      } else if (type === 'text') {
+        // Handle text-based product searches
+        if (!query || typeof query !== 'string' || query.trim().length === 0) {
+          return res.status(400).json({ message: 'Search query is required' });
+        }
+
+        const searchQuery = query.trim();
+        
+        // Generate a mock product based on the search query
+        const mockProduct = {
+          name: `Internet Product - ${searchQuery}`,
+          brand: "Discovered Brand",
+          category: 'pet-food',
+          description: `Pet product found through internet search: "${searchQuery}". This product was discovered through our cosmic internet search capabilities.`,
+          ingredients: "Ingredients to be analyzed upon cosmic verification",
+          imageUrl: null,
+          barcode: null,
+          cosmicScore: Math.floor(Math.random() * 30) + 60, // Random score between 60-90
+          cosmicClarity: 'neutral' as const,
+          transparencyLevel: 'pending' as const,
+          isBlacklisted: false,
+          suspiciousIngredients: [],
+          lastAnalyzed: new Date(),
+        };
+
+        // Try to save to database for future reference
+        try {
+          const savedProduct = await storage.createProduct(mockProduct);
+          res.json({
+            product: savedProduct,
+            source: 'internet-search',
+            message: `Product "${searchQuery}" discovered through cosmic internet divination`
+          });
+        } catch (error) {
+          console.error('Error saving internet search product:', error);
+          // Return the product data even if saving failed
+          res.json({
+            product: mockProduct,
+            source: 'internet-search',
+            message: `Product "${searchQuery}" discovered through cosmic internet divination`
+          });
+        }
+
       } else {
-        return res.status(400).json({ message: 'Invalid search type' });
+        return res.status(400).json({ message: 'Invalid search type. Supported types: barcode, image, text' });
       }
 
     } catch (error) {
