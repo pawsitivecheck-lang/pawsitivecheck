@@ -28,7 +28,7 @@ Preferred communication style: Simple, everyday language.
 - **Security**: HTTP-only cookies, CSRF protection, secure session configuration, CORS with domain allowlisting, and express-rate-limit middleware.
 - **Health Monitoring**: Comprehensive health check endpoints (`/health`, `/health/ready`) with database connectivity verification.
 - **Logging**: Production-grade logging with log levels, contextual categorization, user tracking, and security event logging.
-- **Product Integration**: Services for multi-retailer product scraping and integration (Walmart, Sam's Club, PetSmart, Petco, Pet Supplies Plus, Tractor Supply, Family Farm & Home, Kroger, Meijer, Target, Costco, Amazon, Feeders Pet Supply). Product sync logic prioritizes U.S. & Canada markets and filters for animal care products. Comprehensive coverage includes specialty pet stores, farm supply retailers, general merchandise chains with pet sections, warehouse clubs, online marketplace leaders, and regional livestock specialists.
+- **Product Integration**: Services for multi-retailer product scraping and integration (Walmart, Sam's Club, PetSmart, Petco, Pet Supplies Plus, Tractor Supply, Family Farm & Home, Kroger, Meijer, Target, Costco, Amazon, Feeders Pet Supply, BJ's Wholesale Club). Product sync logic prioritizes U.S. & Canada markets and filters for animal care products. Comprehensive coverage includes specialty pet stores, farm supply retailers, general merchandise chains with pet sections, warehouse clubs, online marketplace leaders, and regional livestock specialists.
 
 ### Database
 - **Primary Database**: PostgreSQL via Neon serverless with connection pooling.
@@ -82,7 +82,7 @@ Preferred communication style: Simple, everyday language.
 - **Authentication**: Passport.js with OpenID Connect strategy.
 - **Session Management**: Express-session with PostgreSQL store.
 - **External APIs**: USDA NASS Quick Stats API, FDA Animal & Veterinary API.
-- **Regional Coverage**: Platform includes employee-owned regional specialists like Feeders Pet Supply (Kentucky, Indiana, Ohio) for comprehensive livestock and small animal nutrition.
+- **Regional Coverage**: Platform includes employee-owned regional specialists like Feeders Pet Supply (Kentucky, Indiana, Ohio) for comprehensive livestock and small animal nutrition, plus warehouse club coverage via BJ's Wholesale Club (Eastern U.S. presence).
 
 ### Development Tools
 - **Build System**: Vite.
