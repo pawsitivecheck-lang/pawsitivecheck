@@ -25,7 +25,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showImageScanner, setShowImageScanner] = useState(false);
-  const [showInternetSearch, setShowInternetSearch] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,9 +32,39 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const searchMutation = useMutation({
     mutationFn: async (query: string) => {
       if (!query.trim()) return [];
-      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=20`); // Get more results for better sorting
+      
+      // First search local database
+      const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=20`);
       if (!res.ok) throw new Error('Search failed');
-      return await res.json();
+      const localResults = await res.json();
+      
+      // If no local results found, automatically search internet
+      if (!localResults || localResults.length === 0) {
+        try {
+          const internetRes = await fetch('/api/products/internet-search', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              type: 'text', 
+              query: query.trim()
+            }),
+          });
+          
+          if (internetRes.ok) {
+            const internetResult = await internetRes.json();
+            if (internetResult.product) {
+              // Return the internet result as if it was a local search result
+              return [internetResult.product];
+            }
+          }
+        } catch (error) {
+          console.error('Internet search fallback failed:', error);
+        }
+      }
+      
+      return localResults || [];
     },
     onSuccess: (results: Product[], variables: string) => {
       // Sort results by relevance using advanced scoring algorithm
@@ -57,7 +86,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     onError: () => {
       toast({
         title: "Search Failed",
-        description: "Unable to search product database",
+        description: "Unable to search products",
         variant: "destructive",
       });
       setSearchResults([]);
@@ -156,46 +185,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     },
   });
 
-  const internetSearchMutation = useMutation({
-    mutationFn: async (query: string) => {
-      const response = await fetch('/api/products/internet-search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'text', 
-          query: query.trim()
-        }),
-      });
-      if (!response.ok) throw new Error('Internet search failed');
-      return await response.json();
-    },
-    onSuccess: (result: any) => {
-      if (result.product) {
-        toast({
-          title: "Product Found Online!",
-          description: `Found "${result.product.name}" from ${result.source}`,
-        });
-        setLocation(`/product-analysis?name=${encodeURIComponent(result.product.name)}&brand=${encodeURIComponent(result.product.brand)}&ingredients=${encodeURIComponent(result.product.ingredients)}`);
-        setShowResults(false);
-        setSearchQuery("");
-      } else {
-        toast({
-          title: "No Results Found",
-          description: "Product not found in database or online sources",
-          variant: "destructive",
-        });
-      }
-    },
-    onError: () => {
-      toast({
-        title: "Search Failed",
-        description: "Unable to search for products",
-        variant: "destructive",
-      });
-    },
-  });
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -718,19 +707,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 <Image className="mr-2 h-4 w-4" />
                 Image Scanner
               </Button>
-              <Button
-                onClick={() => {
-                  setShowInternetSearch(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-internet-search"
-              >
-                <Globe className="mr-2 h-4 w-4" />
-                Internet Search
-              </Button>
             </div>
           </div>
         )}
@@ -832,35 +808,21 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             )}
 
             {/* Loading state */}
-            {(searchMutation.isPending || internetSearchMutation.isPending) && (
+            {searchMutation.isPending && (
               <div className="p-4 text-center">
                 <Loader2 className="h-4 w-4 animate-spin mx-auto text-muted-foreground" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  {searchMutation.isPending ? 'Searching database...' : 'Searching online...'}
+                  Searching database and internet...
                 </p>
               </div>
             )}
 
-            {/* No results state with internet search option */}
-            {!searchMutation.isPending && !internetSearchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
-              <div className="p-4 text-center space-y-3">
-                <div>
-                  <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">No products found in database</p>
-                </div>
-                <div className="border-t border-border pt-3">
-                  <p className="text-xs text-muted-foreground mb-2">Search online for this product?</p>
-                  <Button
-                    onClick={() => internetSearchMutation.mutate(searchQuery)}
-                    disabled={internetSearchMutation.isPending}
-                    size="sm"
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    data-testid="button-search-internet-inline"
-                  >
-                    <Globe className="mr-2 h-3 w-3" />
-                    Search Internet
-                  </Button>
-                </div>
+            {/* No results state */}
+            {!searchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
+              <div className="p-4 text-center">
+                <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                <p className="text-sm text-muted-foreground">No products found</p>
+                <p className="text-xs text-muted-foreground mt-1">Try a different search term</p>
               </div>
             )}
           </div>
@@ -880,77 +842,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         onClose={() => setShowImageScanner(false)}
       />
 
-      {/* Internet Search Modal */}
-      {showInternetSearch && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-popover rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Internet Product Search</h3>
-              <Button
-                onClick={() => setShowInternetSearch(false)}
-                variant="ghost"
-                size="sm"
-                data-testid="button-close-internet-search"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target as HTMLFormElement);
-                const query = formData.get('search') as string;
-                if (query.trim()) {
-                  internetSearchMutation.mutate(query.trim());
-                  setShowInternetSearch(false);
-                }
-              }}
-              className="space-y-4"
-            >
-              <div>
-                <label htmlFor="internet-search-input" className="block text-sm font-medium mb-2">
-                  Product Name
-                </label>
-                <Input
-                  id="internet-search-input"
-                  name="search"
-                  type="text"
-                  placeholder="Enter product name to search online..."
-                  className="w-full"
-                  required
-                  data-testid="input-internet-search"
-                />
-              </div>
-              <div className="flex justify-end gap-3">
-                <Button
-                  type="button"
-                  onClick={() => setShowInternetSearch(false)}
-                  variant="outline"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={internetSearchMutation.isPending}
-                  data-testid="button-submit-internet-search"
-                >
-                  {internetSearchMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Searching...
-                    </>
-                  ) : (
-                    <>
-                      <Globe className="mr-2 h-4 w-4" />
-                      Search Online
-                    </>
-                  )}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
     </>
   );
