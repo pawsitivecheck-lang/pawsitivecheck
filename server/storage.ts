@@ -100,6 +100,7 @@ export interface IStorage {
   getProduct(id: number): Promise<Product | undefined>;
   getProductByBarcode(barcode: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
+  createProducts(products: InsertProduct[]): Promise<Product[]>;
   updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product | undefined>;
   updateProductAnalysis(id: number, analysis: {
     cosmicScore: number;
@@ -408,6 +409,13 @@ export class DatabaseStorage implements IStorage {
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newProduct] = await db.insert(products).values(product).returning();
     return newProduct;
+  }
+
+  async createProducts(productList: InsertProduct[]): Promise<Product[]> {
+    if (productList.length === 0) return [];
+    
+    const newProducts = await db.insert(products).values(productList).returning();
+    return newProducts;
   }
 
   async updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product | undefined> {
