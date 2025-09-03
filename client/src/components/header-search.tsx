@@ -487,6 +487,30 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     const allOptions = [...(searchQuery.length === 0 ? recentSearches : []), ...searchResults.map(p => p.name)];
     
     switch (e.key) {
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
+          // If an option is selected, use it
+          const selectedOption = allOptions[selectedIndex];
+          if (selectedIndex < recentSearches.length) {
+            // Recent search selected
+            setSearchQuery(selectedOption);
+            saveRecentSearch(selectedOption);
+            setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
+            clearSearch();
+          } else {
+            // Product selected
+            const productIndex = selectedIndex - recentSearches.length;
+            const product = searchResults[productIndex];
+            if (product) {
+              selectProduct(product);
+            }
+          }
+        } else {
+          // No option selected, search current query
+          handleSearch(e);
+        }
+        break;
       case 'Tab':
         e.preventDefault();
         // Advanced tab completion with fuzzy matching
@@ -537,27 +561,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
           setShowResults(true);
         }
         setSelectedIndex(prev => prev <= 0 ? Math.max(allOptions.length - 1, 0) : prev - 1);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (showResults && selectedIndex >= 0 && selectedIndex < allOptions.length) {
-          if (selectedIndex < recentSearches.length && searchQuery.length === 0) {
-            // Recent search selected
-            const selectedSearch = recentSearches[selectedIndex];
-            setSearchQuery(selectedSearch);
-            saveRecentSearch(selectedSearch);
-            setLocation(`/product-database?search=${encodeURIComponent(selectedSearch)}`);
-            clearSearch();
-          } else {
-            // Product selected
-            const productIndex = searchQuery.length === 0 ? selectedIndex - recentSearches.length : selectedIndex;
-            if (searchResults[productIndex]) {
-              selectProduct(searchResults[productIndex]);
-            }
-          }
-        } else {
-          handleSearch(e);
-        }
         break;
       case 'Escape':
         if (showResults) {
