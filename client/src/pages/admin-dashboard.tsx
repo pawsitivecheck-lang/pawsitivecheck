@@ -190,15 +190,15 @@ export default function AdminDashboard() {
             {/* Inline Quick Stats */}
             <div className="hidden md:flex gap-6">
               <div className="text-center">
-                <div className="text-xl font-bold text-blue-600">{analytics?.totalProducts || 0}</div>
+                <div className="text-xl font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-green-600">{analytics?.totalUsers || 0}</div>
+                <div className="text-xl font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-red-600">{analytics?.cursedProducts || 0}</div>
+                <div className="text-xl font-bold text-red-600">{(analytics as any)?.cursedProducts || 0}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">Unsafe</div>
               </div>
             </div>
@@ -209,14 +209,14 @@ export default function AdminDashboard() {
             <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <CardContent className="p-4 text-center">
                 <Package className="h-5 w-5 mx-auto mb-2 text-blue-600" />
-                <div className="text-lg font-bold text-blue-600">{analytics?.totalProducts || 0}</div>
+                <div className="text-lg font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
               </CardContent>
             </Card>
             <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <CardContent className="p-4 text-center">
                 <Users className="h-5 w-5 mx-auto mb-2 text-green-600" />
-                <div className="text-lg font-bold text-green-600">{analytics?.totalUsers || 0}</div>
+                <div className="text-lg font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
               </CardContent>
             </Card>

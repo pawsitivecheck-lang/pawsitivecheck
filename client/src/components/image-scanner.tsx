@@ -17,9 +17,14 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
   const [showCamera, setShowCamera] = useState(false);
 
   const capture = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot();
-    if (imageSrc) {
-      setCapturedImage(imageSrc);
+    try {
+      const imageSrc = webcamRef.current?.getScreenshot();
+      if (imageSrc) {
+        setCapturedImage(imageSrc);
+        setShowCamera(false); // Hide camera after successful capture
+      }
+    } catch (error) {
+      console.error('Error capturing image:', error);
     }
   }, []);
 
@@ -43,6 +48,7 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
   const analyzeCapturedImage = () => {
     if (capturedImage) {
       onScan(capturedImage);
+      onClose(); // Close modal after successful analysis
     }
   };
 
@@ -55,17 +61,17 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50" data-testid="modal-image-scanner">
-      <Card className="cosmic-card w-full max-w-2xl mx-4">
+      <Card className="w-full max-w-2xl mx-4 bg-card border-border shadow-xl">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-starlight-400">
+          <CardTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5" />
-            Mystical Image Scanner
+            Product Image Scanner
           </CardTitle>
           <Button
             variant="outline"
             size="sm"
             onClick={onClose}
-            className="border-cosmic-600 text-cosmic-300"
+            className=""
             data-testid="button-close-image-scanner"
           >
             <X className="h-4 w-4" />
@@ -75,14 +81,14 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
         <CardContent>
           {!showCamera && !capturedImage && (
             <div className="text-center space-y-6">
-              <p className="text-cosmic-300" data-testid="text-image-scanner-instructions">
-                Capture or upload a photo of the product. The cosmic vision will analyze the mystical essence from the image.
+              <p className="text-muted-foreground" data-testid="text-image-scanner-instructions">
+                Capture or upload a photo of the product for safety analysis.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Button
                   onClick={() => setShowCamera(true)}
-                  className="mystical-button h-24 flex-col"
+                  className="h-24 flex-col"
                   data-testid="button-use-camera"
                 >
                   <Camera className="h-8 w-8 mb-2" />
@@ -92,7 +98,7 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
                 <Button
                   onClick={() => fileInputRef.current?.click()}
                   variant="outline"
-                  className="border-cosmic-600 text-cosmic-300 h-24 flex-col"
+                  className="h-24 flex-col"
                   data-testid="button-upload-image"
                 >
                   <Upload className="h-8 w-8 mb-2" />
@@ -118,6 +124,11 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
                   ref={webcamRef}
                   audio={false}
                   screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    facingMode: { ideal: "environment" }, // Prefer rear camera
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                  }}
                   className="w-full h-64 object-cover"
                   data-testid="webcam-image-capture"
                 />
@@ -126,7 +137,7 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
               <div className="flex justify-center gap-4">
                 <Button
                   onClick={capture}
-                  className="mystical-button"
+                  className=""
                   data-testid="button-capture-image"
                 >
                   <Camera className="mr-2 h-4 w-4" />
@@ -136,10 +147,9 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
                 <Button
                   onClick={() => setShowCamera(false)}
                   variant="outline"
-                  className="border-cosmic-600 text-cosmic-300"
                   data-testid="button-cancel-camera"
                 >
-                  Close Cosmic View
+                  Close Camera
                 </Button>
               </div>
             </div>
@@ -159,17 +169,16 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
               <div className="flex justify-center gap-4">
                 <Button
                   onClick={analyzeCapturedImage}
-                  className="mystical-button"
+                  className=""
                   data-testid="button-analyze-image"
                 >
                   <Search className="mr-2 h-4 w-4" />
-                  Analyze with Cosmic Vision
+                  Analyze Product Image
                 </Button>
                 
                 <Button
                   onClick={startOver}
                   variant="outline"
-                  className="border-cosmic-600 text-cosmic-300"
                   data-testid="button-retake-image"
                 >
                   Take Another

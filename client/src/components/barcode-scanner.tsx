@@ -52,17 +52,25 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
-          // First explicitly request camera permission
+          // Request camera permission with better error handling
           try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
               video: { 
-                facingMode: 'environment' // Prefer rear camera on mobile
+                facingMode: { ideal: 'environment' }, // Prefer rear camera on mobile
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
               } 
             });
             // Permission granted - close the test stream
             stream.getTracks().forEach(track => track.stop());
-          } catch (permissionError) {
-            throw new Error('Camera permission denied. Please allow camera access and try again.');
+          } catch (permissionError: any) {
+            let errorMessage = 'Camera permission denied. Please allow camera access and try again.';
+            if (permissionError.name === 'NotFoundError') {
+              errorMessage = 'No camera found. Please connect a camera and try again.';
+            } else if (permissionError.name === 'NotReadableError') {
+              errorMessage = 'Camera is busy. Please close other applications using the camera.';
+            }
+            throw new Error(errorMessage);
           }
 
           // Check if camera is available
@@ -73,38 +81,42 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             throw new Error('No camera device found. Please ensure your device has a camera and try again.');
           }
 
-          // Better configuration for mobile devices
+          // Enhanced configuration for better cross-platform support
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           
           const scanner = new Html5QrcodeScanner(
             "barcode-scanner-container",
             {
-              fps: isMobile ? 5 : 10, // Lower FPS on mobile for better performance
+              fps: isMobile ? 8 : 12, // Optimized FPS for better performance
               qrbox: function(viewfinderWidth, viewfinderHeight) {
-                // Square scanning box, responsive to container size
-                const minEdgePercentage = 0.7;
+                const minEdgePercentage = 0.75; // Larger scanning area
                 const qrboxSize = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * minEdgePercentage);
                 return {
                   width: qrboxSize,
-                  height: Math.floor(qrboxSize * 0.6) // Rectangle for barcodes
+                  height: Math.floor(qrboxSize * 0.7) // Better aspect ratio for barcodes
                 };
               },
               supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
               formatsToSupport: [
-                Html5QrcodeSupportedFormats.CODE_128,
-                Html5QrcodeSupportedFormats.CODE_39,
-                Html5QrcodeSupportedFormats.EAN_13,
-                Html5QrcodeSupportedFormats.EAN_8,
                 Html5QrcodeSupportedFormats.UPC_A,
                 Html5QrcodeSupportedFormats.UPC_E,
-                Html5QrcodeSupportedFormats.QR_CODE
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.CODE_128,
+                Html5QrcodeSupportedFormats.CODE_39,
+                Html5QrcodeSupportedFormats.QR_CODE,
+                Html5QrcodeSupportedFormats.ITF,
+                Html5QrcodeSupportedFormats.CODABAR
               ],
-              aspectRatio: isMobile ? 1.0 : 1.777778, // 16:9 for desktop, square for mobile
+              aspectRatio: isMobile ? 1.2 : 1.5, // Better ratios for scanning
               disableFlip: false,
               rememberLastUsedCamera: true,
               showTorchButtonIfSupported: true,
               showZoomSliderIfSupported: true,
-              defaultZoomValueIfSupported: 1,
+              defaultZoomValueIfSupported: 1.2, // Slight zoom for better detection
+              experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true // Use native barcode detection if available
+              }
             },
             false // verbose
           );
