@@ -19,26 +19,26 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case 'urgent':
-        return <TriangleAlert className="text-red-600 h-5 w-5" />;
+        return <TriangleAlert className="text-mystical-red h-5 w-5" />;
       case 'moderate':
         return <AlertCircle className="text-yellow-500 h-5 w-5" />;
       case 'low':
-        return <Shield className="text-green-600 h-5 w-5" />;
+        return <Shield className="text-mystical-green h-5 w-5" />;
       default:
-        return <Shield className="text-blue-600 h-5 w-5" />;
+        return <Shield className="text-blue-400 h-5 w-5" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'urgent':
-        return 'bg-red-50 text-red-600 border-red-600';
+        return 'bg-mystical-red/20 text-mystical-red border-mystical-red';
       case 'moderate':
         return 'bg-yellow-500/20 text-yellow-500 border-yellow-500';
       case 'low':
-        return 'bg-green-50 text-green-600 border-green-600';
+        return 'bg-mystical-green/20 text-mystical-green border-mystical-green';
       default:
-        return 'bg-blue-50 text-blue-600 border-blue-600';
+        return 'bg-blue-500/20 text-blue-400 border-blue-400';
     }
   };
 
@@ -57,9 +57,9 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
 
   return (
     <Card className={`border-l-4 ${
-      recall.severity === 'urgent' ? 'border-red-600' :
+      recall.severity === 'urgent' ? 'border-mystical-red' :
       recall.severity === 'moderate' ? 'border-yellow-500' :
-      'border-green-600'
+      'border-mystical-green'
     }`} data-testid={`recall-alert-${recall.id}`}>
       <CardContent className="p-6">
         <div className="flex items-start gap-4 mb-4">
