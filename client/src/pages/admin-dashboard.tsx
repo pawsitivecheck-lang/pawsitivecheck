@@ -8,8 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery, useQueries } from "@tanstack/react-query";
-import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database, Loader2 } from "lucide-react";
+import { useQuery, useQueries, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Crown, Ban, Shield, Users, Package, AlertTriangle, TrendingUp, Database, Loader2, X } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import DatabaseSync from "@/components/database-sync";
 
@@ -62,6 +63,49 @@ const LoadingSpinner = React.memo(() => (
 export default function AdminDashboard() {
   const { user, isAuthenticated, isAdmin, isLoading } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Quick product deletion mutation
+  const deleteProductMutation = useMutation({
+    mutationFn: async (productId: number) => {
+      const response = await fetch(`/api/admin/products/${productId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete product');
+      }
+      return response.json();
+    },
+    onSuccess: (data: any) => {
+      toast({
+        title: "Product Deleted",
+        description: data.message || "Product has been permanently removed from the database.",
+        variant: "default",
+      });
+      // Invalidate all product-related queries
+      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/analytics'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Deletion Failed",
+        description: error.message || "Failed to delete product.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Quick delete function for Internet Product 7888
+  const handleQuickDelete = () => {
+    if (confirm("Are you sure you want to permanently delete 'Internet Product 7888' (ID: 215)?")) {
+      deleteProductMutation.mutate(215);
+    }
+  };
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -440,6 +484,30 @@ export default function AdminDashboard() {
                 Control the cosmic forces that keep all platform data synchronized and up-to-date
               </p>
             </div>
+
+            {/* Quick Product Management */}
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+              <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">Quick Product Actions</h3>
+              <Button
+                onClick={handleQuickDelete}
+                disabled={deleteProductMutation.isPending}
+                className="bg-red-600 hover:bg-red-700 text-white"
+                data-testid="button-quick-delete-7888"
+              >
+                {deleteProductMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <X className="mr-2 h-4 w-4" />
+                    Delete Internet Product 7888
+                  </>
+                )}
+              </Button>
+            </div>
+
             <DatabaseSync />
           </div>
 
