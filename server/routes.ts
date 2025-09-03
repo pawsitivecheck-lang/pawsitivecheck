@@ -21,6 +21,7 @@ import { SamsClubScraper } from "./services/samsclub-scraper";
 import { PetSmartScraper } from "./services/petsmart-scraper";
 import { PetcoScraper } from "./services/petco-scraper";
 import { PetSuppliesPlusScraper } from "./services/petsuppliesplus-scraper";
+import { TractorSupplyScraper } from "./services/tractorsupply-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
 
@@ -2658,6 +2659,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error('api', 'Error during Pet Supplies Plus scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
       res.status(500).json({ message: "Failed to scrape Pet Supplies Plus products" });
+    }
+  });
+
+  // Tractor Supply Company product scraping endpoint
+  app.post('/api/admin/sync/tractorsupply-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Tractor Supply animal care product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new TractorSupplyScraper();
+      
+      // Scrape products from Tractor Supply
+      const scrapingResult = await scraper.scrapeAnimalCareProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Tractor Supply scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0); // Filter out invalid products
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          // Check if product already exists by name and brand
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Tractor Supply product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Tractor Supply scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Tractor Supply. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "tractorsupply.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Tractor Supply scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Tractor Supply products" });
     }
   });
 
