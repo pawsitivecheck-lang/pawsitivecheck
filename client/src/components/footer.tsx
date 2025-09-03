@@ -36,7 +36,6 @@ export default function Footer() {
           <div className="text-center sm:text-left">
             <h4 className="text-lg font-bold text-foreground mb-3" data-testid="text-features-title">Key Features</h4>
             <ul className="space-y-2 text-muted-foreground text-sm">
-              
               <li>
                 <Link to="/products" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-feature-database">
                   Safety Database
