@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                       </p>
                     </div>
                   ))}
-                  {!recallsQuery.isLoading && recentRecalls.length === 0 && (
+                  {!recallsQuery.isLoading && (recentRecalls as any[] || []).length === 0 && (
                     <p className="text-gray-500 dark:text-gray-400 text-center py-4" data-testid="text-no-active-recalls">
                       No active recalls
                     </p>
@@ -334,7 +334,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(blacklistedIngredients as any[]).slice(0, 4).map((ingredient: any) => (
+                  {(blacklistedIngredients as any[] || []).slice(0, 4).map((ingredient: any) => (
                     <div key={ingredient.id} className="flex justify-between items-center" data-testid={`ingredient-item-${ingredient.id}`}>
                       <span className="text-gray-800 dark:text-gray-200 text-sm">{ingredient.ingredientName}</span>
                       <Badge 
@@ -389,7 +389,7 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {recentProducts && recentProducts.slice(0, 3).map((product: any) => (
+                  {(recentProducts as any[] || []).slice(0, 3).map((product: any) => (
                     <div key={product.id} className="p-3 bg-gray-50 dark:bg-gray-700 border dark:border-gray-600 rounded" data-testid={`activity-item-${product.id}`}>
                       <p className="text-gray-800 dark:text-gray-200 text-sm font-medium">{product.name}</p>
                       <div className="flex justify-between items-center mt-1">
