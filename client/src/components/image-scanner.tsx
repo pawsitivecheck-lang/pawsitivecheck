@@ -138,7 +138,7 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
                   className="border-cosmic-600 text-cosmic-300"
                   data-testid="button-cancel-camera"
                 >
-                  Cancel
+                  Close Cosmic View
                 </Button>
               </div>
             </div>
