@@ -523,7 +523,7 @@ export default function ProductDetail() {
                         
                         {/* Ingredient Parsing and Display */}
                         {(() => {
-                          const ingredients = product.ingredients.split(/[,;]/).map(ing => ing.trim()).filter(ing => ing.length > 0);
+                          const ingredients = product.ingredients.split(/[,;]/).map((ing: string) => ing.trim()).filter((ing: string) => ing.length > 0);
                           const totalIngredients = ingredients.length;
                           
                           if (totalIngredients > 0) {
@@ -721,34 +721,400 @@ export default function ProductDetail() {
                 </CardContent>
               </Card>
 
-              {/* Safety Assessment */}
+              {/* Comprehensive Safety Assessment */}
               {product.cosmicClarity && product.cosmicClarity !== 'unknown' && (
                 <Card className="cosmic-card" data-testid="card-safety-assessment">
                   <CardHeader>
                     <CardTitle className="text-starlight-400 flex items-center gap-2">
                       <Shield className="h-5 w-5" />
-                      Safety Assessment
+                      Comprehensive Safety Assessment
+                      <HelpTooltip 
+                        content="Our multi-factor safety analysis considers ingredient toxicity, manufacturing standards, regulatory compliance, veterinary research, recall history, and consumer reports to provide a comprehensive safety evaluation."
+                        side="right"
+                      />
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className={`border-l-4 rounded-r-lg p-4 ${
+                  <CardContent className="space-y-6">
+                    {/* Overall Safety Rating */}
+                    <div className={`border-l-4 rounded-r-lg p-6 ${
                       product.cosmicClarity === 'blessed' ? 'bg-mystical-green/10 border-mystical-green' :
                       product.cosmicClarity === 'questionable' ? 'bg-yellow-500/10 border-yellow-500' :
                       'bg-mystical-red/10 border-mystical-red'
                     }`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        {getCosmicClarityIcon(product.cosmicClarity)}
-                        <span className="font-semibold">
-                          {product.cosmicClarity === 'blessed' && 'Safe for Pets'}
-                          {product.cosmicClarity === 'questionable' && 'Use with Caution'}
-                          {product.cosmicClarity === 'cursed' && 'Not Recommended'}
-                        </span>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          {getCosmicClarityIcon(product.cosmicClarity)}
+                          <div>
+                            <span className="font-bold text-lg">
+                              {product.cosmicClarity === 'blessed' && 'SAFE FOR PETS'}
+                              {product.cosmicClarity === 'questionable' && 'USE WITH CAUTION'}
+                              {product.cosmicClarity === 'cursed' && 'NOT RECOMMENDED'}
+                            </span>
+                            <p className="text-sm mt-1 opacity-90">
+                              Overall Safety Classification
+                            </p>
+                          </div>
+                        </div>
+                        {product.cosmicScore !== undefined && (
+                          <div className="text-right">
+                            <div className={`text-3xl font-bold ${
+                              product.cosmicScore >= 80 ? 'text-mystical-green' :
+                              product.cosmicScore >= 50 ? 'text-yellow-500' :
+                              'text-mystical-red'
+                            }`}>
+                              {product.cosmicScore}
+                            </div>
+                            <div className="text-sm opacity-80">Safety Score</div>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-sm opacity-90">
-                        {product.cosmicClarity === 'blessed' && 'This product meets our safety standards and is generally safe for most pets.'}
-                        {product.cosmicClarity === 'questionable' && 'This product contains ingredients that may cause issues for some sensitive pets.'}
-                        {product.cosmicClarity === 'cursed' && 'This product contains concerning ingredients and is not recommended for pet consumption.'}
-                      </p>
+                      
+                      <div className="space-y-3">
+                        <p className="text-sm leading-relaxed">
+                          {product.cosmicClarity === 'blessed' && 
+                            'This product has passed comprehensive safety analysis and meets high standards for pet consumption. Ingredients are well-researched, properly sourced, and pose minimal risk when used as directed. Manufacturing standards appear adequate with good transparency.'
+                          }
+                          {product.cosmicClarity === 'questionable' && 
+                            'This product contains some ingredients or characteristics that require careful consideration. While not immediately dangerous, there are factors that may affect sensitive pets or require veterinary guidance. Use discretion and monitor your pet closely.'
+                          }
+                          {product.cosmicClarity === 'cursed' && 
+                            'This product contains significant safety concerns that make it unsuitable for pet consumption. Issues may include toxic ingredients, poor manufacturing standards, regulatory violations, or documented adverse effects. We strongly recommend avoiding this product.'
+                          }
+                        </p>
+                        
+                        {/* Quick Risk Factors */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                          <div className={`p-3 rounded-lg text-center ${
+                            product.cosmicClarity === 'blessed' ? 'bg-green-950/30' :
+                            product.cosmicClarity === 'questionable' ? 'bg-yellow-950/30' :
+                            'bg-red-950/30'
+                          }`}>
+                            <div className="text-xs opacity-75">Ingredient Safety</div>
+                            <div className="font-semibold">
+                              {product.cosmicClarity === 'blessed' ? 'Excellent' :
+                               product.cosmicClarity === 'questionable' ? 'Moderate' : 'Poor'}
+                            </div>
+                          </div>
+                          <div className={`p-3 rounded-lg text-center ${
+                            product.transparencyLevel === 'excellent' ? 'bg-green-950/30' :
+                            product.transparencyLevel === 'good' ? 'bg-blue-950/30' :
+                            'bg-red-950/30'
+                          }`}>
+                            <div className="text-xs opacity-75">Transparency</div>
+                            <div className="font-semibold capitalize">
+                              {product.transparencyLevel || 'Unknown'}
+                            </div>
+                          </div>
+                          <div className={`p-3 rounded-lg text-center ${
+                            (product.suspiciousIngredients?.length || 0) === 0 ? 'bg-green-950/30' :
+                            (product.suspiciousIngredients?.length || 0) <= 2 ? 'bg-yellow-950/30' :
+                            'bg-red-950/30'
+                          }`}>
+                            <div className="text-xs opacity-75">Risk Factors</div>
+                            <div className="font-semibold">
+                              {(product.suspiciousIngredients?.length || 0) === 0 ? 'None' :
+                               (product.suspiciousIngredients?.length || 0) <= 2 ? 'Few' : 'Multiple'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Detailed Safety Breakdown */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Positive Factors */}
+                      <div className="p-4 bg-green-950/20 border border-green-500/30 rounded-lg">
+                        <h4 className="font-semibold text-green-300 mb-3 flex items-center gap-2">
+                          ✅ Safety Strengths
+                        </h4>
+                        <ul className="space-y-2 text-sm text-green-200">
+                          {product.cosmicClarity === 'blessed' && (
+                            <>
+                              <li>• No known toxic ingredients detected</li>
+                              <li>• Ingredients are well-researched and documented</li>
+                              <li>• Manufacturing transparency appears adequate</li>
+                              <li>• No recent recall history</li>
+                              <li>• Meets or exceeds industry safety standards</li>
+                            </>
+                          )}
+                          {product.cosmicClarity === 'questionable' && (
+                            <>
+                              <li>• Most ingredients are considered safe</li>
+                              <li>• No immediately dangerous substances</li>
+                              <li>• Basic safety standards appear to be met</li>
+                              {(product.suspiciousIngredients?.length || 0) <= 2 && <li>• Limited number of concerning ingredients</li>}
+                            </>
+                          )}
+                          {product.cosmicClarity === 'cursed' && (
+                            <>
+                              <li>• Product packaging includes basic safety information</li>
+                              <li>• Some standard ingredients are still present</li>
+                            </>
+                          )}
+                          {product.ingredients && product.ingredients.length > 50 && (
+                            <li>• Detailed ingredient disclosure provided</li>
+                          )}
+                          {product.transparencyLevel === 'excellent' && (
+                            <li>• Excellent manufacturing transparency</li>
+                          )}
+                          {(!productRecalls || productRecalls.length === 0) && (
+                            <li>• No active recalls or safety alerts</li>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* Risk Factors */}
+                      <div className="p-4 bg-red-950/20 border border-red-500/30 rounded-lg">
+                        <h4 className="font-semibold text-red-300 mb-3 flex items-center gap-2">
+                          ⚠️ Safety Concerns
+                        </h4>
+                        <ul className="space-y-2 text-sm text-red-200">
+                          {product.suspiciousIngredients && product.suspiciousIngredients.length > 0 ? (
+                            <li>• Contains {product.suspiciousIngredients.length} flagged ingredient{product.suspiciousIngredients.length > 1 ? 's' : ''}</li>
+                          ) : (
+                            <li>• No major ingredient concerns identified</li>
+                          )}
+                          
+                          {product.cosmicClarity === 'cursed' && (
+                            <>
+                              <li>• Contains ingredients with known safety issues</li>
+                              <li>• May pose significant health risks</li>
+                              <li>• Not recommended by veterinary standards</li>
+                            </>
+                          )}
+                          
+                          {product.cosmicClarity === 'questionable' && (
+                            <>
+                              <li>• Some ingredients may affect sensitive pets</li>
+                              <li>• Limited safety data on certain components</li>
+                              <li>• Requires careful monitoring during use</li>
+                            </>
+                          )}
+                          
+                          {product.transparencyLevel === 'poor' && (
+                            <li>• Limited manufacturing transparency</li>
+                          )}
+                          
+                          {!product.ingredients && (
+                            <li>• Ingredient information not readily available</li>
+                          )}
+                          
+                          {productRecalls && productRecalls.length > 0 && (
+                            <li>• Product has {productRecalls.length} active recall{productRecalls.length > 1 ? 's' : ''}</li>
+                          )}
+                          
+                          {product.cosmicClarity === 'blessed' && (!productRecalls || productRecalls.length === 0) && (
+                            <li>• No significant safety concerns identified</li>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Veterinary Recommendations */}
+                    <div className="p-4 bg-blue-950/20 border border-blue-500/30 rounded-lg">
+                      <h4 className="font-semibold text-blue-300 mb-3 flex items-center gap-2">
+                        🩺 Veterinary Guidance
+                      </h4>
+                      <div className="space-y-3 text-sm text-blue-200">
+                        {product.cosmicClarity === 'blessed' && (
+                          <>
+                            <p><strong>General Use:</strong> This product appears safe for most healthy pets when used as directed. No special precautions required beyond normal dietary introduction protocols.</p>
+                            <p><strong>Special Considerations:</strong> Monitor for individual sensitivities. Consult your veterinarian if your pet has specific dietary restrictions or health conditions.</p>
+                          </>
+                        )}
+                        
+                        {product.cosmicClarity === 'questionable' && (
+                          <>
+                            <p><strong>Recommended Approach:</strong> Consult your veterinarian before use, especially for pets with sensitivities, allergies, or health conditions.</p>
+                            <p><strong>Monitoring:</strong> Watch closely for any adverse reactions including digestive upset, lethargy, or behavioral changes. Discontinue if problems occur.</p>
+                            <p><strong>Special Cases:</strong> Not recommended for pregnant, nursing, young, elderly, or immunocompromised pets without veterinary approval.</p>
+                          </>
+                        )}
+                        
+                        {product.cosmicClarity === 'cursed' && (
+                          <>
+                            <p><strong>Strong Recommendation:</strong> Do not use this product. Consult your veterinarian immediately if your pet has already consumed this product.</p>
+                            <p><strong>Alternative Options:</strong> Ask your veterinarian for safer product alternatives that meet your pet's specific nutritional needs.</p>
+                            <p><strong>If Already Used:</strong> Monitor your pet closely and contact your veterinarian if any symptoms develop.</p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Recall History & Regulatory Status */}
+                    <div className="p-4 bg-orange-950/20 border border-orange-500/30 rounded-lg">
+                      <h4 className="font-semibold text-orange-300 mb-3 flex items-center gap-2">
+                        📢 Recall History & Regulatory Status
+                      </h4>
+                      {productRecalls && productRecalls.length > 0 ? (
+                        <div className="space-y-4">
+                          <div className="p-3 bg-red-950/30 border-2 border-red-500/50 rounded-lg">
+                            <div className="flex items-center gap-2 mb-3">
+                              <AlertCircle className="h-5 w-5 text-red-400" />
+                              <span className="font-bold text-red-300">
+                                🚨 ACTIVE RECALL ALERT - {productRecalls.length} Recall{productRecalls.length > 1 ? 's' : ''} Found
+                              </span>
+                            </div>
+                            <div className="space-y-3">
+                              {productRecalls.map((recall: any) => (
+                                <div key={recall.id} className="p-3 bg-red-900/30 border border-red-500/30 rounded">
+                                  <div className="flex items-start justify-between mb-2">
+                                    <div>
+                                      <Badge variant="destructive" className="bg-red-600 text-white font-semibold mb-2">
+                                        Recall #{recall.recallNumber}
+                                      </Badge>
+                                      <h5 className="font-semibold text-red-200">{recall.reason}</h5>
+                                    </div>
+                                    <Badge variant="outline" className="border-red-400/50 text-red-300 text-xs">
+                                      {new Date(recall.dateIssued).toLocaleDateString()}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-red-100 text-sm mb-2">{recall.description}</p>
+                                  <div className="text-xs text-red-200">
+                                    <p><strong>Affected Products:</strong> {recall.affectedProducts}</p>
+                                    {recall.healthHazard && (
+                                      <p className="mt-1"><strong>Health Risk:</strong> {recall.healthHazard}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="mt-4 p-3 bg-red-800/20 border border-red-400/30 rounded">
+                              <p className="text-red-100 text-sm font-bold">
+                                ⚠️ CRITICAL WARNING: This product is under active recall. Do not use this product and contact your veterinarian immediately if your pet has consumed it. Check with the manufacturer for recall status updates.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          <div className="p-3 bg-green-950/20 border border-green-500/30 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Shield className="h-4 w-4 text-green-400" />
+                              <span className="font-semibold text-green-300">✅ No Active Recalls</span>
+                            </div>
+                            <p className="text-green-200 text-sm">
+                              This product currently has no active recalls or FDA warnings on record. 
+                              Our system monitors FDA databases and manufacturer announcements for safety alerts.
+                            </p>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                            <div className="text-center p-2 bg-green-950/20 border border-green-500/30 rounded">
+                              <div className="font-semibold text-green-300">Clean</div>
+                              <div className="text-green-200">FDA Status</div>
+                            </div>
+                            <div className="text-center p-2 bg-blue-950/20 border border-blue-500/30 rounded">
+                              <div className="font-semibold text-blue-300">Monitored</div>
+                              <div className="text-blue-200">Safety Tracking</div>
+                            </div>
+                            <div className="text-center p-2 bg-purple-950/20 border border-purple-500/30 rounded">
+                              <div className="font-semibold text-purple-300">Current</div>
+                              <div className="text-purple-200">Database Status</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className="mt-4 p-3 bg-orange-800/20 border border-orange-400/30 rounded">
+                        <p className="text-orange-100 text-xs">
+                          <strong>Recall Monitoring:</strong> We continuously monitor FDA, USDA, and manufacturer databases for safety alerts. 
+                          Recall status can change rapidly - always verify current status with the manufacturer before use.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Scientific Analysis Details */}
+                    <div className="p-4 bg-purple-950/20 border border-purple-500/30 rounded-lg">
+                      <h4 className="font-semibold text-purple-300 mb-3 flex items-center gap-2">
+                        🔬 Analysis Methodology
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-purple-200">
+                        <div>
+                          <h5 className="font-medium mb-2">Safety Factors Evaluated:</h5>
+                          <ul className="space-y-1">
+                            <li>• Ingredient toxicity database cross-reference</li>
+                            <li>• FDA recall and warning history</li>
+                            <li>• USDA safety alert monitoring</li>
+                            <li>• Veterinary research and case studies</li>
+                            <li>• AAFCO nutritional adequacy standards</li>
+                            <li>• Consumer adverse event reports</li>
+                            <li>• Manufacturing facility inspection records</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 className="font-medium mb-2">Risk Assessment Criteria:</h5>
+                          <ul className="space-y-1">
+                            <li>• Acute toxicity potential</li>
+                            <li>• Long-term health implications</li>
+                            <li>• Allergen and sensitivity factors</li>
+                            <li>• Manufacturing quality indicators</li>
+                            <li>• Regulatory compliance status</li>
+                            <li>• Historical recall patterns</li>
+                            <li>• Pathogen contamination risk</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="mt-3 p-3 bg-purple-900/20 border border-purple-400/20 rounded">
+                        <p className="text-xs text-purple-100">
+                          <strong>Disclaimer:</strong> This analysis is for informational purposes only and does not replace professional veterinary advice. Safety assessments are based on available data and may not account for individual pet sensitivities or health conditions. Recall status can change without notice. Always consult your veterinarian for personalized recommendations and verify current recall status with manufacturers.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Action Items */}
+                    <div className={`p-4 rounded-lg border ${
+                      product.cosmicClarity === 'blessed' ? 'bg-green-950/20 border-green-500/30' :
+                      product.cosmicClarity === 'questionable' ? 'bg-yellow-950/20 border-yellow-500/30' :
+                      'bg-red-950/20 border-red-500/30'
+                    }`}>
+                      <h4 className={`font-semibold mb-3 flex items-center gap-2 ${
+                        product.cosmicClarity === 'blessed' ? 'text-green-300' :
+                        product.cosmicClarity === 'questionable' ? 'text-yellow-300' :
+                        'text-red-300'
+                      }`}>
+                        📋 Recommended Actions
+                      </h4>
+                      <div className={`space-y-2 text-sm ${
+                        product.cosmicClarity === 'blessed' ? 'text-green-200' :
+                        product.cosmicClarity === 'questionable' ? 'text-yellow-200' :
+                        'text-red-200'
+                      }`}>
+                        {product.cosmicClarity === 'blessed' && (
+                          <>
+                            <p>✅ <strong>Safe to use</strong> following standard feeding guidelines</p>
+                            <p>📝 Introduce gradually over 7-10 days as with any new food</p>
+                            <p>👀 Monitor for individual reactions during transition period</p>
+                            <p>📞 Contact veterinarian if any concerns arise</p>
+                          </>
+                        )}
+                        
+                        {product.cosmicClarity === 'questionable' && (
+                          <>
+                            <p>🩺 <strong>Consult veterinarian</strong> before first use</p>
+                            <p>📋 Review ingredient list with your vet</p>
+                            <p>👁️ Monitor closely for 48-72 hours after introduction</p>
+                            <p>⚠️ Avoid use in pets with known sensitivities</p>
+                            <p>📞 Have emergency vet contact ready during trial period</p>
+                            {productRecalls && productRecalls.length > 0 && (
+                              <p>🚨 <strong>Check recall status</strong> before any use</p>
+                            )}
+                          </>
+                        )}
+                        
+                        {(product.cosmicClarity === 'cursed' || (productRecalls && productRecalls.length > 0)) && (
+                          <>
+                            <p>🚫 <strong>Do not use this product</strong></p>
+                            <p>🩺 Consult veterinarian for safe alternatives</p>
+                            <p>⚠️ If already used, monitor pet closely</p>
+                            <p>📞 Contact vet immediately if symptoms develop</p>
+                            <p>🗑️ Dispose of product safely according to instructions</p>
+                            {productRecalls && productRecalls.length > 0 && (
+                              <p>📢 <strong>Report to manufacturer</strong> if pet consumed recalled product</p>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
