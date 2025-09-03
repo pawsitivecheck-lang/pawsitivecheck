@@ -87,7 +87,7 @@ const loadGoogleMaps = (() => {
         .then(response => response.json())
         .then(data => {
           const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places,marker`;
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places&loading=async`;
           script.async = true;
           script.defer = true;
           
@@ -173,39 +173,16 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
     }
 
     try {
-      // Initialize map
+      // Initialize map (removed custom styles as they conflict with mapId)
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
-      center: { lat: center[0], lng: center[1] },
-      zoom: zoom,
-      mapId: 'vet_finder_map', // Required for Advanced Markers
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: false,
-      zoomControl: true,
-      gestureHandling: 'cooperative',
-      styles: [
-        {
-          "featureType": "all",
-          "elementType": "geometry.fill",
-          "stylers": [{"color": "#1a1a2e"}]
-        },
-        {
-          "featureType": "water",
-          "elementType": "geometry.fill", 
-          "stylers": [{"color": "#16213e"}]
-        },
-        {
-          "featureType": "road",
-          "elementType": "geometry.stroke",
-          "stylers": [{"color": "#533a7b"}]
-        },
-        {
-          "featureType": "road",
-          "elementType": "geometry.fill",
-          "stylers": [{"color": "#2a2a4a"}]
-        }
-      ]
-    });
+        center: { lat: center[0], lng: center[1] },
+        zoom: zoom,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        zoomControl: true,
+        gestureHandling: 'cooperative',
+      });
 
       updateMarkers();
       
@@ -246,33 +223,13 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
           strokeWeight: 2,
         };
 
-        // Use AdvancedMarkerElement if available, fallback to Marker
-        let marker;
-        if (window.google.maps.marker && window.google.maps.marker.AdvancedMarkerElement) {
-          // Create a custom HTML element for the marker
-          const markerElement = document.createElement('div');
-          markerElement.style.width = `${practice.emergencyServices ? 24 : 16}px`;
-          markerElement.style.height = `${practice.emergencyServices ? 24 : 16}px`;
-          markerElement.style.borderRadius = '50%';
-          markerElement.style.backgroundColor = practice.emergencyServices ? '#dc2626' : '#3b82f6';
-          markerElement.style.border = '2px solid #ffffff';
-          markerElement.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-          
-          marker = new window.google.maps.marker.AdvancedMarkerElement({
-            position: position,
-            map: mapInstanceRef.current,
-            content: markerElement,
-            title: practice.name,
-          });
-        } else {
-          // Fallback to old Marker for compatibility
-          marker = new window.google.maps.Marker({
-            position: position,
-            map: mapInstanceRef.current,
-            icon: markerIcon,
-            title: practice.name,
-          });
-        }
+        // Use standard Marker (simplified to avoid AdvancedMarkerElement issues)
+        const marker = new window.google.maps.Marker({
+          position: position,
+          map: mapInstanceRef.current,
+          icon: markerIcon,
+          title: practice.name,
+        });
 
         // Create info window content
         const infoContent = `
