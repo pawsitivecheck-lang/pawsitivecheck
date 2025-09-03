@@ -201,7 +201,12 @@ export default function Landing() {
                 
                 {isAuthenticated ? (
                   <>
-                    <div className="flex items-center py-3 px-3 mb-2">
+                    <Link 
+                      to="/profile"
+                      className="flex items-center py-3 px-3 mb-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      data-testid="button-profile-link"
+                    >
                       {user?.profileImageUrl ? (
                         <img 
                           src={user.profileImageUrl} 
@@ -212,10 +217,10 @@ export default function Landing() {
                         <UserCheck className="mr-3 h-5 w-5 text-blue-600" />
                       )}
                       <div>
-                        <div className="font-medium text-gray-800">{user?.firstName || 'User'}</div>
-                        <div className="text-xs text-gray-500">{user?.email}</div>
+                        <div className="font-medium text-gray-800 dark:text-gray-200">{user?.firstName || 'User'}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</div>
                       </div>
-                    </div>
+                    </Link>
                     
                     <Link 
                       to="/pets"
