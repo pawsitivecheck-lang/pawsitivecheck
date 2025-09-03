@@ -13,7 +13,6 @@ import { Sparkles, Eye, CheckCircle, XCircle, Clock, FileText, Calendar, User, P
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import type { ProductUpdateSubmission } from "@shared/schema";
-import ThemeToggle from "@/components/theme-toggle";
 import Footer from "@/components/footer";
 
 type SubmissionStatus = 'pending' | 'approved' | 'rejected' | 'in_review';
@@ -142,7 +141,6 @@ export default function AdminProductSubmissions() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Theme Toggle */}
       <div className="absolute top-4 right-4 z-50">
-        <ThemeToggle />
       </div>
       
       <div className="container mx-auto px-4 py-8">

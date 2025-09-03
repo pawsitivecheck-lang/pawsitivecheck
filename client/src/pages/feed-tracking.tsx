@@ -14,7 +14,6 @@ import { ArrowLeft, PlusIcon, Edit2, Trash2, TrendingUp, DollarSign, Wheat, Eye,
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import ThemeToggle from "@/components/theme-toggle";
 
 interface FeedRecord {
   id: number;
@@ -173,7 +172,6 @@ export default function FeedTracking() {
     <div className="container mx-auto px-4 py-8 relative">
       {/* Theme Toggle */}
       <div className="absolute top-4 right-4 z-50">
-        <ThemeToggle />
       </div>
       
       {/* Preview Mode Alert */}

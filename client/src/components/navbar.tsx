@@ -5,7 +5,6 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat } from "lucide-react";
 import { MAIN_NAVIGATION } from "@shared/navigation";
 import HeaderSearch from "@/components/header-search";
-import ThemeToggle from "@/components/theme-toggle";
 import DNTIndicator from "@/components/dnt-indicator";
 import {
   DropdownMenu,
@@ -57,8 +56,6 @@ export default function Navbar() {
             <DNTIndicator />
             
             
-            {/* Theme Toggle */}
-            <ThemeToggle />
             
             {/* Hamburger Menu Button - Desktop */}
             <div className="hidden md:block">

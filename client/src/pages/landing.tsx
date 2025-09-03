@@ -5,7 +5,6 @@ import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
-import ThemeToggle from "@/components/theme-toggle";
 // import CookieConsent from "@/components/cookie-consent";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
@@ -116,8 +115,6 @@ export default function Landing() {
               {/* DNT Indicator */}
               <DNTIndicator />
               
-              {/* Theme Toggle - Always visible */}
-              <ThemeToggle />
               
               {/* Menu button - visible on all devices */}
               <button 
@@ -180,11 +177,6 @@ export default function Landing() {
                 );
               })}
               
-              {/* Theme Toggle in Mobile */}
-              <div className="flex items-center py-3 px-3">
-                <span className="mr-3 text-foreground font-medium">Theme:</span>
-                <ThemeToggle />
-              </div>
               
               
               {/* Account Section in Mobile */}

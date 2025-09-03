@@ -44,30 +44,30 @@ export default function ComprehensiveSafetyAnalysis() {
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                    <h4 className="font-semibold text-green-700 mb-2">🔬 Scientific Foundation</h4>
-                    <p className="text-sm text-gray-700">
+                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-4">
+                    <h4 className="font-semibold text-green-700 dark:text-green-300 mb-2">🔬 Scientific Foundation</h4>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       Our analysis incorporates <a href="https://www.nature.com/articles/s41598-019-40841-x" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed research on pet nutrition toxicity</a> and <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AAFCO ingredient safety standards</a> to provide evidence-based safety ratings.
                     </p>
                   </div>
 
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                    <h4 className="font-semibold text-red-700 mb-2">⚠️ Corporate Accountability</h4>
-                    <p className="text-sm text-gray-700">
+                  <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-xl p-4">
+                    <h4 className="font-semibold text-red-700 dark:text-red-300 mb-2">⚠️ Corporate Accountability</h4>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       Major violations include <a href="https://www.reuters.com/business/healthcare-pharmaceuticals/hill-pet-nutrition-agrees-settle-lawsuit-over-dog-deaths-2019-04-17/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Hill's toxic vitamin D scandal affecting 1,000+ dogs</a> and <a href="https://topclassactions.com/lawsuit-settlements/consumer-products/pet-products/blue-buffalo-settles-class-action-over-false-natural-claims/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Blue Buffalo's $32M settlement for ingredient deception</a>.
                     </p>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                    <h4 className="font-semibold text-blue-700 mb-2">📊 Transparency Database</h4>
-                    <p className="text-sm text-gray-700">
+                  <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">📊 Transparency Database</h4>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       Our database tracks ingredient transparency across brands, revealing that <a href="https://www.petfoodindustry.com/articles/8698-pet-food-transparency-survey-results" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">only 23% of pet food manufacturers provide complete sourcing information</a> to consumers.
                     </p>
                   </div>
 
-                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
-                    <h4 className="font-semibold text-orange-700 mb-2">🚨 Early Warning System</h4>
-                    <p className="text-sm text-gray-700">
+                  <div className="bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-xl p-4">
+                    <h4 className="font-semibold text-orange-700 dark:text-orange-300 mb-2">🚨 Early Warning System</h4>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       Real-time monitoring of <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA safety alerts</a> and <a href="https://www.avma.org/resources-tools/pet-owners/petcare/what-do-if-your-pets-food-recalled" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AVMA recall guidance</a> ensures immediate notification of safety issues.
                     </p>
                   </div>
@@ -85,17 +85,17 @@ export default function ComprehensiveSafetyAnalysis() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-gray-700">
+              <div className="text-gray-700 dark:text-gray-300">
                 <p className="text-lg mb-6">
                   Our comprehensive safety analysis system uses advanced algorithms trained on <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology databases</a> and <a href="https://www.tandfonline.com/doi/full/10.1080/1745039X.2018.1520019" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">pet nutrition research</a> to provide accurate safety assessments.
                 </p>
 
                 <div className="space-y-4">
-                  <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
+                  <div className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Ingredient Analysis</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Ingredient Analysis</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         Each ingredient is evaluated against veterinary toxicology databases, AAFCO safety standards, and peer-reviewed research on pet nutrition safety.
                       </p>
                     </div>

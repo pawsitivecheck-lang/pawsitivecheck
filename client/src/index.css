@@ -4,46 +4,7 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(210, 40%, 98%);
-  --foreground: hsl(222.2, 84%, 4.9%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222.2, 84%, 4.9%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222.2, 84%, 4.9%);
-  --primary: hsl(258, 90%, 66%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222.2, 84%, 4.9%);
-  --muted: hsl(210, 40%, 96%);
-  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(222.2, 84%, 4.9%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --border: hsl(214.3, 31.8%, 91.4%);
-  --input: hsl(214.3, 31.8%, 91.4%);
-  --ring: hsl(258, 90%, 66%);
-  --chart-1: hsl(12, 76%, 61%);
-  --chart-2: hsl(173, 58%, 39%);
-  --chart-3: hsl(197, 37%, 24%);
-  --chart-4: hsl(43, 74%, 66%);
-  --chart-5: hsl(27, 87%, 67%);
-  --radius: 0.5rem;
-  
-  /* Professional color palette */
-  --pet-brown: hsl(25, 45%, 45%);
-  --pet-brown-600: hsl(25, 45%, 35%);
-  --pet-brown-700: hsl(25, 45%, 25%);
-  --pet-orange: hsl(25, 85%, 55%);
-  --pet-blue: hsl(210, 70%, 55%);
-  --pet-green: hsl(120, 60%, 45%);
-  --pet-red: hsl(0, 70%, 55%);
-  
-  --font-header: 'Nunito', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
-  --font-body: 'Open Sans', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
-}
-
-.dark {
+  /* Dark mode as default - site is dark mode only */
   --background: hsl(220, 13%, 8%);
   --foreground: hsl(210, 40%, 98%);
   --card: hsl(220, 13%, 12%);
@@ -63,6 +24,24 @@
   --border: hsl(220, 13%, 20%);
   --input: hsl(220, 13%, 15%);
   --ring: hsl(217, 91%, 60%);
+  --chart-1: hsl(12, 76%, 61%);
+  --chart-2: hsl(173, 58%, 39%);
+  --chart-3: hsl(197, 37%, 24%);
+  --chart-4: hsl(43, 74%, 66%);
+  --chart-5: hsl(27, 87%, 67%);
+  --radius: 0.5rem;
+  
+  /* Professional color palette */
+  --pet-brown: hsl(25, 45%, 45%);
+  --pet-brown-600: hsl(25, 45%, 35%);
+  --pet-brown-700: hsl(25, 45%, 25%);
+  --pet-orange: hsl(25, 85%, 55%);
+  --pet-blue: hsl(210, 70%, 55%);
+  --pet-green: hsl(120, 60%, 45%);
+  --pet-red: hsl(0, 70%, 55%);
+  
+  --font-header: 'Nunito', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  --font-body: 'Open Sans', system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
 @layer base {
@@ -97,14 +76,9 @@
     display: none;
   }
   
-  /* Dark mode body */
-  .dark body {
+  /* Dark mode is default - site is dark mode only */
+  body {
     background: hsl(220, 13%, 8%);
-  }
-  
-  /* Dark mode - clean background */
-  .dark body::before {
-    display: none;
   }
 }
 
