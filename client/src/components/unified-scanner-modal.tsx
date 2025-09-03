@@ -110,8 +110,10 @@ export function UnifiedScannerModal({
             variant: "destructive",
           });
         }
-        // Close scanner after showing the message
-        onClose();
+        // Close scanner after a delay so user can see the message
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       }
     },
     onError: (error: any) => {
