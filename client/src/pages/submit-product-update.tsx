@@ -143,11 +143,8 @@ export default function SubmitProductUpdate() {
   };
 
   const onSubmit = (data: SubmitUpdateData) => {
-    console.log("Form submitted with data:", data);
-    
     // Validate required fields before submitting
     if (!data.title || data.title.trim().length === 0) {
-      console.log("Validation failed: title missing");
       toast({
         title: "Validation Error",
         description: "Please enter a title for your submission",
@@ -157,7 +154,6 @@ export default function SubmitProductUpdate() {
     }
     
     if (!data.description || data.description.trim().length === 0) {
-      console.log("Validation failed: description missing");
       toast({
         title: "Validation Error", 
         description: "Please enter a description for your submission",
@@ -166,7 +162,6 @@ export default function SubmitProductUpdate() {
       return;
     }
     
-    console.log("Validation passed, submitting...");
     submitMutation.mutate(data);
   };
 
