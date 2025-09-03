@@ -169,15 +169,15 @@ export default function Landing() {
                 Community Reviews
               </button>
               
-              {/* Livestock Management Preview */}
+              {/* Livestock Management */}
               <Link 
-                to="/livestock-preview"
+                to={isAuthenticated ? "/livestock" : "/livestock-preview"}
                 className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
                 onClick={() => setIsMobileMenuOpen(false)}
-                data-testid="mobile-nav-livestock-preview"
+                data-testid={isAuthenticated ? "mobile-nav-livestock" : "mobile-nav-livestock-preview"}
               >
                 <BarChart3 className="mr-3 h-5 w-5" />
-                Livestock Management Preview
+                {isAuthenticated ? "Livestock Management" : "Livestock Management Preview"}
               </Link>
               
               {/* Theme Toggle in Mobile */}
