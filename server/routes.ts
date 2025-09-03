@@ -22,6 +22,7 @@ import { PetSmartScraper } from "./services/petsmart-scraper";
 import { PetcoScraper } from "./services/petco-scraper";
 import { PetSuppliesPlusScraper } from "./services/petsuppliesplus-scraper";
 import { TractorSupplyScraper } from "./services/tractorsupply-scraper";
+import { FamilyFarmAndHomeScraper } from "./services/familyfarmandhome-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
 
@@ -2734,6 +2735,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error('api', 'Error during Tractor Supply scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
       res.status(500).json({ message: "Failed to scrape Tractor Supply products" });
+    }
+  });
+
+  // Family Farm & Home product scraping endpoint
+  app.post('/api/admin/sync/familyfarmandhome-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Family Farm & Home animal care product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new FamilyFarmAndHomeScraper();
+      
+      // Scrape products from Family Farm & Home
+      const scrapingResult = await scraper.scrapeAnimalCareProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Family Farm & Home scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0); // Filter out invalid products
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          // Check if product already exists by name and brand
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Family Farm & Home product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Family Farm & Home scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Family Farm & Home. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "familyfarmandhome.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Family Farm & Home scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Family Farm & Home products" });
     }
   });
 
