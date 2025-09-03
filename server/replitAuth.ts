@@ -260,6 +260,11 @@ export async function setupAuth(app: Express) {
     
     // Replit OAuth routes
     app.get("/api/login", (req, res, next) => {
+      // Store redirect URL in session if provided
+      if (req.query.redirect) {
+        (req.session as any).redirectAfterLogin = req.query.redirect;
+      }
+      
       passport.authenticate(`replitauth:${req.hostname}`, {
         prompt: "login consent",
         scope: ["openid", "email", "profile", "offline_access"],
@@ -268,9 +273,18 @@ export async function setupAuth(app: Express) {
 
     app.get("/api/callback", (req, res, next) => {
       passport.authenticate(`replitauth:${req.hostname}`, {
-        successReturnToOrRedirect: "/",
         failureRedirect: "/api/login",
-      })(req, res, next);
+      })(req, res, (err: any) => {
+        if (err) {
+          return next(err);
+        }
+        
+        // Check for stored redirect URL
+        const redirectUrl = (req.session as any).redirectAfterLogin || "/";
+        delete (req.session as any).redirectAfterLogin; // Clear it after use
+        
+        res.redirect(redirectUrl);
+      });
     });
 
     // Google OAuth routes
@@ -289,7 +303,7 @@ export async function setupAuth(app: Express) {
 
     // Local authentication routes (email/password)
     app.post("/api/auth/login", (req, res, next) => {
-      passport.authenticate("local", (err, user, info) => {
+      passport.authenticate("local", (err: any, user: any, info: any) => {
         if (err) {
           return res.status(500).json({ message: "Authentication error" });
         }

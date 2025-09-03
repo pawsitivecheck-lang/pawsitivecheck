@@ -562,7 +562,7 @@ export function UnifiedScannerModal({
                 </p>
                 <Button 
                   onClick={() => {
-                    window.location.href = '/api/login';
+                    window.location.href = '/api/login?redirect=/add-product';
                   }}
                   className="mt-3 bg-blue-600 hover:bg-blue-700 text-white"
                   data-testid="button-login-to-add"
