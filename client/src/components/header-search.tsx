@@ -6,9 +6,9 @@ import { useToast } from "@/hooks/use-toast";
 import { UnifiedScannerModal } from "@/components/unified-scanner-modal";
 import { ImageScanner } from "@/components/image-scanner";
 import { useLocation } from "wouter";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock } from "lucide-react";
+import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock, Sparkles, Brain } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface HeaderSearchProps {
@@ -26,20 +26,36 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
   const [showImageScanner, setShowImageScanner] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [aiContext, setAiContext] = useState<any>(null);
+  const [showAiContext, setShowAiContext] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
+  const suggestionsDebounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const searchMutation = useMutation({
     mutationFn: async (query: string) => {
-      if (!query.trim()) return [];
+      if (!query.trim()) return { products: [], aiContext: null };
       
-      // First search local database
+      // Enhanced search with AI capabilities
       const res = await fetch(`/api/products?search=${encodeURIComponent(query)}&limit=20`);
       if (!res.ok) throw new Error('Search failed');
-      const localResults = await res.json();
+      const searchResponse = await res.json();
+      
+      // Handle both legacy and AI-enhanced response formats
+      if (Array.isArray(searchResponse)) {
+        // Legacy format - just products array
+        return { products: searchResponse, aiContext: null };
+      } else if (searchResponse.products) {
+        // AI-enhanced format - products and AI context
+        return {
+          products: searchResponse.products || [],
+          aiContext: searchResponse.aiContext || null
+        };
+      }
       
       // If no local results found, automatically search internet
-      if (!localResults || localResults.length === 0) {
+      if (!searchResponse.products || searchResponse.products.length === 0) {
         try {
           const internetRes = await fetch('/api/products/internet-search', {
             method: 'POST',
@@ -55,8 +71,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
           if (internetRes.ok) {
             const internetResult = await internetRes.json();
             if (internetResult.product) {
-              // Return the internet result as if it was a local search result
-              return [internetResult.product];
+              return { products: [internetResult.product], aiContext: null };
             }
           }
         } catch (error) {
@@ -64,24 +79,46 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         }
       }
       
-      return localResults || [];
+      return { products: searchResponse.products || [], aiContext: searchResponse.aiContext || null };
     },
-    onSuccess: (results: Product[], variables: string) => {
-      // Sort results by relevance using advanced scoring algorithm
-      const scoredResults = (results || []).map(product => ({
-        product,
-        score: calculateAdvancedScore(variables, product.name, product.brand)
-      }));
+    onSuccess: (result: { products: Product[], aiContext: any }, variables: string) => {
+      const { products, aiContext } = result;
       
-      // Sort by score (highest first), then take top 8 most relevant
-      const sortedProducts = scoredResults
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 8)
-        .map(item => item.product);
+      // Store AI context for display
+      setAiContext(aiContext);
+      setShowAiContext(!!aiContext);
+      
+      // Sort results by relevance - if AI ranking was applied, trust it; otherwise use local scoring
+      let sortedProducts = products || [];
+      
+      if (!aiContext || !aiContext.expandedQuery) {
+        // No AI enhancement, use local advanced scoring
+        const scoredResults = sortedProducts.map(product => ({
+          product,
+          score: calculateAdvancedScore(variables, product.name, product.brand)
+        }));
+        
+        sortedProducts = scoredResults
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 8)
+          .map(item => item.product);
+      } else {
+        // AI already ranked results, just limit to top 8
+        sortedProducts = sortedProducts.slice(0, 8);
+      }
       
       setSearchResults(sortedProducts);
       setShowResults(true);
       setSelectedIndex(-1);
+      
+      // Show success message if AI enhanced the search
+      if (aiContext && aiContext.expandedQuery !== variables) {
+        toast({
+          title: "AI Enhanced Search",
+          description: `Found results using: "${aiContext.expandedQuery}"`,
+          duration: 3000,
+        });
+      }
     },
     onError: () => {
       toast({
@@ -185,6 +222,35 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     },
   });
 
+  // AI-powered search suggestions query
+  const fetchAiSuggestions = useCallback(
+    async (query: string): Promise<string[]> => {
+      if (!query.trim() || query.length < 2) return [];
+      
+      try {
+        const res = await fetch(`/api/products/suggestions?query=${encodeURIComponent(query)}`);
+        if (!res.ok) return [];
+        const suggestions = await res.json();
+        return Array.isArray(suggestions) ? suggestions.slice(0, 5) : [];
+      } catch (error) {
+        console.error('AI suggestions failed:', error);
+        return [];
+      }
+    },
+    []
+  );
+
+  // Debounced AI suggestions
+  const debouncedFetchSuggestions = useCallback((query: string) => {
+    if (suggestionsDebounceRef.current) {
+      clearTimeout(suggestionsDebounceRef.current);
+    }
+    
+    suggestionsDebounceRef.current = setTimeout(async () => {
+      const suggestions = await fetchAiSuggestions(query);
+      setAiSuggestions(suggestions);
+    }, 200); // Slightly slower than search for better UX
+  }, [fetchAiSuggestions]);
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -373,7 +439,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     }, delay);
   }, [searchMutation]);
 
-  // Handle input changes with ultra-responsive real-time search
+  // Handle input changes with ultra-responsive real-time search and AI suggestions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
@@ -381,13 +447,26 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     
     if (value.length === 0) {
       setSearchResults([]);
+      setAiSuggestions([]);
+      setAiContext(null);
+      setShowAiContext(false);
       setShowResults(false);
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
+      if (suggestionsDebounceRef.current) {
+        clearTimeout(suggestionsDebounceRef.current);
+      }
     } else {
       // Show dropdown immediately for better responsiveness
       setShowResults(true);
+      
+      // Trigger AI suggestions for queries 2+ characters
+      if (value.length >= 2) {
+        debouncedFetchSuggestions(value);
+      } else {
+        setAiSuggestions([]);
+      }
       
       // For short queries, prioritize recent searches and faster feedback
       if (value.length <= 2 && recentSearches.length > 0) {
@@ -403,6 +482,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       
       // Clear previous results and search
       setSearchResults([]);
+      setAiContext(null);
+      setShowAiContext(false);
       debouncedSearch(value);
     }
   };
@@ -433,7 +514,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     const normalizedQuery = normalizeString(query);
     
     // Combine all possible suggestions with advanced scoring
-    const candidates: Array<{text: string, score: number, source: 'product' | 'recent' | 'brand'}> = [];
+    const candidates: Array<{text: string, score: number, source: 'product' | 'recent' | 'brand' | 'ai'}> = [];
     
     // Score product names
     searchResults.forEach(product => {
@@ -473,6 +554,20 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       }
     });
     
+    // Add AI suggestions with high priority scoring
+    aiSuggestions.forEach((suggestion) => {
+      if (suggestion.toLowerCase() !== normalizedQuery) {
+        const baseScore = calculateAdvancedScore(query, suggestion);
+        // AI suggestions get a significant boost since they're contextually relevant
+        const aiBoost = 40;
+        candidates.push({
+          text: suggestion,
+          score: baseScore + aiBoost,
+          source: 'ai'
+        });
+      }
+    });
+    
     // Sort by score and return the best match
     candidates.sort((a, b) => b.score - a.score);
     
@@ -496,23 +591,35 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
   // Handle keyboard navigation and autofill
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    const allOptions = [...(searchQuery.length === 0 ? recentSearches : []), ...searchResults.map(p => p.name)];
+    const allOptions = [
+      ...(searchQuery.length === 0 ? recentSearches : []),
+      ...(searchQuery.length >= 2 ? aiSuggestions : []),
+      ...searchResults.map(p => p.name)
+    ];
     
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
         if (selectedIndex >= 0 && selectedIndex < allOptions.length) {
-          // If an option is selected, use it
           const selectedOption = allOptions[selectedIndex];
-          if (selectedIndex < recentSearches.length) {
+          const recentCount = searchQuery.length === 0 ? recentSearches.length : 0;
+          const aiSuggestionsCount = searchQuery.length >= 2 ? aiSuggestions.length : 0;
+          
+          if (selectedIndex < recentCount) {
             // Recent search selected
+            setSearchQuery(selectedOption);
+            saveRecentSearch(selectedOption);
+            setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
+            clearSearch();
+          } else if (selectedIndex < recentCount + aiSuggestionsCount) {
+            // AI suggestion selected
             setSearchQuery(selectedOption);
             saveRecentSearch(selectedOption);
             setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
             clearSearch();
           } else {
             // Product selected
-            const productIndex = selectedIndex - recentSearches.length;
+            const productIndex = selectedIndex - recentCount - aiSuggestionsCount;
             const product = searchResults[productIndex];
             if (product) {
               selectProduct(product);
@@ -625,7 +732,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products or scan... (Press Tab to autofill)"
+              placeholder="AI-powered search... (Tab to autofill, get smart suggestions)"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -752,6 +859,55 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   >
                     "{getAutofillSuggestion()}"
                   </span>
+                </div>
+              </div>
+            )}
+
+            {/* AI Context Information */}
+            {showAiContext && aiContext && (
+              <div className="p-2 border-b border-border/30">
+                <div className="flex items-center gap-2 text-xs text-blue-300 mb-1">
+                  <Brain className="h-3 w-3" />
+                  <span>AI Enhanced Search</span>
+                </div>
+                {aiContext.expandedQuery && aiContext.expandedQuery !== searchQuery && (
+                  <div className="text-xs text-muted-foreground">
+                    <span>Enhanced to: </span>
+                    <span className="text-blue-300 font-mono">"{aiContext.expandedQuery}"</span>
+                  </div>
+                )}
+                {aiContext.context && (
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {aiContext.context}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* AI Smart Suggestions */}
+            {aiSuggestions.length > 0 && searchQuery.length >= 2 && (
+              <div className="p-2 border-b border-border/30">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                  <Sparkles className="h-3 w-3 text-yellow-400" />
+                  <span>AI Suggestions</span>
+                </div>
+                <div className="space-y-1">
+                  {aiSuggestions.map((suggestion, index) => (
+                    <div
+                      key={suggestion}
+                      onClick={() => {
+                        setSearchQuery(suggestion);
+                        saveRecentSearch(suggestion);
+                        setLocation(`/product-database?search=${encodeURIComponent(suggestion)}`);
+                        clearSearch();
+                      }}
+                      className="flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors hover:bg-accent/50 group"
+                      data-testid={`ai-suggestion-${index}`}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 group-hover:from-yellow-300 group-hover:to-orange-300" />
+                      <span className="text-popover-foreground text-sm">{suggestion}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

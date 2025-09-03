@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, isAdmin } from "./replitAuth";
-import { analyzeProductSafety, generateProductGuidance, enhanceRecallInformation } from "./ai-service";
+import { analyzeProductSafety, generateProductGuidance, enhanceRecallInformation, enhanceSearchQuery, generateSmartSuggestions, rankSearchResults } from "./ai-service";
 import { 
   insertProductSchema, 
   insertProductReviewSchema, 
@@ -533,7 +533,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
       }
 
-      res.json(products);
+      // AI-Enhanced Search Processing
+      if (search && typeof search === 'string' && search.trim().length >= 1) {
+        try {
+          // Get user context for personalized AI search
+          const userId = (req as any).user?.claims?.sub;
+          let userContext: any = {};
+          
+          if (userId) {
+            try {
+              const userPets = await storage.getUserPets(userId);
+              if (userPets && userPets.length > 0) {
+                userContext.pets = userPets.map(pet => ({
+                  name: pet.name,
+                  species: pet.species,
+                  breed: pet.breed,
+                  age: pet.age,
+                  healthConditions: pet.healthConditions || []
+                }));
+              }
+            } catch (petError) {
+              console.log('Could not fetch user pets for AI context:', petError);
+            }
+          }
+
+          // Enhance search query with AI understanding
+          const enhancedQuery = await enhanceSearchQuery(search.trim(), userContext);
+          
+          // If AI generated better search terms, search again with expanded terms
+          if (enhancedQuery.searchTerms.length > 1 && products.length < 20) {
+            const expandedSearch = enhancedQuery.searchTerms.join(' ');
+            const additionalProducts = await storage.getProducts(50, 0, expandedSearch);
+            
+            // Combine results without duplicates
+            const existingIds = new Set(products.map(p => p.id));
+            const newProducts = additionalProducts.filter(p => !existingIds.has(p.id));
+            products = [...products, ...newProducts];
+          }
+
+          // AI-powered ranking of search results
+          if (products.length > 1) {
+            products = await rankSearchResults(search.trim(), products, userContext);
+          }
+
+          // Add AI context to response for frontend
+          (res as any).locals.aiContext = {
+            originalQuery: search.trim(),
+            expandedQuery: enhancedQuery.expandedQuery,
+            searchTerms: enhancedQuery.searchTerms,
+            context: enhancedQuery.context,
+            filters: enhancedQuery.filters
+          };
+        } catch (aiError) {
+          console.error('AI search enhancement failed, using standard results:', aiError);
+          // Continue with standard results if AI fails
+        }
+      }
+
+      // Include AI context in response if available
+      const responseData: any = products;
+      if ((res as any).locals.aiContext) {
+        res.json({
+          products: responseData,
+          aiContext: (res as any).locals.aiContext
+        });
+      } else {
+        res.json(products);
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
       res.status(500).json({ message: "Failed to fetch products" });
@@ -565,6 +631,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching product by barcode:", error);
       res.status(500).json({ message: "Failed to fetch product" });
+    }
+  });
+
+  // AI-powered search suggestions endpoint
+  app.get('/api/products/suggestions', async (req, res) => {
+    try {
+      const { query } = req.query;
+      
+      if (!query || typeof query !== 'string' || query.trim().length < 1) {
+        return res.json([]);
+      }
+
+      // Get sample of available products for AI context
+      const availableProducts = await storage.getProducts(20, 0);
+      
+      // Generate AI-powered suggestions
+      const suggestions = await generateSmartSuggestions(
+        query.trim(), 
+        availableProducts.map(p => ({
+          name: p.name,
+          brand: p.brand || '',
+          category: p.category
+        }))
+      );
+
+      res.json(suggestions);
+    } catch (error) {
+      console.error('Error generating AI suggestions:', error);
+      res.json([]); // Return empty array on error
     }
   });
 
