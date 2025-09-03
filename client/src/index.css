@@ -89,41 +89,27 @@
   
   
   
-  /* Light mode input styling */
+  /* Dark mode input styling (default) */
   input[type="text"],
   input[type="email"],
   input[type="password"],
   textarea {
-    background-color: hsl(0, 0%, 98%);
-    border: 1px solid hsl(258, 20%, 85%);
-    color: hsl(258, 20%, 15%);
+    background-color: hsl(220, 13%, 15%);
+    border: 1px solid hsl(220, 13%, 20%);
+    color: hsl(210, 40%, 98%);
   }
   
   input[type="text"]:focus,
   input[type="email"]:focus,
   input[type="password"]:focus,
   textarea:focus {
-    border-color: hsl(258, 80%, 55%);
-    box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
-    -webkit-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
-    -moz-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    border-color: hsl(217, 91%, 60%);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    -webkit-box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    -moz-box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
     outline: none;
   }
-  
-  /* Dark mode input visibility */
-  .dark input[type="text"],
-  .dark input[type="email"],
-  .dark input[type="password"],
-  .dark textarea {
-    background-color: hsl(253, 40%, 12%);
-    border: 1px solid hsl(253, 36%, 30%);
-    color: hsl(252, 100%, 96%);
-  }
-  
-  .dark input[type="text"]:focus,
-  .dark input[type="email"]:focus,
-  .dark input[type="password"]:focus,
-  .dark textarea:focus {
+  textarea:focus {
     border-color: var(--ring);
     box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
     -webkit-box-shadow: 0 0 0 2px rgba(166, 89, 255, 0.2);
@@ -133,53 +119,37 @@
   
   /* Light mode text colors */
   
-  /* Dark mode text contrast */
-  .dark .text-cosmic-400 {
+  /* Dark mode text contrast (default) */
+  .text-cosmic-400 {
     color: hsl(252, 50%, 75%);
   }
   
-  .dark .text-cosmic-300 {
+  .text-cosmic-300 {
     color: hsl(252, 60%, 82%);
   }
   
-  .dark .text-cosmic-200 {
+  .text-cosmic-200 {
     color: hsl(252, 70%, 88%);
   }
   
-  .dark .text-cosmic-100 {
+  .text-cosmic-100 {
     color: hsl(252, 100%, 96%);
   }
   
-  /* Light mode navigation */
+  /* Dark mode navigation (default) */
   nav {
-    background: rgba(255, 255, 255, 0.90);
-    background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid hsl(258, 20%, 90%);
-  }
-  
-  /* Dark mode navigation */
-  .dark nav {
     background: rgba(13, 9, 48, 0.95);
     background: -webkit-linear-gradient(rgba(13, 9, 48, 0.95), rgba(13, 9, 48, 0.95));
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid hsl(253, 36%, 25%);
+    border-bottom: 1px solid hsl(220, 13%, 20%);
   }
   
-  /* Light mode badge styling */
+  /* Dark mode badge styling (default) */
   .badge {
-    background-color: hsl(258, 20%, 92%);
-    color: hsl(258, 30%, 25%);
-    border: 1px solid hsl(258, 20%, 80%);
-  }
-  
-  /* Dark mode badge contrast */
-  .dark .badge {
-    background-color: hsl(253, 46%, 20%);
-    color: hsl(252, 100%, 96%);
-    border: 1px solid hsl(253, 36%, 25%);
+    background-color: hsl(220, 13%, 18%);
+    color: hsl(210, 40%, 98%);
+    border: 1px solid hsl(220, 13%, 20%);
   }
   
   .cosmic-gradient {
