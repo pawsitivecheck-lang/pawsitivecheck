@@ -85,7 +85,7 @@ export default function VetFinder() {
         setLocationError("");
         toast({
           title: "Location Found",
-          description: "Found your cosmic coordinates for vet search",
+          description: "Found your location for veterinarian search",
         });
       },
       (error) => {
@@ -164,15 +164,15 @@ export default function VetFinder() {
       setVetPractices(data.practices || []);
       setVisibleResults(6); // Reset to show first 6 results
       toast({
-        title: "Cosmic Healers Found!",
-        description: `Found ${data.practices?.length || 0} mystical veterinary guardians near you`,
+        title: "Veterinarians Found!",
+        description: `Found ${data.practices?.length || 0} veterinary professionals near you`,
       });
     },
     onError: (error) => {
       setVetPractices([]);
       toast({
         title: "Search Failed",
-        description: "Unable to locate cosmic veterinary guardians. Please try a different location or check your internet connection.",
+        description: "Unable to locate veterinarians. Please try a different location or check your internet connection.",
         variant: "destructive",
       });
     },
@@ -289,9 +289,9 @@ export default function VetFinder() {
     return (
       <div className="space-y-1">
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-cosmic-200 font-medium">Real-Time Hours</h4>
+          <h4 className="text-foreground font-medium">Real-Time Hours</h4>
           {hoursLastUpdated && (
-            <span className="text-xs text-cosmic-400" title={`Hours last updated: ${new Date(hoursLastUpdated).toLocaleString()}`}>
+            <span className="text-xs text-muted-foreground" title={`Hours last updated: ${new Date(hoursLastUpdated).toLocaleString()}`}>
               {formatLastUpdated(hoursLastUpdated)}
             </span>
           )}
@@ -305,15 +305,15 @@ export default function VetFinder() {
               key={day}
               className={`flex justify-between items-center text-sm px-2 py-1 rounded ${
                 isToday 
-                  ? 'bg-starlight-500/10 text-starlight-400 font-medium border border-starlight-500/20' 
-                  : 'text-cosmic-300'
+                  ? 'bg-blue-500/10 text-blue-400 font-medium border border-blue-500/20' 
+                  : 'text-muted-foreground'
               }`}
               data-testid={`hours-${vetId}-${day.toLowerCase()}`}
             >
               <span className="font-medium">
                 {isToday ? `${day} (Today)` : day}
               </span>
-              <span className={`${isToday ? 'text-starlight-300' : 'text-cosmic-400'} flex items-center gap-1`}>
+              <span className={`${isToday ? 'text-blue-300' : 'text-muted-foreground'} flex items-center gap-1`}>
                 {isToday && typeof isOpen === 'boolean' && (
                   <span className={`inline-block w-2 h-2 rounded-full ${isOpen ? 'bg-green-400' : 'bg-red-400'}`} />
                 )}
@@ -341,7 +341,7 @@ export default function VetFinder() {
       <div className="space-y-4">
         {animalTypes.length > 0 && (
           <div>
-            <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+            <h4 className="text-foreground font-medium mb-2 flex items-center gap-2">
               🐾 Animals We Serve
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -360,7 +360,7 @@ export default function VetFinder() {
         
         {serviceTypes.length > 0 && (
           <div>
-            <h4 className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+            <h4 className="text-foreground font-medium mb-2 flex items-center gap-2">
               ⚕️ Services Offered
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -368,7 +368,7 @@ export default function VetFinder() {
                 <Badge
                   key={index}
                   variant="outline"
-                  className="border-cosmic-600 text-cosmic-300"
+                  className="border-border text-muted-foreground"
                   data-testid={`service-type-${vetId}-${index}`}
                 >
                   {service}
@@ -386,7 +386,7 @@ export default function VetFinder() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-muted border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="vet-finder-header" />
         </div>
@@ -396,34 +396,34 @@ export default function VetFinder() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <div className="cosmic-card p-8 text-center">
-              <h1 className="font-mystical text-4xl md:text-5xl font-bold text-starlight-500 mb-4" data-testid="text-vet-finder-title">
-                Cosmic Healer Locator
+            <div className="bg-card border-border p-8 text-center">
+              <h1 className="font-bold text-4xl md:text-5xl font-bold text-blue-500 mb-4" data-testid="text-vet-finder-title">
+                Veterinarian Finder
               </h1>
-              <p className="text-cosmic-300 text-lg" data-testid="text-vet-finder-subtitle">
-                Find mystical veterinary guardians in your realm
+              <p className="text-muted-foreground text-lg" data-testid="text-vet-finder-subtitle">
+                Find veterinary professionals in your area
               </p>
             </div>
           </div>
 
           {/* Search Controls */}
           <div className="mb-8">
-            <Card className="cosmic-card" data-testid="card-search-controls">
+            <Card className="bg-card border-border" data-testid="card-search-controls">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-starlight-400">
+                <CardTitle className="flex items-center gap-2 text-blue-400">
                   <Stethoscope className="h-5 w-5" />
-                  Locate Cosmic Healers
+                  Find Veterinarians
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Location-based Search */}
                 <div>
-                  <h3 className="text-cosmic-200 font-medium mb-3">Use Current Location</h3>
+                  <h3 className="text-foreground font-medium mb-3">Use Current Location</h3>
                   <div className="flex gap-3">
                     <Button
                       onClick={getCurrentLocation}
                       variant="outline"
-                      className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10"
                       data-testid="button-get-location"
                     >
                       <Navigation className="mr-2 h-4 w-4" />
@@ -434,7 +434,7 @@ export default function VetFinder() {
                       <Button
                         onClick={handleSearch}
                         disabled={searchVetsMutation.isPending}
-                        className="mystical-button"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
                         data-testid="button-search-nearby"
                       >
                         {searchVetsMutation.isPending ? (
@@ -442,19 +442,19 @@ export default function VetFinder() {
                         ) : (
                           <Heart className="mr-2 h-4 w-4" />
                         )}
-                        Find Nearby Healers
+                        Find Nearby Veterinarians
                       </Button>
                     )}
                   </div>
                   
                   {userLocation && (
-                    <p className="text-cosmic-400 text-sm mt-2">
+                    <p className="text-muted-foreground text-sm mt-2">
                       ✨ GPS coordinates acquired: {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
                     </p>
                   )}
 
                   {manualLocation && (
-                    <div className="text-cosmic-400 text-sm mt-2 flex items-center justify-between">
+                    <div className="text-muted-foreground text-sm mt-2 flex items-center justify-between">
                       <span>📍 Manual location set: {manualLocation.lat.toFixed(4)}, {manualLocation.lng.toFixed(4)}</span>
                       <Button 
                         size="sm" 
@@ -472,7 +472,7 @@ export default function VetFinder() {
                   )}
 
                   {isGeocodingLocation && (
-                    <p className="text-starlight-400 text-sm mt-2 flex items-center">
+                    <p className="text-blue-400 text-sm mt-2 flex items-center">
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Finding location coordinates...
                     </p>
@@ -480,31 +480,31 @@ export default function VetFinder() {
                 </div>
 
                 {/* Search Radius */}
-                <div className="pt-4 border-t border-cosmic-700">
-                  <h3 className="text-cosmic-200 font-medium mb-3">Search Distance</h3>
+                <div className="pt-4 border-t border-border">
+                  <h3 className="text-foreground font-medium mb-3">Search Distance</h3>
                   <div className="flex items-center gap-4">
                     <Select value={searchRadius.toString()} onValueChange={(value) => setSearchRadius(Number(value))}>
-                      <SelectTrigger className="w-48 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100" data-testid="select-radius">
+                      <SelectTrigger className="w-48 bg-input border-border text-foreground" data-testid="select-radius">
                         <SelectValue placeholder="Search radius" />
                       </SelectTrigger>
-                      <SelectContent className="bg-cosmic-900 border-cosmic-600">
-                        <SelectItem value="5" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">5 miles</SelectItem>
-                        <SelectItem value="10" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">10 miles</SelectItem>
-                        <SelectItem value="15" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">15 miles</SelectItem>
-                        <SelectItem value="25" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">25 miles</SelectItem>
-                        <SelectItem value="50" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">50 miles</SelectItem>
-                        <SelectItem value="100" className="text-cosmic-100 hover:bg-cosmic-700 focus:bg-cosmic-700">100 miles</SelectItem>
+                      <SelectContent className="bg-popover border-border">
+                        <SelectItem value="5" className="text-foreground hover:bg-accent focus:bg-accent">5 miles</SelectItem>
+                        <SelectItem value="10" className="text-foreground hover:bg-accent focus:bg-accent">10 miles</SelectItem>
+                        <SelectItem value="15" className="text-foreground hover:bg-accent focus:bg-accent">15 miles</SelectItem>
+                        <SelectItem value="25" className="text-foreground hover:bg-accent focus:bg-accent">25 miles</SelectItem>
+                        <SelectItem value="50" className="text-foreground hover:bg-accent focus:bg-accent">50 miles</SelectItem>
+                        <SelectItem value="100" className="text-foreground hover:bg-accent focus:bg-accent">100 miles</SelectItem>
                       </SelectContent>
                     </Select>
-                    <span className="text-cosmic-400 text-sm">
+                    <span className="text-muted-foreground text-sm">
                       Within {searchRadius} miles of your location
                     </span>
                   </div>
                 </div>
 
                 {/* Manual Search */}
-                <div className="pt-4 border-t border-cosmic-700">
-                  <h3 className="text-cosmic-200 font-medium mb-3">Search by Location & Services</h3>
+                <div className="pt-4 border-t border-border">
+                  <h3 className="text-foreground font-medium mb-3">Search by Location & Services</h3>
                   <div className="space-y-3">
                     <div className="flex gap-3">
                       <Input
@@ -512,7 +512,7 @@ export default function VetFinder() {
                         placeholder="Enter location (e.g., Lansing, MI)..."
                         value={locationQuery}
                         onChange={(e) => setLocationQuery(e.target.value)}
-                        className="flex-1 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100"
+                        className="flex-1 bg-input border-border text-foreground"
                         data-testid="input-location-query"
                       />
                       <Input
@@ -520,14 +520,14 @@ export default function VetFinder() {
                         placeholder="Services (e.g., emergency, dental)..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="flex-1 bg-cosmic-900/50 border-cosmic-600 text-cosmic-100"
+                        className="flex-1 bg-input border-border text-foreground"
                         data-testid="input-service-query"
                       />
                     </div>
                     <Button
                       onClick={handleSearch}
                       disabled={searchVetsMutation.isPending}
-                      className="mystical-button w-full"
+                      className="bg-blue-600 hover:bg-blue-700 text-white w-full"
                       data-testid="button-combined-search"
                     >
                       {searchVetsMutation.isPending ? (
@@ -535,7 +535,7 @@ export default function VetFinder() {
                       ) : (
                         <Search className="mr-2 h-4 w-4" />
                       )}
-                      Search Cosmic Healers
+                      Search Veterinarians
                     </Button>
                   </div>
                 </div>
@@ -547,20 +547,20 @@ export default function VetFinder() {
           {vetPractices.length > 0 && (
             <div className="space-y-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-mystical text-starlight-400" data-testid="text-results-header">
-                  Mystical Veterinary Guardians
+                <h2 className="text-2xl font-bold text-blue-400" data-testid="text-results-header">
+                  Veterinary Professionals
                 </h2>
-                <div className="text-cosmic-300 text-sm">
+                <div className="text-muted-foreground text-sm">
                   Showing {Math.min(visibleResults, (vetPractices || []).length)} of {(vetPractices || []).length} results
                 </div>
               </div>
               
               {/* Interactive Map */}
-              <Card className="cosmic-card" data-testid="card-vet-map">
+              <Card className="bg-card border-border" data-testid="card-vet-map">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-starlight-400">
+                  <CardTitle className="flex items-center gap-2 text-blue-400">
                     <MapPin className="h-5 w-5" />
-                    Cosmic Healer Map
+                    Veterinarian Locations
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -584,23 +584,23 @@ export default function VetFinder() {
               
               <div className="grid gap-6">
                 {(vetPractices || []).slice(0, visibleResults).map((vet) => (
-                  <Card key={vet.id} className="cosmic-card" data-testid={`vet-card-${vet.id}`}>
+                  <Card key={vet.id} className="bg-card border-border" data-testid={`vet-card-${vet.id}`}>
                     <CardContent className="p-6">
                       <div className="grid md:grid-cols-3 gap-6">
                         {/* Main Info */}
                         <div className="md:col-span-2">
                           <div className="flex items-start justify-between mb-4">
                             <div>
-                              <h3 className="text-xl font-semibold text-starlight-400 mb-2" data-testid={`vet-name-${vet.id}`}>
+                              <h3 className="text-xl font-semibold text-blue-400 mb-2" data-testid={`vet-name-${vet.id}`}>
                                 {vet.name}
                               </h3>
-                              <div className="flex items-center gap-2 text-cosmic-300 mb-2">
+                              <div className="flex items-center gap-2 text-muted-foreground mb-2">
                                 <MapPin className="h-4 w-4" />
                                 <span className="text-sm" data-testid={`vet-address-${vet.id}`}>
                                   {vet.address}, {vet.city}, {vet.state} {vet.zipCode}
                                 </span>
                                 {vet.distance && (
-                                  <Badge variant="secondary" className="bg-cosmic-700 text-cosmic-200">
+                                  <Badge variant="secondary" className="bg-cosmic-700 text-foreground">
                                     {formatDistance(vet.distance)}
                                   </Badge>
                                 )}
@@ -609,20 +609,20 @@ export default function VetFinder() {
                             
                             {vet.rating && (
                               <div className="flex items-center gap-1">
-                                <Star className="h-4 w-4 text-starlight-500 fill-current" />
-                                <span className="text-starlight-400 font-medium">{vet.rating}</span>
-                                <span className="text-cosmic-400 text-sm">({vet.reviewCount})</span>
+                                <Star className="h-4 w-4 text-blue-500 fill-current" />
+                                <span className="text-blue-400 font-medium">{vet.rating}</span>
+                                <span className="text-muted-foreground text-sm">({vet.reviewCount})</span>
                               </div>
                             )}
                           </div>
 
                           {/* Contact Info */}
                           <div className="grid gap-4 mb-6">
-                            <div className="flex items-center gap-2 text-cosmic-300">
+                            <div className="flex items-center gap-2 text-muted-foreground">
                               <Phone className="h-4 w-4" />
                               <a 
                                 href="tel:15174324700"
-                                className="hover:text-starlight-400 transition-colors"
+                                className="hover:text-blue-400 transition-colors"
                                 data-testid={`vet-phone-${vet.id}`}
                               >
                                 (517) 432-4700
@@ -630,13 +630,13 @@ export default function VetFinder() {
                             </div>
                             
                             {vet.website && (
-                              <div className="flex items-center gap-2 text-cosmic-300">
+                              <div className="flex items-center gap-2 text-muted-foreground">
                                 <Globe className="h-4 w-4" />
                                 <a 
                                   href={vet.website}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="hover:text-starlight-400 transition-colors text-sm"
+                                  className="hover:text-blue-400 transition-colors text-sm"
                                   data-testid={`vet-website-${vet.id}`}
                                 >
                                   Visit Website
@@ -668,16 +668,16 @@ export default function VetFinder() {
                         {/* Action Panel */}
                         <div className="space-y-4">
                           {/* Current Status */}
-                          <div className="bg-cosmic-800/30 rounded-lg p-4 border border-cosmic-700">
-                            <div className="text-cosmic-200 font-medium mb-2 flex items-center gap-2">
+                          <div className="bg-cosmic-800/30 rounded-lg p-4 border border-border">
+                            <div className="text-foreground font-medium mb-2 flex items-center gap-2">
                               <Clock className="h-4 w-4" />
                               Current Status
                             </div>
-                            <div className="text-starlight-400 font-medium">
+                            <div className="text-blue-400 font-medium">
                               {formatHours(vet.hours, vet.isOpen)}
                             </div>
                             {vet.hoursLastUpdated && (
-                              <div className="text-xs text-cosmic-400 mt-1">
+                              <div className="text-xs text-muted-foreground mt-1">
                                 Hours updated: {new Date(vet.hoursLastUpdated).toLocaleTimeString([], { 
                                   hour: '2-digit', 
                                   minute: '2-digit' 
@@ -695,7 +695,7 @@ export default function VetFinder() {
                           <div className="space-y-2">
                             <Button
                               onClick={() => window.open(`tel:${vet.phone}`)}
-                              className="w-full mystical-button"
+                              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                               data-testid={`button-call-${vet.id}`}
                             >
                               <Phone className="mr-2 h-4 w-4" />
@@ -705,7 +705,7 @@ export default function VetFinder() {
                             <Button
                               onClick={() => window.open(`https://maps.google.com?q=${encodeURIComponent(vet.address + ', ' + vet.city + ', ' + vet.state)}`)}
                               variant="outline"
-                              className="w-full border-cosmic-600 text-cosmic-300 hover:bg-cosmic-600/10"
+                              className="w-full border-border text-muted-foreground hover:bg-cosmic-600/10"
                               data-testid={`button-directions-${vet.id}`}
                             >
                               <MapPin className="mr-2 h-4 w-4" />
@@ -725,7 +725,7 @@ export default function VetFinder() {
                       onClick={handleLoadMore}
                       variant="outline"
                       size="lg"
-                      className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10 px-8"
+                      className="border-blue-500 text-blue-500 hover:bg-blue-500/10 px-8"
                       data-testid="button-load-more-vets"
                     >
                       Load More Healers ({vetPractices.length - visibleResults} remaining)
@@ -738,16 +738,16 @@ export default function VetFinder() {
 
           {/* No Results */}
           {searchVetsMutation.data && (vetPractices || []).length === 0 && (
-            <Card className="cosmic-card text-center p-8" data-testid="card-no-results">
+            <Card className="bg-card border-border text-center p-8" data-testid="card-no-results">
               <Building2 className="mx-auto h-12 w-12 text-cosmic-500 mb-4" />
-              <h3 className="text-xl font-mystical text-cosmic-300 mb-2">No Cosmic Healers Found</h3>
-              <p className="text-cosmic-400 mb-4">
+              <h3 className="text-xl font-bold text-muted-foreground mb-2">No Cosmic Healers Found</h3>
+              <p className="text-muted-foreground mb-4">
                 The mystical search found no veterinary guardians in this realm. Try expanding your search area or checking a different location.
               </p>
               <Button
                 onClick={() => setVetPractices([])}
                 variant="outline"
-                className="border-starlight-500 text-starlight-500 hover:bg-starlight-500/10"
+                className="border-blue-500 text-blue-500 hover:bg-blue-500/10"
                 data-testid="button-try-again"
               >
                 Try Another Search
@@ -757,27 +757,27 @@ export default function VetFinder() {
 
           {/* Welcome State */}
           {(vetPractices || []).length === 0 && !searchVetsMutation.data && (
-            <Card className="cosmic-card text-center p-8" data-testid="card-welcome">
-              <Heart className="mx-auto h-16 w-16 text-starlight-500 mb-4" />
-              <h3 className="text-2xl font-mystical text-starlight-400 mb-4">Find Your Pet's Guardian</h3>
-              <p className="text-cosmic-300 max-w-2xl mx-auto mb-6">
+            <Card className="bg-card border-border text-center p-8" data-testid="card-welcome">
+              <Heart className="mx-auto h-16 w-16 text-blue-500 mb-4" />
+              <h3 className="text-2xl font-bold text-blue-400 mb-4">Find Your Veterinarian</h3>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
                 Use the mystical locator above to find trusted veterinary healers near you. 
                 Get their cosmic coordinates, divine their services, and connect with the guardians 
                 who will protect your beloved companion's well-being.
               </p>
               <div className="grid sm:grid-cols-2 gap-6 max-w-lg mx-auto text-left">
                 <div className="flex items-start gap-3">
-                  <Navigation className="h-5 w-5 text-starlight-500 mt-0.5" />
+                  <Navigation className="h-5 w-5 text-blue-500 mt-0.5" />
                   <div>
-                    <h4 className="text-cosmic-200 font-medium">Location Search</h4>
-                    <p className="text-cosmic-400 text-sm">Find vets using your current location</p>
+                    <h4 className="text-foreground font-medium">Location Search</h4>
+                    <p className="text-muted-foreground text-sm">Find vets using your current location</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Search className="h-5 w-5 text-starlight-500 mt-0.5" />
+                  <Search className="h-5 w-5 text-blue-500 mt-0.5" />
                   <div>
-                    <h4 className="text-cosmic-200 font-medium">Manual Search</h4>
-                    <p className="text-cosmic-400 text-sm">Search by city, zip, or address</p>
+                    <h4 className="text-foreground font-medium">Manual Search</h4>
+                    <p className="text-muted-foreground text-sm">Search by city, zip, or address</p>
                   </div>
                 </div>
               </div>
