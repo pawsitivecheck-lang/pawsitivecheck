@@ -222,6 +222,9 @@ app.get('/health/ready', async (req, res) => {
 });
 
 (async () => {
+  // Import and start the background scheduler
+  const { backgroundScheduler } = await import('./scheduler');
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -252,5 +255,9 @@ app.get('/health/ready', async (req, res) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Start the background scheduler for automated sync tasks
+    backgroundScheduler.start();
+    log(`background scheduler started - checking schedules every minute`);
   });
 })();
