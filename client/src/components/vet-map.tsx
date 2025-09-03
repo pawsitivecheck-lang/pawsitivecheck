@@ -73,21 +73,47 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
 
   // Load Google Maps script
   useEffect(() => {
-    if (scriptLoadedRef.current || window.google) {
+    // Check if Google Maps is already loaded
+    if (window.google && window.google.maps) {
       scriptLoadedRef.current = true;
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        setScriptLoaded(true);
-      }, 100);
+      setScriptLoaded(true);
       return;
     }
 
-    // Get API key from backend and load script
+    // Check if script is already being loaded
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+    if (existingScript) {
+      // Script exists, wait for it to load
+      if (scriptLoadedRef.current) {
+        setScriptLoaded(true);
+        return;
+      }
+      
+      const checkLoaded = setInterval(() => {
+        if (window.google && window.google.maps) {
+          scriptLoadedRef.current = true;
+          setScriptLoaded(true);
+          clearInterval(checkLoaded);
+        }
+      }, 100);
+      
+      setTimeout(() => {
+        clearInterval(checkLoaded);
+        if (!scriptLoadedRef.current) {
+          setMapError('Google Maps failed to load');
+          setIsLoading(false);
+        }
+      }, 10000);
+      
+      return;
+    }
+
+    // Load the script for the first time
     fetch('/api/google-maps-key')
       .then(response => response.json())
       .then(data => {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places,marker`;
         script.async = true;
         script.defer = true;
         
@@ -107,13 +133,6 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
         setMapError('Failed to load Google Maps API key');
         setIsLoading(false);
       });
-
-    return () => {
-      const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
-      if (existingScript && existingScript.parentNode) {
-        existingScript.parentNode.removeChild(existingScript);
-      }
-    };
   }, []);
 
   // Initialize map when both script and DOM are ready
@@ -203,12 +222,33 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
           strokeWeight: 2,
         };
 
-        const marker = new window.google.maps.Marker({
-          position: position,
-          map: mapInstanceRef.current,
-          icon: markerIcon,
-          title: practice.name,
-        });
+        // Use AdvancedMarkerElement if available, fallback to Marker
+        let marker;
+        if (window.google.maps.marker && window.google.maps.marker.AdvancedMarkerElement) {
+          // Create a custom HTML element for the marker
+          const markerElement = document.createElement('div');
+          markerElement.style.width = `${practice.emergencyServices ? 24 : 16}px`;
+          markerElement.style.height = `${practice.emergencyServices ? 24 : 16}px`;
+          markerElement.style.borderRadius = '50%';
+          markerElement.style.backgroundColor = practice.emergencyServices ? '#dc2626' : '#3b82f6';
+          markerElement.style.border = '2px solid #ffffff';
+          markerElement.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+          
+          marker = new window.google.maps.marker.AdvancedMarkerElement({
+            position: position,
+            map: mapInstanceRef.current,
+            content: markerElement,
+            title: practice.name,
+          });
+        } else {
+          // Fallback to old Marker for compatibility
+          marker = new window.google.maps.Marker({
+            position: position,
+            map: mapInstanceRef.current,
+            icon: markerIcon,
+            title: practice.name,
+          });
+        }
 
         // Create info window content
         const infoContent = `
