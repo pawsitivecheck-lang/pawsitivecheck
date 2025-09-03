@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, ChevronDown, LogOut, Tractor, Wheat } from "lucide-react";
+import { MAIN_NAVIGATION } from "@shared/navigation";
 import HeaderSearch from "@/components/header-search";
 import ThemeToggle from "@/components/theme-toggle";
 import DNTIndicator from "@/components/dnt-indicator";
@@ -21,13 +22,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Recall Alerts', href: '/recalls', icon: Shield },
-    { name: 'Vet Locator', href: '/vet-finder', icon: Heart },
-    { name: 'Community', href: '/community', icon: Users },
-    { name: 'Pet Profiles', href: '/pets', icon: PawPrint },
-    { name: 'Livestock Management', href: '/livestock', icon: Tractor },
-  ];
+  const navigation = MAIN_NAVIGATION;
 
   const isActivePage = (href: string) => location === href;
 

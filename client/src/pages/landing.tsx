@@ -13,9 +13,10 @@ import DNTIndicator from "@/components/dnt-indicator";
 import Footer from "@/components/footer";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database } from "lucide-react";
+import { Search, Shield, Users, Heart, Camera, BarChart3, AlertTriangle, Star, Menu, X, PawPrint, Crown, Eye, ChartLine, Ban, WandSparkles, TriangleAlert, UserCheck, Database, Tractor } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
+import { MAIN_NAVIGATION, getConditionalLivestockLink } from "@shared/navigation";
 import { useMobile } from "@/hooks/useMobile";
 import MobileAuth from "@/components/mobile-auth";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -139,46 +140,45 @@ export default function Landing() {
         {isMobileMenuOpen && (
           <div className="bg-card border-b border-border shadow-lg">
             
-            {/* Navigation Links */}
+            {/* Navigation Links - Synced with Navbar */}
             <div className="px-4 py-4 space-y-2">
               
-              <button 
-                onClick={() => scrollToSection('database')}
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
-                data-testid="mobile-nav-database"
-              >
-                <Database className="mr-3 h-5 w-5" />
-                Safety Database
-              </button>
-              
-              <Link 
-                to="/vet-finder" 
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
-                data-testid="mobile-nav-vets"
-              >
-                <Heart className="mr-3 h-5 w-5" />
-                Veterinary Network
-              </Link>
-              <button 
-                onClick={() => scrollToSection('community')}
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px] w-full text-left"
-                data-testid="mobile-nav-community"
-              >
-                <Users className="mr-3 h-5 w-5" />
-                Community Reviews
-              </button>
-              
-              {/* Livestock Management */}
-              <Link 
-                to={isAuthenticated ? "/livestock" : "/livestock-preview"}
-                className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
-                onClick={() => setIsMobileMenuOpen(false)}
-                data-testid={isAuthenticated ? "mobile-nav-livestock" : "mobile-nav-livestock-preview"}
-              >
-                <BarChart3 className="mr-3 h-5 w-5" />
-                {isAuthenticated ? "Livestock Management" : "Livestock Management Preview"}
-              </Link>
+              {MAIN_NAVIGATION.map((item) => {
+                const Icon = item.icon;
+                
+                // Special handling for livestock management based on authentication
+                if (item.href === '/livestock') {
+                  const livestockItem = getConditionalLivestockLink(isAuthenticated);
+                  const LivestockIcon = livestockItem.icon;
+                  
+                  return (
+                    <Link 
+                      key={item.href}
+                      to={livestockItem.href}
+                      className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      data-testid={isAuthenticated ? "mobile-nav-livestock" : "mobile-nav-livestock-preview"}
+                    >
+                      <LivestockIcon className="mr-3 h-5 w-5" />
+                      {livestockItem.name}
+                    </Link>
+                  );
+                }
+                
+                // Regular navigation items
+                return (
+                  <Link 
+                    key={item.href}
+                    to={item.href}
+                    className="flex items-center py-3 px-3 text-foreground hover:text-primary hover:bg-muted transition-colors font-medium rounded-lg min-h-[44px]"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    data-testid={`mobile-nav-${item.href.slice(1)}`}
+                  >
+                    <Icon className="mr-3 h-5 w-5" />
+                    {item.name}
+                  </Link>
+                );
+              })}
               
               {/* Theme Toggle in Mobile */}
               <div className="flex items-center py-3 px-3">
