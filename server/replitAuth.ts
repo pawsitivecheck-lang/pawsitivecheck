@@ -139,8 +139,26 @@ export async function setupAuth(app: Express) {
     };
 
     // Set up authentication strategies for each domain
-    for (const domain of process.env
-      .REPLIT_DOMAINS!.split(",")) {
+    const domains = process.env.REPLIT_DOMAINS!.split(",");
+    
+    // Also add common Replit domain patterns if they're not already included
+    const commonReplitPatterns = [
+      `${process.env.REPL_ID}.id.replit.app`,
+      `${process.env.REPL_ID}.id.replit.dev`,
+      `${process.env.REPL_ID}.replit.app`,
+      `${process.env.REPL_ID}.replit.dev`
+    ];
+    
+    const allDomains = [...domains];
+    
+    // Add patterns that aren't already in the list
+    commonReplitPatterns.forEach(pattern => {
+      if (!allDomains.includes(pattern)) {
+        allDomains.push(pattern);
+      }
+    });
+    
+    for (const domain of allDomains) {
       const strategy = new Strategy(
         {
           name: `replitauth:${domain}`,
@@ -265,14 +283,64 @@ export async function setupAuth(app: Express) {
         (req.session as any).redirectAfterLogin = req.query.redirect;
       }
       
-      passport.authenticate(`replitauth:${req.hostname}`, {
+      // Find matching domain for this request
+      const domains = process.env.REPLIT_DOMAINS!.split(",");
+      const requestHost = req.hostname;
+      
+      // Try exact match first, then fallback to pattern matching for Replit domains
+      let targetDomain = domains.find(domain => domain === requestHost);
+      
+      if (!targetDomain) {
+        // For Replit domains, try to match patterns like *.replit.dev, *.replit.app, etc.
+        targetDomain = domains.find(domain => {
+          // Extract base domain pattern (everything after first dash for UUID-based domains)
+          if (domain.includes('.replit.')) {
+            const baseDomain = domain.split('.').slice(-2).join('.');
+            return requestHost.includes(baseDomain);
+          }
+          return false;
+        });
+      }
+      
+      // Fallback to first domain if no match found
+      if (!targetDomain) {
+        console.warn(`No exact domain match found for ${requestHost}, using fallback: ${domains[0]}`);
+        targetDomain = domains[0];
+      }
+      
+      console.log(`Authenticating with domain: ${targetDomain} for request host: ${requestHost}`);
+      
+      passport.authenticate(`replitauth:${targetDomain}`, {
         prompt: "login consent",
         scope: ["openid", "email", "profile", "offline_access"],
       })(req, res, next);
     });
 
     app.get("/api/callback", (req, res, next) => {
-      passport.authenticate(`replitauth:${req.hostname}`, {
+      // Find matching domain for this request (same logic as login)
+      const domains = process.env.REPLIT_DOMAINS!.split(",");
+      const requestHost = req.hostname;
+      
+      let targetDomain = domains.find(domain => domain === requestHost);
+      
+      if (!targetDomain) {
+        targetDomain = domains.find(domain => {
+          if (domain.includes('.replit.')) {
+            const baseDomain = domain.split('.').slice(-2).join('.');
+            return requestHost.includes(baseDomain);
+          }
+          return false;
+        });
+      }
+      
+      if (!targetDomain) {
+        console.warn(`No exact domain match found for ${requestHost}, using fallback: ${domains[0]}`);
+        targetDomain = domains[0];
+      }
+      
+      console.log(`Callback authenticating with domain: ${targetDomain} for request host: ${requestHost}`);
+      
+      passport.authenticate(`replitauth:${targetDomain}`, {
         failureRedirect: "/api/login",
       })(req, res, (err: any) => {
         if (err) {
