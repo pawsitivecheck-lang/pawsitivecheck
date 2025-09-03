@@ -74,11 +74,15 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background w-full overflow-x-hidden">
       {/* Safety Alert Banner */}
-      <div className="bg-red-600 text-white py-3 px-4 text-center text-sm md:text-base font-medium">
+      <Link 
+        to="/recalls" 
+        className="block bg-red-600 text-white py-3 px-4 text-center text-sm md:text-base font-medium hover:bg-red-700 transition-colors cursor-pointer"
+        data-testid="banner-safety-alert"
+      >
         <span className="block sm:inline">🚨 ALERT: New product recalls updated</span>
         <span className="hidden sm:inline"> • </span>
         <span className="block sm:inline">Check your pet's products now →</span>
-      </div>
+      </Link>
 
       {/* Top Leaderboard Ad */}
       <div className="bg-muted border-b border-border py-3">
