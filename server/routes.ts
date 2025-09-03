@@ -26,6 +26,7 @@ import { FamilyFarmAndHomeScraper } from "./services/familyfarmandhome-scraper";
 import { KrogerScraper } from "./services/kroger-scraper";
 import { MeijerScraper } from "./services/meijer-scraper";
 import { TargetScraper } from "./services/target-scraper";
+import { CostcoScraper } from "./services/costco-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
 
@@ -3035,6 +3036,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error('api', 'Error during Target scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
       res.status(500).json({ message: "Failed to scrape Target products" });
+    }
+  });
+
+  // Costco product scraping endpoint
+  app.post('/api/admin/sync/costco-products', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('api', 'Starting Costco pet product scraping', { userId });
+
+      const { maxPages = 3 } = req.body;
+      const scraper = new CostcoScraper();
+      
+      // Scrape products from Costco
+      const scrapingResult = await scraper.scrapePetProducts(maxPages);
+      
+      if (scrapingResult.errors.length > 0) {
+        logger.warn('api', 'Costco scraping completed with errors', { 
+          errorCount: scrapingResult.errors.length, 
+          errors: scrapingResult.errors 
+        });
+      }
+
+      // Convert scraped products to database format
+      const productsToInsert = scrapingResult.products
+        .map(product => scraper.convertToInsertProduct(product))
+        .filter(product => product.name && product.name.length > 0);
+
+      let insertedCount = 0;
+      let skippedCount = 0;
+
+      // Check for duplicates and insert new products
+      for (const product of productsToInsert) {
+        try {
+          const existingProducts = await storage.getProducts(1000, 0, `${product.name} ${product.brand}`);
+          const exists = existingProducts.some(p => 
+            p.name.toLowerCase() === product.name.toLowerCase() && 
+            p.brand.toLowerCase() === product.brand.toLowerCase()
+          );
+          
+          if (!exists) {
+            await storage.createProduct(product);
+            insertedCount++;
+          } else {
+            skippedCount++;
+          }
+        } catch (err) {
+          logger.error('api', `Failed to insert Costco product: ${product.name}`, { error: err instanceof Error ? err.message : 'Unknown error' });
+        }
+      }
+
+      logger.info('api', 'Costco scraping completed', { 
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors.length
+      });
+
+      res.json({
+        message: `Successfully scraped ${scrapingResult.products.length} products from Costco. ${insertedCount} new products added, ${skippedCount} duplicates skipped.`,
+        scraped: scrapingResult.products.length,
+        inserted: insertedCount,
+        skipped: skippedCount,
+        errors: scrapingResult.errors,
+        source: "costco.com"
+      });
+
+    } catch (error) {
+      logger.error('api', 'Error during Costco scraping', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: "Failed to scrape Costco products" });
     }
   });
 
