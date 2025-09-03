@@ -1,0 +1,311 @@
+index-DVqSJnfx.js:338  Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ index-DVqSJnfx.js:338
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+(anonymous) @ index-DVqSJnfx.js:41
+index-DVqSJnfx.js:357 Current camera permission state: granted
+index-DVqSJnfx.js:357 ChromeOS detected: false
+index-DVqSJnfx.js:357  Camera permission error: OverconstrainedError
+sA @ index-DVqSJnfx.js:357
+await in sA
+(anonymous) @ index-DVqSJnfx.js:361
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+(anonymous) @ index-DVqSJnfx.js:41
+index-DVqSJnfx.js:49 Toast: Camera Access Granted
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26
+index-DVqSJnfx.js:357  Error initializing scanner: 'facingMode' should be string or object with exact as key.
+(anonymous) @ index-DVqSJnfx.js:357
+setTimeout
+(anonymous) @ index-DVqSJnfx.js:361
+fu @ index-DVqSJnfx.js:41
+_a @ index-DVqSJnfx.js:41
+vm @ index-DVqSJnfx.js:41
+Ai @ index-DVqSJnfx.js:39
+Xw @ index-DVqSJnfx.js:41
+jo @ index-DVqSJnfx.js:41
+wm @ index-DVqSJnfx.js:41
+G @ index-DVqSJnfx.js:26
+we @ index-DVqSJnfx.js:26

@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { useMobile } from "@/hooks/useMobile";
 import MobileAuth from "@/components/mobile-auth";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function Landing() {
   const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
@@ -263,6 +263,10 @@ export default function Landing() {
                           </button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Sign In to PawsitiveCheck</DialogTitle>
+                            <DialogDescription>Access your account to track products and save analysis results</DialogDescription>
+                          </DialogHeader>
                           <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
                         </DialogContent>
                       </Dialog>
@@ -290,6 +294,10 @@ export default function Landing() {
                           </button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Create Account</DialogTitle>
+                            <DialogDescription>Join PawsitiveCheck to save your product analysis and access personalized features</DialogDescription>
+                          </DialogHeader>
                           <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
                         </DialogContent>
                       </Dialog>
@@ -518,6 +526,10 @@ export default function Landing() {
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>View Safety Alerts</DialogTitle>
+                      <DialogDescription>Sign in to access detailed product recall information and safety alerts</DialogDescription>
+                    </DialogHeader>
                     <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
                   </DialogContent>
                 </Dialog>
@@ -601,6 +613,10 @@ export default function Landing() {
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Join Safety Community</DialogTitle>
+                    <DialogDescription>Connect with other pet owners to share product reviews and safety experiences</DialogDescription>
+                  </DialogHeader>
                   <MobileAuth onAuthSuccess={() => setShowMobileAuth(false)} />
                 </DialogContent>
               </Dialog>

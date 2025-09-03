@@ -155,7 +155,7 @@ export const getCameraConstraints = () => {
   
   return {
     video: {
-      facingMode: { exact: 'environment' }, // Force rear camera explicitly
+      facingMode: 'environment', // Use rear camera without exact constraint
       width: isMobile ? { ideal: 1280 } : { ideal: 1920 },
       height: isMobile ? { ideal: 720 } : { ideal: 1080 }
     }
