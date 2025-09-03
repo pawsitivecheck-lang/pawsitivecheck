@@ -61,6 +61,7 @@ export default function AdBanner({ size, position = "", className = "" }: AdBann
           data-testid="button-close-ad"
         >
           <X className="h-3 w-3" />
+          <span className="sr-only">Close advertisement</span>
         </button>
         
         <div className="text-center w-full">

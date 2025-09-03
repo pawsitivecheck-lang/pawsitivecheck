@@ -654,6 +654,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 data-testid="button-clear-search"
               >
                 <X className="h-3 w-3" />
+                <span className="sr-only">Clear search</span>
               </Button>
             )}
             
@@ -667,6 +668,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               data-testid="button-header-search"
             >
               <Search className="h-4 w-4" />
+              <span className="sr-only">Search products</span>
             </Button>
             
             {/* Scanner Menu Button */}
@@ -687,6 +689,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 ) : (
                   <Camera className="h-4 w-4" />
                 )}
+                <span className="sr-only">{isLoading ? 'Loading scanner' : 'Open scanner menu'}</span>
               </Button>
             </div>
           </div>

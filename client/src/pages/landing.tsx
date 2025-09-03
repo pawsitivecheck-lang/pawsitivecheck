@@ -129,6 +129,7 @@ export default function Landing() {
                 ) : (
                   <Menu className="h-6 w-6 text-foreground" />
                 )}
+                <span className="sr-only">{isMobileMenuOpen ? 'Close menu' : 'Open menu'}</span>
               </button>
             </div>
           </div>

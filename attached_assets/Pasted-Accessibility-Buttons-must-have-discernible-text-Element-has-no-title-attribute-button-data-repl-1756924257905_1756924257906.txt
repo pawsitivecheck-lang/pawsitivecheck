@@ -1,0 +1,406 @@
+Accessibility
+Buttons must have discernible text: Element has no title attribute
+<button data-replit-metadata="client/src/components/ad-banner.tsx:77:8" data-component-name="button" class="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground bg-card/80 rounded-full z-10" data-testid="button-close-ad">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/header-search.tsx:680:12" data-component-name="Button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 absolute right-12 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full" type="submit" disabled="" data-testid="button-header-search">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/header-search.tsx:693:14" data-component-name="Button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-8 w-8 p-1 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 rounded-full border border-blue-500/20" type="button" data-testid="button-scanner-menu">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/theme-toggle.tsx:49:4" data-component-name="Button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-9 rounded-md px-3 text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20" data-testid="button-theme-toggle">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/pages/landing.tsx:141:14" data-component-name="button" class="p-3 rounded-lg hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" data-testid="button-mobile-menu">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/ad-banner.tsx:77:8" data-component-name="button" class="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground bg-card/80 rounded-full z-10" data-testid="button-close-ad">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/ad-banner.tsx:77:8" data-component-name="button" class="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground bg-card/80 rounded-full z-10" data-testid="button-close-ad">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+<button data-replit-metadata="client/src/components/ad-banner.tsx:77:8" data-component-name="button" class="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground bg-card/80 rounded-full z-10" data-testid="button-close-ad">
+Open in Elements
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this axe rule at Deque University
+Learn why this is important and how to fix it on webhint.io
+Compatibility
+'-ms-text-size-adjust' is not supported by Chrome, Chrome Android, Edge, Firefox, Safari. Add 'text-size-adjust' to support Chrome 54+, Chrome Android 54+, Edge 79+.
+html {
+    -ms-text-size-adjust: 100%;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this CSS feature on MDN
+Learn why this is important and how to fix it on webhint.io
+'-webkit-text-size-adjust' is not supported by Chrome, Chrome Android, Edge 79+, Firefox, Safari. Add 'text-size-adjust' to support Chrome 54+, Chrome Android 54+, Edge 79+.
+html,
+:host {
+    -webkit-text-size-adjust: 100%;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this CSS feature on MDN
+Learn why this is important and how to fix it on webhint.io
+'backdrop-filter' is not supported by Safari. Add '-webkit-backdrop-filter' to support Safari 9+.
+.backdrop-blur-md {
+    backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this CSS feature on MDN
+Learn why this is important and how to fix it on webhint.io
+'charset' meta element is not needed as one was already specified.
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+Open in Sources
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'content-type' header media type value should be 'text/css', not 'text/javascript'.
+Content-Type: text/javascript
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/index.css?t=1756924076686&v=cnF8kGYX8qNun7Dc_K9z3
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'content-type' header media type value should be 'text/x-typescript', not 'text/javascript'.
+Content-Type: text/javascript
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/main.tsx?v=cnF8kGYX8qNun7Dc_K9z3
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Content-Type: text/javascript
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/src/App.tsx?t=1756924073198&v=cnF8kGYX8qNun7Dc_K9z3
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'meta[name=theme-color]' is not supported by Firefox.
+<meta name="theme-color" content="#2563eb">
+Open in ElementsSources
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this HTML feature on MDN
+Learn why this is important and how to fix it on webhint.io
+'text-size-adjust' is not supported by Firefox, Safari.
+body {
+    text-size-adjust: 100%;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn more about this CSS feature on MDN
+Learn why this is important and how to fix it on webhint.io
+Performance
+'height' changes to this property will trigger: 'Layout', which can impact performance when used inside @keyframes.
+@keyframes accordion-up {
+    from {
+        height: var(--radix-accordion-content-height);
+    }
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+A 'cache-control' header contains directives which are not recommended: 'must-revalidate'
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: public, max-age=3600, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/favicon.ico
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: public, max-age=3600, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/icon-192.png
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/auth/user
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/recalls
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/products?limit=3
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/reviews?limit=3&featured=true
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: no-cache, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/analytics/dashboard
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+A 'cache-control' header contains directives which are not recommended: 'must-revalidate', 'no-store'
+Cache-Control: no-cache, no-store, must-revalidate
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/manifest.json
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Open in
+Network
+Request
+https://www.ruralking.com/images/country-road-game-bird-feed.jpg
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Open in
+Network
+Request
+https://www.ruralking.com/images/purina-cat-chow-indoor.jpg
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Open in
+Network
+Request
+https://www.ruralking.com/images/nutrena-pig-grower.jpg
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Response should not include unneeded headers: x-xss-protection
+Request
+https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Request
+https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap&subset=latin
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Security
+The 'Expires' header should not be used, 'Cache-Control' should be preferred.
+expires: wed, 03 sep 2025 18:23:36 gmt
+Open in
+Network
+Request
+https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+expires: wed, 03 sep 2025 18:23:37 gmt
+Open in
+Network
+Request
+https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap&subset=latin
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+expires: 0
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/manifest.json
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+The 'Pragma' header should not be used, it is deprecated and is a request header only.
+pragma: no-cache
+Open in
+Network
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/manifest.json
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+The 'X-Frame-Options' header should not be used. A similar effect, with more consistent support and stronger checks, can be achieved with the 'Content-Security-Policy' header and 'frame-ancestors' directive.
+x-frame-options: sameorigin
+Open in
+Network
+Request
+https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+x-frame-options: sameorigin
+Open in
+Network
+Request
+https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap&subset=latin
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+Other
+'animation' should be listed after '-webkit-animation'.
+.animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+    -webkit-animation: glow 2s ease-in-out infinite alternate;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'backdrop-filter' should be listed after '-webkit-backdrop-filter'.
+nav {
+    background: rgba(255, 255, 255, 0.90);
+    background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(258, 20%, 90%);
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'background: rgba(13, 9, 48, 0.95)' should be listed after 'background: -webkit-linear-gradient(rgba(13, 9, 48, 0.95), rgba(13, 9, 48, 0.95))'.
+.dark nav {
+    background: rgba(13, 9, 48, 0.95);
+    background: -webkit-linear-gradient(rgba(13, 9, 48, 0.95), rgba(13, 9, 48, 0.95));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(253, 36%, 25%);
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'background: rgba(255, 255, 255, 0.90)' should be listed after 'background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90))'.
+nav {
+    background: rgba(255, 255, 255, 0.90);
+    background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(258, 20%, 90%);
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'border-radius' should be listed after '-moz-border-radius'.
+.professional-card {
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'box-shadow' should be listed after '-moz-box-shadow'.
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: hsl(258, 80%, 55%);
+    box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    -webkit-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    -moz-box-shadow: 0 0 0 2px rgba(139, 69, 255, 0.15);
+    outline: none;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'box-shadow' should be listed after '-webkit-box-shadow'.
+@keyframes glow {
+    from {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        -webkit-box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'box-sizing' should be listed after '-moz-box-sizing'.
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+'transform' should be listed after '-webkit-transform'.
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+        -webkit-transform: translateY(0px);
+    }
+}
+Request
+https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/
+Further Reading
+Learn why this is important and how to fix it on webhint.io
+A form field element should have an id or name attribute
+A form field element has neither an id nor a name attribute. This might prevent the browser from correctly autofilling the form.
+
+To fix this issue, add a unique id or name attribute to a form field. This is not strictly needed, but still recommended even if you have an autocomplete attribute on the same element.
+
+1 resource
+Violating node
+Learn more: The form input element
+Response was blocked by CORB (Cross-Origin Read Blocking)
+Cross-Origin Read Blocking (CORB) blocked a cross-origin response.
+
+3 requests
+Learn more: CORB explainer
