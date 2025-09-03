@@ -69,6 +69,7 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
             data-testid="button-close-image-scanner"
           >
             <X className="h-4 w-4" />
+            <span className="sr-only">Close scanner</span>
           </Button>
         </CardHeader>
         <CardContent>

@@ -273,6 +273,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               data-testid="button-reset-scanner"
             >
               <RotateCcw className="h-4 w-4" />
+              <span className="sr-only">Reset scanner</span>
             </Button>
             <Button
               variant="outline"
@@ -282,6 +283,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               data-testid="button-close-scanner"
             >
               <X className="h-4 w-4" />
+              <span className="sr-only">Close scanner</span>
             </Button>
           </div>
         </CardHeader>
