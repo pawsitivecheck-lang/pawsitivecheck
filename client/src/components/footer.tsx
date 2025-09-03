@@ -11,22 +11,22 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-foreground mb-3" data-testid="text-mission-title">Our Mission</h4>
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>
-                <Link to="/comprehensive-safety-analysis" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                <Link to="/home" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
                 </Link>
               </li>
               <li>
-                <Link to="/ingredient-transparency" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                <Link to="/products" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-transparency">
                   Ingredient Transparency
                 </Link>
               </li>
               <li>
-                <Link to="/corporate-accountability" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-truth">
+                <Link to="/community" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-truth">
                   Corporate Accountability
                 </Link>
               </li>
               <li>
-                <Link to="/pet-health-protection" className="hover:text-white transition-colors cursor-pointer" data-testid="link-mission-protection">
+                <Link to="/recalls" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-protection">
                   Pet Health Protection
                 </Link>
               </li>
@@ -37,17 +37,17 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-foreground mb-3" data-testid="text-features-title">Key Features</h4>
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>
-                <Link to="/scanner-technology" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-scanner">
+                <Link to="/home" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-feature-scanner">
                   Product Scanner
                 </Link>
               </li>
               <li>
-                <Link to="/safety-database-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-database">
+                <Link to="/products" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-feature-database">
                   Safety Database
                 </Link>
               </li>
               <li>
-                <Link to="/recall-system-info" className="hover:text-white transition-colors cursor-pointer" data-testid="link-feature-alerts">
+                <Link to="/recalls" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-feature-alerts">
                   Recall Alerts
                 </Link>
               </li>
@@ -69,7 +69,7 @@ export default function Footer() {
               </li>
               <li>
                 <div className="space-y-1">
-                  <Link to="/community-reviews-info" className="hover:text-foreground transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
+                  <Link to="/community" className="hover:text-foreground transition-colors cursor-pointer block font-medium" data-testid="link-contact-community">
                     💬 Community Portal
                   </Link>
                   <div className="text-xs text-muted-foreground/70 ml-4">
