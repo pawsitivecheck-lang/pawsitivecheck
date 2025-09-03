@@ -1,0 +1,36 @@
+Compatibility
+'-ms-text-size-adjust' is not supported by Chrome, Chrome Android, Edge, Firefox, Safari. Add 'text-size-adjust' to support Chrome 54+, Chrome Android 54+, Edge 79+.
+'-webkit-text-size-adjust' is not supported by Chrome, Chrome Android, Edge 79+, Firefox, Safari. Add 'text-size-adjust' to support Chrome 54+, Chrome Android 54+, Edge 79+.
+'backdrop-filter' is not supported by Safari. Add '-webkit-backdrop-filter' to support Safari 9+.
+'charset' meta element is not needed as one was already specified.
+'content-type' header media type value should be 'image/png', not 'image/webp'.
+'content-type' header media type value should be 'text/css', not 'text/javascript'.
+'content-type' header media type value should be 'text/x-typescript', not 'text/javascript'.
+'meta[name=theme-color]' is not supported by Firefox.
+'text-size-adjust' is not supported by Firefox, Safari.
+Response should include 'content-type' header.
+Performance
+'height' changes to this property will trigger: 'Layout', which can impact performance when used inside @keyframes.
+A 'cache-control' header contains directives which are not recommended: 'must-revalidate'
+A 'cache-control' header contains directives which are not recommended: 'must-revalidate', 'no-store'
+Response should not include unneeded headers: x-xss-protection
+Security
+A 'set-cookie' has an invalid 'expires' date format. The recommended format is: Wed, 03 Sep 2025 19:03:08 GMT
+A 'set-cookie' has an invalid 'expires' date format. The recommended format is: Wed, 03 Sep 2025 19:03:09 GMT
+The 'Expires' header should not be used, 'Cache-Control' should be preferred.
+The 'Pragma' header should not be used, it is deprecated and is a request header only.
+The 'X-Frame-Options' header should not be used. A similar effect, with more consistent support and stronger checks, can be achieved with the 'Content-Security-Policy' header and 'frame-ancestors' directive.
+Other
+Incorrect use of <label for=FORM_ELEMENT>
+'animation' should be listed after '-webkit-animation'.
+'backdrop-filter' should be listed after '-webkit-backdrop-filter'.
+'background: rgba(13, 9, 48, 0.95)' should be listed after 'background: -webkit-linear-gradient(rgba(13, 9, 48, 0.95), rgba(13, 9, 48, 0.95))'.
+'background: rgba(255, 255, 255, 0.90)' should be listed after 'background: -webkit-linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90))'.
+'border-radius' should be listed after '-moz-border-radius'.
+'box-shadow' should be listed after '-moz-box-shadow'.
+'box-shadow' should be listed after '-webkit-box-shadow'.
+'box-sizing' should be listed after '-moz-box-sizing'.
+'transform' should be listed after '-webkit-transform'.
+A form field element should have an id or name attribute
+Response was blocked by CORB (Cross-Origin Read Blocking)
+
