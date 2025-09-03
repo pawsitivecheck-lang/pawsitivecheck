@@ -1,0 +1,48 @@
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'ambient-light-sensor'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'battery'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'layout-animations'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'legacy-image-formats'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'navigation-override'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'oversized-images'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'publickey-credentials'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'speaker-selection'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'unoptimized-images'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'unsized-media'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Unrecognized feature: 'pointer-lock'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+9038-5b682418ae8a1bc6.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+(anonymous) @ 9038-5b682418ae8a1bc6.js:1
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'battery'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'layout-animations'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'navigation-override'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'oversized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Unrecognized feature: 'unsized-media'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html?initialPath=%2F&id=%3Arih%3A:32  Allow attribute will take precedence over 'allowpaymentrequest'.
+adsbygoogle.js:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066.
+059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/auth/user:1   Failed to load resource: the server responded with a status of 401 (Unauthorized)
