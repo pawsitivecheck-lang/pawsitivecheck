@@ -11,7 +11,7 @@ export default function Footer() {
             <h4 className="text-lg font-bold text-foreground mb-3" data-testid="text-mission-title">Our Mission</h4>
             <ul className="space-y-2 text-muted-foreground text-sm">
               <li>
-                <Link to="/home" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-analysis">
+                <Link to="/comprehensive-safety-analysis" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-analysis">
                   Comprehensive Safety Analysis
                 </Link>
               </li>
