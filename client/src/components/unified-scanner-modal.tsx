@@ -110,6 +110,8 @@ export function UnifiedScannerModal({
             variant: "destructive",
           });
         }
+        // Close scanner after showing the message
+        onClose();
       }
     },
     onError: (error: any) => {
