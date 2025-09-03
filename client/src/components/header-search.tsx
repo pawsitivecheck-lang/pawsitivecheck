@@ -289,18 +289,22 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     
     let score = 0;
     const weights = {
-      exactStart: 100,
-      jaroWinkler: 40,
-      levenshtein: 30,
-      ngram: 20,
-      brandMatch: 15,
-      contains: 10,
-      length: 5
+      exactStart: 120,
+      jaroWinkler: 50,
+      levenshtein: 35,
+      ngram: 25,
+      brandMatch: 20,
+      contains: 15,
+      length: 8
     };
     
     // Exact start match (highest priority)
     if (normalizedCandidate.startsWith(normalizedQuery)) {
       score += weights.exactStart;
+      // Extra bonus for exact start matches
+      if (normalizedQuery.length >= 3) {
+        score += 20;
+      }
     }
     
     // Jaro-Winkler similarity (handles transpositions well)
@@ -320,9 +324,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     const ngramScore = queryNgrams.length > 0 ? ngramMatches / queryNgrams.length : 0;
     score += ngramScore * weights.ngram;
     
-    // Brand matching
-    if (normalizedBrand && (normalizedBrand.includes(normalizedQuery) || normalizedQuery.includes(normalizedBrand))) {
-      score += weights.brandMatch;
+    // Brand matching with improved logic
+    if (normalizedBrand && normalizedQuery.length >= 2) {
+      if (normalizedBrand.startsWith(normalizedQuery)) {
+        score += weights.brandMatch + 10; // Extra bonus for brand start match
+      } else if (normalizedBrand.includes(normalizedQuery) || normalizedQuery.includes(normalizedBrand)) {
+        score += weights.brandMatch;
+      }
     }
     
     // Contains match
@@ -351,8 +359,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     if (query.length > 4) delay = 50;
     if (query.length > 8) delay = 30;
     
-    // Longer delay for very short queries to avoid excessive API calls
-    if (query.length <= 2) delay = 200;
+    // Optimized delays for better responsiveness
+    if (query.length <= 1) delay = 300;
+    if (query.length === 2) delay = 180;
     
     debounceRef.current = setTimeout(() => {
       if (query.trim().length >= 1) { // Start searching from 1 character
@@ -380,13 +389,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       // Show dropdown immediately for better responsiveness
       setShowResults(true);
       
-      // For single character queries, show recent searches immediately
-      if (value.length === 1 && recentSearches.length > 0) {
+      // For short queries, prioritize recent searches and faster feedback
+      if (value.length <= 2 && recentSearches.length > 0) {
         const filteredRecent = recentSearches.filter(search => 
           normalizeString(search).startsWith(normalizeString(value))
         );
         if (filteredRecent.length > 0) {
-          // Don't clear results, just trigger search for more options
+          // Show recent matches immediately while triggering background search
           debouncedSearch(value);
           return;
         }
@@ -454,8 +463,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     recentSearches.forEach((search, index) => {
       if (search.toLowerCase() !== normalizedQuery) {
         const baseScore = calculateAdvancedScore(query, search);
-        // Boost recent searches, with more recent ones getting higher boost
-        const recencyBoost = (recentSearches.length - index) * 5;
+        // Enhanced recency boost for better user experience
+        const recencyBoost = (recentSearches.length - index) * 8;
         candidates.push({
           text: search,
           score: baseScore + recencyBoost,
@@ -469,11 +478,14 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     
     // Only return suggestions that meet a minimum quality threshold
     const bestCandidate = candidates[0];
-    const minThreshold = query.length <= 2 ? 80 : query.length <= 4 ? 60 : 40;
+    const minThreshold = query.length <= 1 ? 100 : query.length <= 2 ? 70 : query.length <= 3 ? 50 : query.length <= 4 ? 40 : 30;
     
     if (bestCandidate && bestCandidate.score >= minThreshold) {
       // For very short queries, only suggest if it's an exact start match or very high score
-      if (query.length <= 2 && !normalizeString(bestCandidate.text).startsWith(normalizedQuery) && bestCandidate.score < 100) {
+      if (query.length <= 1 && bestCandidate.score < 120) {
+        return '';
+      }
+      if (query.length <= 2 && !normalizeString(bestCandidate.text).startsWith(normalizedQuery) && bestCandidate.score < 90) {
         return '';
       }
       return bestCandidate.text;
