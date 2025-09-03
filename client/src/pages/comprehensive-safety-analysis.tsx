@@ -152,17 +152,17 @@ export default function ComprehensiveSafetyAnalysis() {
                 <div className="space-y-3">
                   <div className="bg-card border border-border rounded-lg p-4">
                     <p className="text-sm text-foreground">
-                      <strong className="text-red-600">1. Pattern Recognition Algorithm:</strong> Machine learning analyzes community reports every 24 hours to identify unusual symptom clusters across specific products, brands, or manufacturing dates that exceed statistical baselines.
+                      <strong className="text-mystical-red">1. Pattern Recognition Algorithm:</strong> Machine learning analyzes community reports every 24 hours to identify unusual symptom clusters across specific products, brands, or manufacturing dates that exceed statistical baselines.
                     </p>
                   </div>
                   <div className="bg-card border border-border rounded-lg p-4">
                     <p className="text-sm text-foreground">
-                      <strong className="text-red-600">2. Geographic Clustering Analysis:</strong> Our system detects when multiple reports of similar symptoms appear in specific regions within 30-day windows, indicating potential contamination at distribution centers or manufacturing facilities.
+                      <strong className="text-mystical-red">2. Geographic Clustering Analysis:</strong> Our system detects when multiple reports of similar symptoms appear in specific regions within 30-day windows, indicating potential contamination at distribution centers or manufacturing facilities.
                     </p>
                   </div>
                   <div className="bg-card border border-border rounded-lg p-4">
                     <p className="text-sm text-foreground">
-                      <strong className="text-red-600">3. Veterinary Alert Network:</strong> Licensed veterinarians in our network of 1,200+ participating clinics flag unusual patterns, which are cross-referenced with community reports to validate potential safety concerns before they become widespread.
+                      <strong className="text-mystical-red">3. Veterinary Alert Network:</strong> Licensed veterinarians in our network of 1,200+ participating clinics flag unusual patterns, which are cross-referenced with community reports to validate potential safety concerns before they become widespread.
                     </p>
                   </div>
                 </div>
@@ -180,8 +180,8 @@ export default function ComprehensiveSafetyAnalysis() {
             </CardHeader>
             <CardContent>
               <div className="text-foreground">
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                  <h4 className="font-semibold text-blue-700 mb-4">🏆 Safety Detection Success</h4>
+                <div className="bg-blue-900/20 border border-blue-600/30 rounded-xl p-6">
+                  <h4 className="font-semibold text-blue-400 mb-4">🏆 Safety Detection Success</h4>
                   <p className="text-sm text-foreground mb-4">
                     This system has successfully identified <strong>47 safety issues before official recalls</strong> by detecting patterns an average of <strong>6-18 weeks earlier</strong> than regulatory agencies, including:
                   </p>
@@ -211,15 +211,15 @@ export default function ComprehensiveSafetyAnalysis() {
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-green-700 mb-2">Evidence-Based</h4>
+                  <div className="bg-mystical-green/20 border border-mystical-green/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-mystical-green mb-2">Evidence-Based</h4>
                     <p className="text-sm text-muted-foreground">
                       All assessments backed by peer-reviewed research and regulatory guidelines
                     </p>
                   </div>
                   
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-blue-700 mb-2">Veterinary Validated</h4>
+                  <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-blue-400 mb-2">Veterinary Validated</h4>
                     <p className="text-sm text-muted-foreground">
                       Professional verification through licensed veterinary network
                     </p>
