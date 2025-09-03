@@ -623,77 +623,77 @@ img {
   }
 }
 
-/* Additional dark mode contrast improvements */
-.dark .text-gray-400 {
+/* Dark mode styling (default) */
+.text-gray-400 {
   @apply text-muted-foreground;
 }
 
-.dark .text-gray-500 {
+.text-gray-500 {
   @apply text-muted-foreground;
 }
 
-.dark .bg-white {
+.bg-white {
   @apply bg-background;
 }
 
-.dark .text-white {
+.text-white {
   @apply text-foreground;
 }
 
-/* Cosmic theme dark mode support */
-.dark .text-cosmic-600 {
+/* Cosmic theme color coding */
+.text-cosmic-600 {
   color: hsl(252, 40%, 70%);
 }
 
-.dark .text-starlight-400 {
+.text-starlight-400 {
   color: hsl(255, 60%, 80%);
 }
 
-.dark .text-starlight-500 {
+.text-starlight-500 {
   color: hsl(255, 70%, 85%);
 }
 
-.dark .text-mystical-green {
+.text-mystical-green {
   color: hsl(142, 50%, 65%);
 }
 
-.dark .text-mystical-red {
+.text-mystical-red {
   color: hsl(0, 60%, 70%);
 }
 
-.dark .text-mystical-purple {
+.text-mystical-purple {
   color: hsl(280, 60%, 75%);
 }
 
-.dark .bg-mystical-green {
+.bg-mystical-green {
   background-color: hsl(142, 50%, 45%);
 }
 
-.dark .bg-mystical-red {
+.bg-mystical-red {
   background-color: hsl(0, 60%, 50%);
 }
 
-.dark .bg-mystical-purple {
+.bg-mystical-purple {
   background-color: hsl(280, 60%, 55%);
 }
 
-.dark .border-starlight-500 {
+.border-starlight-500 {
   border-color: hsl(255, 70%, 85%);
 }
 
-.dark .border-mystical-green {
+.border-mystical-green {
   border-color: hsl(142, 50%, 65%);
 }
 
-.dark .border-mystical-red {
+.border-mystical-red {
   border-color: hsl(0, 60%, 70%);
 }
 
-.dark .border-mystical-purple {
+.border-mystical-purple {
   border-color: hsl(280, 60%, 75%);
 }
 
-/* Cosmic card dark mode */
-.dark .cosmic-card {
+/* Cosmic card styling */
+.cosmic-card {
   @apply bg-card border-border text-card-foreground;
 }
