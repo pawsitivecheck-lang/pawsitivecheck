@@ -222,15 +222,7 @@ export default function Landing() {
                       </div>
                     </Link>
                     
-                    <Link 
-                      to="/product-database"
-                      className="flex items-center w-full py-3 px-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors font-medium rounded-lg min-h-[44px]"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      data-testid="mobile-nav-database"
-                    >
-                      <Database className="mr-3 h-5 w-5" />
-                      Safety Database
-                    </Link>
+                    
                     
                     <a 
                       href="/api/logout"
