@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -189,6 +189,7 @@ export function SaveToPetButton({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Save Product for {selectedPet?.name}</DialogTitle>
+            <DialogDescription>Add this product to your pet's saved items with notes and status</DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">

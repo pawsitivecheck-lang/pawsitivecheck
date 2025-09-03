@@ -58,10 +58,10 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
         // ChromeOS: Use simplest possible constraints
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
       } else {
-        // Force rear camera on mobile devices without fallback
+        // Use rear camera on mobile devices with fallback
         stream = await navigator.mediaDevices.getUserMedia({ 
           video: { 
-            facingMode: { exact: 'environment' }, // Force rear camera
+            facingMode: 'environment', // Use rear camera without exact constraint
             frameRate: { ideal: 30 },
             width: { ideal: 1280 },
             height: { ideal: 720 }
