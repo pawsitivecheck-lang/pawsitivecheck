@@ -143,8 +143,13 @@ export default function SubmitProductUpdate() {
   };
 
   const onSubmit = (data: SubmitUpdateData) => {
+    console.log("🚀 FORM SUBMITTED!", data);
+    console.log("Form state:", form.formState);
+    console.log("Form errors:", form.formState.errors);
+    
     // Validate required fields before submitting
     if (!data.title || data.title.trim().length === 0) {
+      console.log("❌ Validation failed: title missing");
       toast({
         title: "Validation Error",
         description: "Please enter a title for your submission",
@@ -154,6 +159,7 @@ export default function SubmitProductUpdate() {
     }
     
     if (!data.description || data.description.trim().length === 0) {
+      console.log("❌ Validation failed: description missing");
       toast({
         title: "Validation Error", 
         description: "Please enter a description for your submission",
@@ -162,6 +168,7 @@ export default function SubmitProductUpdate() {
       return;
     }
     
+    console.log("✅ Validation passed, submitting to API...");
     submitMutation.mutate(data);
   };
 
@@ -400,6 +407,13 @@ export default function SubmitProductUpdate() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 text-lg"
                   data-testid="button-submit-update"
+                  onClick={(e) => {
+                    console.log("🖱️ BUTTON CLICKED!");
+                    console.log("Event:", e);
+                    console.log("Form values:", form.getValues());
+                    console.log("Form is valid:", form.formState.isValid);
+                    console.log("Form errors:", form.formState.errors);
+                  }}
                 >
                   {submitMutation.isPending ? (
                     <>
