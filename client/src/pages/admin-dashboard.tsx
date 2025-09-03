@@ -108,10 +108,10 @@ export default function AdminDashboard() {
   });
 
   const [analyticsQuery, recallsQuery, blacklistQuery, productsQuery] = queries;
-  const analytics = analyticsQuery.data || {};
-  const recentRecalls = recallsQuery.data || [];
-  const blacklistedIngredients = blacklistQuery.data || [];
-  const recentProducts = productsQuery.data || [];
+  const analytics = analyticsQuery.data || { totalProducts: 0, totalUsers: 0, cursedProducts: 0, blessedProducts: 0 };
+  const recentRecalls = (recallsQuery.data as any[]) || [];
+  const blacklistedIngredients = (blacklistQuery.data as any[]) || [];
+  const recentProducts = (productsQuery.data as any[]) || [];
 
   const isLoadingData = queries.some(query => query.isLoading);
   const hasErrors = queries.some(query => query.isError);
