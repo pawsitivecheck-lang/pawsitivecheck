@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -58,6 +58,25 @@ export default function SubmitProductUpdate() {
       productBarcode: "",
     },
   });
+
+  // Auto-populate form fields from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId');
+    const productName = urlParams.get('name');
+    const productBrand = urlParams.get('brand');
+    const productBarcode = urlParams.get('barcode');
+    
+    if (productName) {
+      form.setValue('productName', productName);
+    }
+    if (productBrand) {
+      form.setValue('productBrand', productBrand);
+    }
+    if (productBarcode) {
+      form.setValue('productBarcode', productBarcode);
+    }
+  }, [form]);
 
   const submitMutation = useMutation({
     mutationFn: async (data: SubmitUpdateData) => {
