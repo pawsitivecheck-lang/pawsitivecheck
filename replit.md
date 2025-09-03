@@ -81,11 +81,16 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 ### September 3, 2025 - Multi-Retailer Product Integration
-- **Four-Retailer Expansion**: Added comprehensive product scraping for Walmart, Sam's Club, PetSmart, and Petco
+- **Five-Retailer Expansion**: Added comprehensive product scraping for Walmart, Sam's Club, PetSmart, Petco, and Pet Supplies Plus
 - **PetcoScraper Service**: Built dedicated scraper for premium pet specialty store products including:
   - Exclusive brands (WholeHearted, So Phresh, You & Me, Well & Good)
   - Premium lines (Merrick, Wellness CORE, Fluker's reptile products)
   - Multi-species coverage (dogs, cats, birds, fish, reptiles, small animals)
+- **PetSuppliesPlusScraper Service**: Built neighborhood pet store scraper with competitive pricing including:
+  - Store brands (Exclusive, Simply Nourish)
+  - Premium holistic lines (Earthborn Holistic, Stella & Chewy's)
+  - Specialty items (Weruva gourmet cat food, Benebone chew toys, Zupreem bird food)
+  - Multi-species coverage including unique brands for birds, reptiles, and small animals
 - **PetSmartScraper Service**: Built dedicated scraper for specialty pet store products including:
   - Premium brands (Hill's Science Diet, Royal Canin, Wellness CORE, Blue Buffalo)
   - Specialty items (FURminator grooming tools, KONG toys, Nylabone chews)
@@ -100,8 +105,9 @@ Preferred communication style: Simple, everyday language.
   - `/api/admin/sync/samsclub-products` for warehouse club inventory  
   - `/api/admin/sync/petsmart-products` for premium specialty products
   - `/api/admin/sync/petco-products` for exclusive specialty brands
-- **Database Integration**: Successfully integrated 33+ new retail products (IDs 229-261) spanning four major pet retailers
-- **Testing Verification**: Confirmed complete scraping pipeline from product collection through database storage for all four retailers
+  - `/api/admin/sync/petsuppliesplus-products` for neighborhood pet store competitive pricing
+- **Database Integration**: Successfully integrated 45+ new retail products (IDs 229-273) spanning five major pet retailers
+- **Testing Verification**: Confirmed complete scraping pipeline from product collection through database storage for all five retailers
 
 ### September 3, 2025 - Production Readiness Improvements
 - **Security Enhancements**: Added CORS configuration with domain allowlisting and express-rate-limit middleware to prevent API abuse
