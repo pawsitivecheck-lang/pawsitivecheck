@@ -42,8 +42,76 @@ declare global {
   interface Window {
     google: any;
     initGoogleMap: () => void;
+    googleMapsLoading?: boolean;
+    googleMapsLoaded?: boolean;
+    googleMapsCallbacks?: Array<() => void>;
   }
 }
+
+// Global Google Maps loader singleton
+const loadGoogleMaps = (() => {
+  let loadingPromise: Promise<void> | null = null;
+
+  return (): Promise<void> => {
+    // Return existing promise if already loading
+    if (loadingPromise) {
+      return loadingPromise;
+    }
+
+    // If already loaded, return resolved promise
+    if (window.google && window.google.maps && window.googleMapsLoaded) {
+      return Promise.resolve();
+    }
+
+    // Create new loading promise
+    loadingPromise = new Promise((resolve, reject) => {
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+      
+      if (existingScript) {
+        // Wait for existing script to load
+        const checkLoaded = () => {
+          if (window.google && window.google.maps) {
+            window.googleMapsLoaded = true;
+            resolve();
+          } else {
+            setTimeout(checkLoaded, 100);
+          }
+        };
+        checkLoaded();
+        return;
+      }
+
+      // Load the API for the first time
+      fetch('/api/google-maps-key')
+        .then(response => response.json())
+        .then(data => {
+          const script = document.createElement('script');
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places,marker`;
+          script.async = true;
+          script.defer = true;
+          
+          script.onload = () => {
+            window.googleMapsLoaded = true;
+            resolve();
+          };
+
+          script.onerror = () => {
+            loadingPromise = null; // Reset promise on error
+            reject(new Error('Failed to load Google Maps'));
+          };
+
+          document.head.appendChild(script);
+        })
+        .catch(error => {
+          loadingPromise = null; // Reset promise on error
+          reject(error);
+        });
+    });
+
+    return loadingPromise;
+  };
+})();
 
 export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: VetMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -71,66 +139,16 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
     };
   }, [isLoading]);
 
-  // Load Google Maps script
+  // Load Google Maps script using singleton
   useEffect(() => {
-    // Check if Google Maps is already loaded
-    if (window.google && window.google.maps) {
-      scriptLoadedRef.current = true;
-      setScriptLoaded(true);
-      return;
-    }
-
-    // Check if script is already being loaded
-    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
-    if (existingScript) {
-      // Script exists, wait for it to load
-      if (scriptLoadedRef.current) {
+    loadGoogleMaps()
+      .then(() => {
+        scriptLoadedRef.current = true;
         setScriptLoaded(true);
-        return;
-      }
-      
-      const checkLoaded = setInterval(() => {
-        if (window.google && window.google.maps) {
-          scriptLoadedRef.current = true;
-          setScriptLoaded(true);
-          clearInterval(checkLoaded);
-        }
-      }, 100);
-      
-      setTimeout(() => {
-        clearInterval(checkLoaded);
-        if (!scriptLoadedRef.current) {
-          setMapError('Google Maps failed to load');
-          setIsLoading(false);
-        }
-      }, 10000);
-      
-      return;
-    }
-
-    // Load the script for the first time
-    fetch('/api/google-maps-key')
-      .then(response => response.json())
-      .then(data => {
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places,marker`;
-        script.async = true;
-        script.defer = true;
-        
-        script.onload = () => {
-          scriptLoadedRef.current = true;
-          setScriptLoaded(true);
-        };
-
-        script.onerror = () => {
-          setMapError('Failed to load Google Maps');
-          setIsLoading(false);
-        };
-
-        document.head.appendChild(script);
       })
       .catch(error => {
-        setMapError('Failed to load Google Maps API key');
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load Google Maps';
+        setMapError(errorMessage);
         setIsLoading(false);
       });
   }, []);
@@ -159,6 +177,12 @@ export default function VetMap({ practices, center, zoom = 12, onMarkerClick }: 
       mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
       center: { lat: center[0], lng: center[1] },
       zoom: zoom,
+      mapId: 'vet_finder_map', // Required for Advanced Markers
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      zoomControl: true,
+      gestureHandling: 'cooperative',
       styles: [
         {
           "featureType": "all",
