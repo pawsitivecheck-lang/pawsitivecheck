@@ -55,6 +55,7 @@ export default function SubmitProductUpdate() {
       submittedImageUrl: "",
       productName: "",
       productBrand: "",
+      productBarcode: "",
     },
   });
 
@@ -209,7 +210,7 @@ export default function SubmitProductUpdate() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-purple-200">Update Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger 
                             className="bg-slate-700/50 border-purple-500/30 text-white"
