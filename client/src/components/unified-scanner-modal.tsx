@@ -436,7 +436,7 @@ export function UnifiedScannerModal({
     }
   }, [isOpen]);
 
-  // Reset state when modal opens and auto-request camera permission
+  // Reset state when modal opens and show permission request screen
   useEffect(() => {
     if (isOpen) {
       setShowScanner(false);
@@ -445,21 +445,17 @@ export function UnifiedScannerModal({
       setIsScannerReady(false);
       setScanResult(null);
       
-      // Automatically start scanner without permission screen delay
-      const timer = setTimeout(async () => {
-        const result = await utilsRequestCameraPermission();
-        if (result.granted) {
-          setShowScanner(true);
-          toast({
-            title: "Camera Access Granted",
-            description: "Point your camera at a product barcode to scan.",
-          });
-        } else {
-          setCameraError(result.message || 'Camera permission denied');
-        }
-      }, 100);
-      
-      return () => clearTimeout(timer);
+      // On mobile, automatically request camera permission
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        // Small delay for modal to fully open, then auto-request permission
+        const timer = setTimeout(async () => {
+          await requestCameraPermission();
+        }, 300);
+        
+        return () => clearTimeout(timer);
+      }
+      // On desktop, show the permission request button
     }
   }, [isOpen]);
 
@@ -501,18 +497,41 @@ export function UnifiedScannerModal({
                 <AlertCircle className="h-8 w-8 text-red-600" />
               </div>
               <div className="space-y-2">
-                <p className="text-gray-700 font-medium">Scanner Error</p>
-                <p className="text-sm text-red-600" data-testid="text-camera-error">
+                <p className="text-gray-700 font-medium">Camera Access Needed</p>
+                <p className="text-sm text-gray-600" data-testid="text-camera-error">
                   {cameraError}
+                </p>
+                <p className="text-xs text-gray-500">
+                  Please allow camera access to scan product barcodes
                 </p>
               </div>
               <Button 
-                onClick={handleRetry}
+                onClick={requestCameraPermission}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 data-testid="button-retry-scanner"
               >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Try Again
+                <Camera className="w-4 h-4 mr-2" />
+                Allow Camera Access
+              </Button>
+            </div>
+          ) : !permissionRequested && !showScanner ? (
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+                <Camera className="h-8 w-8 text-blue-600" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-gray-700 font-medium">Ready to Scan</p>
+                <p className="text-sm text-gray-600">
+                  Click below to start scanning product barcodes
+                </p>
+              </div>
+              <Button 
+                onClick={requestCameraPermission}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                data-testid="button-start-scanner"
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                Start Scanner
               </Button>
             </div>
           ) : showScanner ? (
