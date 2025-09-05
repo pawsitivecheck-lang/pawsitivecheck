@@ -254,6 +254,9 @@ export function UnifiedScannerModal({
   const playSuccessSound = () => {
     // Create a brief success beep
     try {
+      // Check if component is still mounted and audio context is available
+      if (!document.getElementById("unified-barcode-scanner-container")) return;
+      
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -269,42 +272,64 @@ export function UnifiedScannerModal({
       
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.2);
+      
+      // Clean up audio context after use
+      setTimeout(() => {
+        try {
+          audioContext.close();
+        } catch (e) {
+          console.debug('Audio context cleanup error:', e);
+        }
+      }, 300);
     } catch (error) {
       console.debug('Audio feedback not available:', error);
     }
   };
 
   const showScanSuccess = () => {
-    // Show success overlay
-    const successOverlay = document.getElementById("scan-success-overlay");
-    if (successOverlay) {
-      successOverlay.style.opacity = "1";
-      
-      setTimeout(() => {
-        successOverlay.style.opacity = "0";
-      }, 400);
-    }
+    try {
+      // Show success overlay
+      const successOverlay = document.getElementById("scan-success-overlay");
+      if (successOverlay) {
+        successOverlay.style.opacity = "1";
+        
+        setTimeout(() => {
+          if (successOverlay && successOverlay.parentNode) {
+            successOverlay.style.opacity = "0";
+          }
+        }, 400);
+      }
 
-    // Add visual flash effect to container
-    const scannerContainer = document.getElementById("unified-barcode-scanner-container");
-    if (scannerContainer) {
-      scannerContainer.style.transition = "all 0.2s ease";
-      scannerContainer.style.boxShadow = "0 0 20px #10b981";
-      scannerContainer.style.borderColor = "#10b981";
-      
-      setTimeout(() => {
-        scannerContainer.style.boxShadow = "";
-        scannerContainer.style.borderColor = "";
-      }, 400);
-    }
+      // Add visual flash effect to container
+      const scannerContainer = document.getElementById("unified-barcode-scanner-container");
+      if (scannerContainer) {
+        scannerContainer.style.transition = "all 0.2s ease";
+        scannerContainer.style.boxShadow = "0 0 20px #10b981";
+        scannerContainer.style.borderColor = "#10b981";
+        
+        setTimeout(() => {
+          if (scannerContainer && scannerContainer.parentNode) {
+            scannerContainer.style.boxShadow = "";
+            scannerContainer.style.borderColor = "";
+          }
+        }, 600);
+      }
 
-    // Trigger haptic feedback
-    triggerHapticFeedback();
+      // Trigger haptic feedback
+      triggerHapticFeedback();
+    } catch (error) {
+      console.debug('Visual feedback error:', error);
+    }
   };
 
   const onScanFailure = useCallback((error: string) => {
     // Ignore scan failures - they happen constantly during scanning
     console.debug('Scan attempt failed:', error);
+    
+    // Handle specific error cases that might cause issues
+    if (error?.includes('frame') || error?.includes('undefined')) {
+      console.debug('Frame access error detected, scanner may need restart');
+    }
   }, []);
 
   const requestCameraPermission = async () => {
@@ -375,7 +400,7 @@ export function UnifiedScannerModal({
       img.onload = async () => {
         try {
           // Use ZXing library to decode barcode from image
-          const codeReader = new BrowserCodeReader(null, 500);
+          const codeReader = new BrowserCodeReader();
           const result = await codeReader.decodeFromImageElement(img);
           
           // Clean up
@@ -552,29 +577,54 @@ export function UnifiedScannerModal({
   }, [showScanner, onScanSuccess, onScanFailure]);
 
   const handleClose = () => {
-    // Clean up scanner and camera streams
-    if (scannerRef.current) {
-      try {
-        scannerRef.current.clear();
-      } catch (e) {
-        console.log('Scanner cleanup error:', e);
+    try {
+      // Clean up scanner and camera streams
+      if (scannerRef.current) {
+        try {
+          if (typeof scannerRef.current.stop === 'function') {
+            scannerRef.current.stop();
+          }
+          if (typeof scannerRef.current.clear === 'function') {
+            scannerRef.current.clear();
+          }
+        } catch (e) {
+          console.debug('Scanner cleanup error:', e);
+        }
+        scannerRef.current = null;
       }
-      scannerRef.current = null;
+      
+      // Stop any active camera streams more safely
+      try {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            if (stream && stream.getTracks) {
+              stream.getTracks().forEach(track => {
+                if (track && typeof track.stop === 'function') {
+                  track.stop();
+                }
+              });
+            }
+          })
+          .catch(() => {}); // Ignore errors
+      } catch (e) {
+        console.debug('Camera cleanup error:', e);
+      }
+      
+      // Reset all states
+      setShowScanner(false);
+      setPermissionRequested(false);
+      setCameraError("");
+      setIsScannerReady(false);
+      setIsProcessing(false);
+      setLastScannedCode("");
+      setScanResult(null);
+      setIsDecodingImage(false);
+      
+      onClose();
+    } catch (error) {
+      console.debug('Modal cleanup error:', error);
+      onClose(); // Still close the modal even if cleanup fails
     }
-    
-    // Stop any active camera streams
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => stream.getTracks().forEach(track => track.stop()))
-      .catch(() => {}); // Ignore errors
-    
-    // Reset all states
-    setShowScanner(false);
-    setPermissionRequested(false);
-    setCameraError("");
-    setIsScannerReady(false);
-    setIsProcessing(false);
-    setLastScannedCode("");
-    onClose();
   };
 
   const handleRetry = () => {
