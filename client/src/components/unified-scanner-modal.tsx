@@ -226,7 +226,16 @@ export function UnifiedScannerModal({
     if (scannerRef.current) {
       try {
         scannerRef.current.stop();
-        scannerRef.current.clear(); // More aggressive cleanup
+        // Wait a moment before clearing
+        setTimeout(() => {
+          try {
+            if (scannerRef.current) {
+              scannerRef.current.clear();
+            }
+          } catch (clearError) {
+            console.debug('Scanner clear error:', clearError);
+          }
+        }, 100);
       } catch (e) {
         console.debug('Scanner stop error:', e);
       }
@@ -578,15 +587,25 @@ export function UnifiedScannerModal({
 
   const handleClose = () => {
     try {
-      // Clean up scanner and camera streams
+      // Clean up scanner and camera streams with proper sequence
       if (scannerRef.current) {
         try {
+          // Stop first, then clear after a delay
           if (typeof scannerRef.current.stop === 'function') {
             scannerRef.current.stop();
           }
-          if (typeof scannerRef.current.clear === 'function') {
-            scannerRef.current.clear();
-          }
+          
+          // Clear after stopping
+          setTimeout(() => {
+            try {
+              if (scannerRef.current && typeof scannerRef.current.clear === 'function') {
+                scannerRef.current.clear();
+              }
+            } catch (clearError) {
+              console.debug('Scanner clear error:', clearError);
+            }
+          }, 100);
+          
         } catch (e) {
           console.debug('Scanner cleanup error:', e);
         }
@@ -711,13 +730,13 @@ export function UnifiedScannerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md" aria-describedby="scanner-dialog-description">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5 text-blue-600" />
             {getModeTitle()}
           </DialogTitle>
-          <p id="scanner-dialog-description" className="sr-only">
+          <p className="text-sm text-gray-600 mt-1">
             {getModeDescription()}
           </p>
         </DialogHeader>
