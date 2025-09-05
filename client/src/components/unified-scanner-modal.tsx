@@ -43,6 +43,70 @@ export function UnifiedScannerModal({
   const [isDecodingImage, setIsDecodingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const imageSearchMutation = useMutation({
+    mutationFn: async (imageData: string) => {
+      // Only try internet search if user is logged in
+      if (!user) {
+        throw new Error('Please log in to use image search functionality');
+      }
+      
+      const res = await apiRequest('POST', '/api/products/internet-search', {
+        type: 'image',
+        query: imageData
+      });
+      
+      if (res.ok) {
+        const result = await res.json();
+        return result;
+      }
+      
+      return null;
+    },
+    onSuccess: (result) => {
+      setIsDecodingImage(false);
+      
+      if (result?.product) {
+        toast({
+          title: "Product Identified!",
+          description: "Product successfully identified from image",
+        });
+
+        // Close modal first, then navigate to prevent navigation issues
+        onClose();
+        
+        // Small delay to ensure modal closes before navigation  
+        setTimeout(() => {
+          console.log('Navigating to product:', result.product.id);
+          setLocation(`/product/${result.product.id}`);
+        }, 200);
+      } else {
+        toast({
+          title: "Product Not Recognized",
+          description: "Cannot identify this product from the image. Try a clearer image or check if it has a barcode.",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (error) => {
+      setIsDecodingImage(false);
+      
+      // Check if it's an authentication error
+      if (error?.message?.includes('log in')) {
+        toast({
+          title: "Login Required",
+          description: "Please log in to analyze product images",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Image Analysis Failed",
+          description: "Unable to analyze the product from the image",
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
   const scanProductMutation = useMutation({
     mutationFn: async (barcode: string) => {
       // First try to find existing product by barcode (works for everyone)
@@ -323,14 +387,36 @@ export function UnifiedScannerModal({
           
         } catch (decodeError) {
           console.error('Barcode decode error:', decodeError);
-          URL.revokeObjectURL(imageUrl);
-          setIsDecodingImage(false);
           
-          toast({
-            title: "No Barcode Found",
-            description: "Could not detect a barcode in this image. Try a clearer image with a visible barcode.",
-            variant: "destructive",
-          });
+          // If barcode detection fails, try image analysis as fallback
+          console.log('No barcode detected, falling back to image analysis...');
+          
+          try {
+            // Convert image to base64 for image analysis
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx?.drawImage(img, 0, 0);
+            const imageData = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Clean up the original image URL
+            URL.revokeObjectURL(imageUrl);
+            
+            // Try image analysis instead
+            imageSearchMutation.mutate(imageData);
+            
+          } catch (imageError) {
+            console.error('Image analysis error:', imageError);
+            URL.revokeObjectURL(imageUrl);
+            setIsDecodingImage(false);
+            
+            toast({
+              title: "Image Processing Failed",
+              description: "Could not process this image. Please try a different image.",
+              variant: "destructive",
+            });
+          }
         }
       };
       
@@ -618,7 +704,7 @@ export function UnifiedScannerModal({
               <div className="space-y-2">
                 <p className="text-gray-700 font-medium">Ready to Scan</p>
                 <p className="text-sm text-gray-600">
-                  Use your camera or upload a barcode image
+                  Use your camera or upload a product image (with or without barcode)
                 </p>
               </div>
               
@@ -644,12 +730,12 @@ export function UnifiedScannerModal({
                     {isDecodingImage ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Decoding Barcode...
+                        Analyzing Image...
                       </>
                     ) : (
                       <>
                         <Upload className="w-4 h-4 mr-2" />
-                        Upload Barcode Image
+                        Upload Product Image
                       </>
                     )}
                   </Button>
