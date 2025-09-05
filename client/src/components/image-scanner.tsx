@@ -124,11 +124,19 @@ export function ImageScanner({ onScan, onClose, isActive }: ImageScannerProps) {
                   ref={webcamRef}
                   audio={false}
                   screenshotFormat="image/jpeg"
-                  videoConstraints={{
-                    facingMode: { ideal: "environment" }, // Prefer rear camera
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                  }}
+                  videoConstraints={(() => {
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    return isMobile ? {
+                      facingMode: { exact: "environment" }, // Force rear camera on mobile
+                      width: { ideal: 640, max: 1280 }, // Lower resolution for mobile
+                      height: { ideal: 480, max: 720 },
+                      frameRate: { ideal: 15, max: 30 }
+                    } : {
+                      facingMode: { ideal: "environment" },
+                      width: { ideal: 1280 },
+                      height: { ideal: 720 }
+                    };
+                  })()}
                   className="w-full h-64 object-cover"
                   data-testid="webcam-image-capture"
                 />

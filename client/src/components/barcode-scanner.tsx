@@ -52,25 +52,53 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
-          // Request camera permission with better error handling
+          // Enhanced mobile-friendly camera permission handling
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          
           try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-              video: { 
-                facingMode: { ideal: 'environment' }, // Prefer rear camera on mobile
+            // Mobile-optimized camera constraints
+            const constraints = {
+              video: isMobile ? {
+                facingMode: { exact: 'environment' }, // Force rear camera on mobile
+                width: { ideal: 640, max: 1280 }, // Lower resolution for mobile
+                height: { ideal: 480, max: 720 },
+                frameRate: { ideal: 15, max: 30 } // Lower frame rate for mobile
+              } : {
+                facingMode: { ideal: 'environment' },
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
-              } 
-            });
+              }
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
             // Permission granted - close the test stream
             stream.getTracks().forEach(track => track.stop());
           } catch (permissionError: any) {
-            let errorMessage = 'Camera permission denied. Please allow camera access and try again.';
-            if (permissionError.name === 'NotFoundError') {
-              errorMessage = 'No camera found. Please connect a camera and try again.';
-            } else if (permissionError.name === 'NotReadableError') {
-              errorMessage = 'Camera is busy. Please close other applications using the camera.';
+            console.error('Camera permission error:', permissionError);
+            
+            // Try fallback constraints for mobile
+            if (isMobile && permissionError.name === 'OverconstrainedError') {
+              try {
+                const fallbackStream = await navigator.mediaDevices.getUserMedia({ 
+                  video: { 
+                    facingMode: 'environment' // Less strict constraint
+                  } 
+                });
+                fallbackStream.getTracks().forEach(track => track.stop());
+              } catch (fallbackError: any) {
+                throw new Error('Camera access denied. Try again for a fresh permission prompt.');
+              }
+            } else {
+              let errorMessage = 'Camera access denied. Try again for a fresh permission prompt.';
+              if (permissionError.name === 'NotFoundError') {
+                errorMessage = 'No camera found. Please connect a camera and try again.';
+              } else if (permissionError.name === 'NotReadableError') {
+                errorMessage = 'Camera is busy. Please close other applications using the camera.';
+              } else if (permissionError.name === 'NotAllowedError') {
+                errorMessage = 'Camera access denied. Please allow camera access in your browser settings and try again.';
+              }
+              throw new Error(errorMessage);
             }
-            throw new Error(errorMessage);
           }
 
           // Check if camera is available
@@ -82,12 +110,11 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           }
 
           // Enhanced configuration for better cross-platform support
-          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           
           const scanner = new Html5QrcodeScanner(
             "barcode-scanner-container",
             {
-              fps: isMobile ? 8 : 12, // Optimized FPS for better performance
+              fps: isMobile ? 6 : 10, // Lower FPS for better mobile performance
               qrbox: function(viewfinderWidth, viewfinderHeight) {
                 const minEdgePercentage = 0.75; // Larger scanning area
                 const qrboxSize = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * minEdgePercentage);
@@ -108,7 +135,7 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
                 Html5QrcodeSupportedFormats.ITF,
                 Html5QrcodeSupportedFormats.CODABAR
               ],
-              aspectRatio: isMobile ? 1.2 : 1.5, // Better ratios for scanning
+              aspectRatio: isMobile ? 1.0 : 1.3, // Square ratio for mobile, rectangular for desktop
               disableFlip: false,
               rememberLastUsedCamera: true,
               showTorchButtonIfSupported: true,
