@@ -92,6 +92,12 @@ export default function ProductScanner() {
     mutationFn: async (imageData: string) => {
       setIsSearching(true);
       try {
+        // Only try internet search if user is logged in
+        if (!user) {
+          setIsSearching(false);
+          throw new Error('Please log in to use image search functionality');
+        }
+        
         const res = await apiRequest('POST', '/api/products/internet-search', {
           type: 'image',
           query: imageData

@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
-import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats, Html5QrcodeScannerState } from "html5-qrcode";
 import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp, triggerHapticFeedback } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
@@ -50,19 +50,21 @@ export function UnifiedScannerModal({
       }
       
       // If not found locally, try internet search (for logged-in users)
-      try {
-        const internetRes = await apiRequest('POST', '/api/products/internet-search', {
-          type: 'barcode',
-          query: barcode
-        });
-        
-        if (internetRes.ok) {
-          const result = await internetRes.json();
-          return result;
+      if (user) {
+        try {
+          const internetRes = await apiRequest('POST', '/api/products/internet-search', {
+            type: 'barcode',
+            query: barcode
+          });
+          
+          if (internetRes.ok) {
+            const result = await internetRes.json();
+            return result;
+          }
+        } catch (error) {
+          // Internet search failed (likely auth issue), but that's okay
+          console.debug('Internet search unavailable for authenticated user:', error);
         }
-      } catch (error) {
-        // Internet search failed (likely auth issue), but that's okay
-        console.debug('Internet search unavailable:', error);
       }
       
       // Product not found anywhere - still allow "Add Product" flow
@@ -427,11 +429,22 @@ export function UnifiedScannerModal({
   useEffect(() => {
     if (!isOpen && scannerRef.current) {
       try {
-        scannerRef.current.clear();
+        // Stop scanning first, then clear
+        try {
+          scannerRef.current.stop();
+        } catch (stopError) {
+          console.debug('Scanner stop error (normal):', stopError);
+        }
+        setTimeout(() => {
+          if (scannerRef.current) {
+            scannerRef.current.clear();
+            scannerRef.current = null;
+          }
+        }, 100);
       } catch (error) {
         console.debug('Scanner cleanup error (normal):', error);
+        scannerRef.current = null;
       }
-      scannerRef.current = null;
       setIsScannerReady(false);
     }
   }, [isOpen]);
