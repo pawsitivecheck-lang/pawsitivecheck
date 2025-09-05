@@ -6,8 +6,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2 } from "lucide-react";
+import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2, Upload, FileImage } from "lucide-react";
 import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats, Html5QrcodeScannerState } from "html5-qrcode";
+import { BrowserCodeReader } from "@zxing/browser";
 import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp, triggerHapticFeedback } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
@@ -39,6 +40,8 @@ export function UnifiedScannerModal({
   const [lastScannedCode, setLastScannedCode] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [scanResult, setScanResult] = useState<string | null>(null);
+  const [isDecodingImage, setIsDecodingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scanProductMutation = useMutation({
     mutationFn: async (barcode: string) => {
@@ -149,16 +152,11 @@ export function UnifiedScannerModal({
     },
   });
 
-  const onScanSuccess = useCallback((decodedText: string) => {
-    // Prevent duplicate scans of the same code - check this FIRST
-    if (isProcessing || lastScannedCode === decodedText) {
-      console.debug('Ignoring duplicate scan:', decodedText);
-      return;
-    }
-
-    console.log('Processing new barcode scan:', decodedText);
+  const handleBarcodeDetected = useCallback(async (barcode: string) => {
+    if (isProcessing || !barcode || barcode === lastScannedCode) return;
+    
     setIsProcessing(true);
-    setLastScannedCode(decodedText);
+    setLastScannedCode(barcode);
     
     // Stop scanner immediately to prevent more scans
     if (scannerRef.current) {
@@ -170,16 +168,24 @@ export function UnifiedScannerModal({
       }
     }
     
+    try {
+      const result = await scanProductMutation.mutateAsync(barcode);
+      // The mutation handles success/error states
+    } catch (error) {
+      console.error('Barcode processing error:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [scanProductMutation, isProcessing, lastScannedCode]);
+
+  const onScanSuccess = useCallback((decodedText: string) => {
+    // Use the unified barcode handling function
+    handleBarcodeDetected(decodedText);
+    
     // Immediate feedback for successful scan
     playSuccessSound();
     showScanSuccess();
-    
-    // Brief delay to show success feedback before processing
-    setTimeout(() => {
-      setShowScanner(false);
-      scanProductMutation.mutate(decodedText);
-    }, 500);
-  }, [scanProductMutation, isProcessing, lastScannedCode]);
+  }, [handleBarcodeDetected]);
 
   const playSuccessSound = () => {
     // Create a brief success beep
@@ -280,6 +286,83 @@ export function UnifiedScannerModal({
       });
     }
   };
+
+  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please select an image file (JPG, PNG, etc.)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsDecodingImage(true);
+    
+    try {
+      // Create image element from file
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      
+      img.onload = async () => {
+        try {
+          // Use ZXing library to decode barcode from image
+          const codeReader = new BrowserCodeReader(null, 500);
+          const result = await codeReader.decodeFromImageElement(img);
+          
+          // Clean up
+          URL.revokeObjectURL(imageUrl);
+          setIsDecodingImage(false);
+          
+          // Process the barcode like a camera scan
+          await handleBarcodeDetected(result.getText());
+          
+        } catch (decodeError) {
+          console.error('Barcode decode error:', decodeError);
+          URL.revokeObjectURL(imageUrl);
+          setIsDecodingImage(false);
+          
+          toast({
+            title: "No Barcode Found",
+            description: "Could not detect a barcode in this image. Try a clearer image with a visible barcode.",
+            variant: "destructive",
+          });
+        }
+      };
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(imageUrl);
+        setIsDecodingImage(false);
+        
+        toast({
+          title: "Image Load Error",
+          description: "Failed to load the image. Please try another file.",
+          variant: "destructive",
+        });
+      };
+      
+      img.src = imageUrl;
+      
+    } catch (error) {
+      console.error('File upload error:', error);
+      setIsDecodingImage(false);
+      
+      toast({
+        title: "Upload Error",
+        description: "Failed to process the uploaded image.",
+        variant: "destructive",
+      });
+    }
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [handleBarcodeDetected, toast]);
 
   const initializeScanner = useCallback(async () => {
     if (!showScanner || scannerRef.current) return;
@@ -535,17 +618,52 @@ export function UnifiedScannerModal({
               <div className="space-y-2">
                 <p className="text-gray-700 font-medium">Ready to Scan</p>
                 <p className="text-sm text-gray-600">
-                  Click below to start scanning product barcodes
+                  Use your camera or upload a barcode image
                 </p>
               </div>
-              <Button 
-                onClick={requestCameraPermission}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                data-testid="button-start-scanner"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Start Scanner
-              </Button>
+              
+              <div className="space-y-3">
+                <Button 
+                  onClick={requestCameraPermission}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  data-testid="button-start-scanner"
+                  disabled={isDecodingImage}
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  Start Camera Scanner
+                </Button>
+                
+                <div className="relative">
+                  <Button 
+                    onClick={() => fileInputRef.current?.click()}
+                    variant="outline"
+                    className="w-full border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    data-testid="button-upload-image"
+                    disabled={isDecodingImage}
+                  >
+                    {isDecodingImage ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Decoding Barcode...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Barcode Image
+                      </>
+                    )}
+                  </Button>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    data-testid="input-upload-image"
+                  />
+                </div>
+              </div>
             </div>
           ) : showScanner ? (
             <div className="space-y-4">
