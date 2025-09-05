@@ -59,13 +59,18 @@ export default function ProductScanner() {
     },
     onSuccess: (result) => {
       if (result?.product) {
-        setScannedProduct(result.product);
+        // Navigate to product detail page instead of staying on scanner page
         toast({
           title: `Product Found!`,
           description: result.source === 'local' 
             ? "Found in safety database" 
             : "Discovered through product search",
         });
+        
+        // Navigate to product detail page
+        setTimeout(() => {
+          window.location.href = `/product/${result.product.id}`;
+        }, 1000);
       } else {
         toast({
           title: "Product Not Found",

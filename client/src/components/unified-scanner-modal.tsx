@@ -81,9 +81,14 @@ export function UnifiedScannerModal({
           description: successMessage,
         });
 
-        // Navigate to product detail page
-        setLocation(`/product/${result.product.id}`);
+        // Close modal first, then navigate to prevent navigation issues
         onClose();
+        
+        // Small delay to ensure modal closes before navigation  
+        setTimeout(() => {
+          console.log('Navigating to product:', result.product.id);
+          setLocation(`/product/${result.product.id}`);
+        }, 200);
       } else {
         // Product not found - different message based on auth status
         if (user) {
