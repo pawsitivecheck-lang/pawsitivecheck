@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { UnifiedScannerModal } from "@/components/unified-scanner-modal";
-import { ImageScanner } from "@/components/image-scanner";
 import { useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Search, Camera, Scan, Image, Globe, Loader2, X, Clock } from "lucide-react";
+import { Search, Camera, Scan, Globe, Loader2, X, Clock } from "lucide-react";
 import type { Product } from "@shared/schema";
 
 interface HeaderSearchProps {
@@ -24,7 +23,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
-  const [showImageScanner, setShowImageScanner] = useState(false);
   const [showScannerMenu, setShowScannerMenu] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -147,43 +145,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     },
   });
 
-  const imageSearchMutation = useMutation({
-    mutationFn: async (imageData: string) => {
-      const res = await apiRequest('POST', '/api/products/internet-search', {
-        type: 'image',
-        query: imageData
-      });
-      
-      if (res.ok) {
-        const result = await res.json();
-        return result;
-      }
-      
-      return null;
-    },
-    onSuccess: (result) => {
-      if (result?.product) {
-        setLocation('/product-scanner');
-        toast({
-          title: "Product Identified!",
-          description: "Product successfully identified from image",
-        });
-      } else {
-        toast({
-          title: "Product Not Recognized",
-          description: "Unable to identify product from image",
-          variant: "destructive",
-        });
-      }
-    },
-    onError: () => {
-      toast({
-        title: "Image Analysis Failed",
-        description: "Unable to analyze product image",
-        variant: "destructive",
-      });
-    },
-  });
 
 
   // Load recent searches from localStorage
@@ -608,13 +569,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     setShowScannerMenu(false);
   };
 
-  const handleImageScanned = (imageData: string) => {
-    setShowImageScanner(false);
-    setShowScannerMenu(false);
-    imageSearchMutation.mutate(imageData);
-  };
-
-  const isLoading = searchMutation.isPending || scanProductMutation.isPending || imageSearchMutation.isPending;
+  const isLoading = searchMutation.isPending || scanProductMutation.isPending;
 
   return (
     <>
@@ -707,23 +662,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-barcode-scanner"
+                data-testid="button-product-scanner"
               >
-                <Scan className="mr-2 h-4 w-4" />
-                Barcode Scanner
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowImageScanner(true);
-                  setShowScannerMenu(false);
-                }}
-                variant="ghost"
-                size="sm"
-                className="w-full justify-start text-popover-foreground hover:text-blue-400 hover:bg-accent"
-                data-testid="button-image-scanner"
-              >
-                <Image className="mr-2 h-4 w-4" />
-                Image Scanner
+                <Camera className="mr-2 h-4 w-4" />
+                Product Scanner
               </Button>
             </div>
           </div>
@@ -854,11 +796,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         mode="full"
       />
       
-      <ImageScanner
-        isActive={showImageScanner}
-        onScan={handleImageScanned}
-        onClose={() => setShowImageScanner(false)}
-      />
 
 
     </>
