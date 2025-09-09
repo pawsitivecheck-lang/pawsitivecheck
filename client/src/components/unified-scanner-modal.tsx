@@ -429,7 +429,7 @@ export function UnifiedScannerModal({
       img.onload = async () => {
         try {
           // Use ZXing library to decode barcode from image
-          const codeReader = new BrowserCodeReader();
+          const codeReader = new BrowserCodeReader(null, {});
           const result = await codeReader.decodeFromImageElement(img);
           
           // Clean up
@@ -776,14 +776,42 @@ export function UnifiedScannerModal({
                   Please allow camera access to scan product barcodes
                 </p>
               </div>
-              <Button 
-                onClick={requestCameraPermission}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                data-testid="button-retry-scanner"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Allow Camera Access
-              </Button>
+              <div className="space-y-3">
+                <Button 
+                  onClick={requestCameraPermission}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  data-testid="button-retry-scanner"
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  Allow Camera Access
+                </Button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">Or</span>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleFileUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    data-testid="input-upload-barcode"
+                  />
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    data-testid="button-upload-barcode"
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Barcode Image
+                  </Button>
+                </div>
+              </div>
             </div>
           ) : !permissionRequested && !showScanner ? (
             <div className="text-center space-y-4">
