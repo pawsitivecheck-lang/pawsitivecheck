@@ -184,6 +184,17 @@ export function UnifiedScannerModal({
             title: "Product Not Found",
             description: "This product is not in our database yet. Log in to add new products.",
             variant: "destructive",
+            action: (
+              <div className="space-x-2">
+                <Button size="sm" onClick={() => {
+                  onClose();
+                  // Redirect to login API endpoint with redirect parameter
+                  window.location.href = '/api/login?redirect=' + encodeURIComponent('/add-product');
+                }}>
+                  Log In
+                </Button>
+              </div>
+            ),
           });
         }
         // Don't auto-close - let user manually close or take action
