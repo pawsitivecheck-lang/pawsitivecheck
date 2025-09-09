@@ -762,24 +762,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         */
 
-        // Fall back to mock data if API failed or no API key
+        // Try Go-UPC Database as secondary fallback for real product data
+        if (!productData) {
+          try {
+            const response = await fetch(`https://go-upc.com/api/v1/code/${query}`, {
+              headers: {
+                'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
+              }
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              
+              if (data.codeType === 'UPC' && data.product) {
+                const product = data.product;
+                
+                // Calculate cosmic score based on data quality
+                let cosmicScore = 65;
+                if (product.name && product.name.length > 20) cosmicScore += 10;
+                if (product.description && product.description.length > 50) cosmicScore += 10;
+                if (product.brand && product.brand !== 'Unknown Brand') cosmicScore += 10;
+                if (product.imageUrl) cosmicScore += 5;
+
+                // Determine if it's pet-related and category
+                const isPetProduct = product.name && (
+                  product.name.toLowerCase().includes('dog') ||
+                  product.name.toLowerCase().includes('cat') ||
+                  product.name.toLowerCase().includes('pet') ||
+                  product.name.toLowerCase().includes('puppy') ||
+                  product.name.toLowerCase().includes('kitten') ||
+                  product.name.toLowerCase().includes('feline') ||
+                  product.name.toLowerCase().includes('canine') ||
+                  product.category?.toLowerCase().includes('pet') ||
+                  product.category?.toLowerCase().includes('animal')
+                );
+
+                if (isPetProduct) {
+                  let category = 'pet-food';
+                  const name = product.name.toLowerCase();
+                  if (name.includes('toy') || name.includes('ball') || name.includes('rope')) {
+                    category = 'pet-toys';
+                  } else if (name.includes('treat') || name.includes('snack')) {
+                    category = 'pet-treats';
+                  } else if (name.includes('leash') || name.includes('collar') || name.includes('bed')) {
+                    category = 'pet-accessories';
+                  } else if (name.includes('food') || name.includes('nutrition') || name.includes('meal')) {
+                    category = 'pet-food';
+                  }
+
+                  productData = {
+                    name: product.name,
+                    brand: product.brand || "Unknown Brand", 
+                    category,
+                    description: product.description || `${product.name} - Pet product from verified barcode database`,
+                    ingredients: product.ingredients || "Ingredients information not available",
+                    imageUrl: product.imageUrl || null,
+                    barcode: query,
+                    cosmicScore: Math.min(cosmicScore, 90),
+                    cosmicClarity: 'blessed',
+                    transparencyLevel: 'good',
+                    isBlacklisted: false,
+                    suspiciousIngredients: [],
+                    lastAnalyzed: new Date(),
+                  };
+                  source = 'go-upc';
+                  message = 'Real product found in verified barcode database';
+                }
+              }
+            }
+          } catch (error) {
+            console.error('Go-UPC API error:', error);
+          }
+        }
+
+        // Try UPCitemdb.com as third fallback
+        if (!productData) {
+          try {
+            const response = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${query}`, {
+              headers: {
+                'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
+              }
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              
+              if (data.code === 'OK' && data.items && data.items.length > 0) {
+                const item = data.items[0];
+                
+                // Check if it's pet-related
+                const isPetProduct = item.title && (
+                  item.title.toLowerCase().includes('dog') ||
+                  item.title.toLowerCase().includes('cat') ||
+                  item.title.toLowerCase().includes('pet') ||
+                  item.title.toLowerCase().includes('puppy') ||
+                  item.title.toLowerCase().includes('kitten') ||
+                  item.title.toLowerCase().includes('feline') ||
+                  item.title.toLowerCase().includes('canine') ||
+                  item.category?.toLowerCase().includes('pet')
+                );
+
+                if (isPetProduct) {
+                  let category = 'pet-food';
+                  const title = item.title.toLowerCase();
+                  if (title.includes('toy') || title.includes('ball') || title.includes('rope')) {
+                    category = 'pet-toys';
+                  } else if (title.includes('treat') || title.includes('snack')) {
+                    category = 'pet-treats';
+                  } else if (title.includes('leash') || title.includes('collar') || title.includes('bed')) {
+                    category = 'pet-accessories';
+                  }
+
+                  productData = {
+                    name: item.title,
+                    brand: item.brand || "Unknown Brand",
+                    category,
+                    description: item.description || `${item.title} - Pet product from UPC database`,
+                    ingredients: "Ingredients information not available - please check product packaging",
+                    imageUrl: item.images?.[0] || null,
+                    barcode: query,
+                    cosmicScore: 75,
+                    cosmicClarity: 'blessed',
+                    transparencyLevel: 'good', 
+                    isBlacklisted: false,
+                    suspiciousIngredients: [],
+                    lastAnalyzed: new Date(),
+                  };
+                  source = 'upcitemdb';
+                  message = 'Real product found in UPC item database';
+                }
+              }
+            }
+          } catch (error) {
+            console.error('UPCitemdb API error:', error);
+          }
+        }
+
+        // Only fall back to mock data as absolute last resort
         if (!productData) {
           productData = {
-            name: `Internet Product ${query.slice(-4)}`,
-            brand: "Global Pet Co",
+            name: `Unidentified Product ${query.slice(-4)}`,
+            brand: "Unknown Brand",
             category: "pet-food",
-            description: `Premium pet product discovered through internet divination. Barcode: ${query}`,
-            ingredients: "Chicken, rice, vegetables, vitamins, minerals",
+            description: `Product with barcode ${query} - Unable to identify from available databases. Please verify product details manually.`,
+            ingredients: "Ingredients not available - please check product packaging",
             imageUrl: null,
             barcode: query,
-            cosmicScore: Math.floor(Math.random() * 50) + 50,
-            cosmicClarity: Math.random() > 0.5 ? 'blessed' : 'questionable',
-            transparencyLevel: 'good',
+            cosmicScore: 45, // Lower score for unidentified products
+            cosmicClarity: 'questionable',
+            transparencyLevel: 'limited',
             isBlacklisted: false,
             suspiciousIngredients: [],
             lastAnalyzed: new Date(),
           };
-          source = 'mock';
+          source = 'fallback';
+          message = 'Product barcode detected but not found in available databases';
         }
 
         // Add to database
