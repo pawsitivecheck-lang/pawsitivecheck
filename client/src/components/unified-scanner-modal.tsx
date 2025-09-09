@@ -373,14 +373,23 @@ export function UnifiedScannerModal({
           description: `${message}. Point your camera at a product barcode to scan.`,
         });
       } else {
-        // Handle different denial scenarios
+        // Handle different denial scenarios - provide file upload as fallback
         const errorMessage = result.message || 'Camera permission denied by user';
         setCameraError(errorMessage);
         setPermissionRequested(false);
         
+        // For mobile/preview environments, suggest file upload as alternative
+        const isMobileOrPreview = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                                  window.location.hostname.includes('replit.') ||
+                                  window.location.hostname.includes('repl.co');
+        
+        const description = isMobileOrPreview 
+          ? result.message + " You can also upload a barcode image using the 'Upload Barcode Image' option below."
+          : result.message || "Please allow camera access to scan barcodes";
+        
         toast({
           title: "Camera Permission Denied", 
-          description: result.message || "Please allow camera access to scan barcodes",
+          description,
           variant: "destructive",
         });
       }

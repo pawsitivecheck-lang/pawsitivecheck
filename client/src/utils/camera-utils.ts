@@ -47,26 +47,36 @@ export const requestCameraPermission = async (): Promise<{ granted: boolean; per
       };
     }
     
-    // Request camera access with ChromeOS compatibility
+    // Request camera access with compatibility for various environments
     try {
-      // Detect ChromeOS
+      // Detect ChromeOS and Replit preview environment
       const isChromebook = /CrOS/.test(navigator.userAgent);
+      const isReplitPreview = window.location.hostname.includes('replit.') || 
+                             window.location.hostname.includes('repl.co') ||
+                             navigator.userAgent.includes('Replit');
       console.log('ChromeOS detected:', isChromebook);
+      console.log('Replit preview detected:', isReplitPreview);
       
       let stream;
-      if (isChromebook) {
-        // ChromeOS: Use simplest possible constraints
+      if (isChromebook || isReplitPreview) {
+        // ChromeOS and Replit preview: Use simplest possible constraints
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
       } else {
-        // Use rear camera on mobile devices with fallback
-        stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { 
-            facingMode: 'environment', // Use rear camera without exact constraint
-            frameRate: { ideal: 30 },
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
-        });
+        // Try with rear camera first, fallback to any available camera
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { 
+              facingMode: 'environment', // Use rear camera without exact constraint
+              frameRate: { ideal: 30 },
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          });
+        } catch (rearCameraError) {
+          console.log('Rear camera not available, trying any camera:', rearCameraError);
+          // Fallback to any available camera
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        }
       }
       
       // Close test stream immediately
