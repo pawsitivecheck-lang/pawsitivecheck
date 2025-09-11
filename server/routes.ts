@@ -617,9 +617,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Internet product search endpoint
-  app.post('/api/products/internet-search', isAuthenticated, async (req: any, res) => {
+  app.post('/api/products/internet-search', async (req: any, res) => {
     try {
       const { type, query } = req.body;
+
+      // Only allow image search for guest users, require auth for barcode search
+      if (type === 'barcode' && !req.user) {
+        return res.status(401).json({ message: "Authentication required for barcode search" });
+      }
+
+      // Basic validation for image uploads
+      if (type === 'image') {
+        if (!query || typeof query !== 'string') {
+          return res.status(400).json({ message: "Invalid image data" });
+        }
+        // Check if it's a valid base64 image (basic check)
+        if (!query.startsWith('data:image/') || query.length > 10 * 1024 * 1024) { // 10MB limit
+          return res.status(400).json({ message: "Invalid or too large image data" });
+        }
+      }
 
       if (type === 'barcode') {
         let productData = null;

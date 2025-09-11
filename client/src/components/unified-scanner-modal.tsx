@@ -8,7 +8,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { Camera, X, AlertCircle, CheckCircle, RotateCcw, Loader2, Upload, FileImage } from "lucide-react";
 import { Html5Qrcode, Html5QrcodeScanType, Html5QrcodeSupportedFormats, Html5QrcodeScannerState } from "html5-qrcode";
-import { BrowserCodeReader } from "@zxing/browser";
+import { BrowserMultiFormatReader } from "@zxing/browser";
 import { requestCameraPermission as utilsRequestCameraPermission, isCapacitorApp, triggerHapticFeedback } from "@/utils/camera-utils";
 import type { Product } from "@shared/schema";
 
@@ -45,11 +45,7 @@ export function UnifiedScannerModal({
 
   const imageSearchMutation = useMutation({
     mutationFn: async (imageData: string) => {
-      // Only try internet search if user is logged in
-      if (!user) {
-        throw new Error('Please log in to use image search functionality');
-      }
-      
+      // Try internet search for all users (authentication handled by server)
       const res = await apiRequest('POST', '/api/products/internet-search', {
         type: 'image',
         query: imageData
@@ -429,7 +425,7 @@ export function UnifiedScannerModal({
       img.onload = async () => {
         try {
           // Use ZXing library to decode barcode from image
-          const codeReader = new BrowserCodeReader(null, {});
+          const codeReader = new BrowserMultiFormatReader();
           const result = await codeReader.decodeFromImageElement(img);
           
           // Clean up
