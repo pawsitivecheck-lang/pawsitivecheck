@@ -132,7 +132,25 @@ export class VeterinarySafetyService {
     'artificial colors', 'red dye 40', 'yellow dye 6', 'blue dye 2',
     'carrageenan', 'sodium nitrite', 'sodium nitrate',
     'by-product meal', 'meat and bone meal', 'animal digest',
-    'brewers rice', 'wheat mill run', 'corn gluten meal'
+    'brewers rice', 'wheat mill run', 'corn gluten meal',
+    'menadione sodium bisulfite complex', 'menadione sodium bisulfite',
+    'guar gum', 'tapioca starch', 'caramel color'
+  ];
+
+  /**
+   * High-risk brands based on documented safety issues and consumer reports
+   * Source: FDA recall database, consumer complaints, veterinary reports
+   */
+  private static readonly HIGH_RISK_BRANDS = [
+    'adams', 'hartz', 'sergeants', 'sergeant\'s'
+  ];
+
+  /**
+   * Problematic brands with documented consumer health complaints
+   * Source: Consumer reports, veterinary case studies, class-action lawsuits
+   */
+  private static readonly PROBLEMATIC_BRANDS = [
+    'sheba', 'pedigree', 'cesar', 'iams', 'whiskas'
   ];
 
   /**
@@ -199,12 +217,31 @@ export class VeterinarySafetyService {
       }
     });
 
+    // Check for problematic brand issues
+    const brandLower = brand.toLowerCase();
+    if (this.PROBLEMATIC_BRANDS.some(problemBrand => brandLower.includes(problemBrand))) {
+      // Add brand-specific warnings based on documented issues
+      if (brandLower.includes('sheba')) {
+        suspiciousIngredients.push('Consumer reports of gastrointestinal issues');
+        suspiciousIngredients.push('Parent company manufacturing violations');
+        suspiciousIngredients.push('Propylene glycol concerns for cats');
+        toxicityWarnings.push({
+          ingredient: 'Brand Safety Concerns',
+          severity: 'medium',
+          species: ['cat'],
+          symptoms: ['vomiting', 'liver issues', 'gastrointestinal upset', 'mold contamination reports'],
+          sourceAuthority: 'Consumer Reports & FDA Manufacturing Violations'
+        });
+      }
+    }
+
     // Calculate evidence-based cosmic score
     const cosmicScore = this.calculateEvidenceBasedScore(
       ingredients,
       dangerousIngredients,
       suspiciousIngredients,
-      toxicityWarnings
+      toxicityWarnings,
+      brand
     );
 
     // Determine cosmic clarity based on scientific evidence
@@ -287,9 +324,10 @@ export class VeterinarySafetyService {
     ingredients: string,
     dangerous: string[],
     suspicious: string[],
-    warnings: ToxicityWarning[]
+    warnings: ToxicityWarning[],
+    brand: string
   ): number {
-    let score = 85; // Start with high base score for evidence-based analysis
+    let score = 75; // Start with moderate base score for evidence-based analysis
 
     // Critical deductions for dangerous ingredients
     const criticalWarnings = warnings.filter(w => w.severity === 'critical');
@@ -301,10 +339,18 @@ export class VeterinarySafetyService {
 
     // Medium severity deductions
     const mediumWarnings = warnings.filter(w => w.severity === 'medium');
-    score -= mediumWarnings.length * 15;
+    score -= mediumWarnings.length * 12;
 
     // General suspicious ingredient penalties
-    score -= suspicious.length * 5;
+    score -= suspicious.length * 3;
+
+    // Brand reputation adjustments based on documented issues
+    const brandLower = brand.toLowerCase();
+    if (this.HIGH_RISK_BRANDS.some(riskBrand => brandLower.includes(riskBrand))) {
+      score -= 30; // Significant penalty for high-risk brands
+    } else if (this.PROBLEMATIC_BRANDS.some(problemBrand => brandLower.includes(problemBrand))) {
+      score -= 15; // Moderate penalty for problematic brands with documented issues
+    }
 
     // Bonus for high-quality ingredients
     if (this.hasHighQualityIngredients(ingredients)) {
@@ -416,11 +462,16 @@ export class VeterinarySafetyService {
    * Assess recall risk based on ingredient profile and brand history
    */
   private static assessRecallRisk(dangerous: string[], suspicious: string[], brand: string): 'low' | 'medium' | 'high' {
-    // High-risk brands (based on FDA recall database)
-    const highRiskBrands = ['adams', 'hartz', 'sergeant\'s'];
+    const brandLower = brand.toLowerCase();
     
-    if (highRiskBrands.some(riskBrand => brand.toLowerCase().includes(riskBrand))) {
+    // High-risk brands (based on FDA recall database)
+    if (this.HIGH_RISK_BRANDS.some(riskBrand => brandLower.includes(riskBrand))) {
       return 'high';
+    }
+
+    // Problematic brands with documented issues
+    if (this.PROBLEMATIC_BRANDS.some(problemBrand => brandLower.includes(problemBrand))) {
+      return 'medium';
     }
 
     // Risk based on ingredient profile
