@@ -58,19 +58,44 @@ export default function ProductDatabase() {
   const uniqueCategories: string[] = Array.from(new Set(products?.map((p: any) => p.category).filter(Boolean) || []));
   
   const filteredProducts = products?.filter((product: any) => {
+    console.log('🔍 FILTERING PRODUCT:', product.name, {
+      clarity: product.cosmicClarity,
+      filterClarity,
+      category: product.category,
+      filterCategory,
+      brand: product.brand,
+      filterBrand,
+      score: product.cosmicScore,
+      minCosmicScore,
+      maxCosmicScore
+    });
+    
     // Clarity filter
-    if (filterClarity !== 'all' && product.cosmicClarity !== filterClarity) return false;
+    if (filterClarity !== 'all' && product.cosmicClarity !== filterClarity) {
+      console.log('❌ FILTERED OUT BY CLARITY');
+      return false;
+    }
     
     // Category filter
-    if (filterCategory !== 'all' && product.category !== filterCategory) return false;
+    if (filterCategory !== 'all' && product.category !== filterCategory) {
+      console.log('❌ FILTERED OUT BY CATEGORY');
+      return false;
+    }
     
     // Brand filter
-    if (filterBrand !== 'all' && product.brand !== filterBrand) return false;
+    if (filterBrand !== 'all' && product.brand !== filterBrand) {
+      console.log('❌ FILTERED OUT BY BRAND');
+      return false;
+    }
     
     // Cosmic score range filter
     const score = product.cosmicScore || 0;
-    if (score < minCosmicScore || score > maxCosmicScore) return false;
+    if (score < minCosmicScore || score > maxCosmicScore) {
+      console.log('❌ FILTERED OUT BY SCORE');
+      return false;
+    }
     
+    console.log('✅ PRODUCT PASSED ALL FILTERS');
     return true;
   }).sort((a: any, b: any) => {
     switch (sortBy) {
