@@ -374,6 +374,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const handleSearch = (e: React.FormEvent) => {
+    console.log('🔥 FORM SUBMIT:', searchQuery.trim());
     e.preventDefault();
     if (!searchQuery.trim()) return;
     
@@ -381,7 +382,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     saveRecentSearch(searchQuery.trim());
     
     // Navigate to database with search
-    setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
+    const url = `/product-database?search=${encodeURIComponent(searchQuery.trim())}`;
+    console.log('🎯 NAVIGATING TO:', url);
+    setLocation(url);
+    console.log('✅ setLocation called');
     clearSearch();
   };
 
@@ -559,11 +563,15 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const selectProduct = (product: Product) => {
+    console.log('🚀 PRODUCT CLICK:', product.name);
     saveRecentSearch(product.name);
     setShowResults(false);
     clearSearch();
     // Navigate to database with product search
-    setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
+    const url = `/product-database?search=${encodeURIComponent(product.name)}`;
+    console.log('🎯 PRODUCT NAV TO:', url);
+    setLocation(url);
+    console.log('✅ product setLocation called');
   };
 
 
