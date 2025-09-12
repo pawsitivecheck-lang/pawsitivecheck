@@ -65,6 +65,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       return localResults || [];
     },
     onSuccess: (results: Product[], variables: string) => {
+      console.log('✅ SEARCH SUCCESS - RAW RESULTS:', results?.length || 0, 'results for query:', variables);
       // Sort results by relevance using advanced scoring algorithm
       const scoredResults = (results || []).map(product => ({
         product,
@@ -80,6 +81,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       setSearchResults(sortedProducts);
       setShowResults(true);
       setSelectedIndex(-1);
+      console.log('🎯 FINAL STATE - showResults:', true, 'searchResults.length:', sortedProducts.length);
     },
     onError: () => {
       toast({
@@ -326,8 +328,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     
     debounceRef.current = setTimeout(() => {
       if (query.trim().length >= 1) { // Start searching from 1 character
+        console.log('🚀 TRIGGERING SEARCH MUTATION for:', query.trim());
         searchMutation.mutate(query.trim());
       } else {
+        console.log('❌ CLEARING SEARCH RESULTS');
         setSearchResults([]);
         setShowResults(query.length > 0);
       }
@@ -337,6 +341,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   // Handle input changes with ultra-responsive real-time search
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    console.log('🔍 SEARCH INPUT CHANGED:', value);
     setSearchQuery(value);
     setSelectedIndex(-1);
     
