@@ -584,7 +584,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              onFocus={() => searchQuery.length > 0 && setShowResults(true)}
+              onFocus={() => setShowResults(true)}
               onBlur={(e) => {
                 // Delay hiding results to allow clicks
                 setTimeout(() => {
@@ -672,8 +672,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
 
 
-        {/* Search Results Dropdown */}
-        {showResults && (searchResults.length > 0 || (searchQuery.length === 0 && recentSearches.length > 0)) && (
+        {/* Search Results Dropdown - Always show when showResults is true */}
+        {showResults && (
           <div className="absolute top-12 left-0 right-0 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg p-1 z-[9999] shadow-2xl max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
@@ -767,22 +767,31 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               </div>
             )}
 
-            {/* Loading state */}
+            {/* Loading state - HIGH PRIORITY */}
             {searchMutation.isPending && (
-              <div className="p-4 text-center">
-                <Loader2 className="h-4 w-4 animate-spin mx-auto text-muted-foreground" />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Searching database and internet...
-                </p>
+              <div className="p-4 text-center border-b border-border/30">
+                <div className="flex items-center justify-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                  <p className="text-sm text-foreground font-medium">Searching products...</p>
+                </div>
               </div>
             )}
 
-            {/* No results state */}
-            {!searchMutation.isPending && searchQuery.length >= 2 && searchResults.length === 0 && (
+            {/* No results state - ONLY when not loading */}
+            {!searchMutation.isPending && searchQuery.length >= 1 && searchResults.length === 0 && (
               <div className="p-4 text-center">
                 <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">No products found</p>
-                <p className="text-xs text-muted-foreground mt-1">Try a different search term</p>
+                <p className="text-sm text-foreground font-medium">No products found for "{searchQuery}"</p>
+                <p className="text-xs text-muted-foreground mt-1">Try searching for brands like "sheba", "purina", or "kong"</p>
+              </div>
+            )}
+
+            {/* Debug info - TEMPORARY */}
+            {!searchMutation.isPending && searchQuery.length >= 1 && (
+              <div className="p-2 bg-yellow-50 dark:bg-yellow-900/20 border-b border-border/30">
+                <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                  Debug: Query="{searchQuery}" | Results={searchResults.length} | Loading={searchMutation.isPending.toString()}
+                </p>
               </div>
             )}
           </div>
