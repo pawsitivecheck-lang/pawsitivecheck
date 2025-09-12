@@ -239,7 +239,7 @@ export default function AdminProductSubmissions() {
                         <h4 className="font-medium text-purple-200 mb-2">Proposed Changes:</h4>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
                           <pre className="text-sm text-gray-300 whitespace-pre-wrap">
-                            {JSON.stringify(submission.proposedChanges, null, 2) as string}
+                            {JSON.stringify(submission.proposedChanges, null, 2)}
                           </pre>
                         </div>
                       </div>
