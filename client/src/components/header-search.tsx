@@ -569,6 +569,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
 
 
+
   const handleBarcodeScanned = () => {
     setShowBarcodeScanner(false);
     setShowScannerMenu(false);
@@ -576,8 +577,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
   const isLoading = searchMutation.isPending || scanProductMutation.isPending;
 
-  // MASSIVE DEBUG LOG
-  console.log('🏗️ HeaderSearch RENDER - isMobile:', isMobile, 'searchQuery:', searchQuery, 'showResults:', showResults);
 
   return (
     <>
@@ -588,7 +587,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="🔍 SEARCH DEBUG - Type here to trigger logs"
+              placeholder="Search products or scan... (Press Tab to autofill)"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -683,13 +682,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
 
 
-        {/* Search Results Dropdown - EXTREME VISIBILITY MODE */}
+        {/* Search Results Dropdown */}
         {showResults && (
-          <div className="absolute top-12 left-0 right-0 bg-red-500 border-8 border-yellow-400 rounded-lg p-4 z-[99999] shadow-2xl max-h-80 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-800 p-2 rounded">
-              <div className="text-center p-2 bg-green-500 text-white font-bold text-lg mb-2">
-                🎯 DROPDOWN IS VISIBLE! Results: {searchResults.length}
-              </div>
+          <div className="absolute top-12 left-0 right-0 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg p-1 z-[9999] shadow-2xl max-h-80 overflow-y-auto">
             
             {/* Autofill Hint */}
             {searchQuery.length >= 1 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
@@ -801,15 +796,6 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               </div>
             )}
 
-            {/* Debug info - TEMPORARY */}
-            {!searchMutation.isPending && searchQuery.length >= 1 && (
-              <div className="p-2 bg-yellow-50 dark:bg-yellow-900/20 border-b border-border/30">
-                <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                  Debug: Query="{searchQuery}" | Results={searchResults.length} | Loading={searchMutation.isPending.toString()}
-                </p>
-              </div>
-            )}
-            </div>
           </div>
         )}
       </div>
