@@ -5,6 +5,7 @@ import { PetSmartScraper } from "./petsmart-scraper";
 import { AmazonScraper } from "./amazon-scraper";
 import { TargetScraper } from "./target-scraper";
 import { PetcoScraper } from "./petco-scraper";
+import { VeterinarySafetyService } from "./veterinary-safety-service";
 
 export interface OpenPetFoodFactsProduct {
   product_name?: string;
@@ -49,14 +50,17 @@ export class OpenPetFoodFactsService {
       const brand = this.extractBrand(product.brands);
       const category = this.determineCategory(product.categories_tags || []);
       
-      // Calculate enhanced cosmic score
-      const cosmicScore = this.calculateCosmicScore(product);
+      // Perform authoritative veterinary safety analysis
+      const safetyAnalysis = VeterinarySafetyService.analyzeSafety(
+        product.ingredients_text || '',
+        productName,
+        brand,
+        this.extractTargetSpecies(product)
+      );
       
-      // Analyze ingredients for safety
-      const ingredientAnalysis = this.analyzeIngredients(product.ingredients_text || '');
-      
-      // Determine cosmic clarity
-      const cosmicClarity = this.determineCosmicClarity(ingredientAnalysis, product);
+      // Use evidence-based scoring from veterinary analysis
+      const cosmicScore = safetyAnalysis.cosmicScore;
+      const cosmicClarity = safetyAnalysis.cosmicClarity;
       
       // Get transparency level
       const transparencyLevel = this.getTransparencyLevel(product);
@@ -72,9 +76,9 @@ export class OpenPetFoodFactsService {
         barcode: barcode,
         cosmicScore: cosmicScore,
         cosmicClarity: cosmicClarity,
-        transparencyLevel: transparencyLevel,
-        isBlacklisted: false,
-        suspiciousIngredients: ingredientAnalysis.suspicious,
+        transparencyLevel: safetyAnalysis.transparencyLevel,
+        isBlacklisted: safetyAnalysis.dangerousIngredients.length > 0,
+        suspiciousIngredients: safetyAnalysis.suspiciousIngredients,
         targetSpecies: this.extractTargetSpecies(product),
         animalType: 'pet',
         lastAnalyzed: new Date(),

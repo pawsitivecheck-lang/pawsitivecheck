@@ -2181,6 +2181,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Safety analysis calibration endpoint - calibrate all products with authoritative sources
+  app.post('/api/calibrate-safety-analyses', async (req: any, res) => {
+    try {
+      logger.info('general', 'Starting comprehensive safety analysis calibration with authoritative veterinary sources');
+      
+      // Trigger enhanced safety calibration
+      const calibrationResults = await openPetFoodFactsService.updateAllProductsWithEnhancedData();
+      
+      logger.info('general', `Safety calibration completed: ${JSON.stringify(calibrationResults)}`);
+      
+      res.json({
+        message: "Safety analyses calibrated successfully using authoritative veterinary sources (FDA CVM, AAFCO, ASPCA APCC)",
+        results: calibrationResults,
+        sources: [
+          "FDA Center for Veterinary Medicine",
+          "Association of American Feed Control Officials (AAFCO)", 
+          "ASPCA Animal Poison Control Center",
+          "Pet Poison Helpline",
+          "World Small Animal Veterinary Association (WSAVA)"
+        ]
+      });
+    } catch (error) {
+      logger.error('general', `Safety calibration error: ${error}`);
+      res.status(500).json({ message: "Failed to calibrate safety analyses" });
+    }
+  });
+
   // Temporary public endpoint for product data calibration (development only)
   app.post('/api/calibrate-products', async (req, res) => {
     try {
