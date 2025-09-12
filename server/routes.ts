@@ -616,25 +616,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Internet product search endpoint
+  // Internet product search endpoint with enhanced security
   app.post('/api/products/internet-search', async (req: any, res) => {
     try {
-      const { type, query } = req.body;
+      // Validate request structure with Zod
+      const requestSchema = z.object({
+        type: z.enum(['image', 'barcode']),
+        query: z.string().min(1)
+      });
+
+      const validation = requestSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({ 
+          message: "Invalid request format", 
+          errors: validation.error.errors 
+        });
+      }
+
+      const { type, query } = validation.data;
 
       // Only allow image search for guest users, require auth for barcode search
       if (type === 'barcode' && !req.user) {
         return res.status(401).json({ message: "Authentication required for barcode search" });
       }
 
-      // Basic validation for image uploads
+      // Enhanced validation for image uploads
       if (type === 'image') {
-        if (!query || typeof query !== 'string') {
-          return res.status(400).json({ message: "Invalid image data" });
+        // Validate data URL format
+        const dataUrlRegex = /^data:image\/(jpeg|jpg|png|webp);base64,(.+)$/i;
+        const match = query.match(dataUrlRegex);
+        
+        if (!match) {
+          return res.status(400).json({ 
+            message: "Invalid image format. Only JPEG, PNG, and WebP are allowed." 
+          });
         }
-        // Check if it's a valid base64 image (basic check)
-        if (!query.startsWith('data:image/') || query.length > 10 * 1024 * 1024) { // 10MB limit
-          return res.status(400).json({ message: "Invalid or too large image data" });
+
+        const [, format, base64Data] = match;
+        
+        // Calculate actual decoded size (more accurate than string length)
+        const decodedSize = (base64Data.length * 3) / 4;
+        const maxSize = 4 * 1024 * 1024; // 4MB limit
+        
+        if (decodedSize > maxSize) {
+          return res.status(400).json({ 
+            message: `Image too large. Maximum size is ${maxSize / 1024 / 1024}MB.` 
+          });
         }
+
+        // Basic rate limiting check (log for monitoring)
+        logger.info('general', `Image upload request from IP: ${req.ip}, size: ${Math.round(decodedSize / 1024)}KB, format: ${format}`);
       }
 
       if (type === 'barcode') {
