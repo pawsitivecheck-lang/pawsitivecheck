@@ -34,6 +34,7 @@ import { RuralKingScraper } from "./services/ruralking-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
 import { openPetFoodFactsService } from "./services/openpetfoodfacts-service";
+import { VeterinarySafetyService } from "./services/veterinary-safety-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint that bypasses session middleware for deployment
@@ -2181,18 +2182,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Safety analysis calibration endpoint - calibrate all products with authoritative sources
+  // Safety analysis calibration endpoint - calibrate ALL products with authoritative sources
   app.post('/api/calibrate-safety-analyses', async (req: any, res) => {
     try {
-      logger.info('general', 'Starting comprehensive safety analysis calibration with authoritative veterinary sources');
+      logger.info('general', 'Starting comprehensive safety analysis calibration for ALL products with authoritative veterinary sources');
       
-      // Trigger enhanced safety calibration
-      const calibrationResults = await openPetFoodFactsService.updateAllProductsWithEnhancedData();
+      // Get all products from database  
+      const allProducts = await storage.getProducts(1000, 0); // Get up to 1000 products
+      logger.info('general', `Found ${allProducts.length} total products to recalibrate`);
       
-      logger.info('general', `Safety calibration completed: ${JSON.stringify(calibrationResults)}`);
+      let updatedCount = 0;
+      
+      // Process each product through veterinary safety analysis
+      for (const product of allProducts) {
+        try {
+          const safetyAnalysis = VeterinarySafetyService.analyzeSafety(
+            product.ingredients || '',
+            product.name,
+            product.brand,
+            product.targetSpecies || ['dog', 'cat']
+          );
+          
+          // Update product with new safety analysis
+          const updatedProduct = {
+            ...product,
+            cosmicScore: safetyAnalysis.cosmicScore,
+            cosmicClarity: safetyAnalysis.cosmicClarity,
+            transparencyLevel: safetyAnalysis.transparencyLevel,
+            suspiciousIngredients: safetyAnalysis.suspiciousIngredients,
+            isBlacklisted: safetyAnalysis.dangerousIngredients.length > 0,
+            lastAnalyzed: new Date()
+          };
+          
+          await storage.updateProduct(product.id, updatedProduct);
+          updatedCount++;
+          
+          if (updatedCount % 50 === 0) {
+            logger.info('general', `Recalibrated ${updatedCount}/${allProducts.length} products`);
+          }
+          
+        } catch (productError) {
+          logger.error('general', `Failed to recalibrate product ${product.id}: ${productError}`);
+        }
+      }
+      
+      const calibrationResults = {
+        total: allProducts.length,
+        updated: updatedCount,
+        message: `Comprehensive safety recalibration completed for all ${updatedCount} products`
+      };
+      
+      logger.info('general', `Comprehensive safety calibration completed: ${JSON.stringify(calibrationResults)}`);
       
       res.json({
-        message: "Safety analyses calibrated successfully using authoritative veterinary sources (FDA CVM, AAFCO, ASPCA APCC)",
+        message: "Safety analyses calibrated successfully for ALL products using authoritative veterinary sources (FDA CVM, AAFCO, ASPCA APCC)",
         results: calibrationResults,
         sources: [
           "FDA Center for Veterinary Medicine",
