@@ -381,7 +381,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     saveRecentSearch(searchQuery.trim());
     
     // Navigate to database with search
-    setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
+    setLocation(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
     clearSearch();
   };
 
@@ -474,7 +474,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             // Recent search selected
             setSearchQuery(selectedOption);
             saveRecentSearch(selectedOption);
-            setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
+            setLocation(`/products?search=${encodeURIComponent(selectedOption)}`);
             clearSearch();
           } else {
             // Product selected
@@ -563,7 +563,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     setShowResults(false);
     clearSearch();
     // Navigate to database with product search
-    setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
+    setLocation(`/products?search=${encodeURIComponent(product.name)}`);
   };
 
 
@@ -699,7 +699,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       if (suggestion) {
                         setSearchQuery(suggestion);
                         saveRecentSearch(suggestion);
-                        setLocation(`/product-database?search=${encodeURIComponent(suggestion)}`);
+                        setLocation(`/products?search=${encodeURIComponent(suggestion)}`);
                         clearSearch();
                       }
                     }}
@@ -722,7 +722,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       onClick={() => {
                         setSearchQuery(search);
                         saveRecentSearch(search);
-                        setLocation(`/product-database?search=${encodeURIComponent(search)}`);
+                        setLocation(`/products?search=${encodeURIComponent(search)}`);
                         clearSearch();
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
