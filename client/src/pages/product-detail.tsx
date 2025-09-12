@@ -930,6 +930,15 @@ export default function ProductDetail() {
                             <p><strong>Special Cases:</strong> Not recommended for pregnant, nursing, young, elderly, or immunocompromised pets without veterinary approval.</p>
                           </>
                         )}
+
+                        {product.cosmicClarity === 'neutral' && (
+                          <>
+                            <p><strong>Moderate Concerns:</strong> This product has some documented safety concerns or quality issues. Consider veterinary consultation before use.</p>
+                            <p><strong>Careful Introduction:</strong> If choosing to use, introduce very gradually over 10-14 days and monitor closely for any adverse reactions.</p>
+                            <p><strong>Alternative Consideration:</strong> You may want to discuss higher-rated alternatives with your veterinarian for optimal pet health.</p>
+                            <p><strong>Special Populations:</strong> Extra caution advised for young, elderly, pregnant, nursing, or pets with existing health conditions.</p>
+                          </>
+                        )}
                         
                         {product.cosmicClarity === 'cursed' && (
                           <>
@@ -1237,6 +1246,20 @@ export default function ProductDetail() {
                             <p>👁️ Monitor closely for 48-72 hours after introduction</p>
                             <p>⚠️ Avoid use in pets with known sensitivities</p>
                             <p>📞 Have emergency vet contact ready during trial period</p>
+                            {productRecalls && productRecalls.length > 0 && (
+                              <p>🚨 <strong>Check recall status</strong> before any use</p>
+                            )}
+                          </>
+                        )}
+
+                        {product.cosmicClarity === 'neutral' && (
+                          <>
+                            <p>⚠️ <strong>Consider veterinary consultation</strong> before use</p>
+                            <p>📋 Review documented concerns with your vet</p>
+                            <p>🔍 Research higher-rated alternatives if available</p>
+                            <p>👀 Monitor pet closely during transition period</p>
+                            <p>⏱️ Introduce very gradually over 10-14 days</p>
+                            <p>📞 Contact vet if any adverse reactions occur</p>
                             {productRecalls && productRecalls.length > 0 && (
                               <p>🚨 <strong>Check recall status</strong> before any use</p>
                             )}
