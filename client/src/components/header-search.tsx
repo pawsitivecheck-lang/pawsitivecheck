@@ -65,6 +65,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
       return localResults || [];
     },
     onSuccess: (results: Product[], variables: string) => {
+      console.log('Search API response:', results);
+      
       // Sort results by relevance using advanced scoring algorithm
       const scoredResults = (results || []).map(product => ({
         product,
@@ -76,6 +78,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         .sort((a, b) => b.score - a.score)
         .slice(0, 8)
         .map(item => item.product);
+      
+      console.log('Processed search results:', sortedProducts);
+      console.log('Setting showResults to true, searchResults length:', sortedProducts.length);
       
       setSearchResults(sortedProducts);
       setShowResults(true);
