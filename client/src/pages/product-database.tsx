@@ -24,9 +24,7 @@ export default function ProductDatabase() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
-    console.log('🔗 URL PARAMS:', { searchParam, location });
     if (searchParam) {
-      console.log('📝 SETTING SEARCH TERM:', searchParam);
       setSearchTerm(searchParam);
     }
   }, [location]);
@@ -50,12 +48,8 @@ export default function ProductDatabase() {
       });
       if (searchTerm) params.append('search', searchTerm);
       
-      const url = `/api/products?${params}`;
-      console.log('🌐 FETCHING API:', url);
-      const res = await fetch(url);
-      const data = await res.json();
-      console.log('📦 API RESPONSE:', data?.length || 0, 'products');
-      return data;
+      const res = await fetch(`/api/products?${params}`);
+      return await res.json();
     },
   });
 
@@ -64,44 +58,19 @@ export default function ProductDatabase() {
   const uniqueCategories: string[] = Array.from(new Set(products?.map((p: any) => p.category).filter(Boolean) || []));
   
   const filteredProducts = products?.filter((product: any) => {
-    console.log('🔍 FILTERING PRODUCT:', product.name, {
-      clarity: product.cosmicClarity,
-      filterClarity,
-      category: product.category,
-      filterCategory,
-      brand: product.brand,
-      filterBrand,
-      score: product.cosmicScore,
-      minCosmicScore,
-      maxCosmicScore
-    });
-    
     // Clarity filter
-    if (filterClarity !== 'all' && product.cosmicClarity !== filterClarity) {
-      console.log('❌ FILTERED OUT BY CLARITY');
-      return false;
-    }
+    if (filterClarity !== 'all' && product.cosmicClarity !== filterClarity) return false;
     
     // Category filter
-    if (filterCategory !== 'all' && product.category !== filterCategory) {
-      console.log('❌ FILTERED OUT BY CATEGORY');
-      return false;
-    }
+    if (filterCategory !== 'all' && product.category !== filterCategory) return false;
     
     // Brand filter
-    if (filterBrand !== 'all' && product.brand !== filterBrand) {
-      console.log('❌ FILTERED OUT BY BRAND');
-      return false;
-    }
+    if (filterBrand !== 'all' && product.brand !== filterBrand) return false;
     
     // Cosmic score range filter
     const score = product.cosmicScore || 0;
-    if (score < minCosmicScore || score > maxCosmicScore) {
-      console.log('❌ FILTERED OUT BY SCORE');
-      return false;
-    }
+    if (score < minCosmicScore || score > maxCosmicScore) return false;
     
-    console.log('✅ PRODUCT PASSED ALL FILTERS');
     return true;
   }).sort((a: any, b: any) => {
     switch (sortBy) {
