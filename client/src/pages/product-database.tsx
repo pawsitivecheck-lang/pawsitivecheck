@@ -24,7 +24,9 @@ export default function ProductDatabase() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const searchParam = urlParams.get('search');
+    console.log('🔗 URL PARAMS:', { searchParam, location });
     if (searchParam) {
+      console.log('📝 SETTING SEARCH TERM:', searchParam);
       setSearchTerm(searchParam);
     }
   }, [location]);
@@ -48,8 +50,12 @@ export default function ProductDatabase() {
       });
       if (searchTerm) params.append('search', searchTerm);
       
-      const res = await fetch(`/api/products?${params}`);
-      return await res.json();
+      const url = `/api/products?${params}`;
+      console.log('🌐 FETCHING API:', url);
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log('📦 API RESPONSE:', data?.length || 0, 'products');
+      return data;
     },
   });
 
