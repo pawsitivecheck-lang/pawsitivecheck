@@ -42,7 +42,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   }, [query]);
 
   // Fetch search results
-  const { data: products = [] } = useQuery({
+  const { data: products = [] } = useQuery<Product[]>({
     queryKey: ['/api/products', { search: debouncedQuery, limit: 8 }],
     enabled: debouncedQuery.length >= 2,
   });
