@@ -1,0 +1,81 @@
+chunk-SXRIVT2P.js?v=ae6a51a1:21609 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+/api/auth/user:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/:1 Error while trying to use the following icon from the Manifest: https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/icon-192.png (Resource size is not correct - typo in the Manifest?)
+header-search.tsx:596 🎯 SEARCH INPUT FOCUSED!
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:596 🎯 SEARCH INPUT FOCUSED!
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:596 🎯 SEARCH INPUT FOCUSED!
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: true
+header-search.tsx:344 🔍 SEARCH INPUT CHANGED: H
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: H showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: H showResults: true
+header-search.tsx:344 🔍 SEARCH INPUT CHANGED: HA
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HA showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HA showResults: true
+header-search.tsx:331 🚀 TRIGGERING SEARCH MUTATION for: HA
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HA showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HA showResults: true
+header-search.tsx:344 🔍 SEARCH INPUT CHANGED: HAR
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:331 🚀 TRIGGERING SEARCH MUTATION for: HAR
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:68 ✅ SEARCH SUCCESS - RAW RESULTS: 20 results for query: HA
+header-search.tsx:84 🎯 FINAL STATE - showResults: true searchResults.length: 8
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HAR showResults: true
+header-search.tsx:344 🔍 SEARCH INPUT CHANGED: HART
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:68 ✅ SEARCH SUCCESS - RAW RESULTS: 11 results for query: HAR
+header-search.tsx:84 🎯 FINAL STATE - showResults: true searchResults.length: 8
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:331 🚀 TRIGGERING SEARCH MUTATION for: HART
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HART showResults: true
+header-search.tsx:344 🔍 SEARCH INPUT CHANGED: HARTZ
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:331 🚀 TRIGGERING SEARCH MUTATION for: HARTZ
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:68 ✅ SEARCH SUCCESS - RAW RESULTS: 13 results for query: HART
+header-search.tsx:84 🎯 FINAL STATE - showResults: true searchResults.length: 8
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:68 ✅ SEARCH SUCCESS - RAW RESULTS: 13 results for query: HARTZ
+header-search.tsx:84 🎯 FINAL STATE - showResults: true searchResults.length: 8
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery: HARTZ showResults: true
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false
+header-search.tsx:580 🏗️ HeaderSearch RENDER - isMobile: false searchQuery:  showResults: false

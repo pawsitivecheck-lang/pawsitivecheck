@@ -683,9 +683,13 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         )}
 
 
-        {/* Search Results Dropdown - Always show when showResults is true */}
+        {/* Search Results Dropdown - EXTREME VISIBILITY MODE */}
         {showResults && (
-          <div className="absolute top-12 left-0 right-0 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg p-1 z-[9999] shadow-2xl max-h-80 overflow-y-auto">
+          <div className="absolute top-12 left-0 right-0 bg-red-500 border-8 border-yellow-400 rounded-lg p-4 z-[99999] shadow-2xl max-h-80 overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 p-2 rounded">
+              <div className="text-center p-2 bg-green-500 text-white font-bold text-lg mb-2">
+                🎯 DROPDOWN IS VISIBLE! Results: {searchResults.length}
+              </div>
             
             {/* Autofill Hint */}
             {searchQuery.length >= 1 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
@@ -805,6 +809,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                 </p>
               </div>
             )}
+            </div>
           </div>
         )}
       </div>
