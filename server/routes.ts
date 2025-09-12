@@ -2156,7 +2156,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Enhanced product database update endpoint
+  // Enhanced product database update endpoint with comprehensive safety recalibration
   app.post('/api/admin/update-products-database', isAdmin, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -2165,16 +2165,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
       }
 
-      logger.info('general', `Admin ${userId} triggered comprehensive product database update`);
+      logger.info('general', `Admin ${userId} triggered comprehensive product database update with safety recalibration`);
       
-      // Trigger comprehensive product database update with Open Pet Food Facts and retailer data
+      // Step 1: Update with Open Pet Food Facts and retailer data
       const updateResults = await openPetFoodFactsService.updateAllProductsWithEnhancedData();
-      
       logger.info('general', `Product database update completed: ${JSON.stringify(updateResults)}`);
       
+      // Step 2: Comprehensive safety recalibration for ALL products
+      logger.info('general', 'Starting comprehensive safety analysis recalibration for ALL products');
+      
+      // Get all products from database  
+      const allProducts = await storage.getProducts(1000, 0); // Get up to 1000 products
+      logger.info('general', `Found ${allProducts.length} total products to recalibrate`);
+      
+      let recalibratedCount = 0;
+      
+      // Process each product through veterinary safety analysis
+      for (const product of allProducts) {
+        try {
+          const safetyAnalysis = VeterinarySafetyService.analyzeSafety(
+            product.ingredients || '',
+            product.name,
+            product.brand,
+            product.targetSpecies || ['dog', 'cat']
+          );
+          
+          // Update product with new safety analysis
+          const updatedProduct = {
+            ...product,
+            cosmicScore: safetyAnalysis.cosmicScore,
+            cosmicClarity: safetyAnalysis.cosmicClarity,
+            transparencyLevel: safetyAnalysis.transparencyLevel,
+            suspiciousIngredients: safetyAnalysis.suspiciousIngredients,
+            isBlacklisted: safetyAnalysis.dangerousIngredients.length > 0,
+            lastAnalyzed: new Date()
+          };
+          
+          await storage.updateProduct(product.id, updatedProduct);
+          recalibratedCount++;
+          
+          if (recalibratedCount % 50 === 0) {
+            logger.info('general', `Recalibrated ${recalibratedCount}/${allProducts.length} products`);
+          }
+          
+        } catch (productError) {
+          logger.error('general', `Failed to recalibrate product ${product.id}: ${productError}`);
+        }
+      }
+      
+      const combinedResults = {
+        ...updateResults,
+        safetyRecalibration: {
+          total: allProducts.length,
+          recalibrated: recalibratedCount,
+          message: `Comprehensive safety recalibration completed for all ${recalibratedCount} products`
+        }
+      };
+      
+      logger.info('general', `Admin sync completed with safety recalibration: ${JSON.stringify(combinedResults)}`);
+      
       res.json({
-        message: "Comprehensive product database update completed successfully",
-        results: updateResults
+        message: "Comprehensive product database update and safety recalibration completed successfully",
+        results: combinedResults
       });
     } catch (error) {
       logger.error('general', `Product database update error: ${error}`);
