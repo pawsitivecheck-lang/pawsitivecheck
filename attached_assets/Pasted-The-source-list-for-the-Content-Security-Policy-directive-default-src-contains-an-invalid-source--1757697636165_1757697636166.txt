@@ -1,0 +1,132 @@
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+cdn.segment.com/v1/projects/dMePKGC4BqfBivpe0Hvl8IoPpzSHgjdX/settings:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+index.ts:46  Failed to fetch
+(anonymous) @ index.ts:46
+standalone.ts:45  [analytics.js] Failed to load Analytics.js TypeError: Failed to fetch
+    at o (sdk.min.js:1:23763)
+    at index.ts:34:26
+    at tslib.es6.js:103:23
+    at Object.next (tslib.es6.js:108:37)
+    at tslib.es6.js:80:8
+    at new Promise (<anonymous>)
+    at u (tslib.es6.js:72:27)
+    at re (index.ts:239:4)
+    at index.ts:338:7
+(anonymous) @ standalone.ts:45
+/~:1  Tracking Prevention blocked an XHR request to https://cdn.segment.com/v1/projects/dMePKGC4BqfBivpe0Hvl8IoPpzSHgjdX/settings.
+api.segment.io/v1/m:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+remote-metrics.ts:53  Error sending segment performance metrics TypeError: Failed to fetch
+    at o (sdk.min.js:1:23763)
+    at t.<anonymous> (remote-metrics.ts:138:12)
+    at tslib.es6.js:103:23
+    at Object.next (tslib.es6.js:108:37)
+    at tslib.es6.js:80:8
+    at new Promise (<anonymous>)
+    at u (tslib.es6.js:72:27)
+    at t.send (sdk.min.js:1:22021)
+    at t.<anonymous> (remote-metrics.ts:125:16)
+    at tslib.es6.js:103:23
+a @ remote-metrics.ts:53
+/~:1  Tracking Prevention blocked an XHR request to https://api.segment.io/v1/m.
+/~:1  Tracking Prevention blocked an XHR request to https://googleads.g.doubleclick.net/pagead/id.
+/~:1  Tracking Prevention blocked a Script resource from loading https://static.doubleclick.net/instream/ad_status.js.
+/~:1  The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+/~:1  The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+/~:1  The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+/~:1  Tracking Prevention blocked an XHR request to https://o1151714.ingest.sentry.io/api/6318792/envelope/?sentry_key=8aa91189a4274b5a8c9b7b01d46ea360&sentry_version=7&sentry_client=sentry.javascript.browser%2F7.112.0.
+_app-b04696f4d240d889.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+o1151714.ingest.sentry.io/api/6318792/envelope/?sentry_key=8aa91189a4274b5a8c9b7b01d46ea360&sentry_version=7&sentry_client=sentry.javascript.browser%2F7.112.0:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+Tracking Prevention blocked access to storage for <URL>.
+_app-b04696f4d240d889.js:38 [LaunchDarkly] LaunchDarkly client initialized
+/~:1  Tracking Prevention blocked an IFrame resource from loading https://m.stripe.network/inner.html#url=https%3A%2F%2Freplit.com%2F~&title=Home%20-%20Replit&referrer=&muid=NA&sid=NA&version=6&preview=false&__shared_params__[version]=acacia.
+_app-b04696f4d240d889.js:40   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+(anonymous) @ _app-b04696f4d240d889.js:40
+_app-b04696f4d240d889.js:40   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+(anonymous) @ _app-b04696f4d240d889.js:40
+_app-b04696f4d240d889.js:40   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+(anonymous) @ _app-b04696f4d240d889.js:40
+_app-b04696f4d240d889.js:40   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+(anonymous) @ _app-b04696f4d240d889.js:40
+_app-b04696f4d240d889.js:38 Adding extension: Javascript Commands Object
+framework-47e7ba985ed8d858.js:1  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'battery'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'layout-animations'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'navigation-override'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'oversized-images'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'publickey-credentials'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'speaker-selection'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'unoptimized-images'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'unsized-media'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Unrecognized feature: 'pointer-lock'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-47e7ba985ed8d858.js:1
+framework-47e7ba985ed8d858.js:1  Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-47e7ba985ed8d858.js:1
+_app-b04696f4d240d889.js:38  Command: javascript-root-command has unrecognized contributions: commandbar. Valid contributions are commandbar,filetree-context-menu,sidebar-search,editor-context-menu Object
+(anonymous) @ _app-b04696f4d240d889.js:38
+framework-47e7ba985ed8d858.js:1  Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+_ @ framework-47e7ba985ed8d858.js:1
+PawsitiveCheck:1  Tracking Prevention blocked a Script resource from loading https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2513342355355066.
+PawsitiveCheck:1  Tracking Prevention blocked a resource from loading https://m.stripe.network/inner.html#url=https%3A%2F%2Freplit.com%2F~&title=Home%20-%20Replit&referrer=&muid=NA&sid=NA&version=6&preview=false&__shared_params__[version]=acacia.
