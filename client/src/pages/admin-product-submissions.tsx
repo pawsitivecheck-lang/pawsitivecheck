@@ -220,6 +220,7 @@ export default function AdminProductSubmissions() {
                       onClick={() => openReviewDialog(submission)}
                       className="bg-purple-600 hover:bg-purple-700"
                       data-testid={`button-review-${submission.id}`}
+                      title="Review this submission"
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Review
@@ -321,6 +322,7 @@ export default function AdminProductSubmissions() {
                       variant="outline"
                       onClick={() => setReviewDialogOpen(false)}
                       className="border-purple-500/30 text-purple-200 hover:bg-purple-900/20"
+                      title="Cancel review and close dialog"
                     >
                       Cancel
                     </Button>
@@ -328,6 +330,7 @@ export default function AdminProductSubmissions() {
                       onClick={handleReviewSubmit}
                       disabled={reviewMutation.isPending}
                       className="bg-purple-600 hover:bg-purple-700"
+                      title="Submit review decision"
                     >
                       {reviewMutation.isPending ? (
                         <>

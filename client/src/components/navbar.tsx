@@ -65,6 +65,7 @@ export default function Navbar() {
                 className="text-muted-foreground p-2 border border-border"
                 onClick={() => setIsHamburgerMenuOpen(!isHamburgerMenuOpen)}
                 data-testid="nav-hamburger-menu"
+                title="Open navigation menu"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -77,6 +78,7 @@ export default function Navbar() {
               className="md:hidden text-muted-foreground p-2 border border-border"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="nav-mobile-toggle"
+              title={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
@@ -141,6 +143,7 @@ export default function Navbar() {
                   size="sm"
                   onClick={() => setIsHamburgerMenuOpen(false)}
                   className="text-muted-foreground hover:text-foreground"
+                  title="Close navigation menu"
                 >
                   <X className="h-5 w-5" />
                 </Button>

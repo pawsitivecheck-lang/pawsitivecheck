@@ -184,6 +184,7 @@ export default function ProductDatabase() {
                       }}
                       className="text-gray-600 hover:text-gray-900"
                       data-testid="button-clear-search"
+                      title="Clear current search"
                     >
                       <X className="h-4 w-4" />
                       Clear Search
@@ -321,6 +322,7 @@ export default function ProductDatabase() {
                       onClick={clearAllFilters}
                       className="border-mystical-red text-mystical-red hover:bg-mystical-red/10 w-full sm:w-auto"
                       data-testid="button-clear-filters"
+                      title="Clear all filters"
                     >
                       Clear Filters
                     </Button>

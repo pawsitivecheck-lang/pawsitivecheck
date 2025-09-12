@@ -378,20 +378,36 @@ export class DatabaseStorage implements IStorage {
 
   // Product operations
   async getProducts(limit = 50, offset = 0, search?: string): Promise<Product[]> {
-    let query = db.select().from(products);
-
-    if (search) {
-      query = query.where(
-        or(
-          ilike(products.name, `%${search}%`),
-          ilike(products.brand, `%${search}%`),
-          ilike(products.ingredients, `%${search}%`)
-        )
-      ) as typeof query;
+    if (!search) {
+      // No search term provided - return products ordered by creation date
+      return await db.select().from(products)
+        .orderBy(desc(products.createdAt))
+        .limit(limit)
+        .offset(offset);
     }
 
-    return await query
-      .orderBy(desc(products.createdAt))
+    // Normalize search term for exact matching
+    const normalizedSearch = search.trim().toLowerCase();
+
+    // Single ranked query with proper pagination
+    return await db.select().from(products)
+      .where(
+        or(
+          sql`LOWER(TRIM(${products.brand})) = ${normalizedSearch}`, // Exact brand match
+          ilike(products.brand, `%${search}%`), // Partial brand match
+          ilike(products.name, `%${search}%`), // Name match
+          ilike(products.ingredients, `%${search}%`) // Ingredient match
+        )
+      )
+      .orderBy(
+        sql`CASE 
+          WHEN LOWER(TRIM(${products.brand})) = ${normalizedSearch} THEN 0
+          WHEN LOWER(${products.brand}) LIKE ${`%${normalizedSearch}%`} THEN 1
+          WHEN LOWER(${products.name}) LIKE ${`%${normalizedSearch}%`} THEN 2
+          ELSE 3
+        END`,
+        desc(products.createdAt)
+      )
       .limit(limit)
       .offset(offset);
   }

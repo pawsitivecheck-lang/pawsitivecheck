@@ -8,15 +8,16 @@ import { logger } from "./logger";
 
 const app = express();
 
+// Disable Express default headers
+app.disable('x-powered-by');
+
 // Security headers
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self'; child-src 'self'");
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'self'; child-src 'self'");
   } else {
     // Development mode - disable CSP to prevent conflicts with Vite/Replit tools
     res.removeHeader('Content-Security-Policy');
@@ -95,23 +96,23 @@ app.use((req, res, next) => {
     if (path.match(/-[a-f0-9]{8,}\./)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     } else {
-      // Regular static assets cache for 1 hour with must-revalidate
-      res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+      // Regular static assets cache for 1 hour
+      res.setHeader('Cache-Control', 'public, max-age=3600');
     }
     res.setHeader('ETag', `"${Date.now()}"`);
   }
   // HTML files should not be cached aggressively
   else if (path.match(/\.html$/) || path === '/') {
-    res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('ETag', `"${Date.now()}"`);
   }
   // API endpoints get short cache with validation
   else if (path.startsWith('/api/')) {
-    res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    res.setHeader('Cache-Control', 'no-cache');
   }
   // Service worker and manifest should never be cached
   else if (path.match(/\/(sw\.js|manifest\.json)$/)) {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Cache-Control', 'no-cache, no-store');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
   }
