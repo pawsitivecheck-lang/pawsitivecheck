@@ -377,11 +377,16 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     
+    console.log('🔥 SEARCH FORM SUBMIT - Query:', searchQuery.trim());
+    
     // Save to recent searches
     saveRecentSearch(searchQuery.trim());
     
     // Navigate to database with search
-    setLocation(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+    const url = `/products?search=${encodeURIComponent(searchQuery.trim())}`;
+    console.log('🎯 NAVIGATING TO:', url);
+    setLocation(url);
+    console.log('✅ setLocation called');
     clearSearch();
   };
 
@@ -559,11 +564,15 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const selectProduct = (product: Product) => {
+    console.log('🚀 SELECTING PRODUCT:', product.name);
     saveRecentSearch(product.name);
     setShowResults(false);
     clearSearch();
     // Navigate to database with product search
-    setLocation(`/products?search=${encodeURIComponent(product.name)}`);
+    const url = `/products?search=${encodeURIComponent(product.name)}`;
+    console.log('🎯 PRODUCT NAVIGATION TO:', url);
+    setLocation(url);
+    console.log('✅ Product navigation setLocation called');
   };
 
 
