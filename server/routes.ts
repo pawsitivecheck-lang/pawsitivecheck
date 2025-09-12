@@ -2181,6 +2181,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Temporary public endpoint for product data calibration (development only)
+  app.post('/api/calibrate-products', async (req, res) => {
+    try {
+      logger.info('general', 'Triggered comprehensive product database calibration from internet sources');
+      
+      // Trigger comprehensive product database update with Open Pet Food Facts and retailer data
+      const updateResults = await openPetFoodFactsService.updateAllProductsWithEnhancedData();
+      
+      logger.info('general', `Product database calibration completed: ${JSON.stringify(updateResults)}`);
+      
+      res.json({
+        message: "Comprehensive product database calibration completed successfully",
+        results: updateResults,
+        calibrationTimestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      logger.error('general', `Product database calibration error: ${error}`);
+      res.status(500).json({ message: "Failed to calibrate product database" });
+    }
+  });
+
   // Admin Product Management endpoints
   app.delete('/api/admin/products/:id', isAdmin, async (req: any, res) => {
     try {
