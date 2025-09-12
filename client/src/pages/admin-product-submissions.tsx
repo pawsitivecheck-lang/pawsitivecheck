@@ -234,7 +234,7 @@ export default function AdminProductSubmissions() {
                       <p className="text-gray-300">{submission.description}</p>
                     </div>
                     
-                    {submission.proposedChanges && typeof submission.proposedChanges === 'object' && (
+                    {typeof submission.proposedChanges === 'object' && submission.proposedChanges !== null ? (
                       <div>
                         <h4 className="font-medium text-purple-200 mb-2">Proposed Changes:</h4>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
@@ -243,7 +243,7 @@ export default function AdminProductSubmissions() {
                           </pre>
                         </div>
                       </div>
-                    )}
+                    ) : null}
 
                     <div className="flex items-center gap-6 text-sm text-purple-300">
                       <div className="flex items-center gap-2">
