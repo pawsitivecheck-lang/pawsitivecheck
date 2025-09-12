@@ -377,16 +377,11 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     
-    console.log('🔥 SEARCH FORM SUBMIT - Query:', searchQuery.trim());
-    
     // Save to recent searches
     saveRecentSearch(searchQuery.trim());
     
     // Navigate to database with search
-    const url = `/products?search=${encodeURIComponent(searchQuery.trim())}`;
-    console.log('🎯 NAVIGATING TO:', url);
-    setLocation(url);
-    console.log('✅ setLocation called');
+    setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
     clearSearch();
   };
 
@@ -479,7 +474,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             // Recent search selected
             setSearchQuery(selectedOption);
             saveRecentSearch(selectedOption);
-            setLocation(`/products?search=${encodeURIComponent(selectedOption)}`);
+            setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
             clearSearch();
           } else {
             // Product selected
@@ -564,15 +559,11 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const selectProduct = (product: Product) => {
-    console.log('🚀 SELECTING PRODUCT:', product.name);
     saveRecentSearch(product.name);
     setShowResults(false);
     clearSearch();
     // Navigate to database with product search
-    const url = `/products?search=${encodeURIComponent(product.name)}`;
-    console.log('🎯 PRODUCT NAVIGATION TO:', url);
-    setLocation(url);
-    console.log('✅ Product navigation setLocation called');
+    setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
   };
 
 
@@ -708,7 +699,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       if (suggestion) {
                         setSearchQuery(suggestion);
                         saveRecentSearch(suggestion);
-                        setLocation(`/products?search=${encodeURIComponent(suggestion)}`);
+                        setLocation(`/product-database?search=${encodeURIComponent(suggestion)}`);
                         clearSearch();
                       }
                     }}
@@ -731,7 +722,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       onClick={() => {
                         setSearchQuery(search);
                         saveRecentSearch(search);
-                        setLocation(`/products?search=${encodeURIComponent(search)}`);
+                        setLocation(`/product-database?search=${encodeURIComponent(search)}`);
                         clearSearch();
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
