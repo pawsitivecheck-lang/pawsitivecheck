@@ -33,6 +33,7 @@ import { BjsScraper } from "./services/bjs-scraper";
 import { RuralKingScraper } from "./services/ruralking-scraper";
 import { logger } from "./logger";
 import { z } from "zod";
+import { openPetFoodFactsService } from "./services/openpetfoodfacts-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint that bypasses session middleware for deployment
@@ -672,6 +673,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let productData = null;
         let source = 'mock';
         let message = 'Product discovered through cosmic internet divination';
+
+        // Try Open Pet Food Facts API first (enhanced integration with parsing)
+        try {
+          const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/product/${query}.json`, {
+            headers: {
+              'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+
+            if (data.status === 1 && data.product) {
+              const product = data.product;
+
+              // Enhanced data parsing from Open Pet Food Facts
+              const parsedData = await openPetFoodFactsService.parseOpenPetFoodFactsProduct(product, query);
+              
+              if (parsedData) {
+                productData = parsedData;
+                source = 'open-pet-food-facts';
+                message = 'Pet product found and enhanced with Open Pet Food Facts database';
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Open Pet Food Facts API error:', error);
+          // Continue to try other sources
+        }
 
         // Try multiple additional sources for comprehensive coverage
         // Try Go-UPC Database as secondary fallback for real product data
@@ -2122,6 +2152,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error syncing ingredients:", error);
       res.status(500).json({ message: "Failed to sync ingredients" });
+    }
+  });
+
+  // Enhanced product database update endpoint
+  app.post('/api/admin/update-products-database', isAdmin, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Access restricted to Audit Syndicate members" });
+      }
+
+      logger.info('general', `Admin ${userId} triggered comprehensive product database update`);
+      
+      // Trigger comprehensive product database update with Open Pet Food Facts and retailer data
+      const updateResults = await openPetFoodFactsService.updateAllProductsWithEnhancedData();
+      
+      logger.info('general', `Product database update completed: ${JSON.stringify(updateResults)}`);
+      
+      res.json({
+        message: "Comprehensive product database update completed successfully",
+        results: updateResults
+      });
+    } catch (error) {
+      logger.error('general', `Product database update error: ${error}`);
+      res.status(500).json({ message: "Failed to update product database" });
     }
   });
 
