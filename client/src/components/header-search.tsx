@@ -576,6 +576,9 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
   const isLoading = searchMutation.isPending || scanProductMutation.isPending;
 
+  // MASSIVE DEBUG LOG
+  console.log('🏗️ HeaderSearch RENDER - isMobile:', isMobile, 'searchQuery:', searchQuery, 'showResults:', showResults);
+
   return (
     <>
       <div className={`relative ${isMobile ? 'w-full' : 'flex-1 max-w-md mx-4'}`}>
@@ -585,11 +588,14 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products or scan... (Press Tab to autofill)"
+              placeholder="🔍 SEARCH DEBUG - Type here to trigger logs"
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              onFocus={() => setShowResults(true)}
+              onFocus={() => {
+                console.log('🎯 SEARCH INPUT FOCUSED!');
+                setShowResults(true);
+              }}
               onBlur={(e) => {
                 // Delay hiding results to allow clicks
                 setTimeout(() => {

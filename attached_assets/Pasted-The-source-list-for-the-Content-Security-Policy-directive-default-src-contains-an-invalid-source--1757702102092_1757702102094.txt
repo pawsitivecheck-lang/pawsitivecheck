@@ -1,0 +1,539 @@
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+_app-925f4ac63b938e5a.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+/~:1 The source list for the Content Security Policy directive 'default-src' contains an invalid source: ''unsafe-dynamic''. It will be ignored.
+/~:1 The Content-Security-Policy directive 'default-src' contains 'report-uri' as a source expression. Did you want to add it as a directive and forget a semicolon?
+/~:1 The source list for Content Security Policy directive 'default-src' contains a source with an invalid path: '/api/4509669501698048/security/?sentry_key=7eb3d90eb4660416caf507087367e67e'. The query component, including the '?', will be ignored.
+_app-925f4ac63b938e5a.js:38 [LaunchDarkly] LaunchDarkly client initialized
+stallwart.build.js:1 stallwart: failed ping 1
+_app-925f4ac63b938e5a.js:38 Adding extension: Javascript Commands Object
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'battery'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-878878d2a5cc8891.js:1
+framework-878878d2a5cc8891.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-878878d2a5cc8891.js:1
+_app-925f4ac63b938e5a.js:38 Command: javascript-root-command has unrecognized contributions: commandbar. Valid contributions are commandbar,filetree-context-menu,sidebar-search,editor-context-menu Object
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+stallwart.build.js:1 stallwart: failed ping 1
+stallwart.build.js:1 stallwart: failed ping 1
+f5bd7deb6c6cf54fc7b2e6fa2d3b1c0e:1  Failed to load resource: the server responded with a status of 404 ()
+f5bd7deb6c6cf54fc7b2e6fa2d3b1c0e:1  Failed to load resource: the server responded with a status of 404 ()
+f5bd7deb6c6cf54fc7b2e6fa2d3b1c0e:1  Failed to load resource: the server responded with a status of 404 ()
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.
+workspace_iframe.html:32 Unrecognized feature: 'battery'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.
+059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev/api/auth/user:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+f5bd7deb6c6cf54fc7b2e6fa2d3b1c0e:1  Failed to load resource: the server responded with a status of 404 ()
+_app-925f4ac63b938e5a.js:38 XHR finished loading: POST "https://events.launchdarkly.com/events/bulk/62b35a865152ab14c5942820".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+promise @ _app-925f4ac63b938e5a.js:40
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+r.httpRequest @ _app-925f4ac63b938e5a.js:40
+t @ _app-925f4ac63b938e5a.js:40
+a.sendChunk @ _app-925f4ac63b938e5a.js:40
+a.sendEvents @ _app-925f4ac63b938e5a.js:40
+a.flush @ _app-925f4ac63b938e5a.js:40
+e @ _app-925f4ac63b938e5a.js:40
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+e @ _app-925f4ac63b938e5a.js:40
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+e @ _app-925f4ac63b938e5a.js:40
+n @ _app-925f4ac63b938e5a.js:38
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: POST "https://replit.com/graphql".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+e @ _app-925f4ac63b938e5a.js:9
+t.subscribe @ _app-925f4ac63b938e5a.js:9
+e.consumeQueue @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+e.scheduleQueueConsumption @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+e @ _app-925f4ac63b938e5a.js:9
+t.subscribe @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+e @ _app-925f4ac63b938e5a.js:9
+t.subscribe @ _app-925f4ac63b938e5a.js:9
+e.try @ _app-925f4ac63b938e5a.js:9
+e.start @ _app-925f4ac63b938e5a.js:9
+t.request @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+e.execute @ _app-925f4ac63b938e5a.js:40
+e.getObservableFromLink @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+s @ _app-925f4ac63b938e5a.js:1
+e.mutate @ _app-925f4ac63b938e5a.js:9
+e.mutate @ _app-925f4ac63b938e5a.js:9
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ _app-925f4ac63b938e5a.js:40
+n @ _app-925f4ac63b938e5a.js:38
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: GET "https://api.sorryapp.com/v1/pages/27c7b5fc".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+(anonymous) @ 9968-9056ffdada8c8f1a.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ 9968-9056ffdada8c8f1a.js:1
+n @ _app-925f4ac63b938e5a.js:38
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: GET "https://api.sorryapp.com/v1/pages/27c7b5fc".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+(anonymous) @ 9968-9056ffdada8c8f1a.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ 9968-9056ffdada8c8f1a.js:1
+n @ _app-925f4ac63b938e5a.js:38
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: GET "https://api.sorryapp.com/v1/pages/27c7b5fc".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+(anonymous) @ 9968-9056ffdada8c8f1a.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ 9968-9056ffdada8c8f1a.js:1
+n @ _app-925f4ac63b938e5a.js:38
+_app-925f4ac63b938e5a.js:38 XHR finished loading: POST "https://stats.g.doubleclick.net/j/collect?t=dc&aip=1&_r=3&v=1&_v=j102&tid=UA-25629695-1&cid=1021548687.1756851391&jid=556778000&gjid=2066431798&_gid=1957338143.1757701360&_u=SCCAgEAjQAAAAGgCIAD~&z=57203034".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+wd @ analytics.js:46
+pe @ analytics.js:44
+(anonymous) @ analytics.js:83
+(anonymous) @ analytics.js:47
+(anonymous) @ analytics.js:87
+(anonymous) @ analytics.js:68
+(anonymous) @ analytics.js:102
+(anonymous) @ analytics.js:101
+N @ analytics.js:103
+(anonymous) @ index.js:360
+(anonymous) @ protos.js:372
+(anonymous) @ protos.js:178
+(anonymous) @ index.ts:270
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ index.ts:286
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ delivery.js:28
+(anonymous) @ delivery.js:11
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ delivery.js:4
+o @ delivery.js:27
+(anonymous) @ event-queue.js:325
+(anonymous) @ event-queue.js:323
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ event-queue.js:321
+(anonymous) @ event-queue.js:320
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:273
+(anonymous) @ event-queue.js:181
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:169
+(anonymous) @ event-queue.js:135
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:128
+(anonymous) @ dispatch.js:25
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+p @ dispatch.js:18
+(anonymous) @ index.ts:460
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:454
+(anonymous) @ index.ts:253
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:241
+A @ _app-925f4ac63b938e5a.js:1
+m @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 9270-bff3584d5a1a66b1.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+t.trigger @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+Promise.then
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: POST "https://sp.replit.com/v1/t".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+o @ sdk.min.js:1
+dispatch @ fetch-dispatcher.ts:11
+(anonymous) @ index.ts:122
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+g @ index.ts:93
+(anonymous) @ delivery.js:28
+(anonymous) @ delivery.js:11
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ delivery.js:4
+o @ delivery.js:27
+(anonymous) @ event-queue.js:325
+(anonymous) @ event-queue.js:323
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ event-queue.js:321
+(anonymous) @ event-queue.js:320
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:273
+(anonymous) @ event-queue.js:181
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:169
+(anonymous) @ event-queue.js:135
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:128
+(anonymous) @ dispatch.js:25
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+p @ dispatch.js:18
+(anonymous) @ index.ts:460
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:454
+(anonymous) @ index.ts:253
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:241
+A @ _app-925f4ac63b938e5a.js:1
+m @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 9270-bff3584d5a1a66b1.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+t.trigger @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+Promise.then
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+_app-925f4ac63b938e5a.js:38 Fetch finished loading: POST "https://analytics.google.com/g/collect?v=2&tid=G-MPJY3F1YEL&gtm=45je59a1v9135634466za200&_p=1757701471696&_gaz=1&gcd=13l3l3l3l2l1&npa=0&dma=0&ul=en-us&sr=1536x864&cid=1021548687.1756851391&ecid=266606450&ir=1&uaa=arm&uab=64&uafvl=Not)A%253BBrand%3B8.0.0.0%7CChromium%3B138.0.7204.232%7CGoogle%2520Chrome%3B138.0.7204.232&uamb=0&uam=&uap=Chrome%20OS&uapv=16295.74.0&uaw=0&are=1&frm=0&pscdl=noapi&_eu=EBAIAAQ&_s=31&tag_exp=101509157~103116026~103200004~103233427~104527907~104528500~104684208~104684211~104948813~105367987~105367989~105426769~105426771~115480709~115688283~115688285&dl=https%3A%2F%2Freplit.com%2Frepls&dp=%2F%40leirsteinv%2FPawsitiveCheck&dt=replEnvironmentDesktop&sid=1757701360&sct=7&seg=1&_tu=wAQ&en=Agent%20Used&_ee=1&ep.event_category=All&ep.value=0&_et=48033&tfd=621262".
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ _app-925f4ac63b938e5a.js:1
+o @ _app-925f4ac63b938e5a.js:1
+Zc @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:250
+bl @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:404
+jN @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:903
+k.Lb @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:908
+k.add @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:910
+k.Dm @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:925
+k.er @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:925
+(anonymous) @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:922
+vl @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:414
+yn @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:434
+(anonymous) @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:922
+c @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:852
+uJ @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:852
+k.ar @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:922
+c @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:936
+v @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:476
+El @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:416
+Hp @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:476
+Gp.flush @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:480
+Gp.push @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:478
+yp @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:473
+event @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:732
+KB @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:738
+NB.b.push @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:744
+GB @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:744
+OB @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:744
+rC @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:757
+b.push @ js?id=G-MPJY3F1YEL&cx=c&_slc=1:758
+Sa @ analytics.js:51
+(anonymous) @ analytics.js:83
+(anonymous) @ analytics.js:47
+(anonymous) @ analytics.js:87
+(anonymous) @ analytics.js:68
+(anonymous) @ analytics.js:102
+(anonymous) @ analytics.js:101
+N @ analytics.js:103
+(anonymous) @ index.js:360
+(anonymous) @ protos.js:372
+(anonymous) @ protos.js:178
+(anonymous) @ index.ts:270
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ index.ts:286
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ ajs-destination.bundle.8e6b895db75187c55313.js:1
+(anonymous) @ delivery.js:28
+(anonymous) @ delivery.js:11
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ delivery.js:4
+o @ delivery.js:27
+(anonymous) @ event-queue.js:325
+(anonymous) @ event-queue.js:323
+n @ _app-925f4ac63b938e5a.js:38
+setTimeout
+(anonymous) @ _app-925f4ac63b938e5a.js:38
+(anonymous) @ event-queue.js:321
+(anonymous) @ event-queue.js:320
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:273
+(anonymous) @ event-queue.js:181
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+s @ tslib.es6.js:73
+Promise.then
+a @ tslib.es6.js:76
+(anonymous) @ tslib.es6.js:76
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:169
+(anonymous) @ event-queue.js:135
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ event-queue.js:128
+(anonymous) @ dispatch.js:25
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+p @ dispatch.js:18
+(anonymous) @ index.ts:460
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:454
+(anonymous) @ index.ts:253
+(anonymous) @ tslib.es6.js:103
+(anonymous) @ tslib.es6.js:108
+(anonymous) @ tslib.es6.js:80
+u @ tslib.es6.js:72
+(anonymous) @ index.ts:241
+A @ _app-925f4ac63b938e5a.js:1
+m @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 9270-bff3584d5a1a66b1.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+t.trigger @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ 5168-363ecdf0d1c88c20.js:1
+(anonymous) @ main-0df30aaf9e5a7eeb.js:1
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
+Promise.then
+n @ main-0df30aaf9e5a7eeb.js:1
+u @ main-0df30aaf9e5a7eeb.js:1
