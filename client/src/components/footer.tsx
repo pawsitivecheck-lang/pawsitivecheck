@@ -16,7 +16,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-transparency">
+                <Link to="/ingredient-transparency" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-transparency">
                   Ingredient Transparency
                 </Link>
               </li>
