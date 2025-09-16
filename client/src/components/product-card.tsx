@@ -80,6 +80,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
               alt={product.name}
               className="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition-transform"
               data-testid="img-product"
+              loading="lazy" // Performance optimization: lazy load images
+              decoding="async" // Optimize image decoding
             />
           ) : (
             <div className="w-full h-48 bg-cosmic-700 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform" data-testid="placeholder-product-image">

@@ -6,25 +6,87 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Camera, Search, Shield, BarChart3, History, Crown, WandSparkles, PawPrint, Tractor } from "lucide-react";
+// Performance optimization: Only import specific icons to reduce bundle size
+import { Search, Shield, BarChart3, WandSparkles, Tractor } from "lucide-react";
 import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
+import { memo, useMemo } from "react";
 
-export default function Home() {
+// Memoized quick action cards component for better performance
+const QuickActionCards = memo(() => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <Link href="/product-database">
+      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
+        <CardContent className="p-6">
+          <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
+            <Search className="text-purple-600 h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Product Database</h3>
+          <p className="text-muted-foreground text-sm">Search and explore comprehensive product information</p>
+        </CardContent>
+      </Card>
+    </Link>
+    <Link href="/recalls">
+      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-red-300 dark:hover:border-red-600" data-testid="card-recalls">
+        <CardContent className="p-6">
+          <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mb-4">
+            <Shield className="text-red-600 h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Safety Recalls</h3>
+          <p className="text-muted-foreground text-sm">View active product recalls and safety alerts</p>
+        </CardContent>
+      </Card>
+    </Link>
+    <Link href="/community-reviews-info">
+      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-green-300 dark:hover:border-green-600" data-testid="card-community">
+        <CardContent className="p-6">
+          <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
+            <BarChart3 className="text-green-600 h-5 w-5" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Community</h3>
+          <p className="text-muted-foreground text-sm">Connect with other pet owners and share reviews</p>
+        </CardContent>
+      </Card>
+    </Link>
+    <Link href="/livestock">
+      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border-2 border-orange-200 dark:border-orange-800 hover:border-orange-400 dark:hover:border-orange-600 ring-1 ring-orange-100 dark:ring-orange-900" data-testid="card-livestock">
+        <CardContent className="p-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-4 shadow-sm">
+            <Tractor className="text-white h-6 w-6" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Livestock Management</h3>
+          <p className="text-muted-foreground text-sm">Professional farm animal tracking and health monitoring</p>
+        </CardContent>
+      </Card>
+    </Link>
+  </div>
+));
+
+function Home() {
   const { user } = useAuth();
 
+  // Performance optimization: Optimize queries with enabled conditions
   const { data: recentScans, isLoading: isLoadingScans } = useQuery<ScanHistory[]>({
     queryKey: ['/api/scans'],
+    enabled: !!user, // Only fetch when user is authenticated
   });
 
   const { data: recentRecalls, isLoading: isLoadingRecalls } = useQuery<ProductRecall[]>({
     queryKey: ['/api/recalls'],
+    staleTime: 15 * 60 * 1000, // 15 minutes - recalls don't change often
   });
 
   const { data: userReviews, isLoading: isLoadingReviews } = useQuery<ProductReview[]>({
     queryKey: ['/api/user/reviews'],
+    enabled: !!user, // Only fetch when user is authenticated
   });
 
-  const isLoading = isLoadingScans || isLoadingRecalls || isLoadingReviews;
+  // Memoize computed values for better performance
+  const isLoading = useMemo(() => 
+    isLoadingScans || isLoadingRecalls || isLoadingReviews, 
+    [isLoadingScans, isLoadingRecalls, isLoadingReviews]
+  );
+
+  const userName = useMemo(() => user?.firstName || 'Pet Parent', [user?.firstName]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -316,3 +378,6 @@ export default function Home() {
     </div>
   );
 }
+
+// Memoized and optimized export
+export default memo(Home);

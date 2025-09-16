@@ -76,15 +76,25 @@ const createRateLimiter = (windowMs: number, max: number, message: string) => ra
   }
 });
 
-// Apply different rate limits to different endpoints
-app.use('/api/auth', createRateLimiter(15 * 60 * 1000, 20, 'Too many authentication attempts'));
-app.use('/api/reviews', createRateLimiter(15 * 60 * 1000, 30, 'Too many review submissions'));
-app.use('/api/products', createRateLimiter(60 * 1000, 100, 'Too many product requests'));
-app.use('/api/admin', createRateLimiter(5 * 60 * 1000, 50, 'Too many admin requests'));
-app.use('/api', createRateLimiter(15 * 60 * 1000, 200, 'Too many API requests'));
+// Optimized rate limits for better performance
+app.use('/api/auth', createRateLimiter(15 * 60 * 1000, 25, 'Too many authentication attempts')); // Slightly increased
+app.use('/api/reviews', createRateLimiter(15 * 60 * 1000, 40, 'Too many review submissions')); // Increased for better UX
+app.use('/api/products', createRateLimiter(60 * 1000, 150, 'Too many product requests')); // Increased for search performance
+app.use('/api/admin', createRateLimiter(5 * 60 * 1000, 75, 'Too many admin requests')); // Slightly increased
+app.use('/api/scans', createRateLimiter(60 * 1000, 30, 'Too many scan requests')); // New dedicated limit
+app.use('/api', createRateLimiter(15 * 60 * 1000, 300, 'Too many API requests')); // Increased general limit
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: false }));
+// Performance optimized body parsing
+app.use(express.json({ 
+  limit: '5mb', // Reduced from 10mb for better performance
+  strict: true,
+  type: 'application/json'
+}));
+app.use(express.urlencoded({ 
+  extended: false,
+  limit: '1mb', // Add explicit limit
+  parameterLimit: 100 // Prevent parameter pollution
+}));
 
 // Cache control middleware
 app.use((req, res, next) => {

@@ -177,7 +177,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Product routes
   app.get('/api/products', async (req, res) => {
     try {
-      const { limit = '50', offset = '0', search } = req.query;
+      // Performance optimization: reduce default limit and add caching
+      const { limit = '20', offset = '0', search } = req.query; // Reduced from 50 to 20
+      
+      // Add cache headers for better performance
+      res.set('Cache-Control', 'public, max-age=300'); // 5 minutes cache
       let products = await storage.getProducts(
         parseInt(limit as string), 
         parseInt(offset as string),
@@ -1922,9 +1926,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Public reviews endpoint for landing page
+  // Optimized reviews endpoint with caching
   app.get('/api/reviews', async (req, res) => {
     try {
+      // Add caching for reviews
+      res.set('Cache-Control', 'public, max-age=300'); // 5 minutes cache
+      
       const reviews = await storage.getReviews(10, 0);
       res.json(reviews);
     } catch (error) {
@@ -1933,9 +1940,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Public analytics dashboard for landing page
+  // Optimized analytics dashboard with caching
   app.get('/api/analytics/dashboard', async (req, res) => {
     try {
+      // Add aggressive caching for dashboard stats
+      res.set('Cache-Control', 'public, max-age=600'); // 10 minutes cache
+      
       const analytics = await storage.getAnalytics();
       // Return basic metrics for public consumption
       res.json({

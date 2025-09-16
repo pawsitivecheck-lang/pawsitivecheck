@@ -3,7 +3,7 @@ const CACHE_NAME = 'pawsitive-check-v1';
 const STATIC_CACHE = 'static-v1';
 const API_CACHE = 'api-cache-v1';
 
-// Resources to cache on install
+// Performance optimized static resources cache
 const STATIC_RESOURCES = [
   '/',
   '/index.html',
@@ -13,12 +13,29 @@ const STATIC_RESOURCES = [
   '/manifest.json'
 ];
 
-// API endpoints that are safe to cache (GET only)
-const CACHEABLE_API_PATTERNS = [
-  /^\/api\/products/,
-  /^\/api\/recalls/,
-  /^\/api\/analytics/
+// Additional critical resources to cache
+const CRITICAL_RESOURCES = [
+  '/assets/index.js', // Main bundle
+  '/assets/index.css' // Main styles
 ];
+
+// API endpoints that are safe to cache (GET only) - Performance optimized
+const CACHEABLE_API_PATTERNS = [
+  /^\/api\/products(\?.*)?$/, // Product listings with query params
+  /^\/api\/recalls$/, // Recalls data
+  /^\/api\/analytics\/dashboard$/, // Dashboard analytics
+  /^\/api\/reviews(\?.*)?$/, // Reviews with pagination
+  /^\/api\/information-sources$/ // Information sources
+];
+
+// Cache expiration times for different API types
+const API_CACHE_TIMES = {
+  products: 5 * 60 * 1000, // 5 minutes
+  recalls: 15 * 60 * 1000, // 15 minutes (less frequent updates)
+  analytics: 10 * 60 * 1000, // 10 minutes
+  reviews: 5 * 60 * 1000, // 5 minutes
+  default: 3 * 60 * 1000 // 3 minutes default
+};
 
 console.log('Secure service worker loaded');
 
