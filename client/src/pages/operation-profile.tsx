@@ -67,6 +67,45 @@ export default function OperationProfile() {
   const [isEditHerdDialogOpen, setIsEditHerdDialogOpen] = useState(false);
   const [isDeleteHerdDialogOpen, setIsDeleteHerdDialogOpen] = useState(false);
   const [selectedHerd, setSelectedHerd] = useState<LivestockHerd | null>(null);
+
+  // Edit Operation form state
+  const [editOpForm, setEditOpForm] = useState({
+    operationName: "",
+    operationType: "",
+    city: "",
+    state: "",
+    address: "",
+    zipCode: "",
+    contactPhone: "",
+    contactEmail: "",
+    notes: ""
+  });
+
+  // Add Herd form state
+  const [addHerdForm, setAddHerdForm] = useState({
+    herdName: "",
+    species: "",
+    breed: "",
+    headCount: "",
+    purpose: "",
+    housingType: "",
+    averageWeight: "",
+    weightUnit: "lbs",
+    notes: ""
+  });
+
+  // Edit Herd form state
+  const [editHerdForm, setEditHerdForm] = useState({
+    herdName: "",
+    species: "",
+    breed: "",
+    headCount: "",
+    purpose: "",
+    housingType: "",
+    averageWeight: "",
+    weightUnit: "lbs",
+    notes: ""
+  });
   
   // Get operation ID from URL
   const params = useParams();
@@ -110,6 +149,7 @@ export default function OperationProfile() {
     onSuccess: () => {
       console.log("Frontend: Mutation success callback triggered");
       queryClient.invalidateQueries({ queryKey: [`/api/livestock/operations/${operationId}/herds`] });
+      resetAddHerdForm();
       setIsAddHerdDialogOpen(false);
       toast({
         title: "Success",
@@ -210,20 +250,18 @@ export default function OperationProfile() {
 
   const handleSubmitHerd = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
     
     const herdData = {
       operationId: parseInt(operationId!),
-      herdName: formData.get('herdName'),
-      species: formData.get('species'),
-      breed: formData.get('breed') || undefined,
-      headCount: parseInt(formData.get('headCount') as string) || 0,
-      averageWeight: formData.get('averageWeight') || undefined,
-      weightUnit: formData.get('weightUnit') || 'lbs',
-      purpose: formData.get('purpose'),
-      housingType: formData.get('housingType'),
-      ageRange: formData.get('ageRange') || undefined,
-      notes: formData.get('notes') || undefined,
+      herdName: addHerdForm.herdName,
+      species: addHerdForm.species,
+      breed: addHerdForm.breed || undefined,
+      headCount: parseInt(addHerdForm.headCount) || 0,
+      averageWeight: addHerdForm.averageWeight || undefined,
+      weightUnit: addHerdForm.weightUnit || 'lbs',
+      purpose: addHerdForm.purpose,
+      housingType: addHerdForm.housingType,
+      notes: addHerdForm.notes || undefined,
     };
 
     console.log("Frontend: Form submitted with data:", herdData);
@@ -241,18 +279,16 @@ export default function OperationProfile() {
     e.preventDefault();
     if (!operation) return;
     
-    const formData = new FormData(e.currentTarget);
-    
     const operationData = {
-      operationName: formData.get('operationName'),
-      operationType: formData.get('operationType'),
-      city: formData.get('city'),
-      state: formData.get('state'),
-      address: formData.get('address') || undefined,
-      zipCode: formData.get('zipCode') || undefined,
-      contactPhone: formData.get('contactPhone') || undefined,
-      contactEmail: formData.get('contactEmail') || undefined,
-      notes: formData.get('notes') || undefined,
+      operationName: editOpForm.operationName,
+      operationType: editOpForm.operationType,
+      city: editOpForm.city,
+      state: editOpForm.state,
+      address: editOpForm.address || undefined,
+      zipCode: editOpForm.zipCode || undefined,
+      contactPhone: editOpForm.contactPhone || undefined,
+      contactEmail: editOpForm.contactEmail || undefined,
+      notes: editOpForm.notes || undefined,
     };
 
     editOperationMutation.mutate(operationData);
@@ -263,28 +299,73 @@ export default function OperationProfile() {
     e.preventDefault();
     if (!selectedHerd) return;
     
-    const formData = new FormData(e.currentTarget);
-    
     const herdData = {
       id: selectedHerd.id,
-      herdName: formData.get('herdName'),
-      species: formData.get('species'),
-      breed: formData.get('breed') || undefined,
-      headCount: parseInt(formData.get('headCount') as string) || 0,
-      averageWeight: formData.get('averageWeight') || undefined,
-      weightUnit: formData.get('weightUnit') || 'lbs',
-      purpose: formData.get('purpose'),
-      housingType: formData.get('housingType'),
-      ageRange: formData.get('ageRange') || undefined,
-      notes: formData.get('notes') || undefined,
+      herdName: editHerdForm.herdName,
+      species: editHerdForm.species,
+      breed: editHerdForm.breed || undefined,
+      headCount: parseInt(editHerdForm.headCount) || 0,
+      averageWeight: editHerdForm.averageWeight || undefined,
+      weightUnit: editHerdForm.weightUnit || 'lbs',
+      purpose: editHerdForm.purpose,
+      housingType: editHerdForm.housingType,
+      notes: editHerdForm.notes || undefined,
     };
 
     editHerdMutation.mutate(herdData);
   };
 
+  // Initialize edit operation form
+  const initializeEditOpForm = () => {
+    if (operation) {
+      setEditOpForm({
+        operationName: operation.operationName || "",
+        operationType: operation.operationType || "",
+        city: operation.city || "",
+        state: operation.state || "",
+        address: operation.address || "",
+        zipCode: operation.zipCode || "",
+        contactPhone: operation.contactPhone || "",
+        contactEmail: operation.contactEmail || "",
+        notes: operation.notes || ""
+      });
+    }
+  };
+
+  // Initialize edit herd form
+  const initializeEditHerdForm = (herd: LivestockHerd) => {
+    setEditHerdForm({
+      herdName: herd.herdName || "",
+      species: herd.species || "",
+      breed: herd.breed || "",
+      headCount: herd.headCount?.toString() || "",
+      purpose: herd.purpose || "",
+      housingType: herd.housingType || "",
+      averageWeight: herd.averageWeight || "",
+      weightUnit: herd.weightUnit || "lbs",
+      notes: ""
+    });
+  };
+
+  // Reset add herd form
+  const resetAddHerdForm = () => {
+    setAddHerdForm({
+      herdName: "",
+      species: "",
+      breed: "",
+      headCount: "",
+      purpose: "",
+      housingType: "",
+      averageWeight: "",
+      weightUnit: "lbs",
+      notes: ""
+    });
+  };
+
   // Handle edit button click
   const handleEditClick = (herd: LivestockHerd) => {
     setSelectedHerd(herd);
+    initializeEditHerdForm(herd);
     setIsEditHerdDialogOpen(true);
   };
 
@@ -410,7 +491,10 @@ export default function OperationProfile() {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              onClick={() => setIsEditDialogOpen(true)}
+              onClick={() => {
+                initializeEditOpForm();
+                setIsEditDialogOpen(true);
+              }}
               data-testid="button-edit-operation"
             >
               <Edit className="h-4 w-4 mr-2" />
@@ -418,7 +502,11 @@ export default function OperationProfile() {
             </Button>
             <Dialog open={isAddHerdDialogOpen} onOpenChange={setIsAddHerdDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="flex items-center gap-2" data-testid="button-add-herd">
+                <Button 
+                  className="flex items-center gap-2" 
+                  data-testid="button-add-herd"
+                  onClick={() => resetAddHerdForm()}
+                >
                   <PlusCircle className="h-4 w-4" />
                   Add Herd
                 </Button>
@@ -431,11 +519,20 @@ export default function OperationProfile() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
                     <div>
                       <Label htmlFor="herdName">Herd Name *</Label>
-                      <Input name="herdName" placeholder="Main Herd" required />
+                      <Input 
+                        value={addHerdForm.herdName}
+                        onChange={(e) => setAddHerdForm({...addHerdForm, herdName: e.target.value})}
+                        placeholder="Main Herd" 
+                        required 
+                      />
                     </div>
                     <div>
                       <Label htmlFor="species">Species *</Label>
-                      <Select name="species" required>
+                      <Select 
+                        value={addHerdForm.species}
+                        onValueChange={(value) => setAddHerdForm({...addHerdForm, species: value})}
+                        required
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select species" />
                         </SelectTrigger>
@@ -450,15 +547,29 @@ export default function OperationProfile() {
                     </div>
                     <div>
                       <Label htmlFor="breed">Breed</Label>
-                      <Input name="breed" placeholder="Breed (optional)" />
+                      <Input 
+                        value={addHerdForm.breed}
+                        onChange={(e) => setAddHerdForm({...addHerdForm, breed: e.target.value})}
+                        placeholder="Breed (optional)" 
+                      />
                     </div>
                     <div>
                       <Label htmlFor="headCount">Head Count *</Label>
-                      <Input name="headCount" type="number" placeholder="0" required />
+                      <Input 
+                        value={addHerdForm.headCount}
+                        onChange={(e) => setAddHerdForm({...addHerdForm, headCount: e.target.value})}
+                        type="number" 
+                        placeholder="0" 
+                        required 
+                      />
                     </div>
                     <div>
                       <Label htmlFor="purpose">Purpose *</Label>
-                      <Select name="purpose" required>
+                      <Select 
+                        value={addHerdForm.purpose}
+                        onValueChange={(value) => setAddHerdForm({...addHerdForm, purpose: value})}
+                        required
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select purpose" />
                         </SelectTrigger>
@@ -473,7 +584,11 @@ export default function OperationProfile() {
                     </div>
                     <div>
                       <Label htmlFor="housingType">Housing Type *</Label>
-                      <Select name="housingType" required>
+                      <Select 
+                        value={addHerdForm.housingType}
+                        onValueChange={(value) => setAddHerdForm({...addHerdForm, housingType: value})}
+                        required
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select housing" />
                         </SelectTrigger>
@@ -488,11 +603,20 @@ export default function OperationProfile() {
                     </div>
                     <div>
                       <Label htmlFor="averageWeight">Average Weight</Label>
-                      <Input name="averageWeight" type="number" step="0.01" placeholder="0.00" />
+                      <Input 
+                        value={addHerdForm.averageWeight}
+                        onChange={(e) => setAddHerdForm({...addHerdForm, averageWeight: e.target.value})}
+                        type="number" 
+                        step="0.01" 
+                        placeholder="0.00" 
+                      />
                     </div>
                     <div>
                       <Label htmlFor="weightUnit">Weight Unit</Label>
-                      <Select name="weightUnit">
+                      <Select 
+                        value={addHerdForm.weightUnit}
+                        onValueChange={(value) => setAddHerdForm({...addHerdForm, weightUnit: value})}
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -504,7 +628,12 @@ export default function OperationProfile() {
                     </div>
                     <div className="md:col-span-2">
                       <Label htmlFor="notes">Notes</Label>
-                      <Textarea name="notes" placeholder="Additional notes about this herd..." rows={3} />
+                      <Textarea 
+                        value={addHerdForm.notes}
+                        onChange={(e) => setAddHerdForm({...addHerdForm, notes: e.target.value})}
+                        placeholder="Additional notes about this herd..." 
+                        rows={3} 
+                      />
                     </div>
                   </div>
                   <DialogFooter>
@@ -828,11 +957,20 @@ export default function OperationProfile() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
                 <div>
                   <Label htmlFor="operationName">Operation Name *</Label>
-                  <Input name="operationName" defaultValue={operation?.operationName} placeholder="Farm Name" required />
+                  <Input 
+                    value={editOpForm.operationName}
+                    onChange={(e) => setEditOpForm({...editOpForm, operationName: e.target.value})}
+                    placeholder="Farm Name" 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="operationType">Operation Type *</Label>
-                  <Select name="operationType" defaultValue={operation?.operationType} required>
+                  <Select 
+                    value={editOpForm.operationType}
+                    onValueChange={(value) => setEditOpForm({...editOpForm, operationType: value})}
+                    required
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select operation type" />
                     </SelectTrigger>
@@ -848,31 +986,63 @@ export default function OperationProfile() {
                 </div>
                 <div>
                   <Label htmlFor="city">City *</Label>
-                  <Input name="city" defaultValue={operation?.city} placeholder="City" required />
+                  <Input 
+                    value={editOpForm.city}
+                    onChange={(e) => setEditOpForm({...editOpForm, city: e.target.value})}
+                    placeholder="City" 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="state">State *</Label>
-                  <Input name="state" defaultValue={operation?.state} placeholder="State" required />
+                  <Input 
+                    value={editOpForm.state}
+                    onChange={(e) => setEditOpForm({...editOpForm, state: e.target.value})}
+                    placeholder="State" 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="address">Address</Label>
-                  <Input name="address" defaultValue={operation?.address} placeholder="Street address (optional)" />
+                  <Input 
+                    value={editOpForm.address}
+                    onChange={(e) => setEditOpForm({...editOpForm, address: e.target.value})}
+                    placeholder="Street address (optional)" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="zipCode">Zip Code</Label>
-                  <Input name="zipCode" defaultValue={operation?.zipCode} placeholder="Zip code (optional)" />
+                  <Input 
+                    value={editOpForm.zipCode}
+                    onChange={(e) => setEditOpForm({...editOpForm, zipCode: e.target.value})}
+                    placeholder="Zip code (optional)" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="contactPhone">Contact Phone</Label>
-                  <Input name="contactPhone" defaultValue={operation?.contactPhone} placeholder="Phone number (optional)" />
+                  <Input 
+                    value={editOpForm.contactPhone}
+                    onChange={(e) => setEditOpForm({...editOpForm, contactPhone: e.target.value})}
+                    placeholder="Phone number (optional)" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="contactEmail">Contact Email</Label>
-                  <Input name="contactEmail" type="email" defaultValue={operation?.contactEmail} placeholder="Email address (optional)" />
+                  <Input 
+                    value={editOpForm.contactEmail}
+                    onChange={(e) => setEditOpForm({...editOpForm, contactEmail: e.target.value})}
+                    type="email" 
+                    placeholder="Email address (optional)" 
+                  />
                 </div>
                 <div className="md:col-span-2">
                   <Label htmlFor="notes">Notes</Label>
-                  <Textarea name="notes" defaultValue={operation?.notes} placeholder="Additional notes about this operation..." rows={3} />
+                  <Textarea 
+                    value={editOpForm.notes}
+                    onChange={(e) => setEditOpForm({...editOpForm, notes: e.target.value})}
+                    placeholder="Additional notes about this operation..." 
+                    rows={3} 
+                  />
                 </div>
               </div>
               <DialogFooter>
@@ -901,11 +1071,20 @@ export default function OperationProfile() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
                 <div>
                   <Label htmlFor="herdName">Herd Name *</Label>
-                  <Input name="herdName" defaultValue={selectedHerd?.herdName} placeholder="Main Herd" required />
+                  <Input 
+                    value={editHerdForm.herdName}
+                    onChange={(e) => setEditHerdForm({...editHerdForm, herdName: e.target.value})}
+                    placeholder="Main Herd" 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="species">Species *</Label>
-                  <Select name="species" defaultValue={selectedHerd?.species} required>
+                  <Select 
+                    value={editHerdForm.species}
+                    onValueChange={(value) => setEditHerdForm({...editHerdForm, species: value})}
+                    required
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select species" />
                     </SelectTrigger>
@@ -920,15 +1099,29 @@ export default function OperationProfile() {
                 </div>
                 <div>
                   <Label htmlFor="breed">Breed</Label>
-                  <Input name="breed" defaultValue={selectedHerd?.breed} placeholder="Breed (optional)" />
+                  <Input 
+                    value={editHerdForm.breed}
+                    onChange={(e) => setEditHerdForm({...editHerdForm, breed: e.target.value})}
+                    placeholder="Breed (optional)" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="headCount">Head Count *</Label>
-                  <Input name="headCount" type="number" defaultValue={selectedHerd?.headCount} placeholder="0" required />
+                  <Input 
+                    value={editHerdForm.headCount}
+                    onChange={(e) => setEditHerdForm({...editHerdForm, headCount: e.target.value})}
+                    type="number" 
+                    placeholder="0" 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="purpose">Purpose *</Label>
-                  <Select name="purpose" defaultValue={selectedHerd?.purpose} required>
+                  <Select 
+                    value={editHerdForm.purpose}
+                    onValueChange={(value) => setEditHerdForm({...editHerdForm, purpose: value})}
+                    required
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select purpose" />
                     </SelectTrigger>
@@ -936,31 +1129,46 @@ export default function OperationProfile() {
                       <SelectItem value="breeding">Breeding</SelectItem>
                       <SelectItem value="dairy">Dairy</SelectItem>
                       <SelectItem value="meat">Meat</SelectItem>
-                      <SelectItem value="egg_production">Egg Production</SelectItem>
+                      <SelectItem value="show">Show</SelectItem>
+                      <SelectItem value="working">Working</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="housingType">Housing Type *</Label>
-                  <Select name="housingType" defaultValue={selectedHerd?.housingType} required>
+                  <Select 
+                    value={editHerdForm.housingType}
+                    onValueChange={(value) => setEditHerdForm({...editHerdForm, housingType: value})}
+                    required
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select housing type" />
                     </SelectTrigger>
                     <SelectContent className="bg-popover border-border">
                       <SelectItem value="pasture">Pasture</SelectItem>
                       <SelectItem value="barn">Barn</SelectItem>
-                      <SelectItem value="free_range">Free Range</SelectItem>
-                      <SelectItem value="cage_free">Cage Free</SelectItem>
+                      <SelectItem value="feedlot">Feedlot</SelectItem>
+                      <SelectItem value="free-range">Free Range</SelectItem>
+                      <SelectItem value="confinement">Confinement</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="averageWeight">Average Weight</Label>
-                  <Input name="averageWeight" type="number" step="0.01" defaultValue={selectedHerd?.averageWeight} placeholder="Average weight (optional)" />
+                  <Input 
+                    value={editHerdForm.averageWeight}
+                    onChange={(e) => setEditHerdForm({...editHerdForm, averageWeight: e.target.value})}
+                    type="number" 
+                    step="0.01" 
+                    placeholder="Average weight (optional)" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="weightUnit">Weight Unit</Label>
-                  <Select name="weightUnit" defaultValue={selectedHerd?.weightUnit || 'lbs'}>
+                  <Select 
+                    value={editHerdForm.weightUnit}
+                    onValueChange={(value) => setEditHerdForm({...editHerdForm, weightUnit: value})}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -972,7 +1180,12 @@ export default function OperationProfile() {
                 </div>
                 <div className="md:col-span-2">
                   <Label htmlFor="notes">Notes</Label>
-                  <Textarea name="notes" placeholder="Additional notes about this herd..." rows={3} />
+                  <Textarea 
+                    value={editHerdForm.notes}
+                    onChange={(e) => setEditHerdForm({...editHerdForm, notes: e.target.value})}
+                    placeholder="Additional notes about this herd..." 
+                    rows={3} 
+                  />
                 </div>
               </div>
               <DialogFooter>
