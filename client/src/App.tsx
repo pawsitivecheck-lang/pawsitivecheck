@@ -30,6 +30,7 @@ const VetFinder = React.lazy(() => import("@/pages/vet-finder"));
 const ComprehensiveSafetyAnalysis = React.lazy(() => import("@/pages/comprehensive-safety-analysis"));
 const IngredientTransparency = React.lazy(() => import("@/pages/ingredient-transparency"));
 const CorporateAccountability = React.lazy(() => import("@/pages/corporate-accountability"));
+const PetHealthProtection = React.lazy(() => import("@/pages/pet-health-protection"));
 const ProductScanner = React.lazy(() => import("@/pages/product-scanner"));
 
 // Loading component for code-split routes
@@ -148,6 +149,11 @@ function App() {
         <Route path="/corporate-accountability" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
             <CorporateAccountability />
+          </Suspense>
+        )} />
+        <Route path="/pet-health-protection" component={() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <PetHealthProtection />
           </Suspense>
         )} />
         <Route path="/product-scanner" component={() => (
