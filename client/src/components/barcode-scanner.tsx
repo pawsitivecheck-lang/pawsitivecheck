@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, X, RotateCcw } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Camera, X, RotateCcw, AlertCircle, Upload, RefreshCw } from "lucide-react";
 import Webcam from "react-webcam";
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { requestCameraPermission, getErrorGuidance, getDeviceInfo, checkScannerCapabilities } from "@/utils/camera-utils";
 
 interface BarcodeScannerProps {
   onScan: (result: string) => void;
@@ -14,8 +16,13 @@ interface BarcodeScannerProps {
 export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProps) {
   const webcamRef = useRef<Webcam>(null);
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [cameraError, setCameraError] = useState<string>("");
+  const [errorType, setErrorType] = useState<string>("");
   const [isScannerReady, setIsScannerReady] = useState(false);
+  const [scannerCapabilities, setScannerCapabilities] = useState<any>(null);
+  const [deviceInfo] = useState(getDeviceInfo());
+  const [isRequestingPermission, setIsRequestingPermission] = useState(false);
 
   const onScanSuccess = useCallback((decodedText: string) => {
     onScan(decodedText);
@@ -282,6 +289,57 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
     }, 300);
   };
 
+  // Enhanced file upload handler for barcode fallback
+  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Use ZXing library for barcode detection from uploaded image
+      const { BrowserMultiFormatReader } = await import('@zxing/browser');
+      const imageUrl = URL.createObjectURL(file);
+      const img = new Image();
+      
+      img.onload = async () => {
+        try {
+          const codeReader = new BrowserMultiFormatReader();
+          const result = await codeReader.decodeFromImageElement(img);
+          
+          // Clean up
+          URL.revokeObjectURL(imageUrl);
+          
+          // Process the barcode
+          onScan(result.getText());
+          onClose();
+          
+        } catch (decodeError) {
+          console.error('Barcode decode error:', decodeError);
+          URL.revokeObjectURL(imageUrl);
+          setCameraError('No barcode found in image. Please try a clearer photo.');
+          setErrorType('DecodeError');
+        }
+      };
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(imageUrl);
+        setCameraError('Failed to load image. Please try another file.');
+        setErrorType('ImageLoadError');
+      };
+      
+      img.src = imageUrl;
+      
+    } catch (error) {
+      console.error('File upload error:', error);
+      setCameraError('Failed to process uploaded image.');
+      setErrorType('UploadError');
+    }
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [onScan, onClose]);
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     // Only close if clicking on the backdrop, not the modal content
     if (e.target === e.currentTarget) {
@@ -327,20 +385,36 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           </div>
         </CardHeader>
         <CardContent className="p-6">
+          {/* Enhanced Error Display with Fallback Options */}
           {cameraError ? (
-            <div className="text-center py-8">
-              <div className="text-red-600 mb-4 font-medium" data-testid="text-camera-error">
-                ⚠️ {cameraError}
-              </div>
-              <Button
-                onClick={handleReset}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                data-testid="button-retry-camera"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Try Again
-              </Button>
-            </div>
+            <Alert className="mb-4" data-testid="alert-camera-error">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="space-y-2">
+                  <p className="font-medium">{getErrorGuidance(errorType).title}</p>
+                  <p className="text-sm">{cameraError}</p>
+                  <div className="flex gap-2 mt-3">
+                    <Button 
+                      size="sm" 
+                      onClick={handleReset}
+                      data-testid="button-retry-camera"
+                    >
+                      <RefreshCw className="mr-2 h-3 w-3" />
+                      Try Again
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      data-testid="button-fallback-upload"
+                    >
+                      <Upload className="mr-2 h-3 w-3" />
+                      Upload Barcode Image
+                    </Button>
+                  </div>
+                </div>
+              </AlertDescription>
+            </Alert>
           ) : (
             <div className="relative">
               <div className="text-center mb-4">
@@ -351,9 +425,24 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
               
               <div 
                 id="barcode-scanner-container" 
-                className="w-full min-h-[300px] bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden"
+                className="w-full min-h-[300px] bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden relative"
                 data-testid="container-barcode-scanner"
-              />
+              >
+                {/* Add file upload input for fallback */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  data-testid="input-barcode-upload"
+                />
+              </div>
+              
+              {/* Scanner Tips */}
+              <div className="mt-2 text-xs text-muted-foreground text-center">
+                <p>💡 Position barcode clearly in frame • Ensure good lighting • Hold device steady</p>
+              </div>
 
               {!isScannerReady && (
                 <div className="absolute inset-0 flex items-center justify-center bg-background/90 rounded-lg">
