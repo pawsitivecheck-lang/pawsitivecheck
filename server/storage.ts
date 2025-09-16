@@ -26,6 +26,11 @@ import {
   informationalResources,
   farmProductReviews,
   syncSchedules,
+  analyticsEvents,
+  analyticsSessions,
+  performanceMetrics,
+  featureUsage,
+  conversionFunnels,
   type User,
   type UpsertUser,
   type Product,
@@ -80,6 +85,16 @@ import {
   type InsertFarmProductReview,
   type SyncSchedule,
   type InsertSyncSchedule,
+  type AnalyticsEvent,
+  type InsertAnalyticsEvent,
+  type AnalyticsSession,
+  type InsertAnalyticsSession,
+  type PerformanceMetric,
+  type InsertPerformanceMetric,
+  type FeatureUsage,
+  type InsertFeatureUsage,
+  type ConversionFunnel,
+  type InsertConversionFunnel,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
@@ -204,6 +219,14 @@ export interface IStorage {
     blacklistedIngredients: number;
     veterinaryOffices: number;
   }>;
+
+  // Analytics operations
+  createAnalyticsEvent(event: InsertAnalyticsEvent): Promise<AnalyticsEvent>;
+  createAnalyticsSession(session: InsertAnalyticsSession): Promise<AnalyticsSession>;
+  updateAnalyticsSession(sessionId: string, updates: Partial<InsertAnalyticsSession>): Promise<AnalyticsSession | undefined>;
+  createPerformanceMetric(metric: InsertPerformanceMetric): Promise<PerformanceMetric>;
+  createFeatureUsage(usage: InsertFeatureUsage): Promise<FeatureUsage>;
+  createConversionFunnel(funnel: InsertConversionFunnel): Promise<ConversionFunnel>;
 
   // Livestock operation methods
   getLivestockOperations(userId: string): Promise<LivestockOperation[]>;
@@ -1803,6 +1826,50 @@ export class DatabaseStorage implements IStorage {
       console.error('Error deleting user data:', error);
       return false;
     }
+  }
+
+  // Analytics operations
+  async createAnalyticsEvent(event: InsertAnalyticsEvent): Promise<AnalyticsEvent> {
+    const [created] = await db.insert(analyticsEvents)
+      .values(event)
+      .returning();
+    return created;
+  }
+
+  async createAnalyticsSession(session: InsertAnalyticsSession): Promise<AnalyticsSession> {
+    const [created] = await db.insert(analyticsSessions)
+      .values(session)
+      .returning();
+    return created;
+  }
+
+  async updateAnalyticsSession(sessionId: string, updates: Partial<InsertAnalyticsSession>): Promise<AnalyticsSession | undefined> {
+    const [updated] = await db.update(analyticsSessions)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(analyticsSessions.sessionId, sessionId))
+      .returning();
+    return updated;
+  }
+
+  async createPerformanceMetric(metric: InsertPerformanceMetric): Promise<PerformanceMetric> {
+    const [created] = await db.insert(performanceMetrics)
+      .values(metric)
+      .returning();
+    return created;
+  }
+
+  async createFeatureUsage(usage: InsertFeatureUsage): Promise<FeatureUsage> {
+    const [created] = await db.insert(featureUsage)
+      .values(usage)
+      .returning();
+    return created;
+  }
+
+  async createConversionFunnel(funnel: InsertConversionFunnel): Promise<ConversionFunnel> {
+    const [created] = await db.insert(conversionFunnels)
+      .values(funnel)
+      .returning();
+    return created;
   }
 
   // Note: Notification preferences and content moderation methods removed 

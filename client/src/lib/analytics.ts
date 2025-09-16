@@ -19,7 +19,7 @@ export function generateSessionId(): string {
 // Device detection utilities
 export function getDeviceType(): string {
   const userAgent = navigator.userAgent.toLowerCase();
-  if (/tablet|ipad|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(userAgent)) {
+  if (/tablet|ipad|playbook|silk|(puffin(?!.*(IP|AP|WP)))/.test(userAgent)) {
     return 'tablet';
   }
   if (/mobile|iphone|ipod|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile|ipad/.test(userAgent)) {

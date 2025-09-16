@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Search, Camera, Scan, Globe, Loader2, X, Clock } from "lucide-react";
 import type { Product } from "@shared/schema";
+import { analytics, PerformanceTracker } from "@/lib/analytics";
 
 interface HeaderSearchProps {
   isMobile?: boolean;
@@ -66,6 +67,21 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     },
     onSuccess: (results: Product[], variables: string) => {
       console.log('✅ SEARCH SUCCESS - RAW RESULTS:', results?.length || 0, 'results for query:', variables);
+      
+      // Track search completion
+      const searchDuration = PerformanceTracker.endMeasurement(`search_${variables}`, false);
+      analytics.trackPerformance('search_query_time', searchDuration, 'ms', {
+        query: variables,
+        resultsCount: results?.length || 0
+      });
+
+      // Track search results
+      analytics.trackInteraction('search_completed', 'search', variables, results?.length || 0, {
+        hasResults: (results?.length || 0) > 0,
+        searchDuration: searchDuration,
+        resultType: (results?.length || 0) > 0 ? 'success' : 'no_results'
+      });
+
       // Sort results by relevance using advanced scoring algorithm
       const scoredResults = (results || []).map(product => ({
         product,
@@ -344,6 +360,23 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     console.log('🔍 SEARCH INPUT CHANGED:', value);
     setSearchQuery(value);
     setSelectedIndex(-1);
+
+    // Track search initiation when user starts typing
+    if (value.length === 1) {
+      analytics.trackFeatureUsage('product_search', 'first_use', true, undefined, {
+        searchMethod: 'text_input',
+        hasExistingResults: searchResults.length > 0
+      });
+    }
+
+    // Track search queries and start performance measurement
+    if (value.length >= 3) {
+      PerformanceTracker.startMeasurement(`search_${value.trim()}`);
+      analytics.trackInteraction('search_initiated', 'search', value, value.length, {
+        queryLength: value.length,
+        hasExistingQuery: searchQuery.length > 0
+      });
+    }
     
     if (value.length === 0) {
       setSearchResults([]);
@@ -559,6 +592,24 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
   };
 
   const selectProduct = (product: Product) => {
+    // Track product selection conversion
+    analytics.trackConversion('product_selected_from_search', 'search', product.name, 1, {
+      productId: product.id,
+      productName: product.name,
+      productBrand: product.brand,
+      searchQuery: searchQuery.trim(),
+      resultPosition: searchResults.findIndex(p => p.id === product.id) + 1,
+      totalResults: searchResults.length,
+      cosmicScore: product.cosmicScore
+    });
+
+    // Track funnel step: search to product view
+    analytics.trackFunnelStep('product_discovery', 'search_to_product_view', 2, undefined, product.id, {
+      searchMethod: 'text_search',
+      originalQuery: searchQuery.trim(),
+      selectedProduct: product.name
+    });
+
     saveRecentSearch(product.name);
     setShowResults(false);
     clearSearch();

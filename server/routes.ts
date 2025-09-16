@@ -13,7 +13,12 @@ import {
   insertSavedProductSchema,
   insertProductUpdateSubmissionSchema,
   insertVeterinaryOfficeSchema, // Import the schema for veterinary offices
-  insertAnimalMovementSchema // Import the schema for animal movements
+  insertAnimalMovementSchema, // Import the schema for animal movements
+  insertAnalyticsEventSchema,
+  insertAnalyticsSessionSchema,
+  insertPerformanceMetricSchema,
+  insertFeatureUsageSchema,
+  insertConversionFunnelSchema
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { WalmartScraper } from "./services/walmart-scraper";
@@ -90,6 +95,115 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Analytics routes - Privacy-compliant tracking
+  app.post('/api/analytics/session', async (req: any, res) => {
+    try {
+      const sessionData = insertAnalyticsSessionSchema.parse(req.body);
+      const userId = req.user?.claims?.sub || req.user?.id;
+      
+      // Add user ID if authenticated
+      if (userId) {
+        sessionData.userId = userId;
+        sessionData.isAuthenticated = true;
+      }
+
+      const session = await storage.createAnalyticsSession(sessionData);
+      res.json(session);
+    } catch (error) {
+      logger.error('api', 'Failed to create analytics session', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: 'Failed to create analytics session' });
+    }
+  });
+
+  app.post('/api/analytics/events', async (req: any, res) => {
+    try {
+      const { events } = req.body;
+      if (!Array.isArray(events)) {
+        return res.status(400).json({ message: 'Events must be an array' });
+      }
+
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const results = [];
+
+      for (const eventData of events) {
+        try {
+          // Add user ID if authenticated
+          if (userId) {
+            eventData.userId = userId;
+          }
+
+          const event = insertAnalyticsEventSchema.parse(eventData);
+          const created = await storage.createAnalyticsEvent(event);
+          results.push(created);
+        } catch (error) {
+          logger.warn('api', 'Failed to create analytics event', { 
+            error: error instanceof Error ? error.message : 'Unknown error',
+            eventData 
+          });
+        }
+      }
+
+      res.json({ processed: results.length, total: events.length });
+    } catch (error) {
+      logger.error('api', 'Failed to process analytics events', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: 'Failed to process analytics events' });
+    }
+  });
+
+  app.post('/api/analytics/performance', async (req: any, res) => {
+    try {
+      const metricData = insertPerformanceMetricSchema.parse(req.body);
+      const userId = req.user?.claims?.sub || req.user?.id;
+      
+      // Add user ID if authenticated
+      if (userId) {
+        metricData.userId = userId;
+      }
+
+      const metric = await storage.createPerformanceMetric(metricData);
+      res.json(metric);
+    } catch (error) {
+      logger.error('api', 'Failed to create performance metric', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: 'Failed to create performance metric' });
+    }
+  });
+
+  app.post('/api/analytics/feature-usage', async (req: any, res) => {
+    try {
+      const usageData = insertFeatureUsageSchema.parse(req.body);
+      const userId = req.user?.claims?.sub || req.user?.id;
+      
+      // Add user ID if authenticated
+      if (userId) {
+        usageData.userId = userId;
+      }
+
+      const usage = await storage.createFeatureUsage(usageData);
+      res.json(usage);
+    } catch (error) {
+      logger.error('api', 'Failed to create feature usage', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: 'Failed to create feature usage' });
+    }
+  });
+
+  app.post('/api/analytics/funnel', async (req: any, res) => {
+    try {
+      const funnelData = insertConversionFunnelSchema.parse(req.body);
+      const userId = req.user?.claims?.sub || req.user?.id;
+      
+      // Add user ID if authenticated
+      if (userId) {
+        funnelData.userId = userId;
+      }
+
+      const funnel = await storage.createConversionFunnel(funnelData);
+      res.json(funnel);
+    } catch (error) {
+      logger.error('api', 'Failed to create conversion funnel', { error: error instanceof Error ? error.message : 'Unknown error' });
+      res.status(500).json({ message: 'Failed to create conversion funnel' });
     }
   });
 

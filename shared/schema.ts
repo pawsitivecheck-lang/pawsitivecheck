@@ -1024,7 +1024,7 @@ export const conversionFunnels = pgTable("conversion_funnels", {
 // User session tracking for analytics
 export const analyticsSessions = pgTable("analytics_sessions", {
   id: serial("id").primaryKey(),
-  sessionId: varchar("session_id", { length: 255 }).primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }).unique().notNull(),
   userId: varchar("user_id").references(() => users.id),
   isAuthenticated: boolean("is_authenticated").default(false),
   startedAt: timestamp("started_at").defaultNow(),

@@ -6,6 +6,7 @@ import { Camera, X, RotateCcw, AlertCircle, Upload, RefreshCw } from "lucide-rea
 import Webcam from "react-webcam";
 import { Html5QrcodeScanner, Html5QrcodeScanType, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import { requestCameraPermission, getErrorGuidance, getDeviceInfo, checkScannerCapabilities } from "@/utils/camera-utils";
+import { analytics, PerformanceTracker } from "@/lib/analytics";
 
 interface BarcodeScannerProps {
   onScan: (result: string) => void;
@@ -25,9 +26,21 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
 
   const onScanSuccess = useCallback((decodedText: string) => {
+    // Track successful scan
+    analytics.trackFeatureUsage('barcode_scanner', 'feature_completion', true, undefined, {
+      scanResult: decodedText,
+      deviceType: deviceInfo.deviceType,
+      browserName: deviceInfo.browserName
+    });
+    
+    analytics.trackConversion('barcode_scan_success', 'scanning', 'successful_product_scan', 1, {
+      barcodeFormat: 'unknown', // Could be enhanced to detect format
+      scanDuration: PerformanceTracker.endMeasurement('barcode_scan_session', false)
+    });
+
     onScan(decodedText);
     onClose();
-  }, [onScan, onClose]);
+  }, [onScan, onClose, deviceInfo]);
 
   const onScanFailure = useCallback((error: string) => {
     // Ignore scan failures - they happen constantly during scanning
@@ -50,6 +63,15 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
 
   useEffect(() => {
     if (isActive && !scannerRef.current) {
+      // Track scanner opening
+      analytics.trackFeatureUsage('barcode_scanner', 'first_use', true, undefined, {
+        deviceType: deviceInfo.deviceType,
+        browserName: deviceInfo.browserName
+      });
+      
+      // Start performance tracking
+      PerformanceTracker.startMeasurement('barcode_scan_session');
+      
       // Add delay to ensure DOM is ready and prevent race conditions
       const initScanner = async () => {
         try {
@@ -59,13 +81,25 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
+          // Track camera permission request
+          analytics.trackInteraction('camera_permission_request', 'scanning', 'camera_access_requested');
+
           // Use centralized camera permission system
           const permissionResult = await requestCameraPermission();
           
           if (!permissionResult.granted) {
+            // Track permission denied
+            analytics.trackFeatureUsage('barcode_scanner', 'first_use', false, 'Camera permission denied', {
+              errorType: 'permission_denied',
+              deviceType: deviceInfo.deviceType
+            });
+            
             const errorMessage = permissionResult.message || 'Camera access denied.';
             throw new Error(errorMessage);
           }
+
+          // Track permission granted
+          analytics.trackInteraction('camera_permission_granted', 'scanning', 'camera_access_granted');
 
           // Enhanced mobile-friendly configuration
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -116,6 +150,13 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
         } catch (error) {
           console.error('Error initializing scanner:', error);
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          
+          // Track scanner initialization error
+          analytics.trackFeatureUsage('barcode_scanner', 'first_use', false, errorMessage, {
+            errorType: 'initialization_error',
+            deviceType: deviceInfo.deviceType,
+            errorMessage: errorMessage
+          });
           
           // Use error message from centralized system
           setCameraError(errorMessage);
