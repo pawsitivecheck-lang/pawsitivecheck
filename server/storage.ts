@@ -394,9 +394,9 @@ export class DatabaseStorage implements IStorage {
       .where(
         or(
           sql`LOWER(TRIM(${products.brand})) = ${normalizedSearch}`, // Exact brand match
-          ilike(products.brand, `%${search}%`), // Partial brand match
-          ilike(products.name, `%${search}%`), // Name match
-          ilike(products.ingredients, `%${search}%`) // Ingredient match
+          ilike(products.brand, `%${normalizedSearch}%`), // Partial brand match - use normalized search
+          ilike(products.name, `%${normalizedSearch}%`), // Name match - use normalized search
+          ilike(products.ingredients, `%${normalizedSearch}%`) // Ingredient match - use normalized search
         )
       )
       .orderBy(

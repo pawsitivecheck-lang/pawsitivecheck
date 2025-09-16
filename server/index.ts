@@ -228,6 +228,24 @@ app.get('/health/ready', async (req, res) => {
   
   const server = await registerRoutes(app);
 
+  // API Error Handling - Must come BEFORE Vite setup to catch unmatched API routes
+  app.use('/api/*', (req, res) => {
+    res.status(404).json({
+      error: 'API endpoint not found',
+      message: `The requested API endpoint '${req.originalUrl}' does not exist`,
+      timestamp: new Date().toISOString(),
+      availableEndpoints: [
+        'GET /api/health',
+        'GET /api/auth/user', 
+        'GET /api/products',
+        'GET /api/recalls',
+        'GET /api/reviews',
+        'POST /api/products/scan',
+        'For full API documentation, visit /api/health'
+      ]
+    });
+  });
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
