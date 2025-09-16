@@ -59,62 +59,16 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
             existingScanner.innerHTML = '';
           }
 
-          // Enhanced mobile-friendly camera permission handling
+          // Use centralized camera permission system
+          const permissionResult = await requestCameraPermission();
+          
+          if (!permissionResult.granted) {
+            const errorMessage = permissionResult.message || 'Camera access denied.';
+            throw new Error(errorMessage);
+          }
+
+          // Enhanced mobile-friendly configuration
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-          
-          try {
-            // Mobile-optimized camera constraints
-            const constraints = {
-              video: isMobile ? {
-                facingMode: { exact: 'environment' }, // Force rear camera on mobile
-                width: { ideal: 640, max: 1280 }, // Lower resolution for mobile
-                height: { ideal: 480, max: 720 },
-                frameRate: { ideal: 15, max: 30 } // Lower frame rate for mobile
-              } : {
-                facingMode: { ideal: 'environment' },
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-              }
-            };
-
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            // Permission granted - close the test stream
-            stream.getTracks().forEach(track => track.stop());
-          } catch (permissionError: any) {
-            console.error('Camera permission error:', permissionError);
-            
-            // Try fallback constraints for mobile
-            if (isMobile && permissionError.name === 'OverconstrainedError') {
-              try {
-                const fallbackStream = await navigator.mediaDevices.getUserMedia({ 
-                  video: { 
-                    facingMode: 'environment' // Less strict constraint
-                  } 
-                });
-                fallbackStream.getTracks().forEach(track => track.stop());
-              } catch (fallbackError: any) {
-                throw new Error('Camera access denied. Try again for a fresh permission prompt.');
-              }
-            } else {
-              let errorMessage = 'Camera access denied. Try again for a fresh permission prompt.';
-              if (permissionError.name === 'NotFoundError') {
-                errorMessage = 'No camera found. Please connect a camera and try again.';
-              } else if (permissionError.name === 'NotReadableError') {
-                errorMessage = 'Camera is busy. Please close other applications using the camera.';
-              } else if (permissionError.name === 'NotAllowedError') {
-                errorMessage = 'Camera access denied. Please allow camera access in your browser settings and try again.';
-              }
-              throw new Error(errorMessage);
-            }
-          }
-
-          // Check if camera is available
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const hasCamera = devices.some(device => device.kind === 'videoinput');
-          
-          if (!hasCamera) {
-            throw new Error('No camera device found. Please ensure your device has a camera and try again.');
-          }
 
           // Enhanced configuration for better cross-platform support
           
@@ -163,19 +117,8 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           console.error('Error initializing scanner:', error);
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           
-          // Provide more specific error messages
-          let friendlyMessage = errorMessage;
-          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied') || errorMessage.includes('Camera permission denied')) {
-            friendlyMessage = 'Camera permission denied. Please allow camera access in your browser settings and refresh the page.';
-          } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
-            friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
-          } else if (errorMessage.includes('NotReadableError')) {
-            friendlyMessage = 'Camera is already in use by another application. Please close other apps and try again.';
-          } else if (errorMessage.includes('OverconstrainedError')) {
-            friendlyMessage = 'Camera configuration not supported. Please try a different device or browser.';
-          }
-          
-          setCameraError(friendlyMessage);
+          // Use error message from centralized system
+          setCameraError(errorMessage);
           setIsScannerReady(false);
         }
       };
@@ -221,12 +164,14 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
     setTimeout(async () => {
       if (isActive) {
         try {
-          // Check if camera is available
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const hasCamera = devices.some(device => device.kind === 'videoinput');
+          // Use centralized camera permission system for reset
+          const permissionResult = await requestCameraPermission();
           
-          if (!hasCamera) {
-            throw new Error('No camera device found. Please ensure your device has a camera and try again.');
+          if (!permissionResult.granted) {
+            const errorMessage = permissionResult.message || 'Camera access denied.';
+            setCameraError(errorMessage);
+            setErrorType(permissionResult.errorType || 'PermissionError');
+            return;
           }
 
           // Better configuration for mobile devices
@@ -271,19 +216,9 @@ export function BarcodeScanner({ onScan, onClose, isActive }: BarcodeScannerProp
           console.error('Error resetting scanner:', error);
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           
-          // Provide more specific error messages
-          let friendlyMessage = errorMessage;
-          if (errorMessage.includes('NotAllowedError') || errorMessage.includes('Permission denied')) {
-            friendlyMessage = 'Camera permission denied. Please allow camera access and refresh the page.';
-          } else if (errorMessage.includes('NotFoundError') || errorMessage.includes('No camera')) {
-            friendlyMessage = 'No camera found. Please connect a camera or try a different device.';
-          } else if (errorMessage.includes('NotReadableError')) {
-            friendlyMessage = 'Camera is already in use by another application. Please close other apps and try again.';
-          } else if (errorMessage.includes('OverconstrainedError')) {
-            friendlyMessage = 'Camera configuration not supported. Please try a different device or browser.';
-          }
-          
-          setCameraError(friendlyMessage);
+          // Use error message from centralized system or fallback
+          setCameraError(errorMessage);
+          setErrorType('ResetError');
         }
       }
     }, 300);
