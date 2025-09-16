@@ -35,6 +35,7 @@ import { logger } from "./logger";
 import { z } from "zod";
 import { openPetFoodFactsService } from "./services/openpetfoodfacts-service";
 import { VeterinarySafetyService } from "./services/veterinary-safety-service";
+import { SitemapGenerator } from "./sitemap";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint that bypasses session middleware for deployment
@@ -6879,6 +6880,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating bulk sync schedules:", error);
       res.status(500).json({ message: "Failed to create bulk sync schedules" });
+    }
+  });
+
+  // SEO Routes - XML Sitemap and Robots.txt
+  const sitemapGenerator = new SitemapGenerator();
+
+  // XML Sitemap route
+  app.get('/sitemap.xml', async (req, res) => {
+    try {
+      const sitemap = await sitemapGenerator.generateSitemap();
+      res.set('Content-Type', 'application/xml');
+      res.send(sitemap);
+    } catch (error) {
+      console.error("Error generating sitemap:", error);
+      res.status(500).send('Error generating sitemap');
+    }
+  });
+
+  // Robots.txt route
+  app.get('/robots.txt', (req, res) => {
+    try {
+      const robotsTxt = sitemapGenerator.generateRobotsTxt();
+      res.set('Content-Type', 'text/plain');
+      res.send(robotsTxt);
+    } catch (error) {
+      console.error("Error generating robots.txt:", error);
+      res.status(500).send('Error generating robots.txt');
     }
   });
 

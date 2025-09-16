@@ -278,15 +278,31 @@ app.get('/health/ready', async (req, res) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-    
-    // Start the background scheduler for automated sync tasks
-    backgroundScheduler.start();
-    log(`background scheduler started - checking schedules every minute`);
+  
+  // Prevent duplicate listeners during development hot reloads
+  if ((globalThis as any).__httpServer?.listening) {
+    log(`Server already listening on port ${port}, skipping duplicate listen`);
+  } else {
+    (globalThis as any).__httpServer = server.listen({
+      port,
+      host: "0.0.0.0",
+    }, () => {
+      log(`serving on port ${port}`);
+      
+      // Start the background scheduler for automated sync tasks
+      backgroundScheduler.start();
+      log(`background scheduler started - checking schedules every minute`);
+    });
+  }
+  
+  // Clean shutdown handlers
+  process.on('SIGTERM', () => {
+    log('SIGTERM received, closing server');
+    (globalThis as any).__httpServer?.close();
+  });
+  
+  process.on('SIGINT', () => {
+    log('SIGINT received, closing server');
+    (globalThis as any).__httpServer?.close();
   });
 })();

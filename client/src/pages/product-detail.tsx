@@ -230,9 +230,13 @@ export default function ProductDetail() {
                     {product.imageUrl ? (
                       <img 
                         src={product.imageUrl} 
-                        alt={product.name}
+                        alt={`Product image of ${product.name} by ${product.brand} - Pet safety analysis`}
                         className="w-full h-80 object-cover rounded-lg"
                         data-testid="img-product-detail"
+                        loading="lazy"
+                        decoding="async"
+                        width="400"
+                        height="320"
                       />
                     ) : (
                       <div className="w-full h-80 bg-cosmic-700 rounded-lg flex items-center justify-center" data-testid="placeholder-product-image">

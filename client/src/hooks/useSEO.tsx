@@ -12,7 +12,7 @@ interface SEOProps {
   twitterDescription?: string;
   twitterImage?: string;
   canonicalUrl?: string;
-  structuredData?: object;
+  structuredData?: object | object[];
 }
 
 export const useSEO = ({
@@ -56,10 +56,15 @@ export const useSEO = ({
     updateMetaTag('og:title', ogTitle || title, true);
     updateMetaTag('og:description', ogDescription || description, true);
     updateMetaTag('og:type', ogType, true);
+    updateMetaTag('og:site_name', 'PawsitiveCheck', true);
+    updateMetaTag('og:locale', 'en_US', true);
     
     if (ogImage) {
       updateMetaTag('og:image', ogImage, true);
+      updateMetaTag('og:image:width', '512', true);
+      updateMetaTag('og:image:height', '512', true);
       updateMetaTag('og:image:alt', ogTitle || title, true);
+      updateMetaTag('og:image:type', 'image/png', true);
     }
     
     if (canonicalUrl) {
@@ -78,8 +83,11 @@ export const useSEO = ({
     }
 
     // Update Twitter Card tags
+    updateMetaTag('twitter:card', 'summary_large_image');
     updateMetaTag('twitter:title', twitterTitle || ogTitle || title);
     updateMetaTag('twitter:description', twitterDescription || ogDescription || description);
+    updateMetaTag('twitter:site', '@PawsitiveCheck');
+    updateMetaTag('twitter:creator', '@PawsitiveCheck');
     
     if (twitterImage || ogImage) {
       updateMetaTag('twitter:image', twitterImage || ogImage || '');
@@ -89,17 +97,19 @@ export const useSEO = ({
     // Add structured data
     if (structuredData) {
       // Remove existing structured data for this page
-      const existingScript = document.querySelector('script[data-seo-structured]');
-      if (existingScript) {
-        existingScript.remove();
-      }
+      const existingScripts = document.querySelectorAll('script[data-seo-structured]');
+      existingScripts.forEach(script => script.remove());
 
-      // Add new structured data
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.setAttribute('data-seo-structured', 'true');
-      script.textContent = JSON.stringify(structuredData);
-      document.head.appendChild(script);
+      // Handle multiple structured data objects
+      const dataArray = Array.isArray(structuredData) ? structuredData : [structuredData];
+      
+      dataArray.forEach((data, index) => {
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.setAttribute('data-seo-structured', `true-${index}`);
+        script.textContent = JSON.stringify(data);
+        document.head.appendChild(script);
+      });
     }
 
     // Cleanup function to reset to defaults when component unmounts
@@ -203,6 +213,130 @@ export const generateWebPageStructuredData = (page: {
         "name": crumb.name,
         "item": crumb.url
       }))
+    } : undefined
+  };
+};
+
+// Utility function to generate organization structured data
+export const generateOrganizationStructuredData = () => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PawsitiveCheck",
+    "url": "https://pawsitivecheck.com",
+    "logo": "https://pawsitivecheck.com/icon-512.png",
+    "description": "Comprehensive pet product safety analysis platform providing barcode scanning, AI-powered safety analysis, recall alerts, and community reviews.",
+    "foundingDate": "2024",
+    "sameAs": [
+      "https://twitter.com/PawsitiveCheck",
+      "https://facebook.com/PawsitiveCheck"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "support@pawsitivecheck.com"
+    },
+    "areaServed": "US",
+    "knowsAbout": [
+      "Pet Product Safety",
+      "Pet Food Analysis", 
+      "Product Recalls",
+      "Pet Health",
+      "Animal Safety"
+    ]
+  };
+};
+
+// Utility function to generate service structured data
+export const generateServiceStructuredData = (service: {
+  name: string;
+  description: string;
+  url: string;
+  serviceType?: string;
+}) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.name,
+    "description": service.description,
+    "url": service.url,
+    "serviceType": service.serviceType || "Pet Product Safety Analysis",
+    "provider": {
+      "@type": "Organization",
+      "name": "PawsitiveCheck",
+      "url": "https://pawsitivecheck.com"
+    },
+    "areaServed": "US",
+    "availableChannel": {
+      "@type": "ServiceChannel",
+      "serviceUrl": service.url,
+      "serviceType": "online"
+    }
+  };
+};
+
+// Utility function to generate FAQ structured data
+export const generateFAQStructuredData = (faqs: Array<{question: string, answer: string}>) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+};
+
+// Utility function to generate how-to structured data
+export const generateHowToStructuredData = (howTo: {
+  name: string;
+  description: string;
+  steps: Array<{name: string, text: string}>;
+  totalTime?: string;
+}) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": howTo.name,
+    "description": howTo.description,
+    "totalTime": howTo.totalTime,
+    "supply": ["Pet Product", "Smartphone or Computer"],
+    "tool": ["PawsitiveCheck Platform", "Barcode Scanner"],
+    "step": howTo.steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.name,
+      "text": step.text
+    }))
+  };
+};
+
+// Utility function to generate local business structured data for vet finder
+export const generateLocalBusinessStructuredData = (business: {
+  name: string;
+  address: string;
+  phone?: string;
+  url?: string;
+  rating?: number;
+  reviewCount?: number;
+}) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VeterinaryCare",
+    "name": business.name,
+    "address": business.address,
+    "telephone": business.phone,
+    "url": business.url,
+    "aggregateRating": business.rating ? {
+      "@type": "AggregateRating",
+      "ratingValue": business.rating,
+      "reviewCount": business.reviewCount || 1,
+      "bestRating": 5,
+      "worstRating": 1
     } : undefined
   };
 };

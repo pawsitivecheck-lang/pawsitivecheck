@@ -19,7 +19,7 @@ import { MAIN_NAVIGATION, getConditionalLivestockLink } from "@shared/navigation
 import { useMobile } from "@/hooks/useMobile";
 import MobileAuth from "@/components/mobile-auth";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useSEO, generateWebPageStructuredData } from "@/hooks/useSEO";
+import { useSEO, generateWebPageStructuredData, generateOrganizationStructuredData, generateFAQStructuredData } from "@/hooks/useSEO";
 
 export default function Landing() {
   const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
@@ -72,24 +72,47 @@ export default function Landing() {
     retry: 1,
   });
 
-  // SEO optimization for landing page
+  // Enhanced SEO optimization for landing page with comprehensive structured data
   useSEO({
     title: "PawsitiveCheck - Pet Product Safety Analysis & Reviews",
     description: "Comprehensive pet product safety analysis platform with barcode scanning, AI-powered safety analysis, recall alerts, and community reviews. Keep your pets safe with trusted product information.",
-    keywords: "pet safety, pet product analysis, pet food recalls, pet product reviews, barcode scanner, pet health, animal safety, pet care, pet food safety, dog food reviews, cat food safety",
+    keywords: "pet safety, pet product analysis, pet food recalls, pet product reviews, barcode scanner, pet health, animal safety, pet care, pet food safety, dog food reviews, cat food safety, veterinary approved, ingredient transparency",
     ogTitle: "PawsitiveCheck - Keep Your Pets Safe with Smart Product Analysis",
     ogDescription: "Scan, analyze, and review pet products with our comprehensive safety platform. Get instant safety scores, recall alerts, and community reviews.",
     ogImage: "https://pawsitivecheck.com/icon-512.png",
     ogType: "website",
     canonicalUrl: "https://pawsitivecheck.com",
-    structuredData: generateWebPageStructuredData({
-      title: "PawsitiveCheck - Pet Product Safety Analysis",
-      description: "Comprehensive pet product safety analysis platform providing barcode scanning, AI-powered safety analysis, recall alerts, and community reviews.",
-      url: "https://pawsitivecheck.com",
-      breadcrumbs: [
-        { name: "Home", url: "https://pawsitivecheck.com" }
-      ]
-    })
+    twitterTitle: "PawsitiveCheck - Smart Pet Product Safety Analysis",
+    twitterDescription: "🐾 Scan pet products instantly • AI-powered safety analysis • Real-time recall alerts • Trusted by pet parents everywhere",
+    structuredData: [
+      generateOrganizationStructuredData(),
+      generateWebPageStructuredData({
+        title: "PawsitiveCheck - Pet Product Safety Analysis",
+        description: "Comprehensive pet product safety analysis platform providing barcode scanning, AI-powered safety analysis, recall alerts, and community reviews.",
+        url: "https://pawsitivecheck.com",
+        breadcrumbs: [
+          { name: "Home", url: "https://pawsitivecheck.com" }
+        ]
+      }),
+      generateFAQStructuredData([
+        {
+          question: "How does PawsitiveCheck analyze pet product safety?",
+          answer: "PawsitiveCheck uses AI-powered analysis combined with veterinary expertise to evaluate pet product ingredients, check for recalls, and provide safety scores based on comprehensive research and community feedback."
+        },
+        {
+          question: "Is PawsitiveCheck free to use?",
+          answer: "Yes, PawsitiveCheck offers free access to our core safety analysis features, product database, and recall alerts. Premium features include advanced analytics and priority support."
+        },
+        {
+          question: "How accurate are the safety ratings?",
+          answer: "Our safety ratings are based on scientific research, veterinary standards, FDA guidelines, and community feedback. We continuously update our analysis based on the latest safety data and research."
+        },
+        {
+          question: "Can I trust the recall information?",
+          answer: "Yes, our recall database is synchronized with official FDA and manufacturer recall notices, updated in real-time to ensure you receive the most current safety alerts."
+        }
+      ])
+    ]
   });
 
   return (
