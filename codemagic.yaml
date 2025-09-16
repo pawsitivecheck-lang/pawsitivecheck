@@ -1,0 +1,52 @@
+workflows:
+  android-capacitor-workflow:
+    name: Android Capacitor App
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    integrations:
+      app_store_connect: codemagic
+    environment:
+      android_signing:
+        - pawsitivecheck_keystore
+      groups:
+        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS)
+      vars:
+        PACKAGE_NAME: "com.pawsitivecheck.app"
+        GOOGLE_PLAY_TRACK: internal
+      node: 18.17.0
+      npm: 9
+      ndk: r25b
+      java: 11
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm ci
+      - name: Cocoapods installation (if iOS)
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Update dependencies and build web assets
+        script: |
+          # npm audit fix
+          npm run build
+      - name: Update Capacitor Android platform
+        script: |
+          npx cap sync android
+      - name: Build Android
+        script: |
+          cd android
+          ./gradlew assembleRelease
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+      - android/app/build/outputs/**/*.aab
+    publishing:
+      # email:
+      #   recipients:
+      #     - user_1@example.com
+      #     - user_2@example.com
+      #   notify:
+      #     success: true
+      #     failure: false
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: $GOOGLE_PLAY_TRACK
+        submit_as_draft: true
