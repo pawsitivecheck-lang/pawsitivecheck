@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { Toaster } from "@/components/ui/toaster";
 
 // Core pages - load immediately
 import Landing from "@/pages/landing";
@@ -34,8 +36,9 @@ const LoadingSpinner = () => (
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Switch>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Switch>
         {/* Core pages - loaded immediately */}
         <Route path="/" component={Landing} />
         <Route path="/home" component={Home} />
@@ -44,9 +47,11 @@ function App() {
         
         {/* Code-split pages - lazy loaded */}
         <Route path="/add-product" component={() => (
-          <Suspense fallback={<LoadingSpinner />}>
-            <AddProduct />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <AddProduct />
+            </Suspense>
+          </ErrorBoundary>
         )} />
         <Route path="/submit-product-update" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
@@ -54,14 +59,18 @@ function App() {
           </Suspense>
         )} />
         <Route path="/admin" component={() => (
-          <Suspense fallback={<LoadingSpinner />}>
-            <AdminDashboard />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminDashboard />
+            </Suspense>
+          </ErrorBoundary>
         )} />
         <Route path="/admin-dashboard" component={() => (
-          <Suspense fallback={<LoadingSpinner />}>
-            <AdminDashboard />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminDashboard />
+            </Suspense>
+          </ErrorBoundary>
         )} />
         <Route path="/vet-admin" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
@@ -114,15 +123,19 @@ function App() {
           </Suspense>
         )} />
         <Route path="/product-scanner" component={() => (
-          <Suspense fallback={<LoadingSpinner />}>
-            <ProductScanner />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProductScanner />
+            </Suspense>
+          </ErrorBoundary>
         )} />
         
         {/* Default fallback */}
         <Route component={Landing} />
       </Switch>
+      <Toaster />
     </QueryClientProvider>
+  </ErrorBoundary>
   );
 }
 
