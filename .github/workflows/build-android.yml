@@ -44,24 +44,21 @@ jobs:
     - name: Make Gradlew Executable
       run: chmod +x android/gradlew
       
-    - name: Build Release APK
+    - name: Build Production Release APK (Unsigned)
       run: |
         cd android
-        ./gradlew assembleRelease --no-daemon --stacktrace
+        # Clean any previous builds
+        ./gradlew clean
+        # Build unsigned release APK (perfect for APKPure/Aptoide)
+        ./gradlew assembleRelease --no-daemon --stacktrace --info
+        # Verify the APK was created
+        ls -la app/build/outputs/apk/release/
         
-    - name: Build Debug APK (Fallback)
-      if: failure()
-      run: |
-        cd android
-        ./gradlew assembleDebug --no-daemon --stacktrace
-        
-    - name: Upload APK Artifacts
+    - name: Upload Production APK
       uses: actions/upload-artifact@v4
       with:
-        name: pawsitivecheck-apk-${{ github.run_number }}
-        path: |
-          android/app/build/outputs/apk/release/*.apk
-          android/app/build/outputs/apk/debug/*.apk
+        name: pawsitivecheck-production-apk-v1.0.${{ github.run_number }}
+        path: android/app/build/outputs/apk/release/app-release.apk
         retention-days: 90
         
     - name: Create GitHub Release
@@ -90,9 +87,7 @@ jobs:
           
           **Commit:** ${{ github.sha }}
           **Build:** #${{ github.run_number }}
-        files: |
-          android/app/build/outputs/apk/release/*.apk
-          android/app/build/outputs/apk/debug/*.apk
+        files: android/app/build/outputs/apk/release/app-release.apk
         draft: false
         prerelease: false
       env:
