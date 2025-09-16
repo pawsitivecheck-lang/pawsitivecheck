@@ -960,6 +960,126 @@ export const userNotificationPreferencesSchema = z.object({
   dataRetentionDays: z.number().min(30).max(2555), // 30 days to 7 years
 });
 
+// Analytics and Privacy Compliance Tables
+
+// User consent tracking for privacy compliance (GDPR/CCPA)
+export const userConsent = pgTable("user_consent", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  sessionId: varchar("session_id", { length: 255 }), // For anonymous users
+  ipAddress: varchar("ip_address", { length: 45 }), // IPv4/IPv6
+  userAgent: text("user_agent"),
+  consentType: varchar("consent_type", { length: 50 }).notNull(), // analytics, marketing, functional
+  consentGranted: boolean("consent_granted").default(false),
+  consentMethod: varchar("consent_method", { length: 20 }).default('banner'), // banner, modal, settings
+  consentVersion: varchar("consent_version", { length: 10 }).default('1.0'),
+  consentText: text("consent_text"), // What user agreed to
+  expiresAt: timestamp("expires_at"),
+  revokedAt: timestamp("revoked_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Analytics events for user behavior tracking
+export const analyticsEvents = pgTable("analytics_events", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  sessionId: varchar("session_id", { length: 255 }).notNull(), // Anonymous tracking
+  eventType: varchar("event_type", { length: 50 }).notNull(), // page_view, click, scan, search, etc.
+  eventCategory: varchar("event_category", { length: 50 }).notNull(), // user_interaction, conversion, error
+  eventAction: varchar("event_action", { length: 100 }).notNull(), // button_click, product_scan, search_submit
+  eventLabel: varchar("event_label", { length: 200 }), // Optional descriptive label
+  eventValue: integer("event_value"), // Numeric value (e.g., product_id, duration)
+  pageUrl: varchar("page_url", { length: 500 }),
+  referrerUrl: varchar("referrer_url", { length: 500 }),
+  userAgent: text("user_agent"),
+  ipAddress: varchar("ip_address", { length: 45 }), // Anonymized after 24h
+  deviceType: varchar("device_type", { length: 20 }), // mobile, desktop, tablet
+  browserName: varchar("browser_name", { length: 50 }),
+  osName: varchar("os_name", { length: 50 }),
+  countryCode: varchar("country_code", { length: 2 }), // ISO country code
+  // Custom properties as JSON for flexibility
+  customProperties: jsonb("custom_properties"),
+  // Performance metrics
+  pageLoadTime: integer("page_load_time"), // milliseconds
+  timeOnPage: integer("time_on_page"), // seconds
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Conversion funnel tracking
+export const conversionFunnels = pgTable("conversion_funnels", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  sessionId: varchar("session_id", { length: 255 }).notNull(),
+  funnelName: varchar("funnel_name", { length: 100 }).notNull(), // product_analysis, user_onboarding
+  stepName: varchar("step_name", { length: 100 }).notNull(), // scan_initiated, analysis_viewed, action_taken
+  stepOrder: integer("step_order").notNull(), // 1, 2, 3, etc.
+  stepCompletedAt: timestamp("step_completed_at").defaultNow(),
+  stepDuration: integer("step_duration"), // Time spent on this step in seconds
+  productId: integer("product_id").references(() => products.id), // For product-related funnels
+  customData: jsonb("custom_data"), // Additional contextual data
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User session tracking for analytics
+export const analyticsSessions = pgTable("analytics_sessions", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }).primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  isAuthenticated: boolean("is_authenticated").default(false),
+  startedAt: timestamp("started_at").defaultNow(),
+  lastActivityAt: timestamp("last_activity_at").defaultNow(),
+  endedAt: timestamp("ended_at"),
+  sessionDuration: integer("session_duration"), // Total session time in seconds
+  pageViews: integer("page_views").default(0),
+  interactions: integer("interactions").default(0), // Clicks, scans, searches
+  conversions: integer("conversions").default(0), // Completed desired actions
+  entryPage: varchar("entry_page", { length: 500 }),
+  exitPage: varchar("exit_page", { length: 500 }),
+  referrerUrl: varchar("referrer_url", { length: 500 }),
+  utmSource: varchar("utm_source", { length: 100 }), // Traffic source tracking
+  utmMedium: varchar("utm_medium", { length: 100 }),
+  utmCampaign: varchar("utm_campaign", { length: 100 }),
+  deviceType: varchar("device_type", { length: 20 }),
+  browserName: varchar("browser_name", { length: 50 }),
+  osName: varchar("os_name", { length: 50 }),
+  countryCode: varchar("country_code", { length: 2 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Performance metrics tracking
+export const performanceMetrics = pgTable("performance_metrics", {
+  id: serial("id").primaryKey(),
+  sessionId: varchar("session_id", { length: 255 }).notNull(),
+  userId: varchar("user_id").references(() => users.id),
+  metricType: varchar("metric_type", { length: 50 }).notNull(), // page_load, api_response, scan_time
+  metricName: varchar("metric_name", { length: 100 }).notNull(), // specific metric identifier
+  value: decimal("value", { precision: 10, scale: 3 }).notNull(), // Metric value
+  unit: varchar("unit", { length: 20 }).default('ms'), // ms, seconds, bytes
+  pageUrl: varchar("page_url", { length: 500 }),
+  // Additional context
+  customData: jsonb("custom_data"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Feature usage tracking
+export const featureUsage = pgTable("feature_usage", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  sessionId: varchar("session_id", { length: 255 }).notNull(),
+  featureName: varchar("feature_name", { length: 100 }).notNull(), // barcode_scanner, product_analysis
+  usageType: varchar("usage_type", { length: 50 }).notNull(), // first_use, repeated_use, feature_completion
+  usageCount: integer("usage_count").default(1),
+  lastUsedAt: timestamp("last_used_at").defaultNow(),
+  totalTimeSpent: integer("total_time_spent").default(0), // Total time in seconds
+  success: boolean("success").default(true), // Did the feature work as expected
+  errorMessage: text("error_message"), // If success=false, what went wrong
+  customProperties: jsonb("custom_properties"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Livestock types
 export type LivestockOperation = typeof livestockOperations.$inferSelect;
 export type InsertLivestockOperation = z.infer<typeof insertLivestockOperationSchema>;
@@ -990,3 +1110,51 @@ export type InsertContentModerationReport = z.infer<typeof insertContentModerati
 export type SyncSchedule = typeof syncSchedules.$inferSelect;
 export type InsertSyncSchedule = z.infer<typeof insertSyncScheduleSchema>;
 export type UserNotificationPreferences = z.infer<typeof userNotificationPreferencesSchema>;
+
+// Analytics Insert Schemas
+export const insertUserConsentSchema = createInsertSchema(userConsent).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAnalyticsEventSchema = createInsertSchema(analyticsEvents).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertConversionFunnelSchema = createInsertSchema(conversionFunnels).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertAnalyticsSessionSchema = createInsertSchema(analyticsSessions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPerformanceMetricSchema = createInsertSchema(performanceMetrics).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertFeatureUsageSchema = createInsertSchema(featureUsage).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Analytics Types
+export type UserConsent = typeof userConsent.$inferSelect;
+export type InsertUserConsent = z.infer<typeof insertUserConsentSchema>;
+export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;
+export type InsertAnalyticsEvent = z.infer<typeof insertAnalyticsEventSchema>;
+export type ConversionFunnel = typeof conversionFunnels.$inferSelect;
+export type InsertConversionFunnel = z.infer<typeof insertConversionFunnelSchema>;
+export type AnalyticsSession = typeof analyticsSessions.$inferSelect;
+export type InsertAnalyticsSession = z.infer<typeof insertAnalyticsSessionSchema>;
+export type PerformanceMetric = typeof performanceMetrics.$inferSelect;
+export type InsertPerformanceMetric = z.infer<typeof insertPerformanceMetricSchema>;
+export type FeatureUsage = typeof featureUsage.$inferSelect;
+export type InsertFeatureUsage = z.infer<typeof insertFeatureUsageSchema>;
