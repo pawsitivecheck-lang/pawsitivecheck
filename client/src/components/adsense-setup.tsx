@@ -1,7 +1,7 @@
 // Google AdSense Integration Guide
 // Replace the demo ads in ad-banner.tsx with actual AdSense code
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface AdSenseAdProps {
   adClient: string; // Your AdSense client ID (e.g., "ca-pub-1234567890123456")
@@ -9,6 +9,50 @@ interface AdSenseAdProps {
   adFormat?: string;
   fullWidthResponsive?: boolean;
   className?: string;
+  fallbackContent?: React.ReactNode;
+}
+
+let scriptLoadingPromise: Promise<void> | null = null;
+let scriptLoaded = false;
+
+function loadAdSenseScript(): Promise<void> {
+  if (scriptLoaded) {
+    return Promise.resolve();
+  }
+  
+  if (scriptLoadingPromise) {
+    return scriptLoadingPromise;
+  }
+
+  scriptLoadingPromise = new Promise((resolve, reject) => {
+    // Check if script already exists
+    const existingScript = document.querySelector('script[src*="adsbygoogle.js"]');
+    if (existingScript) {
+      scriptLoaded = true;
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+    script.crossOrigin = "anonymous";
+    
+    script.onload = () => {
+      scriptLoaded = true;
+      resolve();
+    };
+    
+    script.onerror = () => {
+      console.warn('AdSense script failed to load - ad blocker or CSP may be blocking it');
+      scriptLoadingPromise = null;
+      reject(new Error('AdSense script failed to load'));
+    };
+    
+    document.head.appendChild(script);
+  });
+
+  return scriptLoadingPromise;
 }
 
 export default function AdSenseAd({ 
@@ -16,28 +60,49 @@ export default function AdSenseAd({
   adSlot, 
   adFormat = "auto", 
   fullWidthResponsive = true,
-  className = ""
+  className = "",
+  fallbackContent
 }: AdSenseAdProps) {
-  useEffect(() => {
-    try {
-      // Load AdSense script if not already loaded
-      if (!(window as any).adsbygoogle) {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
-        script.crossOrigin = "anonymous";
-        document.head.appendChild(script);
-      }
+  const [adError, setAdError] = useState(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+  const adRef = useRef<HTMLDivElement>(null);
 
-      // Push the ad
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-    } catch (error) {
-      console.error('AdSense error:', error);
-    }
-  }, []);
+  useEffect(() => {
+    let isMounted = true;
+
+    const initializeAd = async () => {
+      try {
+        await loadAdSenseScript();
+        
+        if (!isMounted) return;
+
+        // Initialize adsbygoogle array if not exists
+        (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+        
+        // Push the ad
+        ((window as any).adsbygoogle).push({});
+        setAdLoaded(true);
+      } catch (error) {
+        console.warn('AdSense initialization failed:', error);
+        if (isMounted) {
+          setAdError(true);
+        }
+      }
+    };
+
+    initializeAd();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [adClient, adSlot]);
+
+  if (adError && fallbackContent) {
+    return <div className={className}>{fallbackContent}</div>;
+  }
 
   return (
-    <div className={className}>
+    <div className={className} ref={adRef}>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}
@@ -46,6 +111,11 @@ export default function AdSenseAd({
         data-ad-format={adFormat}
         data-full-width-responsive={fullWidthResponsive.toString()}
       />
+      {adError && !fallbackContent && (
+        <div className="text-sm text-gray-500 text-center p-4">
+          Advertisement space
+        </div>
+      )}
     </div>
   );
 }
