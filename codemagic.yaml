@@ -8,7 +8,6 @@ workflows:
         PACKAGE_NAME: "com.pawsitivecheck.app"
       node: 18.17.0
       npm: 9
-      ndk: r25b
       java: 11
     scripts:
       - name: Install npm dependencies
