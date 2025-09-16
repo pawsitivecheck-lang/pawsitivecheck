@@ -402,10 +402,14 @@ export class DatabaseStorage implements IStorage {
       .orderBy(
         sql`CASE 
           WHEN LOWER(TRIM(${products.brand})) = ${normalizedSearch} THEN 0
-          WHEN LOWER(${products.brand}) LIKE ${`%${normalizedSearch}%`} THEN 1
-          WHEN LOWER(${products.name}) LIKE ${`%${normalizedSearch}%`} THEN 2
-          ELSE 3
+          WHEN LOWER(TRIM(${products.brand})) LIKE ${`${normalizedSearch}%`} THEN 1
+          WHEN LOWER(${products.brand}) LIKE ${`%${normalizedSearch}%`} THEN 2
+          WHEN LOWER(${products.name}) LIKE ${`${normalizedSearch}%`} THEN 3
+          WHEN LOWER(${products.name}) LIKE ${`%${normalizedSearch}%`} THEN 4
+          WHEN LOWER(${products.ingredients}) LIKE ${`%${normalizedSearch}%`} THEN 5
+          ELSE 6
         END`,
+        desc(products.cosmicScore),
         desc(products.createdAt)
       )
       .limit(limit)

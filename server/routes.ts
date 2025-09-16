@@ -184,10 +184,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         search as string
       );
 
-      // If searching and we have few results, supplement with Open Pet Food Facts
-      if (search && typeof search === 'string' && search.trim().length >= 2 && products.length < 10) {
+      // Normalize search parameter with proper null-guard
+      const q = typeof search === 'string' ? search.trim().toLowerCase() : '';
+      
+      // Only use OPFF as fallback when there are NO local brand/name matches
+      const hasBrandOrNameMatch = q.length >= 2 && products.some(p => 
+        (p.brand?.toLowerCase() || '').includes(q) || 
+        p.name.toLowerCase().includes(q)
+      );
+      
+      if (q.length >= 2 && !hasBrandOrNameMatch) {
         try {
-          const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(search.trim())}&page_size=10&json=1`, {
+          const response = await fetch(`https://world.openpetfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(search as string)}&page_size=10&json=1`, {
             headers: {
               'User-Agent': 'PawsitiveCheck - Version 1.0 - https://pawsitivecheck.replit.app'
             }
@@ -197,9 +205,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const data = await response.json();
 
             if (data.products && data.products.length > 0) {
-              // Convert Open Pet Food Facts products to our format
+              // Filter and convert Open Pet Food Facts products that match search term
+              const filteredProducts = data.products.filter((product: any) => {
+                const productName = (product.product_name || '').toLowerCase();
+                const brandName = (product.brands || '').toLowerCase();
+                
+                // Only include products that actually match the search term using normalized query
+                return productName.includes(q) || brandName.includes(q);
+              });
+              
               const openFoodFactsProducts = await Promise.all(
-                data.products.slice(0, 5).map(async (product: any) => {
+                filteredProducts.slice(0, 5).map(async (product: any) => {
                   // Check if product already exists in our database
                   let existingProduct = null;
                   if (product.code) {
@@ -287,7 +303,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Auto-populate database with sample products if empty
-      if (products.length === 0 && !search) {
+      if (products.length === 0 && q.length === 0) {
         const sampleProducts = [
           // TOP DOG FOODS - Market Leaders 2024
           {
