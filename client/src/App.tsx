@@ -25,6 +25,7 @@ const Recalls = React.lazy(() => import("@/pages/recalls"));
 const Community = React.lazy(() => import("@/pages/community"));
 const ProductDatabase = React.lazy(() => import("@/pages/product-database"));
 const LivestockDashboard = React.lazy(() => import("@/pages/livestock-dashboard"));
+const LivestockCreateOperation = React.lazy(() => import("@/pages/livestock-create-operation"));
 const OperationProfile = React.lazy(() => import("@/pages/operation-profile"));
 const VetFinder = React.lazy(() => import("@/pages/vet-finder"));
 const ComprehensiveSafetyAnalysis = React.lazy(() => import("@/pages/comprehensive-safety-analysis"));
@@ -123,6 +124,13 @@ function App() {
           <Suspense fallback={<LoadingSpinner />}>
             <LivestockDashboard />
           </Suspense>
+        )} />
+        <Route path="/livestock/create" component={() => (
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner />}>
+              <LivestockCreateOperation />
+            </Suspense>
+          </ErrorBoundary>
         )} />
         <Route path="/livestock/operations/:id" component={() => (
           <ErrorBoundary>
