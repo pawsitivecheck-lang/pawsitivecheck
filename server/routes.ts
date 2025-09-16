@@ -41,24 +41,82 @@ import { z } from "zod";
 import { openPetFoodFactsService } from "./services/openpetfoodfacts-service";
 import { VeterinarySafetyService } from "./services/veterinary-safety-service";
 import { SitemapGenerator } from "./sitemap";
+import { checkDatabaseHealth } from "./db";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint that bypasses session middleware for deployment
-  app.get('/health', (req, res) => {
-    res.status(200).json({ 
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development'
-    });
+  app.get('/health', async (req, res) => {
+    try {
+      const dbHealth = await checkDatabaseHealth();
+      const status = dbHealth.healthy ? 'healthy' : 'unhealthy';
+      const httpStatus = dbHealth.healthy ? 200 : 503;
+      
+      res.status(httpStatus).json({ 
+        status,
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development',
+        database: {
+          healthy: dbHealth.healthy,
+          responseTime: dbHealth.responseTime,
+          error: dbHealth.error
+        }
+      });
+    } catch (error) {
+      res.status(503).json({ 
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development',
+        error: 'Health check failed'
+      });
+    }
   });
   
   // Additional health check for load balancers
-  app.get('/api/health', (req, res) => {
-    res.status(200).json({ 
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development'
-    });
+  app.get('/api/health', async (req, res) => {
+    try {
+      const dbHealth = await checkDatabaseHealth();
+      const status = dbHealth.healthy ? 'healthy' : 'unhealthy';
+      const httpStatus = dbHealth.healthy ? 200 : 503;
+      
+      res.status(httpStatus).json({ 
+        status,
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development',
+        database: {
+          healthy: dbHealth.healthy,
+          responseTime: dbHealth.responseTime,
+          error: dbHealth.error
+        }
+      });
+    } catch (error) {
+      res.status(503).json({ 
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development',
+        error: 'Health check failed'
+      });
+    }
+  });
+
+  // Detailed database health and performance monitoring endpoint for admins
+  app.get('/api/admin/database/health', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const dbHealth = await checkDatabaseHealth();
+      res.json({
+        ...dbHealth,
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+      });
+    } catch (error) {
+      logger.error('api', 'Admin database health check failed', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+      res.status(500).json({ 
+        healthy: false,
+        error: 'Database health check failed',
+        timestamp: new Date().toISOString()
+      });
+    }
   });
 
   // Auth middleware

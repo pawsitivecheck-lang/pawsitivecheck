@@ -53,7 +53,14 @@ export const users = pgTable("users", {
   lastActiveAt: timestamp("last_active_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  // Performance indexes for user lookups and filtering
+  index("IDX_users_google_id").on(table.googleId),
+  index("IDX_users_replit_id").on(table.replitId),
+  index("IDX_users_auth_provider").on(table.authProvider),
+  index("IDX_users_last_active").on(table.lastActiveAt),
+  index("IDX_users_is_admin").on(table.isAdmin),
+]);
 
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
@@ -77,7 +84,22 @@ export const products = pgTable("products", {
   lastAnalyzed: timestamp("last_analyzed"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  // Critical indexes for product searching and filtering
+  index("IDX_products_barcode").on(table.barcode),
+  index("IDX_products_brand").on(table.brand),
+  index("IDX_products_category").on(table.category),
+  index("IDX_products_animal_type").on(table.animalType),
+  index("IDX_products_cosmic_clarity").on(table.cosmicClarity),
+  index("IDX_products_is_blacklisted").on(table.isBlacklisted),
+  index("IDX_products_cosmic_score").on(table.cosmicScore),
+  index("IDX_products_created_at").on(table.createdAt),
+  index("IDX_products_last_analyzed").on(table.lastAnalyzed),
+  // Composite indexes for complex search queries
+  index("IDX_products_brand_category").on(table.brand, table.category),
+  index("IDX_products_clarity_score").on(table.cosmicClarity, table.cosmicScore),
+  index("IDX_products_type_category").on(table.animalType, table.category),
+]);
 
 export const productReviews = pgTable("product_reviews", {
   id: serial("id").primaryKey(),
@@ -95,7 +117,21 @@ export const productReviews = pgTable("product_reviews", {
   flaggedCount: integer("flagged_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  // Foreign key indexes for joins
+  index("IDX_product_reviews_product_id").on(table.productId),
+  index("IDX_product_reviews_user_id").on(table.userId),
+  index("IDX_product_reviews_moderated_by").on(table.moderatedBy),
+  // Status and filtering indexes
+  index("IDX_product_reviews_moderation_status").on(table.moderationStatus),
+  index("IDX_product_reviews_is_verified").on(table.isVerified),
+  index("IDX_product_reviews_rating").on(table.rating),
+  index("IDX_product_reviews_created_at").on(table.createdAt),
+  // Composite indexes for common queries
+  index("IDX_product_reviews_product_created").on(table.productId, table.createdAt),
+  index("IDX_product_reviews_user_created").on(table.userId, table.createdAt),
+  index("IDX_product_reviews_status_created").on(table.moderationStatus, table.createdAt),
+]);
 
 // Content moderation table for tracking user reports
 export const contentModerationReports = pgTable("content_moderation_reports", {
@@ -145,7 +181,16 @@ export const productRecalls = pgTable("product_recalls", {
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  // Critical indexes for recall lookups
+  index("IDX_product_recalls_product_id").on(table.productId),
+  index("IDX_product_recalls_is_active").on(table.isActive),
+  index("IDX_product_recalls_severity").on(table.severity),
+  index("IDX_product_recalls_recall_date").on(table.recallDate),
+  // Composite indexes for common queries
+  index("IDX_product_recalls_active_severity").on(table.isActive, table.severity),
+  index("IDX_product_recalls_product_active").on(table.productId, table.isActive),
+]);
 
 export const ingredientBlacklist = pgTable("ingredient_blacklist", {
   id: serial("id").primaryKey(),
@@ -165,7 +210,15 @@ export const scanHistory = pgTable("scan_history", {
   scannedData: text("scanned_data"), // raw scan data
   analysisResult: jsonb("analysis_result"), // mystical analysis results
   scannedAt: timestamp("scanned_at").defaultNow(),
-});
+}, (table) => [
+  // User and product tracking indexes
+  index("IDX_scan_history_user_id").on(table.userId),
+  index("IDX_scan_history_product_id").on(table.productId),
+  index("IDX_scan_history_scanned_at").on(table.scannedAt),
+  // Composite indexes for user scan history
+  index("IDX_scan_history_user_scanned").on(table.userId, table.scannedAt),
+  index("IDX_scan_history_product_scanned").on(table.productId, table.scannedAt),
+]);
 
 export const petProfiles = pgTable("pet_profiles", {
   id: serial("id").primaryKey(),
@@ -186,7 +239,17 @@ export const petProfiles = pgTable("pet_profiles", {
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  // User and filtering indexes
+  index("IDX_pet_profiles_user_id").on(table.userId),
+  index("IDX_pet_profiles_is_active").on(table.isActive),
+  index("IDX_pet_profiles_species").on(table.species),
+  index("IDX_pet_profiles_breed").on(table.breed),
+  index("IDX_pet_profiles_created_at").on(table.createdAt),
+  // Composite indexes for user pets
+  index("IDX_pet_profiles_user_active").on(table.userId, table.isActive),
+  index("IDX_pet_profiles_species_breed").on(table.species, table.breed),
+]);
 
 // Health tracking records for long-term monitoring
 export const healthRecords = pgTable("health_records", {
