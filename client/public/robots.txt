@@ -1,0 +1,66 @@
+# Robots.txt for PawsitiveCheck.com
+# Pet Product Safety Analysis Platform
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin-dashboard  
+Disallow: /vet-admin
+Disallow: /admin-product-submissions
+Disallow: /api/
+Disallow: /private/
+Disallow: /*.json
+Disallow: /tmp/
+Disallow: /uploads/
+Disallow: /logs/
+Disallow: /404
+
+# Allow important SEO pages
+Allow: /
+Allow: /home
+Allow: /product-database
+Allow: /recalls  
+Allow: /community
+Allow: /products
+Allow: /livestock
+Allow: /vet-finder
+Allow: /comprehensive-safety-analysis
+Allow: /product-scanner
+Allow: /sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://pawsitivecheck.com/sitemap.xml
+
+# Block known bad bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot  
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Allow GoogleBot full access to important pages
+User-agent: Googlebot
+Allow: /
+Allow: /product/
+Allow: /products
+Allow: /recalls
+Allow: /community
+Disallow: /admin
+Disallow: /api/
+
+# Social media crawlers
+User-agent: facebookexternalhit
+Allow: /
+Allow: /product/
+Allow: /products
+
+User-agent: Twitterbot  
+Allow: /
+Allow: /product/
+Allow: /products

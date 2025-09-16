@@ -19,6 +19,7 @@ import { MAIN_NAVIGATION, getConditionalLivestockLink } from "@shared/navigation
 import { useMobile } from "@/hooks/useMobile";
 import MobileAuth from "@/components/mobile-auth";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useSEO, generateWebPageStructuredData } from "@/hooks/useSEO";
 
 export default function Landing() {
   const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
@@ -69,6 +70,26 @@ export default function Landing() {
       return await res.json();
     },
     retry: 1,
+  });
+
+  // SEO optimization for landing page
+  useSEO({
+    title: "PawsitiveCheck - Pet Product Safety Analysis & Reviews",
+    description: "Comprehensive pet product safety analysis platform with barcode scanning, AI-powered safety analysis, recall alerts, and community reviews. Keep your pets safe with trusted product information.",
+    keywords: "pet safety, pet product analysis, pet food recalls, pet product reviews, barcode scanner, pet health, animal safety, pet care, pet food safety, dog food reviews, cat food safety",
+    ogTitle: "PawsitiveCheck - Keep Your Pets Safe with Smart Product Analysis",
+    ogDescription: "Scan, analyze, and review pet products with our comprehensive safety platform. Get instant safety scores, recall alerts, and community reviews.",
+    ogImage: "https://pawsitivecheck.com/icon-512.png",
+    ogType: "website",
+    canonicalUrl: "https://pawsitivecheck.com",
+    structuredData: generateWebPageStructuredData({
+      title: "PawsitiveCheck - Pet Product Safety Analysis",
+      description: "Comprehensive pet product safety analysis platform providing barcode scanning, AI-powered safety analysis, recall alerts, and community reviews.",
+      url: "https://pawsitivecheck.com",
+      breadcrumbs: [
+        { name: "Home", url: "https://pawsitivecheck.com" }
+      ]
+    })
   });
 
   return (

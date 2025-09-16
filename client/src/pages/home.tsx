@@ -13,6 +13,7 @@ import { LoadingOverlay, LoadingSpinner } from "@/components/ui/enhanced-loading
 import { ProductSkeleton, SkeletonCard } from "@/components/ui/skeleton-card";
 import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 import { memo, useMemo } from "react";
+import { useSEO, generateWebPageStructuredData } from "@/hooks/useSEO";
 
 // Memoized quick action cards component for better performance
 const QuickActionCards = memo(() => (
@@ -66,6 +67,25 @@ const QuickActionCards = memo(() => (
 
 function Home() {
   const { user } = useAuth();
+
+  // SEO optimization for home/dashboard page
+  useSEO({
+    title: user ? "Dashboard - PawsitiveCheck" : "Home - PawsitiveCheck",
+    description: "Access your personalized pet product safety dashboard. View recent scans, product alerts, community updates, and manage your pet profiles.",
+    keywords: "pet safety dashboard, product scans, pet health monitoring, safety alerts, pet owner tools",
+    ogTitle: "Pet Safety Dashboard - PawsitiveCheck",
+    ogDescription: "Your personalized dashboard for pet product safety monitoring and community insights.",
+    canonicalUrl: "https://pawsitivecheck.com/home",
+    structuredData: generateWebPageStructuredData({
+      title: "Pet Safety Dashboard",
+      description: "Personalized dashboard for pet product safety monitoring",
+      url: "https://pawsitivecheck.com/home",
+      breadcrumbs: [
+        { name: "Home", url: "https://pawsitivecheck.com" },
+        { name: "Dashboard", url: "https://pawsitivecheck.com/home" }
+      ]
+    })
+  });
 
   // Performance optimization: Optimize queries with enabled conditions
   const { data: recentScans, isLoading: isLoadingScans } = useQuery<ScanHistory[]>({

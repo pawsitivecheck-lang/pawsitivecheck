@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SaveToPetButton } from "@/components/save-to-pet-button";
 import { Package, Shield, AlertTriangle, CheckCircle, XCircle, Heart, Star, ArrowLeft, ExternalLink, AlertCircle, Activity, Clock, TrendingDown, TrendingUp, WandSparkles } from "lucide-react";
+import { useSEO, generateProductStructuredData, generateWebPageStructuredData } from "@/hooks/useSEO";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -58,6 +59,33 @@ export default function ProductDetail() {
   const positiveReviews = reviews?.filter(review => 
     review.rating >= 4 && !safetyReviews.includes(review)
   ) || [];
+
+  // Calculate average rating for structured data
+  const averageRating = reviews?.length ? 
+    reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length : 0;
+
+  // Dynamic SEO optimization for product detail page
+  useSEO({
+    title: product ? `${product.name} by ${product.brand} - Safety Analysis & Reviews | PawsitiveCheck` : "Product Details | PawsitiveCheck",
+    description: product ? 
+      `Comprehensive safety analysis for ${product.name} by ${product.brand}. View ingredients, safety scores, recall alerts, and community reviews. ${product.description?.slice(0, 100)}...` :
+      "View detailed pet product safety analysis, ingredients, reviews, and recall information.",
+    keywords: product ? 
+      `${product.name}, ${product.brand}, pet product safety, ${product.category}, pet food analysis, ingredient checker, product reviews, recall alerts` :
+      "pet product safety, pet food analysis, product reviews",
+    ogTitle: product ? `${product.name} - Safety Analysis & Reviews` : "Product Safety Analysis",
+    ogDescription: product ? 
+      `Get comprehensive safety analysis for ${product.name} by ${product.brand}. View safety scores, ingredients analysis, and community reviews.` :
+      "Comprehensive pet product safety analysis with community reviews.",
+    ogImage: product?.imageUrl || "https://pawsitivecheck.com/icon-512.png",
+    ogType: "product",
+    canonicalUrl: product ? `https://pawsitivecheck.com/product/${product.id}` : undefined,
+    structuredData: product ? generateProductStructuredData({
+      ...product,
+      averageRating,
+      reviewCount: reviews?.length || 0
+    }) : undefined
+  });
 
   if (isLoading) {
     return (

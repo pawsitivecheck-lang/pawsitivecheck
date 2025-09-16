@@ -13,9 +13,29 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Users, Crown, Eye, Star, MessageCircle, ThumbsUp, Search, Loader2 } from "lucide-react";
+import { useSEO, generateWebPageStructuredData } from "@/hooks/useSEO";
 
 export default function Community() {
   const { user } = useAuth();
+
+  // SEO optimization for community page
+  useSEO({
+    title: "Community Reviews & Discussions - PawsitiveCheck",
+    description: "Connect with fellow pet owners, share product reviews, and discover trusted recommendations. Join the PawsitiveCheck community for pet safety insights.",
+    keywords: "pet community, pet product reviews, pet owner discussions, product ratings, pet safety forum, pet care community",
+    ogTitle: "Pet Owner Community - Reviews & Discussions",
+    ogDescription: "Connect with pet owners worldwide. Share reviews, get recommendations, and keep your pets safe together.",
+    canonicalUrl: "https://pawsitivecheck.com/community",
+    structuredData: generateWebPageStructuredData({
+      title: "Pet Owner Community",
+      description: "Connect with pet owners, share reviews and safety insights",
+      url: "https://pawsitivecheck.com/community",
+      breadcrumbs: [
+        { name: "Home", url: "https://pawsitivecheck.com" },
+        { name: "Community", url: "https://pawsitivecheck.com/community" }
+      ]
+    })
+  });
   const { toast } = useToast();
   const [reviewFilter, setReviewFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
