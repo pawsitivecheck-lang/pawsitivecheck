@@ -161,6 +161,29 @@ export default function OperationProfile() {
     },
   });
 
+  // Edit operation mutation
+  const editOperationMutation = useMutation({
+    mutationFn: async (operationData: any) => {
+      return await apiRequest("PUT", `/api/livestock/operations/${operationId}`, operationData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/livestock/operations/${operationId}`] });
+      setIsEditDialogOpen(false);
+      toast({
+        title: "Success",
+        description: "Operation updated successfully.",
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating operation:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update operation. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // Delete herd mutation
   const deleteHerdMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -211,6 +234,28 @@ export default function OperationProfile() {
     });
 
     createHerdMutation.mutate(herdData);
+  };
+
+  // Handle edit operation form submission
+  const handleEditOperation = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!operation) return;
+    
+    const formData = new FormData(e.currentTarget);
+    
+    const operationData = {
+      operationName: formData.get('operationName'),
+      operationType: formData.get('operationType'),
+      city: formData.get('city'),
+      state: formData.get('state'),
+      address: formData.get('address') || undefined,
+      zipCode: formData.get('zipCode') || undefined,
+      contactPhone: formData.get('contactPhone') || undefined,
+      contactEmail: formData.get('contactEmail') || undefined,
+      notes: formData.get('notes') || undefined,
+    };
+
+    editOperationMutation.mutate(operationData);
   };
 
   // Handle edit herd form submission
@@ -772,6 +817,79 @@ export default function OperationProfile() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Edit Operation Dialog */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Operation: {operation?.operationName}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleEditOperation}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                <div>
+                  <Label htmlFor="operationName">Operation Name *</Label>
+                  <Input name="operationName" defaultValue={operation?.operationName} placeholder="Farm Name" required />
+                </div>
+                <div>
+                  <Label htmlFor="operationType">Operation Type *</Label>
+                  <Select name="operationType" defaultValue={operation?.operationType} required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select operation type" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="mixed">Mixed</SelectItem>
+                      <SelectItem value="beef-cattle">Beef Cattle</SelectItem>
+                      <SelectItem value="dairy-cattle">Dairy Cattle</SelectItem>
+                      <SelectItem value="pigs">Pigs</SelectItem>
+                      <SelectItem value="poultry">Poultry</SelectItem>
+                      <SelectItem value="sheep-goat">Sheep & Goats</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="city">City *</Label>
+                  <Input name="city" defaultValue={operation?.city} placeholder="City" required />
+                </div>
+                <div>
+                  <Label htmlFor="state">State *</Label>
+                  <Input name="state" defaultValue={operation?.state} placeholder="State" required />
+                </div>
+                <div>
+                  <Label htmlFor="address">Address</Label>
+                  <Input name="address" defaultValue={operation?.address} placeholder="Street address (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="zipCode">Zip Code</Label>
+                  <Input name="zipCode" defaultValue={operation?.zipCode} placeholder="Zip code (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="contactPhone">Contact Phone</Label>
+                  <Input name="contactPhone" defaultValue={operation?.contactPhone} placeholder="Phone number (optional)" />
+                </div>
+                <div>
+                  <Label htmlFor="contactEmail">Contact Email</Label>
+                  <Input name="contactEmail" type="email" defaultValue={operation?.contactEmail} placeholder="Email address (optional)" />
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea name="notes" defaultValue={operation?.notes} placeholder="Additional notes about this operation..." rows={3} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={editOperationMutation.isPending}
+                  data-testid="button-update-operation"
+                >
+                  {editOperationMutation.isPending ? "Updating..." : "Update Operation"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
 
         {/* Edit Herd Dialog */}
         <Dialog open={isEditHerdDialogOpen} onOpenChange={setIsEditHerdDialogOpen}>
