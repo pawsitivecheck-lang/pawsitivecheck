@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { ProductSkeleton } from "@/components/ui/skeleton-card";
+import { TRANSITION_CLASSES, staggerDelay } from "@/utils/transitions";
 import { Heart, Edit3, Trash2, Calendar, Star, AlertCircle, CheckCircle, XCircle, Package } from "lucide-react";
 import type { SavedProduct, Product } from "@shared/schema";
 
@@ -181,7 +183,7 @@ export function SavedProductsList({ petId }: SavedProductsListProps) {
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-32 bg-gray-200 rounded-lg animate-pulse"></div>
+          <ProductSkeleton key={i} className="h-32" />
         ))}
       </div>
     );

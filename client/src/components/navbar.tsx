@@ -6,6 +6,9 @@ import { Menu, X, Crown, Search, Shield, Users, Camera, Heart, PawPrint, Chevron
 import { MAIN_NAVIGATION } from "@shared/navigation";
 import HeaderSearch from "@/components/header-search";
 import DNTIndicator from "@/components/dnt-indicator";
+import { TRANSITION_CLASSES, staggerDelay } from "@/utils/transitions";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +32,10 @@ export default function Navbar() {
 
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
+    <nav className={cn(
+      "fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm",
+      TRANSITION_CLASSES.stateChange
+    )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center">
           {/* Left Section - Logo */}

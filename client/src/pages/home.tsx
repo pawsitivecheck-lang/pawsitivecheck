@@ -8,6 +8,9 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 // Performance optimization: Only import specific icons to reduce bundle size
 import { Search, Shield, BarChart3, WandSparkles, Tractor } from "lucide-react";
+import { TRANSITION_CLASSES, staggerDelay } from "@/utils/transitions";
+import { LoadingOverlay, LoadingSpinner } from "@/components/ui/enhanced-loading";
+import { ProductSkeleton, SkeletonCard } from "@/components/ui/skeleton-card";
 import type { ScanHistory, ProductRecall, ProductReview } from "@shared/schema";
 import { memo, useMemo } from "react";
 
@@ -15,7 +18,7 @@ import { memo, useMemo } from "react";
 const QuickActionCards = memo(() => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
     <Link href="/product-database">
-      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600" data-testid="card-database">
+      <Card className={`bg-card cursor-pointer border border-border hover:border-purple-300 dark:hover:border-purple-600 ${TRANSITION_CLASSES.card}`} data-testid="card-database">
         <CardContent className="p-6">
           <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
             <Search className="text-purple-600 h-5 w-5" />
@@ -26,7 +29,7 @@ const QuickActionCards = memo(() => (
       </Card>
     </Link>
     <Link href="/recalls">
-      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-red-300 dark:hover:border-red-600" data-testid="card-recalls">
+      <Card className={`bg-card cursor-pointer border border-border hover:border-red-300 dark:hover:border-red-600 ${TRANSITION_CLASSES.card}`} data-testid="card-recalls">
         <CardContent className="p-6">
           <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mb-4">
             <Shield className="text-red-600 h-5 w-5" />
@@ -37,7 +40,7 @@ const QuickActionCards = memo(() => (
       </Card>
     </Link>
     <Link href="/community-reviews-info">
-      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border border-border hover:border-green-300 dark:hover:border-green-600" data-testid="card-community">
+      <Card className={`bg-card cursor-pointer border border-border hover:border-green-300 dark:hover:border-green-600 ${TRANSITION_CLASSES.card}`} data-testid="card-community">
         <CardContent className="p-6">
           <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
             <BarChart3 className="text-green-600 h-5 w-5" />
@@ -48,7 +51,7 @@ const QuickActionCards = memo(() => (
       </Card>
     </Link>
     <Link href="/livestock">
-      <Card className="bg-card hover:shadow-lg transition-all duration-200 cursor-pointer border-2 border-orange-200 dark:border-orange-800 hover:border-orange-400 dark:hover:border-orange-600 ring-1 ring-orange-100 dark:ring-orange-900" data-testid="card-livestock">
+      <Card className={`bg-card cursor-pointer border-2 border-orange-200 dark:border-orange-800 hover:border-orange-400 dark:hover:border-orange-600 ring-1 ring-orange-100 dark:ring-orange-900 ${TRANSITION_CLASSES.card}`} data-testid="card-livestock">
         <CardContent className="p-6">
           <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-4 shadow-sm">
             <Tractor className="text-white h-6 w-6" />
