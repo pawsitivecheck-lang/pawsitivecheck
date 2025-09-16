@@ -10,6 +10,9 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import ProductDetail from "@/pages/product-detail";
 import NotFound from "@/pages/not-found";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsOfService from "@/pages/terms-of-service";
+import Terms from "@/pages/terms";
 
 // Lazy load heavy/admin pages to reduce bundle size
 const AdminDashboard = React.lazy(() => import("@/pages/admin-dashboard"));
@@ -45,6 +48,11 @@ function App() {
         <Route path="/home" component={Home} />
         <Route path="/product/:id" component={ProductDetail} />
         <Route path="/404" component={NotFound} />
+        
+        {/* Legal pages - loaded immediately */}
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
+        <Route path="/terms-of-service" component={TermsOfService} />
+        <Route path="/terms" component={Terms} />
         
         {/* Code-split pages - lazy loaded */}
         <Route path="/add-product" component={() => (
