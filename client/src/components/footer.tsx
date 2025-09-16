@@ -21,7 +21,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/community" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-truth">
+                <Link to="/corporate-accountability" className="hover:text-foreground transition-colors cursor-pointer" data-testid="link-mission-truth">
                   Corporate Accountability
                 </Link>
               </li>

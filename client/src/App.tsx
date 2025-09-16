@@ -29,6 +29,7 @@ const OperationProfile = React.lazy(() => import("@/pages/operation-profile"));
 const VetFinder = React.lazy(() => import("@/pages/vet-finder"));
 const ComprehensiveSafetyAnalysis = React.lazy(() => import("@/pages/comprehensive-safety-analysis"));
 const IngredientTransparency = React.lazy(() => import("@/pages/ingredient-transparency"));
+const CorporateAccountability = React.lazy(() => import("@/pages/corporate-accountability"));
 const ProductScanner = React.lazy(() => import("@/pages/product-scanner"));
 
 // Loading component for code-split routes
@@ -142,6 +143,11 @@ function App() {
         <Route path="/ingredient-transparency" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
             <IngredientTransparency />
+          </Suspense>
+        )} />
+        <Route path="/corporate-accountability" component={() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <CorporateAccountability />
           </Suspense>
         )} />
         <Route path="/product-scanner" component={() => (
