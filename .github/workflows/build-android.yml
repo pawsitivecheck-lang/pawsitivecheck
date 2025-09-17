@@ -34,9 +34,6 @@ jobs:
         
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-      with:
-        api-level: 33
-        build-tools: 33.0.2
         
     - name: Sync Capacitor Android
       run: npx cap sync android
@@ -44,22 +41,29 @@ jobs:
     - name: Make Gradlew Executable
       run: chmod +x android/gradlew
       
-    - name: Build Production Release APK (Unsigned)
+    - name: Build ONLY Release APK (Force Production)
       run: |
         cd android
-        # Clean any previous builds
-        ./gradlew clean
-        # Build unsigned release APK (perfect for APKPure/Aptoide)
-        ./gradlew assembleRelease --no-daemon --stacktrace --info
-        # Verify the APK was created
+        # Clean completely
+        ./gradlew clean --no-daemon
+        # Force ONLY release build - no debug
+        ./gradlew assembleRelease --no-daemon --stacktrace
+        # Verify RELEASE APK exists and show its properties
+        echo "=== VERIFYING RELEASE APK ==="
         ls -la app/build/outputs/apk/release/
+        file app/build/outputs/apk/release/app-release.apk
+        # Make sure NO debug APK exists
+        echo "=== CHECKING FOR DEBUG APK (should be empty) ==="
+        ls -la app/build/outputs/apk/debug/ || echo "Good - no debug directory"
         
-    - name: Upload Production APK
+    - name: Upload ONLY Release APK
       uses: actions/upload-artifact@v4
       with:
-        name: pawsitivecheck-production-apk-v1.0.${{ github.run_number }}
-        path: android/app/build/outputs/apk/release/app-release.apk
+        name: PRODUCTION-RELEASE-APK-v1.0.${{ github.run_number }}
+        path: |
+          android/app/build/outputs/apk/release/app-release.apk
         retention-days: 90
+        if-no-files-found: error
         
     - name: Create GitHub Release
       if: github.ref == 'refs/heads/main'
