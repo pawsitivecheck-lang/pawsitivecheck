@@ -1,8 +1,21 @@
 name: Build Production Android APK
 
+# Add concurrency control to cancel old builds when new ones start
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
+    # Ignore documentation and non-code changes to avoid unnecessary builds
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README*'
   workflow_dispatch: # Manual trigger for immediate builds
 
 jobs:
@@ -65,34 +78,6 @@ jobs:
         retention-days: 90
         if-no-files-found: error
         
-    - name: Create GitHub Release
-      if: github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v1.0.${{ github.run_number }}
-        name: PawsitiveCheck v1.0.${{ github.run_number }}
-        body: |
-          ## 📱 PawsitiveCheck Android APK
-          
-          **Ready for APKPure & Aptoide Upload!**
-          
-          ### 🚀 Features in this build:
-          - Pet product barcode scanning
-          - Safety analysis and scoring
-          - Community reviews
-          - Livestock management
-          - Product recall alerts
-          
-          ### 📱 Installation:
-          1. Download the APK file below
-          2. Enable "Install from Unknown Sources" on your Android device
-          3. Install and test the app
-          4. Upload to APKPure/Aptoide when ready
-          
-          **Commit:** ${{ github.sha }}
-          **Build:** #${{ github.run_number }}
-        files: android/app/build/outputs/apk/release/app-release.apk
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # REMOVED: Create GitHub Release step to prevent cascading builds
+    # GitHub releases should only be created manually or through the android-release.yml workflow on tags
+    # This prevents the cascading build issue where push → release → tag → android-release.yml triggers
