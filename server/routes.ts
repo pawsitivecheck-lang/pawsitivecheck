@@ -5136,13 +5136,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Serve private objects for authenticated users
-  app.get("/objects/:objectPath(*)", isAuthenticated, async (req, res) => {
+  app.get("/objects/:objectPath(*)", isAuthenticated, async (req: any, res) => {
     try {
       const objectStorageService = new ObjectStorageService();
       const objectFile = await objectStorageService.getObjectEntityFile(
         req.path,
       );
-      objectStorageService.downloadObject(objectFile, res);
+      const userId = req.user?.claims?.sub;
+      objectStorageService.downloadObject(objectFile, res, userId);
     } catch (error) {
       console.error("Error accessing object:", error);
       res.sendStatus(404);

@@ -94,14 +94,33 @@ export class ObjectStorageService {
     return null;
   }
 
-  // Downloads an object to the response.
-  async downloadObject(file: File, res: Response, cacheTtlSec: number = 3600) {
+  // Downloads an object to the response with proper access control.
+  async downloadObject(file: File, res: Response, userId?: string, cacheTtlSec: number = 3600) {
     try {
-      // Get file metadata
-      const [metadata] = await file.getMetadata();
       // Get the ACL policy for the object.
       const aclPolicy = await getObjectAclPolicy(file);
       const isPublic = aclPolicy?.visibility === "public";
+      
+      // Enforce access control for private objects
+      if (!isPublic) {
+        if (!userId) {
+          return res.status(401).json({ error: "Authentication required" });
+        }
+        
+        const hasAccess = await canAccessObject({
+          userId,
+          objectFile: file,
+          requestedPermission: ObjectPermission.READ,
+        });
+        
+        if (!hasAccess) {
+          return res.status(403).json({ error: "Access denied" });
+        }
+      }
+
+      // Get file metadata
+      const [metadata] = await file.getMetadata();
+      
       // Set appropriate headers
       res.set({
         "Content-Type": metadata.contentType || "application/octet-stream",
