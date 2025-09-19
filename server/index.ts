@@ -45,12 +45,12 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, server-to-server)
     if (!origin) return callback(null, true);
     
+    // Strict CORS - only specific domains allowed
     const allowedOrigins = [
       'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.app',
       'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.dev', 
-      'https://pawsitivecheck.com',
-      /\.replit\.app$/,
-      /\.replit\.dev$/
+      'https://pawsitivecheck.com'
+      // Removed regex patterns for stricter CSRF protection
     ];
     
     // Development mode - allow localhost
