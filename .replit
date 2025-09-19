@@ -28,6 +28,10 @@ localPort = 44327
 externalPort = 3000
 
 [[ports]]
+localPort = 45117
+externalPort = 4200
+
+[[ports]]
 localPort = 45159
 externalPort = 3003
 
@@ -70,3 +74,6 @@ args = "npm run dev"
 
 [agent]
 integrations = ["javascript_object_storage:1.0.0", "javascript_log_in_with_replit:1.0.0"]
+
+[objectStorage]
+defaultBucketID = "replit-objstore-cad40cb6-fe19-4c0f-80ce-8bfda37d2a6a"
