@@ -28,7 +28,11 @@ const getOidcConfig = memoize(
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   
-  // Validate and set session secret
+  // Validate and set session secret - require strong secret in production
+  if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET environment variable is required in production for secure sessions');
+  }
+  
   const sessionSecret = process.env.SESSION_SECRET || 
     `fallback-secret-${process.env.REPL_ID || 'dev'}-${Date.now()}`;
   
@@ -59,6 +63,9 @@ export function getSession() {
       sessionStore = undefined; // This will use the default memory store
     }
   } else {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('DATABASE_URL is required in production for persistent session storage');
+    }
     console.warn('DATABASE_URL not available, using memory store for sessions (not suitable for production)');
     sessionStore = undefined; // Use default memory store
   }
@@ -71,7 +78,7 @@ export function getSession() {
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'lax' : false, // CSRF protection
+      sameSite: process.env.NODE_ENV === 'production' ? ('lax' as const) : false, // CSRF protection
       maxAge: sessionTtl,
     },
   };
