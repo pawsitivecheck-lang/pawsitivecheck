@@ -5,7 +5,6 @@ import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
-import CookieConsent from "@/components/cookie-consent";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
 import DNTIndicator from "@/components/dnt-indicator";
@@ -21,7 +20,7 @@ import MobileAuth from "@/components/mobile-auth";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useSEO, generateWebPageStructuredData, generateOrganizationStructuredData, generateFAQStructuredData } from "@/hooks/useSEO";
 
-export default function Landing() {
+function LandingContent() {
   const { user, isAuthenticated, isLoading, isAdmin } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showMobileAuth, setShowMobileAuth] = useState(false);
@@ -704,8 +703,10 @@ export default function Landing() {
 
       <Footer />
 
-      {/* Cookie Consent */}
-      <CookieConsent />
     </div>
   );
+}
+
+export default function Landing() {
+  return <LandingContent />;
 }

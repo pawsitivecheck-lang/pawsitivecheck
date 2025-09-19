@@ -1,7 +1,22 @@
 import { PawPrint } from "lucide-react";
 import { Link } from "wouter";
+import { useCookiePreferences } from "./cookie-consent";
 
 export default function Footer() {
+  let openPreferences: (() => void) | null = null;
+  
+  try {
+    const cookieContext = useCookiePreferences();
+    openPreferences = cookieContext.openPreferences;
+  } catch (e) {
+    // Cookie provider not available, fall back to clearing localStorage
+    console.warn('Cookie preferences provider not available, using fallback method');
+    openPreferences = () => {
+      localStorage.removeItem('cookie-consent');
+      window.location.reload();
+    };
+  }
+
   return (
     <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-card mt-auto">
       <div className="max-w-6xl mx-auto">
@@ -120,9 +135,7 @@ export default function Footer() {
             </Link>
             <button 
               onClick={() => {
-                // Re-show cookie consent by clearing stored consent
-                localStorage.removeItem('cookie-consent');
-                window.location.reload();
+                openPreferences();
               }}
               className="text-muted-foreground hover:text-foreground text-sm transition-colors"
               data-testid="button-footer-cookie-preferences"

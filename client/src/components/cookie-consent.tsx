@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -12,8 +12,42 @@ interface CookiePreferences {
   functional: boolean;
 }
 
-export default function CookieConsent() {
-  const [isVisible, setIsVisible] = useState(false);
+interface CookieContextType {
+  openPreferences: () => void;
+}
+
+const CookieContext = createContext<CookieContextType | null>(null);
+
+export const useCookiePreferences = () => {
+  const context = useContext(CookieContext);
+  if (!context) {
+    throw new Error('useCookiePreferences must be used within a CookieProvider');
+  }
+  return context;
+};
+
+export const CookieProvider = ({ children }: { children: React.ReactNode }) => {
+  const [shouldShowCookieConsent, setShouldShowCookieConsent] = useState(false);
+
+  const openPreferences = () => {
+    setShouldShowCookieConsent(true);
+  };
+
+  return (
+    <CookieContext.Provider value={{ openPreferences }}>
+      {children}
+      <CookieConsent isVisible={shouldShowCookieConsent} onClose={() => setShouldShowCookieConsent(false)} />
+    </CookieContext.Provider>
+  );
+};
+
+interface CookieConsentProps {
+  isVisible?: boolean;
+  onClose?: () => void;
+}
+
+export default function CookieConsent({ isVisible: externalVisible, onClose: externalOnClose }: CookieConsentProps = {}) {
+  const [internalVisible, setInternalVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true, // Always required
@@ -22,6 +56,8 @@ export default function CookieConsent() {
     functional: false,
   });
 
+  const isVisible = externalVisible !== undefined ? externalVisible : internalVisible;
+
   // Check if user has DNT enabled
   const isDNTEnabled = () => {
     return navigator.doNotTrack === '1' || 
@@ -29,8 +65,30 @@ export default function CookieConsent() {
            (navigator as any).msDoNotTrack === '1';
   };
 
+  // Load existing preferences
+  const loadExistingPreferences = () => {
+    const saved = localStorage.getItem('cookie-consent');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setPreferences({
+          essential: true, // Always true
+          analytics: parsed.analytics || false,
+          marketing: parsed.marketing || false,
+          functional: parsed.functional || false,
+        });
+        return true;
+      } catch (e) {
+        console.warn('Failed to parse cookie preferences:', e);
+      }
+    }
+    return false;
+  };
+
   // Check if consent has been given or if DNT is enabled
   useEffect(() => {
+    if (externalVisible !== undefined) return; // Externally controlled
+
     const hasConsent = localStorage.getItem('cookie-consent');
     const hasDNT = isDNTEnabled();
     
@@ -44,15 +102,22 @@ export default function CookieConsent() {
         dnt: true,
         timestamp: Date.now()
       }));
-      setIsVisible(false);
+      setInternalVisible(false);
       return;
     }
 
     // Show consent banner if no previous consent
     if (!hasConsent) {
-      setIsVisible(true);
+      setInternalVisible(true);
     }
-  }, []);
+  }, [externalVisible]);
+
+  // Load existing preferences when modal opens
+  useEffect(() => {
+    if (isVisible) {
+      loadExistingPreferences();
+    }
+  }, [isVisible]);
 
   const savePreferences = (prefs: CookiePreferences) => {
     const consentData = {
@@ -63,10 +128,21 @@ export default function CookieConsent() {
     };
     
     localStorage.setItem('cookie-consent', JSON.stringify(consentData));
-    setIsVisible(false);
     
-    // Reload to apply cookie settings
-    window.location.reload();
+    const closeModal = () => {
+      if (externalOnClose) {
+        externalOnClose();
+      } else {
+        setInternalVisible(false);
+      }
+    };
+    
+    closeModal();
+    
+    // Only reload if this is the first time consent (no existing preferences)
+    if (!loadExistingPreferences()) {
+      window.location.reload();
+    }
   };
 
   const acceptAll = () => {
@@ -117,8 +193,15 @@ export default function CookieConsent() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsVisible(false)}
+              onClick={() => {
+                if (externalOnClose) {
+                  externalOnClose();
+                } else {
+                  setInternalVisible(false);
+                }
+              }}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              data-testid="button-close-cookie-preferences"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -133,16 +216,26 @@ export default function CookieConsent() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button onClick={acceptAll} className="flex-1">
+                <Button 
+                  onClick={acceptAll} 
+                  className="flex-1"
+                  data-testid="button-accept-all-cookies"
+                >
                   Accept All Cookies
                 </Button>
-                <Button variant="outline" onClick={acceptEssential} className="flex-1">
+                <Button 
+                  variant="outline" 
+                  onClick={acceptEssential} 
+                  className="flex-1"
+                  data-testid="button-accept-essential-cookies"
+                >
                   Essential Only
                 </Button>
                 <Button 
                   variant="outline" 
                   onClick={() => setShowDetails(true)}
                   className="flex items-center gap-2"
+                  data-testid="button-customize-cookies"
                 >
                   <Settings className="w-4 h-4" />
                   Customize

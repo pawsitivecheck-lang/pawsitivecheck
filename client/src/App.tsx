@@ -4,6 +4,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toaster";
+import { CookieProvider } from "@/components/cookie-consent";
 
 // Core pages - load immediately
 import Landing from "@/pages/landing";
@@ -45,7 +46,8 @@ const LoadingSpinner = () => (
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
+      <CookieProvider>
+        <QueryClientProvider client={queryClient}>
         <Switch>
         {/* Core pages - loaded immediately */}
         <Route path="/" component={Landing} />
@@ -174,10 +176,11 @@ function App() {
         
         {/* Default fallback */}
         <Route component={Landing} />
-      </Switch>
-      <Toaster />
-    </QueryClientProvider>
-  </ErrorBoundary>
+        </Switch>
+        <Toaster />
+        </QueryClientProvider>
+      </CookieProvider>
+    </ErrorBoundary>
   );
 }
 

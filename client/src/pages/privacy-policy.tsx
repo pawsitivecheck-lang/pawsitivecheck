@@ -301,21 +301,72 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          {/* Cookies */}
+          {/* Cookies & Tracking Technologies - Comprehensive Cookie Policy */}
           <Card className="cosmic-card" data-testid="card-cookies">
             <CardHeader>
-              <CardTitle className="text-starlight-400">Cookies and Tracking Technologies</CardTitle>
+              <CardTitle className="text-starlight-400">Cookies & Tracking Technologies</CardTitle>
             </CardHeader>
             <CardContent className="text-cosmic-200">
-              <p className="mb-4">
-                We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. Our Progressive Web App (PWA) also stores data locally for offline functionality.
-              </p>
-              <p className="mb-4">
-                <strong>DNT Users:</strong> If you have "Do Not Track" enabled, we automatically disable all non-essential cookies and tracking without requiring manual consent.
-              </p>
-              <p>
-                For detailed information about the cookies we use, please see our Cookie Policy accessible through the cookie consent banner.
-              </p>
+              <div className="bg-starlight-500/10 border border-starlight-500/30 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-starlight-400 mb-2">🍪 Comprehensive Cookie Policy</h4>
+                <p className="text-cosmic-300">
+                  This section serves as our authoritative Cookie Policy, detailing all tracking technologies used on PawsitiveCheck. 
+                  Our interactive Cookie Preferences system (accessible via Footer → "Cookie Preferences") provides real-time control 
+                  and up-to-date technical specifications for all cookies and tracking technologies.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-cosmic-100 mb-2">Cookie Categories & Legal Basis</h4>
+                  <ul className="space-y-3 list-disc ml-4">
+                    <li><strong>Essential Cookies (Required):</strong> Authentication, session management, security features, and core platform functionality. Legal basis: Legitimate Interest - necessary for service provision</li>
+                    <li><strong>Analytics Cookies (Opt-in):</strong> User behavior analysis, performance monitoring, usage statistics to improve our services. Legal basis: Consent - requires your explicit approval</li>
+                    <li><strong>Functional Cookies (Opt-in):</strong> User preferences, settings, PWA capabilities, personalized experience enhancements. Legal basis: Consent - requires your explicit approval</li>
+                    <li><strong>Marketing Cookies (Opt-in):</strong> Personalized content delivery, relevant advertisements, marketing communications. Legal basis: Consent - requires your explicit approval</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-cosmic-100 mb-2">Your Cookie Rights & Controls</h4>
+                  <ul className="space-y-2 list-disc ml-4">
+                    <li><strong>Granular Consent:</strong> All non-essential cookies require explicit opt-in consent before activation</li>
+                    <li><strong>Easy Access:</strong> Change preferences anytime via Footer → "Cookie Preferences" on any page</li>
+                    <li><strong>Do Not Track Honored:</strong> Automatically disable all non-essential cookies when browser DNT is detected</li>
+                    <li><strong>Clear Withdrawal:</strong> Opt-out options available for all cookie categories except essential ones</li>
+                    <li><strong>No Consent Required:</strong> Essential cookies cannot be disabled as they're necessary for basic functionality</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-cosmic-100 mb-2">Storage Duration & Third Parties</h4>
+                  <ul className="space-y-2 list-disc ml-4">
+                    <li><strong>Session Cookies:</strong> Deleted when browser closes (authentication, security)</li>
+                    <li><strong>Persistent Cookies:</strong> Stored up to 12 months (preferences, analytics)</li>
+                    <li><strong>Consent Records:</strong> Your preferences stored until manually changed</li>
+                    <li><strong>Third-Party Services:</strong> Analytics and advertising partners may set cookies with your consent</li>
+                  </ul>
+                </div>
+
+                <div className="bg-cosmic-800/50 rounded-lg p-4">
+                  <h4 className="font-semibold text-mystical-blue mb-2">🔧 Managing Cookie Preferences</h4>
+                  <p className="text-cosmic-300 mb-2">Multiple ways to control your cookie settings:</p>
+                  <ul className="space-y-1 text-sm list-disc ml-4">
+                    <li><strong>Cookie Banner:</strong> Accept All, Essential Only, or Customize options for new users</li>
+                    <li><strong>Footer Link:</strong> "Cookie Preferences" available on every page for preference changes</li>
+                    <li><strong>Browser Controls:</strong> Configure cookie blocking and Do Not Track in browser settings</li>
+                    <li><strong>Data Reset:</strong> Clear browser data to reset all preferences and stored cookies</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="text-cosmic-300 text-sm">
+                    <strong>PWA Integration:</strong> Our Progressive Web App stores data locally for offline functionality. 
+                    Functional cookies enhance PWA features when enabled. PWA data can be cleared by uninstalling the app 
+                    or clearing browser application data.
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
