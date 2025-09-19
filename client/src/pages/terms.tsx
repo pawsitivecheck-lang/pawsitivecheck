@@ -21,7 +21,7 @@ export default function Terms() {
               Discover the mystical rules that govern our cosmic pet safety realm
             </p>
             <p className="text-cosmic-400 text-sm mt-2">
-              Last Updated: August 30, 2025
+              Last Updated: September 19, 2025
             </p>
           </div>
 

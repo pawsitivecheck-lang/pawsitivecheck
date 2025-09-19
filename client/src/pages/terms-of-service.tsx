@@ -38,7 +38,7 @@ export default function TermsOfService() {
               Cosmic agreement for the mystical analysis realm
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: August 30, 2025
+              Last updated: September 19, 2025
             </p>
           </div>
         </div>

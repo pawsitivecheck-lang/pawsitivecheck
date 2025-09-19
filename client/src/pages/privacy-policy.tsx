@@ -38,7 +38,7 @@ export default function PrivacyPolicy() {
               Your cosmic data protection and mystical privacy rights
             </p>
             <p className="text-cosmic-400 mt-2">
-              Last updated: August 30, 2025
+              Last updated: September 19, 2025
             </p>
           </div>
         </div>
@@ -186,9 +186,13 @@ export default function PrivacyPolicy() {
             </CardHeader>
             <CardContent className="text-cosmic-200">
               <p className="mb-4">
-                We implement industry-leading security measures and ethical AI practices to protect your personal information and ensure algorithmic fairness. Our comprehensive security framework includes:
+                We implement industry-leading security measures and ethical AI practices to protect your personal information and ensure algorithmic fairness. Our comprehensive security framework has been recently enhanced and includes:
               </p>
               <ul className="space-y-1 ml-4">
+                <li>• **Enhanced XSS Protection**: Strict Content Security Policy (CSP) that blocks unsafe scripts and code injection attempts</li>
+                <li>• **CSRF Protection**: SameSite cookie attributes and strict origin validation prevent cross-site request forgery</li>
+                <li>• **Hardened Session Security**: Production-grade session secrets and persistent database session storage with secure cookie settings</li>
+                <li>• **File Access Control**: Comprehensive ACL (Access Control List) enforcement for all object storage and private file access</li>
                 <li>• End-to-end encryption of data in transit and at rest using AES-256 standards</li>
                 <li>• Regular third-party security audits, penetration testing, and vulnerability assessments</li>
                 <li>• Multi-factor authentication, role-based access controls, and zero-trust architecture</li>
@@ -197,6 +201,8 @@ export default function PrivacyPolicy() {
                 <li>• Algorithmic bias testing and fairness assessments for AI-powered analysis features</li>
                 <li>• Regular deletion of unnecessary data and automated data retention policies</li>
                 <li>• Incident response procedures with notification protocols for any potential data breaches</li>
+                <li>• **Security Headers**: Comprehensive HTTP security headers including HSTS, X-Content-Type-Options, and Referrer-Policy</li>
+                <li>• **Rate Limiting**: Advanced API rate limiting to prevent abuse and denial-of-service attacks</li>
               </ul>
             </CardContent>
           </Card>
