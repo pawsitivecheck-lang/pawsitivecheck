@@ -3,6 +3,16 @@ apply plugin: 'com.android.application'
 android {
     namespace "com.pawsitivecheck.app"
     compileSdk rootProject.ext.compileSdkVersion
+    
+    signingConfigs {
+        release {
+            storeFile file('pawsitivecheck-release.jks')
+            storePassword 'pawsitive123'
+            keyAlias 'pawsitivecheck'
+            keyPassword 'pawsitive123'
+        }
+    }
+    
     defaultConfig {
         applicationId "com.pawsitivecheck.app"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -20,8 +30,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            // Unsigned release build - perfect for APKPure/Aptoide
-            signingConfig null
+            // Production signed build - ready for any distribution
+            signingConfig signingConfigs.release
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
