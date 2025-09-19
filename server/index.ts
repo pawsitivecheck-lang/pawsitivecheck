@@ -17,7 +17,21 @@ app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://www.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://pagead2.googlesyndication.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: https://*.doubleclick.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; connect-src 'self' https: https://*.doubleclick.net https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com; frame-src 'self' https://pagead2.googlesyndication.com https://*.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; frame-ancestors 'self'; child-src 'self' https://pagead2.googlesyndication.com https://*.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'");
+    // Secure CSP - no unsafe-inline or unsafe-eval directives
+    const cspPolicy = [
+      "default-src 'self'",
+      "script-src 'self' https://www.googletagmanager.com https://maps.googleapis.com", 
+      "style-src 'self' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https:",
+      "connect-src 'self' https:",
+      "frame-ancestors 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'"
+    ].join('; ');
+    
+    res.setHeader('Content-Security-Policy', cspPolicy);
   } else {
     // Development mode - disable CSP to prevent conflicts with Vite/Replit tools
     res.removeHeader('Content-Security-Policy');
