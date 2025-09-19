@@ -5,7 +5,7 @@ import ProductCard from "@/components/product-card";
 import RecallAlert from "@/components/recall-alert";
 import UserReview from "@/components/user-review";
 import HeaderSearch from "@/components/header-search";
-// import CookieConsent from "@/components/cookie-consent";
+import CookieConsent from "@/components/cookie-consent";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
 import DNTIndicator from "@/components/dnt-indicator";
@@ -705,7 +705,7 @@ export default function Landing() {
       <Footer />
 
       {/* Cookie Consent */}
-      {/* <CookieConsent /> */}
+      <CookieConsent />
     </div>
   );
 }
