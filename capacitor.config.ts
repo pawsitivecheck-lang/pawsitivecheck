@@ -6,9 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'dist/public',
   server: {
     androidScheme: 'https',
-    // Point mobile app to your live Replit server
-    url: 'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20-00-2qvtd9mlye025.picard.replit.dev',
-    cleartext: true
+    // Standalone APK mode - no external server dependency during build
   },
   android: {
     allowMixedContent: true,
