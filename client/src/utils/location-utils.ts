@@ -17,6 +17,7 @@ export const requestLocationPermission = async (): Promise<{
   granted: boolean;
   location?: LocationResult;
   message?: string;
+  permissionLevel?: 'always' | 'while-using' | 'once' | 'denied';
 }> => {
   try {
     if (isCapacitorApp()) {
@@ -24,29 +25,56 @@ export const requestLocationPermission = async (): Promise<{
       try {
         const { Geolocation } = await import('@capacitor/geolocation');
         
-        // Request permissions (this will show the permission prompt on Android)
+        // Request permissions - On Android 10+, this shows:
+        // - "While using the app" (permission granted while app is in foreground)
+        // - "Only this time" (one-time permission, Android 11+)
+        // - "Deny" (no permission)
+        // - "Allow all the time" (background location, requires additional request)
         const permissions = await Geolocation.requestPermissions();
         
-        if (permissions.location === 'granted' || permissions.coarseLocation === 'granted') {
-          // Permission granted, now get the location
-          const position = await Geolocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-          });
-          
-          return {
-            granted: true,
-            location: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              accuracy: position.coords.accuracy
-            }
-          };
-        } else {
+        // Check permission status
+        const locationStatus = permissions.location || permissions.coarseLocation;
+        
+        if (locationStatus === 'granted') {
+          // Permission granted (could be "while using" or "always")
+          try {
+            const position = await Geolocation.getCurrentPosition({
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 0
+            });
+            
+            return {
+              granted: true,
+              location: {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                accuracy: position.coords.accuracy
+              },
+              permissionLevel: 'while-using' // Android default for foreground location
+            };
+          } catch (positionError: any) {
+            // Permission was granted but location retrieval failed
+            console.error('Position error:', positionError);
+            return {
+              granted: true,
+              message: 'Location permission granted but could not determine position. Please check if location services are enabled.',
+              permissionLevel: 'while-using'
+            };
+          }
+        } else if (locationStatus === 'prompt' || locationStatus === 'prompt-with-rationale') {
+          // User hasn't decided yet or needs rationale
           return {
             granted: false,
-            message: 'Location permission denied. Go to Settings > Apps > PawsitiveCheck > Permissions to enable location access.'
+            message: 'Please grant location permission to find veterinarians near you. You can choose "Only this time" for a single use.',
+            permissionLevel: 'denied'
+          };
+        } else {
+          // Permission denied
+          return {
+            granted: false,
+            message: 'Location permission denied. You can change this in Settings > Apps > PawsitiveCheck > Permissions > Location.',
+            permissionLevel: 'denied'
           };
         }
       } catch (capacitorError: any) {
