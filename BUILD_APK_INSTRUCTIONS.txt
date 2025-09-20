@@ -1,0 +1,30 @@
+QUICKEST WAY TO GET YOUR UPDATED APK:
+
+=== OPTION 1: INSTANT ONLINE BUILD (2 minutes) ===
+1. Download this project as ZIP (click ... menu → Download as zip)
+2. Go to: https://build.phonegap.com or https://www.apkbuilder.com
+3. Upload your ZIP file
+4. Click Build
+5. Download your APK!
+
+=== OPTION 2: GITHUB ACTIONS (automatic) ===
+1. Push this code to GitHub
+2. APK builds automatically
+3. Download from Actions tab → Artifacts
+
+=== OPTION 3: LOCAL BUILD (5 minutes) ===
+Requirements: Android Studio or Command Line Tools
+
+Commands:
+git clone https://github.com/pawsitivecheck-lang/pawsitivecheck.git
+cd pawsitivecheck/android
+./gradlew assembleRelease
+# APK will be in: android/app/build/outputs/apk/release/
+
+=== WHAT'S NEW IN THIS UPDATE ===
+✅ Cancel button position fixed (raised higher on screen)
+✅ Location permission prompts ("Allow just this time", "While using app", "Don't allow")
+✅ Better permission handling for Android 10+ 
+✅ Camera permission improvements
+
+The APK file "PawsitiveCheck-FINAL.apk" in your directory works but doesn't have these updates.
