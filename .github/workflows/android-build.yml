@@ -65,11 +65,11 @@ jobs:
         echo "Building web application..."
         npm run build
         
-    # Setup Java 17 environment
-    - name: ☕ Setup Java JDK 17
+    # Setup Java 21 environment
+    - name: ☕ Setup Java JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
         cache: 'gradle'
         
@@ -221,7 +221,7 @@ jobs:
           ### 🔐 Build Information
           - Build Number: ${{ github.run_number }}
           - Commit: ${{ github.sha }}
-          - Built with: Java 17, Android SDK 35
+          - Built with: Java 21, Android SDK 35
           
           ### ✅ Features
           - Fully signed with production keystore
