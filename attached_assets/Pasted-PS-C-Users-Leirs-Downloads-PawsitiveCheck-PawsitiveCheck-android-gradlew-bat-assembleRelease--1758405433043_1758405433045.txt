@@ -1,0 +1,71 @@
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> .\gradlew.bat assembleRelease
+
+Welcome to Gradle 8.9!
+
+Here are the highlights of this release:
+ - Enhanced Error and Warning Messages
+ - IDE Integration Improvements
+ - Daemon JVM Information
+
+For more details see https://docs.gradle.org/8.9/release-notes.html
+
+Configuration on demand is an incubating feature.
+
+> Configure project :app
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Configure project :capacitor-cordova-android-plugins
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Could not determine the dependencies of task ':app:lintVitalReportRelease'.
+> Could not resolve all dependencies for configuration ':app:releaseCompileClasspath'.
+   > Could not resolve project :capacitor-android.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-android was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+   > Could not resolve project :capacitor-app.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-app was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+   > Could not resolve project :capacitor-browser.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-browser was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+   > Could not resolve project :capacitor-camera.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-camera was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+   > Could not resolve project :capacitor-geolocation.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-geolocation was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+   > Could not resolve project :capacitor-haptics.
+     Required by:
+         project :app
+      > No matching variant of project :capacitor-haptics was found. The consumer was configured to find a library for use during compile-time, preferably optimized for Android, as well as attribute 'com.android.build.api.attributes.AgpVersionAttr' with value '8.7.3', attribute 'com.android.build.api.attributes.BuildTypeAttr' with value 'release', attribute 'org.jetbrains.kotlin.platform.type' with value 'androidJvm' but:
+          - No variants exist.
+
+* Try:
+> Creating consumable variants is explained in more detail at https://docs.gradle.org/8.9/userguide/declaring_dependencies.html#sec:resolvable-consumable-configs.
+> Review the variant matching algorithm at https://docs.gradle.org/8.9/userguide/variant_attributes.html#sec:abm_algorithm.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 2s
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android>
