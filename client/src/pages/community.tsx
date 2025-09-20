@@ -141,25 +141,25 @@ export default function Community() {
                   <div className="text-3xl font-bold text-blue-600 mb-2" data-testid="text-total-reviews">
                     {allReviews?.length || 0}
                   </div>
-                  <p className="text-gray-600">Total Reviews</p>
+                  <p className="text-muted-foreground">Total Reviews</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-green-600 mb-2" data-testid="text-blessed-reviews">
                     {allReviews?.filter((r: any) => r.rating >= 4).length || 0}
                   </div>
-                  <p className="text-gray-600">Positive Reviews</p>
+                  <p className="text-muted-foreground">Positive Reviews</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-red-600 mb-2" data-testid="text-cursed-reviews">
                     {allReviews?.filter((r: any) => r.rating <= 2).length || 0}
                   </div>
-                  <p className="text-gray-600">Safety Alerts</p>
+                  <p className="text-muted-foreground">Safety Alerts</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple-600 mb-2" data-testid="text-active-members">
                     {allReviews ? new Set(allReviews.map((r: any) => r.userId)).size : 0}
                   </div>
-                  <p className="text-gray-600">Active Members</p>
+                  <p className="text-muted-foreground">Active Members</p>
                 </div>
               </div>
             </CardContent>
@@ -184,7 +184,7 @@ export default function Community() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-xl font-semibold text-gray-900" data-testid="text-user-name">
+                      <h3 className="text-xl font-semibold text-foreground" data-testid="text-user-name">
                         {user.firstName || 'Anonymous Member'}
                       </h3>
                       {getRankIcon(userReviews ? userReviews.length : 0)}
@@ -193,7 +193,7 @@ export default function Community() {
                       <Badge className="bg-purple-500/20 text-purple-400 border-purple-500" data-testid="badge-user-rank">
                         {getRankTitle(userReviews ? userReviews.length : 0)}
                       </Badge>
-                      <span className="text-gray-600 text-sm" data-testid="text-user-reviews-count">
+                      <span className="text-muted-foreground text-sm" data-testid="text-user-reviews-count">
                         {userReviews ? userReviews.length : 0} reviews shared
                       </span>
                     </div>
@@ -256,15 +256,15 @@ export default function Community() {
                 <Card key={i} className="animate-pulse" data-testid={`skeleton-review-${i}`}>
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                      <div className="w-12 h-12 bg-accent rounded-full"></div>
                       <div className="flex-1">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                        <div className="h-4 bg-accent rounded mb-2"></div>
+                        <div className="h-3 bg-accent rounded w-1/2"></div>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                      <div className="h-4 bg-accent rounded"></div>
+                      <div className="h-4 bg-accent rounded w-3/4"></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -285,11 +285,11 @@ export default function Community() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100" data-testid="text-reviewer-name">
+                          <h4 className="font-semibold text-foreground" data-testid="text-reviewer-name">
                             Member #{review.userId.slice(-4)}
                           </h4>
                           {getRankIcon(5)} {/* Default rank for community display */}
-                          <Badge className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" data-testid="badge-reviewer-rank">
+                          <Badge className="bg-accent text-muted-foreground" data-testid="badge-reviewer-rank">
                             Community Member
                           </Badge>
                         </div>
@@ -302,29 +302,29 @@ export default function Community() {
                             {[...Array(5)].map((_, i) => (
                               <span 
                                 key={i} 
-                                className={i < review.rating ? 'text-green-600' : 'text-gray-300 dark:text-gray-600'}
+                                className={i < review.rating ? 'text-green-600' : 'text-muted-foreground'}
                                 data-testid={`paw-rating-${i}`}
                               >
                                 🐾
                               </span>
                             ))}
-                            <span className="text-gray-600 dark:text-gray-400 text-sm ml-2">
+                            <span className="text-muted-foreground text-sm ml-2">
                               {review.rating}/5 Paws
                             </span>
                           </div>
                         </div>
                         
                         {review.title && (
-                          <h6 className="font-medium text-gray-700 dark:text-gray-300 mb-2" data-testid="text-review-title">
+                          <h6 className="font-medium text-muted-foreground mb-2" data-testid="text-review-title">
                             {review.title}
                           </h6>
                         )}
                         
-                        <p className="text-gray-600 dark:text-gray-400 mb-3" data-testid="text-review-content">
+                        <p className="text-muted-foreground mb-3" data-testid="text-review-content">
                           {review.content}
                         </p>
                         
-                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <span data-testid="text-review-date">
                             {new Date(review.createdAt).toLocaleDateString()}
                           </span>
@@ -347,13 +347,13 @@ export default function Community() {
             ) : (
               <Card className="" data-testid="card-no-reviews">
                 <CardContent className="p-12 text-center">
-                  <div className="w-16 h-16 mx-auto bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
-                    <MessageCircle className="text-gray-400 dark:text-gray-600 text-2xl" />
+                  <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center mb-6">
+                    <MessageCircle className="text-muted-foreground text-2xl" />
                   </div>
-                  <h3 className="text-xl text-gray-700 dark:text-gray-300 mb-4" data-testid="text-no-reviews-title">
+                  <h3 className="text-xl text-muted-foreground mb-4" data-testid="text-no-reviews-title">
                     No Reviews Found
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-no-reviews-description">
+                  <p className="text-muted-foreground mb-6" data-testid="text-no-reviews-description">
                     {searchTerm || reviewFilter !== "all" 
                       ? "No reviews match your current search criteria."
                       : "The community is just beginning. Be the first to share your experiences!"}
@@ -385,7 +385,7 @@ export default function Community() {
                   <h3 className="text-2xl font-bold text-blue-600 mb-4" data-testid="text-cta-title">
                     Share Your Experience
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6" data-testid="text-cta-description">
+                  <p className="text-muted-foreground mb-6" data-testid="text-cta-description">
                     Help fellow pet owners by sharing your experiences with pet products
                   </p>
                   <Button 

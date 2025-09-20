@@ -147,7 +147,7 @@ export function NetworkGate({ children, fallback, showStatus = true, onRetry }: 
       <div>
         {showStatus && <NetworkStatus onRetry={onRetry} />}
         {fallback || (
-          <div className="text-center p-8 text-gray-500 dark:text-gray-400" data-testid="network-fallback">
+          <div className="text-center p-8 text-muted-foreground" data-testid="network-fallback">
             <WifiOff className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>This feature requires an internet connection.</p>
           </div>

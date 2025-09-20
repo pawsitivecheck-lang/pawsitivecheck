@@ -85,7 +85,7 @@ export function NotificationPreferences() {
 
   if (isLoading) {
     return (
-      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow">
+      <Card className="bg-card border border-border shadow">
         <CardContent className="p-6 text-center">
           <div className="animate-pulse">Loading preferences...</div>
         </CardContent>
@@ -96,7 +96,7 @@ export function NotificationPreferences() {
   return (
     <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow" data-testid="card-notification-preferences">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+        <CardTitle className="flex items-center gap-2 text-foreground">
           <Bell className="h-5 w-5" />
           Notification Preferences
         </CardTitle>
@@ -105,11 +105,11 @@ export function NotificationPreferences() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Critical Safety Alerts */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Shield className="h-4 w-4 text-red-500" />
               Critical Safety Alerts
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               These alerts help keep your pets safe and are recommended for all users.
             </p>
             
@@ -117,7 +117,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-recall-alerts">
                 <div className="space-y-0.5">
                   <Label className="text-base">Product Recall Alerts</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Get notified immediately when products you've saved are recalled
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-safety-alerts">
                 <div className="space-y-0.5">
                   <Label className="text-base">Safety Alerts</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Important safety updates and ingredient warnings
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export function NotificationPreferences() {
 
           {/* Product & Community Updates */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Package className="h-4 w-4 text-blue-500" />
               Product & Community Updates
             </h3>
@@ -155,7 +155,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-product-updates">
                 <div className="space-y-0.5">
                   <Label className="text-base">Product Updates</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Changes to products in your saved lists or scan history
                   </div>
                 </div>
@@ -168,7 +168,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-community-updates">
                 <div className="space-y-0.5">
                   <Label className="text-base">Community Updates</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     New reviews, comments, and community discussions
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export function NotificationPreferences() {
 
           {/* Communication Preferences */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Mail className="h-4 w-4 text-green-500" />
               Communication Preferences
             </h3>
@@ -193,7 +193,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-email-notifications">
                 <div className="space-y-0.5">
                   <Label className="text-base">Email Notifications</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Receive notifications via email (required for critical alerts)
                   </div>
                 </div>
@@ -206,7 +206,7 @@ export function NotificationPreferences() {
               <div className="flex items-center justify-between" data-testid="switch-marketing-emails">
                 <div className="space-y-0.5">
                   <Label className="text-base">Marketing Communications</Label>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Tips, feature updates, and promotional content
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export function NotificationPreferences() {
 
           {/* Data Retention */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Settings className="h-4 w-4 text-purple-500" />
               Data Retention
             </h3>

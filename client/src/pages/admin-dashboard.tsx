@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         case 'medium':
           return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400';
         default:
-          return 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400';
+          return 'bg-accent text-muted-foreground';
       }
     };
   }, []);
@@ -159,7 +159,7 @@ export default function AdminDashboard() {
           <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
             <Crown className="text-2xl text-white" />
           </div>
-          <p className="text-gray-600 dark:text-gray-400">Loading admin dashboard...</p>
+          <p className="text-muted-foreground">Loading admin dashboard...</p>
         </div>
       </div>
     );
@@ -178,10 +178,10 @@ export default function AdminDashboard() {
                 <Crown className="text-white h-6 w-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200" data-testid="text-admin-title">
+                <h1 className="text-2xl font-bold text-foreground" data-testid="text-admin-title">
                   Admin Dashboard
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 text-sm" data-testid="text-admin-description">
+                <p className="text-muted-foreground text-sm" data-testid="text-admin-description">
                   Platform management & automation
                 </p>
               </div>
@@ -191,33 +191,33 @@ export default function AdminDashboard() {
             <div className="hidden md:flex gap-6">
               <div className="text-center">
                 <div className="text-xl font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
+                <div className="text-xs text-muted-foreground">Products</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
+                <div className="text-xs text-muted-foreground">Users</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-red-600">{(analytics as any)?.cursedProducts || 0}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Unsafe</div>
+                <div className="text-xs text-muted-foreground">Unsafe</div>
               </div>
             </div>
           </div>
 
           {/* Mobile Stats Cards */}
           <div className="grid grid-cols-2 gap-4 mb-8 md:hidden">
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <Card className="border border-border bg-card">
               <CardContent className="p-4 text-center">
                 <Package className="h-5 w-5 mx-auto mb-2 text-blue-600" />
                 <div className="text-lg font-bold text-blue-600">{(analytics as any)?.totalProducts || 0}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Products</div>
+                <div className="text-xs text-muted-foreground">Products</div>
               </CardContent>
             </Card>
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <Card className="border border-border bg-card">
               <CardContent className="p-4 text-center">
                 <Users className="h-5 w-5 mx-auto mb-2 text-green-600" />
                 <div className="text-lg font-bold text-green-600">{(analytics as any)?.totalUsers || 0}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Users</div>
+                <div className="text-xs text-muted-foreground">Users</div>
               </CardContent>
             </Card>
           </div>
@@ -225,7 +225,7 @@ export default function AdminDashboard() {
           {/* Main Management Grid */}
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
             {/* Content Overview */}
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <Card className="border border-border bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Package className="h-5 w-5" />
@@ -241,10 +241,10 @@ export default function AdminDashboard() {
                   </h4>
                   <div className="space-y-2">
                     {recentProducts.slice(0, 3).map((product: any) => (
-                      <div key={product.id} className="flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
+                      <div key={product.id} className="flex justify-between items-center p-2 bg-accent/50 rounded">
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{product.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{product.brand}</p>
+                          <p className="text-xs text-muted-foreground">{product.brand}</p>
                         </div>
                         <Badge className={getClarityBadgeClass(product.cosmicClarity)}>
                           {formatClarityText(product.cosmicClarity)}
@@ -272,7 +272,7 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                     {recentRecalls.length === 0 && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center py-2">No active recalls</p>
+                      <p className="text-xs text-muted-foreground text-center py-2">No active recalls</p>
                     )}
                   </div>
                 </div>
@@ -280,7 +280,7 @@ export default function AdminDashboard() {
             </Card>
 
             {/* System Control */}
-            <Card className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+            <Card className="border border-border bg-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Database className="h-5 w-5" />
@@ -344,7 +344,7 @@ export default function AdminDashboard() {
                     <Ban className="h-4 w-4 text-amber-600" />
                     Dangerous Ingredients ({blacklistedIngredients.length})
                   </h4>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-muted-foreground">
                     {blacklistedIngredients.slice(0, 3).map((ingredient: any) => ingredient.ingredientName).join(', ') || 'None'}
                   </div>
                 </div>

@@ -18,7 +18,7 @@ export default function MascotCard({ name, role, icon, bgGradient }: MascotCardP
         <h3 className="text-2xl font-bold text-blue-600 mb-2" data-testid={`mascot-${name.toLowerCase()}-name`}>
           {name}
         </h3>
-        <p className="text-gray-600" data-testid={`mascot-${name.toLowerCase()}-role`}>
+        <p className="text-muted-foreground" data-testid={`mascot-${name.toLowerCase()}-role`}>
           {role}
         </p>
       </div>

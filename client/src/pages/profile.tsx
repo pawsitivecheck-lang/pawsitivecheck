@@ -58,7 +58,7 @@ export default function Profile() {
     if (reviewCount >= 50) return <Crown className="text-blue-500 h-5 w-5" />;
     if (reviewCount >= 20) return <Star className="text-green-600 h-5 w-5" />;
     if (reviewCount >= 5) return <Eye className="text-blue-600 h-5 w-5" />;
-    return <User className="text-gray-400 h-5 w-5" />;
+    return <User className="text-muted-foreground h-5 w-5" />;
   };
 
   const getRankTitle = (reviewCount: number) => {
@@ -242,7 +242,7 @@ export default function Profile() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-white border-b border-gray-200 py-3">
+      <div className="bg-card border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="profile-header" />
         </div>
@@ -252,7 +252,7 @@ export default function Profile() {
         <div className="max-w-6xl mx-auto">
           {/* Profile Header */}
           <div className="mb-12">
-            <Card className="bg-white dark:bg-gray-800 border border-blue-500/20 shadow-lg" data-testid="card-profile-header">
+            <Card className="bg-card border border-blue-500/20 shadow-lg" data-testid="card-profile-header">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-center gap-8">
                   <div className="text-center md:text-left">
@@ -289,11 +289,11 @@ export default function Profile() {
                       )}
                     </div>
                     
-                    <p className="text-gray-600 dark:text-gray-300 mb-4" data-testid="text-rank-description">
+                    <p className="text-muted-foreground mb-4" data-testid="text-rank-description">
                       {getRankDescription(reviewCount)}
                     </p>
                     
-                    <div className="flex items-center justify-center md:justify-start gap-1 text-gray-500 dark:text-gray-400 text-sm">
+                    <div className="flex items-center justify-center md:justify-start gap-1 text-muted-foreground text-sm">
                       <Calendar className="h-4 w-4" />
                       <span data-testid="text-join-date">
                         Joined {new Date(user?.createdAt || Date.now()).toLocaleDateString()}
@@ -327,21 +327,21 @@ export default function Profile() {
                         <div className="space-y-6">
                           {/* Profile Information Section */}
                           <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Profile Information</h3>
+                            <h3 className="text-lg font-semibold text-foreground">Profile Information</h3>
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">
                                   First Name
                                 </label>
-                                <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <div className="px-3 py-2 border border-border rounded-md bg-card text-muted-foreground">
                                   {user?.firstName || 'Not provided'}
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">
                                   Last Name
                                 </label>
-                                <div className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                <div className="px-3 py-2 border border-border rounded-md bg-card text-muted-foreground">
                                   {user?.lastName || 'Not provided'}
                                 </div>
                               </div>
@@ -354,39 +354,39 @@ export default function Profile() {
                                 {user?.email || 'Not provided'}
                               </div>
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-sm text-muted-foreground">
                               Profile information is managed through your Replit account settings.
                             </div>
                           </div>
 
                           {/* Data Summary */}
                           <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Your Data Summary</h3>
+                            <h3 className="text-lg font-semibold text-foreground">Your Data Summary</h3>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{(dataSummary as any).petProfiles || 0}</div>
-                                <div className="text-sm text-gray-600 dark:text-gray-400">Pet Profiles</div>
+                                <div className="text-sm text-muted-foreground">Pet Profiles</div>
                               </div>
                               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                                 <div className="text-2xl font-bold text-green-600 dark:text-green-400">{(dataSummary as any).livestockOperations || 0}</div>
-                                <div className="text-sm text-gray-600 dark:text-gray-400">Livestock Operations</div>
+                                <div className="text-sm text-muted-foreground">Livestock Operations</div>
                               </div>
                               <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                                 <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{(dataSummary as any).reviews || 0}</div>
-                                <div className="text-sm text-gray-600 dark:text-gray-400">Product Reviews</div>
+                                <div className="text-sm text-muted-foreground">Product Reviews</div>
                               </div>
                             </div>
                           </div>
 
                           {/* Notification Preferences */}
                           <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Notification Preferences</h3>
+                            <h3 className="text-lg font-semibold text-foreground">Notification Preferences</h3>
                             <NotificationPreferences />
                           </div>
 
                           {/* Danger Zone - Account Deletion */}
                           <div className="space-y-4">
-                            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <div className="border-t border-border pt-6">
                               <Card className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800">
                                 <CardHeader>
                                   <CardTitle className="flex items-center gap-2 text-red-700 dark:text-red-400">
@@ -442,7 +442,7 @@ export default function Profile() {
 
           {/* Pet Profiles Section */}
           <div className="mb-8">
-            <Card className="bg-white dark:bg-gray-800 border border-pink-500/20 shadow-lg" data-testid="card-pet-profiles">
+            <Card className="bg-card border border-pink-500/20 shadow-lg" data-testid="card-pet-profiles">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-pink-600 dark:text-pink-400">
@@ -477,14 +477,14 @@ export default function Profile() {
                 {isPetsLoading ? (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
-                    <p className="text-gray-500 dark:text-gray-400 mt-2">Loading pets...</p>
+                    <p className="text-muted-foreground mt-2">Loading pets...</p>
                   </div>
                 ) : Array.isArray(pets) && pets.length > 0 ? (
                   <div className="grid md:grid-cols-2 gap-6">
                     {(pets as any[]).map((pet: any) => {
                       const SpeciesIcon = getSpeciesIcon(pet.species);
                       return (
-                        <Card key={pet.id} className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow" data-testid={`pet-card-${pet.id}`}>
+                        <Card key={pet.id} className="bg-card border border-border shadow" data-testid={`pet-card-${pet.id}`}>
                           <CardHeader className="pb-4">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -498,10 +498,10 @@ export default function Profile() {
                                   )}
                                 </Avatar>
                                 <div>
-                                  <CardTitle className="text-lg text-gray-900 dark:text-gray-100" data-testid="text-pet-name">
+                                  <CardTitle className="text-lg text-foreground" data-testid="text-pet-name">
                                     {pet.name}
                                   </CardTitle>
-                                  <p className="text-sm text-gray-500 dark:text-gray-400 capitalize" data-testid="text-pet-species">
+                                  <p className="text-sm text-muted-foreground capitalize" data-testid="text-pet-species">
                                     {pet.breed ? `${pet.breed} ${pet.species}` : pet.species}
                                   </p>
                                 </div>
@@ -557,14 +557,14 @@ export default function Profile() {
                               <div className="grid grid-cols-2 gap-4 text-sm">
                                 {pet.age && (
                                   <div className="flex items-center gap-2">
-                                    <Calendar className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 dark:text-gray-300">{pet.age} years old</span>
+                                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-muted-foreground">{pet.age} years old</span>
                                   </div>
                                 )}
                                 {pet.weight && (
                                   <div className="flex items-center gap-2">
-                                    <Weight className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 dark:text-gray-300">{pet.weight} {pet.weightUnit || 'lbs'}</span>
+                                    <Weight className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-muted-foreground">{pet.weight} {pet.weightUnit || 'lbs'}</span>
                                   </div>
                                 )}
                                 {pet.gender && (
@@ -574,8 +574,8 @@ export default function Profile() {
                                 )}
                                 {pet.isSpayedNeutered !== null && (
                                   <div className="flex items-center gap-2">
-                                    <Stethoscope className="h-4 w-4 text-gray-400" />
-                                    <span className="text-gray-600 dark:text-gray-300">
+                                    <Stethoscope className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-muted-foreground">
                                       {pet.isSpayedNeutered ? 'Spayed/Neutered' : 'Intact'}
                                     </span>
                                   </div>

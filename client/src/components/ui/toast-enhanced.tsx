@@ -66,7 +66,7 @@ export function useEnhancedToast() {
         title: options?.title || "Loading",
         description: message,
         duration: options?.duration || 0, // Persistent until dismissed
-        className: "border-gray-200 bg-gray-50 text-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100",
+        className: "border-border bg-card text-foreground",
       })
     },
 

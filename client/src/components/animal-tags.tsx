@@ -48,7 +48,7 @@ export default function AnimalTags({
           variant={variant}
           className={cn(
             "flex items-center gap-1 text-xs font-medium",
-            tagTypeColors[tag.type as keyof typeof tagTypeColors] || "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100",
+            tagTypeColors[tag.type as keyof typeof tagTypeColors] || "bg-accent text-foreground",
             size === "sm" && "text-[10px] px-1.5 py-0.5",
             size === "lg" && "text-sm px-3 py-1"
           )}
@@ -70,7 +70,7 @@ export default function AnimalTags({
         <Badge
           variant="outline"
           className={cn(
-            "text-xs text-gray-600 dark:text-gray-400",
+            "text-xs text-muted-foreground",
             size === "sm" && "text-[10px] px-1.5 py-0.5",
             size === "lg" && "text-sm px-3 py-1"
           )}
@@ -84,7 +84,7 @@ export default function AnimalTags({
 
 export function TagLegend() {
   return (
-    <div className="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-400">
+    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
       <span className="flex items-center gap-1">
         <span>🐾</span> Species
       </span>

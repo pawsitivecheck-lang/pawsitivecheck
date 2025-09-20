@@ -29,12 +29,12 @@ export default function DNTIndicator() {
       </div>
 
       {showTooltip && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg shadow-lg z-50 p-3">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-background text-white text-xs rounded-lg shadow-lg z-50 p-3">
           <div className="text-center">
             <p className="font-medium mb-1">Privacy Protected</p>
             <p>We've detected your "Do Not Track" setting and automatically disabled all non-essential tracking and analytics.</p>
           </div>
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-background"></div>
         </div>
       )}
     </div>

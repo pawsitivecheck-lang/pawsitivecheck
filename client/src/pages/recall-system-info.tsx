@@ -9,7 +9,7 @@ export default function RecallSystemInfo() {
       <Navbar />
       
       {/* Top Ad */}
-      <div className="bg-gray-50 border-b border-gray-200 py-3">
+      <div className="bg-card border-b border-border py-3">
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <AdBanner size="leaderboard" position="recall-system-header" />
         </div>
@@ -22,10 +22,10 @@ export default function RecallSystemInfo() {
             <div className="w-20 h-20 mx-auto bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center mb-6">
               <AlertTriangle className="text-3xl text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6" data-testid="text-title">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6" data-testid="text-title">
               How Our Recall Alert System Works
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Advanced monitoring and instant notification system protecting millions of pets from contaminated and dangerous products
             </p>
           </div>
@@ -33,11 +33,11 @@ export default function RecallSystemInfo() {
           {/* Alert System Overview */}
           <section className="mb-16">
             <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-8 mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <Bell className="text-red-600" />
                 Real-Time Monitoring Infrastructure
               </h2>
-              <p className="text-lg text-gray-700 mb-6">
+              <p className="text-lg text-muted-foreground mb-6">
                 Our recall alert system operates 24/7, monitoring multiple federal databases and industry sources to provide instant notifications when pet products pose safety risks. Built on <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">FDA's Animal Food Recall system</a> with direct integration to <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">federal safety alert networks</a>.
               </p>
 
@@ -46,8 +46,8 @@ export default function RecallSystemInfo() {
                   <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                     <Clock className="text-red-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">15-Minute Monitoring</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">15-Minute Monitoring</h3>
+                  <p className="text-muted-foreground text-sm">
                     Automated scanning of <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">FDA recall feeds</a> every 15 minutes, ensuring immediate detection of new safety alerts and contamination warnings.
                   </p>
                 </div>
@@ -56,8 +56,8 @@ export default function RecallSystemInfo() {
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                     <Zap className="text-orange-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">Instant Notifications</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">Instant Notifications</h3>
+                  <p className="text-muted-foreground text-sm">
                     Push alerts delivered within minutes of official recall announcements, faster than most news outlets and manufacturer notifications. Connected to <a href="https://www.avma.org/resources-tools/pet-owners/petcare/what-do-if-your-pets-food-recalled" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">AVMA emergency protocols</a>.
                   </p>
                 </div>
@@ -66,8 +66,8 @@ export default function RecallSystemInfo() {
                   <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
                     <Shield className="text-yellow-600 h-6 w-6" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-3">Multi-Source Validation</h3>
-                  <p className="text-gray-600 text-sm">
+                  <h3 className="font-bold text-foreground mb-3">Multi-Source Validation</h3>
+                  <p className="text-muted-foreground text-sm">
                     Cross-verification with <a href="https://www.usda.gov/media/press-releases" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">USDA announcements</a>, state agriculture departments, and manufacturer recall notices to ensure accuracy and completeness.
                   </p>
                 </div>
@@ -77,7 +77,7 @@ export default function RecallSystemInfo() {
 
           {/* Monitoring Sources */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
               <Database className="text-blue-600" />
               Primary Monitoring Sources
             </h2>
@@ -88,8 +88,8 @@ export default function RecallSystemInfo() {
                   <FileText className="text-red-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">FDA Animal Food Recalls</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">FDA Animal Food Recalls</h3>
+                  <p className="text-muted-foreground mb-4">
                     Direct monitoring of <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">FDA's official animal food recall database</a>, which tracks Class I (life-threatening), Class II (health hazard), and Class III (violative) recalls across 16,000+ registered pet food facilities. Our system processes over 200 recall notifications monthly, with <a href="https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigating-potential-connection-between-diet-and-cases-canine-heart-disease" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">major investigations like DCM-linked diets</a> receiving priority alerts.
                   </p>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -105,8 +105,8 @@ export default function RecallSystemInfo() {
                   <Globe className="text-blue-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">USDA & State Agriculture Alerts</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">USDA & State Agriculture Alerts</h3>
+                  <p className="text-muted-foreground mb-4">
                     Comprehensive monitoring of <a href="https://www.usda.gov/media/press-releases" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">USDA Food Safety and Inspection Service alerts</a> and state-level agriculture department warnings. This includes monitoring <a href="https://www.cdc.gov/healthypets/publications/pet-food-safety.html" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">CDC outbreak investigations</a> and coordination with state veterinary authorities for regional contamination events.
                   </p>
                 </div>
@@ -117,8 +117,8 @@ export default function RecallSystemInfo() {
                   <Users className="text-green-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">Veterinary & Industry Networks</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">Veterinary & Industry Networks</h3>
+                  <p className="text-muted-foreground mb-4">
                     Real-time feeds from <a href="https://www.avma.org/resources-tools/pet-owners/petcare/what-do-if-your-pets-food-recalled" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">American Veterinary Medical Association (AVMA)</a> safety bulletins, <a href="https://www.petfoodinstitute.org/pet-food-matters/ingredients/pet-food-safety/" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">Pet Food Institute safety communications</a>, and manufacturer voluntary recall announcements. Our network includes 1,200+ veterinary clinics reporting adverse events directly.
                   </p>
                 </div>
@@ -129,8 +129,8 @@ export default function RecallSystemInfo() {
                   <Eye className="text-purple-600 h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">International Safety Monitoring</h3>
-                  <p className="text-gray-700 mb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-3">International Safety Monitoring</h3>
+                  <p className="text-muted-foreground mb-4">
                     Global surveillance including <a href="https://www.canada.ca/en/health-canada/services/consumer-product-safety/advisories-warnings-recalls.html" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">Health Canada recall databases</a>, <a href="https://ec.europa.eu/food/safety/rasff_en" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">European Union RASFF alerts</a>, and manufacturer recalls from international markets that may affect imported products sold in the US.
                   </p>
                 </div>
@@ -141,21 +141,21 @@ export default function RecallSystemInfo() {
           {/* Alert Processing */}
           <section className="mb-16">
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
                 <Zap className="text-blue-600" />
                 Intelligent Alert Processing
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Automated Classification</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Automated Classification</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <div className="w-3 h-3 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
                         <div>
-                          <p className="font-medium text-gray-900">Critical Alerts</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Critical Alerts</p>
+                          <p className="text-sm text-muted-foreground">
                             <strong>Class I recalls:</strong> Life-threatening contamination (Salmonella, toxic ingredients) based on <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/what-difference-between-recall-market-withdrawal-and-medical-device-safety-communication" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">FDA classification standards</a>
                           </p>
                         </div>
@@ -166,8 +166,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <div className="w-3 h-3 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
                         <div>
-                          <p className="font-medium text-gray-900">High Priority</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">High Priority</p>
+                          <p className="text-sm text-muted-foreground">
                             <strong>Class II recalls:</strong> Health hazards requiring veterinary attention, contamination events affecting multiple batches
                           </p>
                         </div>
@@ -178,8 +178,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <div className="w-3 h-3 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
                         <div>
-                          <p className="font-medium text-gray-900">Standard Alerts</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Standard Alerts</p>
+                          <p className="text-sm text-muted-foreground">
                             <strong>Class III recalls:</strong> Labeling violations, minor quality issues, precautionary withdrawals
                           </p>
                         </div>
@@ -189,14 +189,14 @@ export default function RecallSystemInfo() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Smart Product Matching</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Smart Product Matching</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Barcode Cross-Reference</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Barcode Cross-Reference</p>
+                          <p className="text-sm text-muted-foreground">
                             Automatic matching against user scan history and <a href="https://www.gs1.org/standards/barcodes" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">GS1 product databases</a>
                           </p>
                         </div>
@@ -207,8 +207,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Brand & Manufacturer Tracking</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Brand & Manufacturer Tracking</p>
+                          <p className="text-sm text-muted-foreground">
                             Intelligent matching by brand families, private label relationships, and manufacturing facility codes
                           </p>
                         </div>
@@ -219,8 +219,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Ingredient-Based Alerts</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Ingredient-Based Alerts</p>
+                          <p className="text-sm text-muted-foreground">
                             Advanced matching for contaminated ingredient sources affecting multiple brands and products
                           </p>
                         </div>
@@ -235,14 +235,14 @@ export default function RecallSystemInfo() {
           {/* Why Critical */}
           <section className="mb-16">
             <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center gap-3">
                 <AlertTriangle className="text-red-600" />
                 Why Recall Alerts Are Critical
               </h2>
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">The Scale of the Crisis</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">The Scale of the Crisis</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <p className="text-gray-700">
@@ -265,14 +265,14 @@ export default function RecallSystemInfo() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Immediate Protection Benefits</h3>
+                  <h3 className="text-xl font-bold text-foreground mb-4">Immediate Protection Benefits</h3>
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Minutes vs. Days</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Minutes vs. Days</p>
+                          <p className="text-sm text-muted-foreground">
                             Receive alerts within 15 minutes of <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">FDA announcements</a>, not weeks later through manufacturer notifications
                           </p>
                         </div>
@@ -283,8 +283,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Comprehensive Coverage</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Comprehensive Coverage</p>
+                          <p className="text-sm text-muted-foreground">
                             Track recalls across treats, food, toys, and accessories from all sources including <a href="https://www.avma.org/resources-tools/pet-owners/petcare/what-do-if-your-pets-food-recalled" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-800 underline">AVMA safety bulletins</a>
                           </p>
                         </div>
@@ -295,8 +295,8 @@ export default function RecallSystemInfo() {
                       <div className="flex items-start gap-3">
                         <CheckCircle className="text-green-600 h-5 w-5 mt-1 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900">Proactive Safety</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-foreground">Proactive Safety</p>
+                          <p className="text-sm text-muted-foreground">
                             Identify potentially affected products in your home before symptoms appear in your pets
                           </p>
                         </div>
@@ -311,7 +311,7 @@ export default function RecallSystemInfo() {
           {/* Technical Performance */}
           <section className="mb-16">
             <div className="bg-orange-50 rounded-2xl p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <h2 className="text-3xl font-bold text-foreground mb-6 flex items-center gap-3">
                 <Database className="text-orange-600" />
                 System Performance & Reliability
               </h2>

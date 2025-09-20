@@ -255,7 +255,7 @@ export default function ProductScanner() {
             <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-blue-600 mb-4" data-testid="text-scanner-title">
               Comprehensive Safety Analysis
             </h1>
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-4" data-testid="text-scanner-description">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-4" data-testid="text-scanner-description">
               Professional pet product safety evaluation using scientific research, veterinary expertise, and regulatory compliance data
             </p>
           </div>
@@ -269,7 +269,7 @@ export default function ProductScanner() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-gray-700">
+              <div className="text-muted-foreground">
                 <p className="text-lg mb-6">
                   Pet product safety has become increasingly critical as <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/animal-food-recalls" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA animal food recalls have increased significantly</a>, affecting millions of pets. Comprehensive safety analysis helps identify potential hazards before they reach your beloved companions.
                 </p>
@@ -277,28 +277,28 @@ export default function ProductScanner() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                     <h4 className="font-semibold text-green-700 mb-2">🔬 Scientific Foundation</h4>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-muted-foreground">
                       Our analysis incorporates <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed research on pet nutrition toxicity</a> and <a href="https://www.aafco.org/consumers/what-is-in-pet-food/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AAFCO ingredient safety standards</a> to provide evidence-based safety ratings.
                     </p>
                   </div>
 
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                     <h4 className="font-semibold text-red-700 mb-2">⚠️ Corporate Accountability</h4>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-muted-foreground">
                       Major violations include <a href="https://www.fda.gov/animal-veterinary/recalls-withdrawals/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA investigations into pet food safety issues</a> and <a href="https://www.consumeraffairs.com/pets/pet_food.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">consumer complaints about pet food quality</a>.
                     </p>
                   </div>
 
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <h4 className="font-semibold text-blue-700 mb-2">📊 Transparency Database</h4>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-muted-foreground">
                       Our database tracks ingredient transparency across brands, revealing that <a href="https://www.petfoodindustry.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">pet food manufacturers vary significantly in transparency</a> to consumers.
                     </p>
                   </div>
 
                   <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
                     <h4 className="font-semibold text-orange-700 mb-2">🚨 Early Warning System</h4>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-muted-foreground">
                       Real-time monitoring of <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">FDA safety alerts</a> and <a href="https://www.avma.org/resources-tools/pet-owners/petcare/what-do-if-your-pets-food-recalled" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">AVMA recall guidance</a> ensures immediate notification of safety issues.
                     </p>
                   </div>
@@ -316,47 +316,47 @@ export default function ProductScanner() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-gray-700">
+              <div className="text-muted-foreground">
                 <p className="text-lg mb-6">
                   Our comprehensive safety analysis system uses advanced algorithms trained on <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6520637/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">veterinary toxicology databases</a> and <a href="https://www.ncbi.nlm.nih.gov/pmc/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">peer-reviewed pet nutrition research</a> to provide accurate safety assessments.
                 </p>
 
                 <div className="space-y-4">
-                  <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex gap-4 p-4 bg-card rounded-lg">
                     <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Ingredient Analysis</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-foreground mb-2">Ingredient Analysis</h4>
+                      <p className="text-sm text-muted-foreground">
                         Each ingredient is evaluated against veterinary toxicology databases, AAFCO safety standards, and peer-reviewed research on pet nutrition safety.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex gap-4 p-4 bg-card rounded-lg">
                     <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Recall History Check</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-foreground mb-2">Recall History Check</h4>
+                      <p className="text-sm text-muted-foreground">
                         Cross-reference with FDA recall databases and manufacturer safety records to identify products with previous safety violations.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex gap-4 p-4 bg-card rounded-lg">
                     <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">3</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Veterinary Network Validation</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-foreground mb-2">Veterinary Network Validation</h4>
+                      <p className="text-sm text-muted-foreground">
                         B2B data partnerships with veterinary practice management systems (PracticeIQ, Vetspire, eVetPractice) provide anonymized adverse event reports when pets experience health issues after product exposure. This creates real-world safety data from actual clinical cases across 1,200+ participating clinics.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex gap-4 p-4 bg-card rounded-lg">
                     <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">4</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Community Health Reports</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="font-semibold text-foreground mb-2">Community Health Reports</h4>
+                      <p className="text-sm text-muted-foreground">
                         Integration of verified community reports and long-term health tracking data to identify emerging safety patterns.
                       </p>
                     </div>
@@ -412,7 +412,7 @@ export default function ProductScanner() {
                     <div className="text-center">
                       <Globe className="h-8 w-8 mx-auto text-purple-600 mb-2" />
                       <div className="font-semibold text-purple-600">Internet Search</div>
-                      <div className="text-xs text-gray-600">Enter product name or barcode</div>
+                      <div className="text-xs text-muted-foreground">Enter product name or barcode</div>
                     </div>
                     <form onSubmit={(e) => { e.preventDefault(); handleScan(); }} className="space-y-2">
                       <Input
@@ -435,7 +435,7 @@ export default function ProductScanner() {
                   </div>
                 </div>
                 
-                <div className="text-center text-sm text-gray-600">
+                <div className="text-center text-sm text-muted-foreground">
                   Choose your preferred scanning method. Barcode scanning works best in good lighting conditions.
                 </div>
               </CardContent>
@@ -452,15 +452,15 @@ export default function ProductScanner() {
                 <h3 className="text-xl font-semibold text-blue-600 mb-2" data-testid="text-searching-title">
                   Analyzing Product...
                 </h3>
-                <p className="text-gray-600 mb-4" data-testid="text-searching-description">
+                <p className="text-muted-foreground mb-4" data-testid="text-searching-description">
                   {scanProductMutation.isPending ? 'Searching product database...' : 
                    imageSearchMutation.isPending ? 'Analyzing product image...' :
                    'Processing your request...'}
                 </p>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                <div className="w-full bg-accent rounded-full h-2 mb-4">
                   <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
                 </div>
-                <p className="text-xs text-gray-500">This may take a few moments...</p>
+                <p className="text-xs text-muted-foreground">This may take a few moments...</p>
               </CardContent>
             </Card>
           )}
@@ -477,18 +477,18 @@ export default function ProductScanner() {
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="md:col-span-2">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2" data-testid="text-product-name">
+                    <h3 className="text-xl font-semibold text-foreground mb-2" data-testid="text-product-name">
                       {scannedProduct.name}
                     </h3>
-                    <p className="text-gray-600 mb-2" data-testid="text-product-brand">
+                    <p className="text-muted-foreground mb-2" data-testid="text-product-brand">
                       by {scannedProduct.brand}
                     </p>
 
                     {/* UPC/Barcode */}
                     {scannedProduct.barcode && (
                       <div className="flex items-center gap-2 mb-4" data-testid="scanned-product-barcode">
-                        <span className="text-gray-700 font-medium text-sm">UPC:</span>
-                        <span className="text-gray-600 font-mono bg-gray-100/30 px-2 py-1 rounded text-sm">
+                        <span className="text-muted-foreground font-medium text-sm">UPC:</span>
+                        <span className="text-muted-foreground font-mono bg-accent/30 px-2 py-1 rounded text-sm">
                           {scannedProduct.barcode}
                         </span>
                       </div>
@@ -496,8 +496,8 @@ export default function ProductScanner() {
                     
                     {scannedProduct.description && (
                       <div className="mb-4">
-                        <h4 className="text-gray-700 font-medium mb-2">Description:</h4>
-                        <p className="text-gray-600 text-sm" data-testid="text-product-description">
+                        <h4 className="text-muted-foreground font-medium mb-2">Description:</h4>
+                        <p className="text-muted-foreground text-sm" data-testid="text-product-description">
                           {scannedProduct.description}
                         </p>
                       </div>
@@ -505,7 +505,7 @@ export default function ProductScanner() {
 
                     <div className="mb-4">
                       <h4 className="text-gray-700 font-medium mb-2">Ingredients:</h4>
-                      <p className="text-gray-600 text-sm" data-testid="text-product-ingredients">
+                      <p className="text-muted-foreground text-sm" data-testid="text-product-ingredients">
                         {scannedProduct.ingredients}
                       </p>
                     </div>
@@ -514,7 +514,7 @@ export default function ProductScanner() {
                       <div className="flex items-center gap-4 mb-4">
                         <div className="flex items-center gap-2">
                           {getCosmicClarityIcon(scannedProduct.cosmicClarity)}
-                          <span className="text-gray-700">Cosmic Clarity:</span>
+                          <span className="text-muted-foreground">Cosmic Clarity:</span>
                         </div>
                         <Badge className={getCosmicClarityColor(scannedProduct.cosmicClarity)} data-testid="badge-cosmic-clarity">
                           {scannedProduct.cosmicClarity.toUpperCase()}
@@ -532,8 +532,8 @@ export default function ProductScanner() {
                         data-testid="img-product"
                       />
                     ) : (
-                      <div className="w-32 h-32 bg-gray-200 rounded-lg mb-4 flex items-center justify-center" data-testid="placeholder-product-image">
-                        <Camera className="text-gray-500" />
+                      <div className="w-32 h-32 bg-accent rounded-lg mb-4 flex items-center justify-center" data-testid="placeholder-product-image">
+                        <Camera className="text-muted-foreground" />
                       </div>
                     )}
 
@@ -561,19 +561,19 @@ export default function ProductScanner() {
                 <h3 className="text-2xl font-bold text-purple-600 mb-3" data-testid="text-analyzing-title">
                   Cosmic Analysis in Progress...
                 </h3>
-                <p className="text-gray-600 mb-6" data-testid="text-analyzing-description">
+                <p className="text-muted-foreground mb-6" data-testid="text-analyzing-description">
                   Our mystical algorithms are examining ingredient safety, recall history, and veterinary data
                 </p>
                 <div className="max-w-md mx-auto">
-                  <div className="flex justify-between text-xs text-gray-500 mb-2">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-2">
                     <span>Ingredient Analysis</span>
                     <span>Processing...</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+                  <div className="w-full bg-accent rounded-full h-2 mb-4">
                     <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full animate-pulse" style={{width: '75%'}}></div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">Analyzing against 50,000+ safety data points...</p>
+                <p className="text-xs text-muted-foreground">Analyzing against 50,000+ safety data points...</p>
               </CardContent>
             </Card>
           )}
@@ -590,31 +590,31 @@ export default function ProductScanner() {
               <CardContent className="space-y-6">
                 {/* Cosmic Score */}
                 <div className="text-center">
-                  <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4 relative">
+                  <div className="w-24 h-24 mx-auto bg-accent rounded-full flex items-center justify-center mb-4 relative">
                     <div className="text-2xl font-bold text-blue-600" data-testid="text-cosmic-score">
                       {analysisResult.analysis.cosmicScore}
                     </div>
-                    <div className="absolute -bottom-2 text-xs text-gray-600">/ 100</div>
+                    <div className="absolute -bottom-2 text-xs text-muted-foreground">/ 100</div>
                   </div>
                   <h3 className="font-bold text-xl text-blue-600 mb-2">Cosmic Purity Score</h3>
                 </div>
 
                 {/* Verdicts */}
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gray-100/30 rounded-xl p-6">
+                  <div className="bg-accent/30 rounded-xl p-6">
                     <h4 className="font-bold text-lg text-purple-600 mb-3" data-testid="text-aleister-verdict-title">
                       Aleister's Verdict:
                     </h4>
-                    <p className="text-gray-700 italic" data-testid="text-aleister-verdict">
+                    <p className="text-muted-foreground italic" data-testid="text-aleister-verdict">
                       "{analysisResult.analysis.aleisterVerdict}"
                     </p>
                   </div>
 
-                  <div className="bg-gray-100/30 rounded-xl p-6">
-                    <h4 className="font-bold text-lg text-gray-700 mb-3" data-testid="text-severus-verdict-title">
+                  <div className="bg-accent/30 rounded-xl p-6">
+                    <h4 className="font-bold text-lg text-muted-foreground mb-3" data-testid="text-severus-verdict-title">
                       Severus's Verdict:
                     </h4>
-                    <p className="text-gray-700 italic" data-testid="text-severus-verdict">
+                    <p className="text-muted-foreground italic" data-testid="text-severus-verdict">
                       "{analysisResult.analysis.severusVerdict}"
                     </p>
                   </div>
@@ -652,8 +652,8 @@ export default function ProductScanner() {
                 )}
 
                 {/* Transparency Level */}
-                <div className="flex items-center justify-between p-4 bg-gray-100/30 rounded-xl">
-                  <span className="text-gray-600">Transparency Level:</span>
+                <div className="flex items-center justify-between p-4 bg-accent/30 rounded-xl">
+                  <span className="text-muted-foreground">Transparency Level:</span>
                   <Badge 
                     className={
                       analysisResult.analysis.transparencyLevel === 'excellent' 

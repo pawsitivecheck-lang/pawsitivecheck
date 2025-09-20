@@ -143,7 +143,7 @@ export default function ProductDatabase() {
             <h1 className="text-3xl md:text-6xl font-bold text-blue-600 mb-3 md:mb-4" data-testid="text-database-title">
               Product Database
             </h1>
-            <p className="text-gray-600 text-base md:text-lg mb-4 md:mb-6 px-2" data-testid="text-database-description">
+            <p className="text-muted-foreground text-base md:text-lg mb-4 md:mb-6 px-2" data-testid="text-database-description">
               Search our comprehensive database of pet product safety information
             </p>
             
@@ -157,7 +157,7 @@ export default function ProductDatabase() {
                 <Scan className="mr-3 h-6 w-6" />
                 Scan Product Barcode
               </Button>
-              <p className="text-sm text-gray-500 px-4">
+              <p className="text-sm text-muted-foreground px-4">
                 Can't find a product? Try scanning its barcode instead
               </p>
             </div>
@@ -172,7 +172,7 @@ export default function ProductDatabase() {
                     <div className="flex items-center gap-3">
                       <Search className="h-5 w-5 text-blue-600" />
                       <div>
-                        <p className="text-gray-700 text-sm">Search Results for:</p>
+                        <p className="text-muted-foreground text-sm">Search Results for:</p>
                         <p className="text-blue-600 font-medium text-lg" data-testid="text-search-term">
                           "{searchTerm}"
                         </p>
@@ -192,7 +192,7 @@ export default function ProductDatabase() {
                         setSearchTerm("");
                         setLocation('/product-database');
                       }}
-                      className="text-gray-600 hover:text-gray-900"
+                      className="text-muted-foreground hover:text-foreground"
                       data-testid="button-clear-search"
                       title="Clear current search"
                     >

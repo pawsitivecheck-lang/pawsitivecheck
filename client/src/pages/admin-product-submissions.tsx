@@ -98,7 +98,7 @@ export default function AdminProductSubmissions() {
           <CardContent className="pt-6 text-center">
             <XCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-white mb-2">Access Denied</h2>
-            <p className="text-gray-300">You don't have permission to access this page.</p>
+            <p className="text-muted-foreground">You don't have permission to access this page.</p>
           </CardContent>
         </Card>
       </div>
@@ -231,14 +231,14 @@ export default function AdminProductSubmissions() {
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-medium text-purple-200 mb-2">Description:</h4>
-                      <p className="text-gray-300">{submission.description}</p>
+                      <p className="text-muted-foreground">{submission.description}</p>
                     </div>
                     
                     {typeof submission.proposedChanges === 'object' && submission.proposedChanges !== null ? (
                       <div>
                         <h4 className="font-medium text-purple-200 mb-2">Proposed Changes:</h4>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
-                          <pre className="text-sm text-gray-300 whitespace-pre-wrap">
+                          <pre className="text-sm text-muted-foreground whitespace-pre-wrap">
                             {JSON.stringify(submission.proposedChanges, null, 2)}
                           </pre>
                         </div>
@@ -259,7 +259,7 @@ export default function AdminProductSubmissions() {
                     {submission.adminNotes && (
                       <div>
                         <h4 className="font-medium text-purple-200 mb-2">Admin Notes:</h4>
-                        <p className="text-gray-300 bg-slate-700/30 p-3 rounded-lg">{submission.adminNotes}</p>
+                        <p className="text-muted-foreground bg-slate-700/30 p-3 rounded-lg">{submission.adminNotes}</p>
                       </div>
                     )}
                   </div>

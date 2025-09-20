@@ -785,7 +785,7 @@ export default function HerdProfile() {
       case 'female':
         return 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
+        return 'bg-accent text-muted-foreground';
     }
   };
 
@@ -813,8 +813,8 @@ export default function HerdProfile() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-          <div className="h-48 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-8 bg-accent rounded w-1/3"></div>
+          <div className="h-48 bg-accent rounded-lg"></div>
         </div>
       </div>
     );
@@ -824,10 +824,10 @@ export default function HerdProfile() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          <h2 className="text-2xl font-bold text-foreground mb-4">
             Herd not found
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             The requested herd could not be found.
           </p>
           <Button onClick={() => navigate("/livestock")}>
@@ -839,7 +839,7 @@ export default function HerdProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+    <div className="min-h-screen bg-card relative">
       {/* Theme Toggle */}
       <div className="absolute top-4 right-4 z-50">
       </div>
@@ -863,7 +863,7 @@ export default function HerdProfile() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
                   {getSpeciesIcon(herd.species)}
                   {herd.herdName}
                 </h1>
@@ -1465,10 +1465,10 @@ export default function HerdProfile() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Total Animals
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-foreground">
                     {animals.length}
                   </p>
                 </div>
@@ -1481,10 +1481,10 @@ export default function HerdProfile() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Herd Value
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-foreground">
                     ${getTotalHerdValue().toFixed(2)}
                   </p>
                 </div>
@@ -1497,10 +1497,10 @@ export default function HerdProfile() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Breeding Females
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-foreground">
                     {getBreedingFemales()}
                   </p>
                 </div>
@@ -1513,10 +1513,10 @@ export default function HerdProfile() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Avg Weight
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-foreground">
                     {getAverageWeight().toFixed(0)} {herd.weightUnit}
                   </p>
                 </div>
@@ -1547,36 +1547,36 @@ export default function HerdProfile() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Species</p>
+                        <p className="text-sm font-medium text-muted-foreground">Species</p>
                         <p className="text-lg font-semibold">{herd.species}</p>
                       </div>
                       {herd.breed && (
                         <div>
-                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Breed</p>
+                          <p className="text-sm font-medium text-muted-foreground">Breed</p>
                           <p className="text-lg font-semibold">{herd.breed}</p>
                         </div>
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Purpose</p>
+                        <p className="text-sm font-medium text-muted-foreground">Purpose</p>
                         <p className="text-lg font-semibold capitalize">{herd.purpose}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Housing</p>
+                        <p className="text-sm font-medium text-muted-foreground">Housing</p>
                         <p className="text-lg font-semibold">{herd.housingType}</p>
                       </div>
                     </div>
                     {herd.ageRange && (
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Age Range</p>
+                        <p className="text-sm font-medium text-muted-foreground">Age Range</p>
                         <p className="text-lg font-semibold">{herd.ageRange}</p>
                       </div>
                     )}
                     {herd.notes && (
                       <div>
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Notes</p>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">{herd.notes}</p>
+                        <p className="text-sm font-medium text-muted-foreground">Notes</p>
+                        <p className="text-sm text-muted-foreground">{herd.notes}</p>
                       </div>
                     )}
                   </div>
@@ -1589,8 +1589,8 @@ export default function HerdProfile() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="text-center py-8 text-gray-500">
-                      <Activity className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Activity className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                       <p>No recent activity</p>
                     </div>
                   </div>
@@ -1645,7 +1645,7 @@ export default function HerdProfile() {
                     </CardHeader>
                     
                     <CardContent className="pt-0">
-                      <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="space-y-2 text-sm text-muted-foreground">
                         {animal.breed && (
                           <div className="flex items-center gap-2">
                             <span className="font-medium">Breed:</span>
@@ -1678,11 +1678,11 @@ export default function HerdProfile() {
             ) : (
               <Card className="text-center py-12">
                 <CardContent>
-                  <Users className="h-16 w-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
                     No animals yet
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     Add individual animals to start tracking breeding, production, and health
                   </p>
                   <Button
@@ -1759,7 +1759,7 @@ export default function HerdProfile() {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Last Health Check</span>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">2 weeks ago</span>
+                          <span className="text-sm text-muted-foreground">2 weeks ago</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Health Alerts</span>
@@ -1784,7 +1784,7 @@ export default function HerdProfile() {
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Last Vet Visit</span>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">3 months ago</span>
+                          <span className="text-sm text-muted-foreground">3 months ago</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Active Treatments</span>
@@ -1792,7 +1792,7 @@ export default function HerdProfile() {
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Next Checkup</span>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Due in 1 month</span>
+                          <span className="text-sm text-muted-foreground">Due in 1 month</span>
                         </div>
                         <Button variant="outline" size="sm" className="w-full mt-2">
                           Schedule Visit
@@ -1892,13 +1892,13 @@ export default function HerdProfile() {
                               {record.treatment && (
                                 <div className="mt-3 pt-3 border-t">
                                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Treatment:</p>
-                                  <p className="text-sm text-gray-700 dark:text-gray-300">{record.treatment}</p>
+                                  <p className="text-sm text-muted-foreground">{record.treatment}</p>
                                 </div>
                               )}
                               {record.notes && (
                                 <div className="mt-3 pt-3 border-t">
                                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Notes:</p>
-                                  <p className="text-sm text-gray-700 dark:text-gray-300">{record.notes}</p>
+                                  <p className="text-sm text-muted-foreground">{record.notes}</p>
                                 </div>
                               )}
                             </CardContent>
@@ -2198,7 +2198,7 @@ export default function HerdProfile() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                       No Production Records
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-muted-foreground mb-6">
                       Start tracking production like milk yield, egg count, or wool harvest.
                     </p>
                     <Button 
@@ -2336,7 +2336,7 @@ export default function HerdProfile() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                       No Movement Records
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-muted-foreground mb-6">
                       Start tracking animal sales, transfers, and movements.
                     </p>
                     <Button 

@@ -47,10 +47,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               <div className="w-16 h-16 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-6">
                 <AlertTriangle className="text-red-600 h-8 w-8" aria-label="Error" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4" data-testid="text-error-title">
+              <h3 className="text-xl font-semibold text-foreground mb-4" data-testid="text-error-title">
                 Something went wrong
               </h3>
-              <p className="text-gray-600 mb-6" data-testid="text-error-description">
+              <p className="text-muted-foreground mb-6" data-testid="text-error-description">
                 We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
               </p>
               <div className="space-y-3">
@@ -65,7 +65,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                 <Button 
                   variant="outline"
                   onClick={() => window.location.reload()}
-                  className="w-full border-gray-300 text-gray-700 hover:bg-gray-50"
+                  className="w-full border-border text-muted-foreground hover:bg-accent"
                   data-testid="button-refresh"
                 >
                   Refresh Page
@@ -73,7 +73,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               </div>
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="mt-6 text-left">
-                  <summary className="text-sm text-gray-500 cursor-pointer">Error Details (Dev Only)</summary>
+                  <summary className="text-sm text-muted-foreground cursor-pointer">Error Details (Dev Only)</summary>
                   <pre className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded overflow-auto">
                     {this.state.error.toString()}
                   </pre>
