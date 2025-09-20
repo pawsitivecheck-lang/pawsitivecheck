@@ -1,4 +1,5 @@
 import { InsertAnalyticsEvent, InsertConversionFunnel, InsertFeatureUsage, InsertPerformanceMetric } from '@shared/schema';
+import { hasAnalyticsConsent } from "@/components/cookie-consent";
 
 // Analytics configuration
 export const ANALYTICS_CONFIG = {
@@ -9,7 +10,33 @@ export const ANALYTICS_CONFIG = {
   enableDebug: import.meta.env.DEV,
   enablePerformanceTracking: true,
   enableErrorTracking: true,
+  respectCookieConsent: true, // GDPR compliance
 };
+
+// Check if analytics should be enabled
+export function shouldEnableAnalytics(): boolean {
+  // Check for DNT
+  if (
+    navigator.doNotTrack === "1" ||
+    (window as any).doNotTrack === "1" ||
+    (navigator as any).msDoNotTrack === "1"
+  ) {
+    if (ANALYTICS_CONFIG.enableDebug) {
+      console.info("Analytics blocked: Do Not Track is enabled");
+    }
+    return false;
+  }
+
+  // Check for cookie consent
+  if (ANALYTICS_CONFIG.respectCookieConsent && !hasAnalyticsConsent()) {
+    if (ANALYTICS_CONFIG.enableDebug) {
+      console.info("Analytics blocked: No cookie consent");
+    }
+    return false;
+  }
+
+  return true;
+}
 
 // Generate unique session ID
 export function generateSessionId(): string {
@@ -73,7 +100,10 @@ export class AnalyticsClient {
 
   constructor() {
     this.sessionId = generateSessionId();
-    this.initializeSession();
+    // Only initialize session if analytics is enabled
+    if (shouldEnableAnalytics()) {
+      this.initializeSession();
+    }
   }
 
   private async initializeSession() {
@@ -113,6 +143,11 @@ export class AnalyticsClient {
 
   // Track analytics events
   async trackEvent(event: Omit<InsertAnalyticsEvent, 'sessionId' | 'userId' | 'userAgent' | 'deviceType' | 'browserName' | 'osName'>): Promise<void> {
+    // Check consent before tracking
+    if (!shouldEnableAnalytics()) {
+      return;
+    }
+    
     try {
       const enrichedEvent: InsertAnalyticsEvent = {
         ...event,
@@ -198,6 +233,11 @@ export class AnalyticsClient {
 
   // Track performance metrics
   async trackPerformance(metricName: string, value: number, unit: string = 'ms', customData?: Record<string, any>): Promise<void> {
+    // Check consent before tracking
+    if (!shouldEnableAnalytics()) {
+      return;
+    }
+    
     try {
       const metric: InsertPerformanceMetric = {
         sessionId: this.sessionId,
@@ -227,6 +267,11 @@ export class AnalyticsClient {
 
   // Track feature usage
   async trackFeatureUsage(featureName: string, usageType: 'first_use' | 'repeated_use' | 'feature_completion', success: boolean = true, errorMessage?: string, customProperties?: Record<string, any>): Promise<void> {
+    // Check consent before tracking
+    if (!shouldEnableAnalytics()) {
+      return;
+    }
+    
     try {
       const usage: InsertFeatureUsage = {
         sessionId: this.sessionId,
@@ -256,6 +301,11 @@ export class AnalyticsClient {
 
   // Track conversion funnel
   async trackFunnelStep(funnelName: string, stepName: string, stepOrder: number, stepDuration?: number, productId?: number, customData?: Record<string, any>): Promise<void> {
+    // Check consent before tracking
+    if (!shouldEnableAnalytics()) {
+      return;
+    }
+    
     try {
       const funnelStep: InsertConversionFunnel = {
         sessionId: this.sessionId,
@@ -384,6 +434,7 @@ export class PerformanceTracker {
 // Error tracking utility
 export function setupErrorTracking(): void {
   if (!ANALYTICS_CONFIG.enableErrorTracking) return;
+  if (!shouldEnableAnalytics()) return;
 
   // Global error handler
   window.addEventListener('error', (event) => {
@@ -403,9 +454,27 @@ export function setupErrorTracking(): void {
   });
 }
 
+// Listen for cookie consent changes
+if (typeof window !== "undefined") {
+  window.addEventListener("cookieConsent", (event: CustomEvent) => {
+    if (event.detail?.analytics === true) {
+      // User gave consent - reinitialize analytics
+      setupErrorTracking();
+      // Re-initialize the session
+      analytics.initializeSession();
+      if (ANALYTICS_CONFIG.enableDebug) {
+        console.info("Analytics enabled after cookie consent");
+      }
+    }
+  });
+}
+
 // Initialize analytics on page load
 if (typeof window !== 'undefined') {
-  setupErrorTracking();
+  // Only setup error tracking if consent is given
+  if (shouldEnableAnalytics()) {
+    setupErrorTracking();
+  }
 
   // Track page unload
   window.addEventListener('beforeunload', () => {

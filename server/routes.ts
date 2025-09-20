@@ -18,7 +18,8 @@ import {
   insertAnalyticsSessionSchema,
   insertPerformanceMetricSchema,
   insertFeatureUsageSchema,
-  insertConversionFunnelSchema
+  insertConversionFunnelSchema,
+  insertCookiePreferencesSchema
 } from "@shared/schema";
 import { ObjectStorageService } from "./objectStorage";
 import { WalmartScraper } from "./services/walmart-scraper";
@@ -121,6 +122,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth middleware
   await setupAuth(app);
+
+  // Cookie preferences routes - available for both authenticated and anonymous users
+  app.get('/api/cookie-preferences', async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        // No user ID, return null to indicate no server-side preferences
+        return res.json(null);
+      }
+
+      const preferences = await storage.getCookiePreferences(userId);
+      res.json(preferences || null);
+    } catch (error) {
+      logger.error('api', 'Failed to get cookie preferences', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+      res.status(500).json({ message: "Failed to get cookie preferences" });
+    }
+  });
+
+  app.post('/api/cookie-preferences', async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        // Anonymous user - just return success without storing
+        return res.json({ success: true, stored: false });
+      }
+
+      const { essential, analytics, marketing, functional } = req.body;
+      
+      const preferences = await storage.upsertCookiePreferences({
+        userId,
+        essential: essential !== false, // Always true by default
+        analytics: analytics === true,
+        marketing: marketing === true,
+        functional: functional === true,
+        consentTimestamp: new Date(),
+        ipAddress: req.ip || req.connection?.remoteAddress,
+        userAgent: req.get('user-agent') || undefined,
+      });
+
+      res.json({ success: true, stored: true, preferences });
+    } catch (error) {
+      logger.error('api', 'Failed to save cookie preferences', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+      res.status(500).json({ message: "Failed to save cookie preferences" });
+    }
+  });
 
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {

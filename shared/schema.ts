@@ -62,6 +62,24 @@ export const users = pgTable("users", {
   index("IDX_users_is_admin").on(table.isAdmin),
 ]);
 
+// Cookie preferences table for GDPR compliance
+export const cookiePreferences = pgTable("cookie_preferences", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }).notNull().unique(),
+  essential: boolean("essential").default(true).notNull(),
+  analytics: boolean("analytics").default(false).notNull(),
+  marketing: boolean("marketing").default(false).notNull(),
+  functional: boolean("functional").default(false).notNull(),
+  consentTimestamp: timestamp("consent_timestamp").notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }), // IPv6 compatible
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("IDX_cookie_prefs_user_id").on(table.userId),
+  index("IDX_cookie_prefs_timestamp").on(table.consentTimestamp),
+]);
+
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -1174,6 +1192,13 @@ export type SyncSchedule = typeof syncSchedules.$inferSelect;
 export type InsertSyncSchedule = z.infer<typeof insertSyncScheduleSchema>;
 export type UserNotificationPreferences = z.infer<typeof userNotificationPreferencesSchema>;
 
+// Cookie preferences schema
+export const insertCookiePreferencesSchema = createInsertSchema(cookiePreferences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Analytics Insert Schemas
 export const insertUserConsentSchema = createInsertSchema(userConsent).omit({
   id: true,
@@ -1221,3 +1246,5 @@ export type PerformanceMetric = typeof performanceMetrics.$inferSelect;
 export type InsertPerformanceMetric = z.infer<typeof insertPerformanceMetricSchema>;
 export type FeatureUsage = typeof featureUsage.$inferSelect;
 export type InsertFeatureUsage = z.infer<typeof insertFeatureUsageSchema>;
+export type CookiePreferences = typeof cookiePreferences.$inferSelect;
+export type InsertCookiePreferences = z.infer<typeof insertCookiePreferencesSchema>;

@@ -31,6 +31,7 @@ import {
   performanceMetrics,
   featureUsage,
   conversionFunnels,
+  cookiePreferences,
   type User,
   type UpsertUser,
   type Product,
@@ -95,6 +96,8 @@ import {
   type InsertFeatureUsage,
   type ConversionFunnel,
   type InsertConversionFunnel,
+  type CookiePreferences,
+  type InsertCookiePreferences,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, sql, ilike, and, or, gte, lte } from "drizzle-orm";
@@ -355,6 +358,11 @@ export interface IStorage {
     reviews: number;
     scans: number;
   }>;
+
+  // Cookie preferences methods
+  getCookiePreferences(userId: string): Promise<CookiePreferences | undefined>;
+  upsertCookiePreferences(preferences: InsertCookiePreferences): Promise<CookiePreferences>;
+  deleteCookiePreferences(userId: string): Promise<boolean>;
 
   // Notification preferences methods (removed - not implemented)
   // Content moderation methods (removed - not implemented)
@@ -1892,6 +1900,43 @@ export class DatabaseStorage implements IStorage {
       console.error('Error deleting user data:', error);
       return false;
     }
+  }
+
+  // Cookie preferences operations
+  async getCookiePreferences(userId: string): Promise<CookiePreferences | undefined> {
+    const [preferences] = await db
+      .select()
+      .from(cookiePreferences)
+      .where(eq(cookiePreferences.userId, userId));
+    return preferences;
+  }
+
+  async upsertCookiePreferences(preferences: InsertCookiePreferences): Promise<CookiePreferences> {
+    const [result] = await db
+      .insert(cookiePreferences)
+      .values(preferences)
+      .onConflictDoUpdate({
+        target: cookiePreferences.userId,
+        set: {
+          essential: preferences.essential,
+          analytics: preferences.analytics,
+          marketing: preferences.marketing,
+          functional: preferences.functional,
+          consentTimestamp: preferences.consentTimestamp,
+          ipAddress: preferences.ipAddress,
+          userAgent: preferences.userAgent,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return result;
+  }
+
+  async deleteCookiePreferences(userId: string): Promise<boolean> {
+    const result = await db
+      .delete(cookiePreferences)
+      .where(eq(cookiePreferences.userId, userId));
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Analytics operations
