@@ -117,6 +117,11 @@ function App() {
             <ProductDatabase />
           </Suspense>
         )} />
+        <Route path="/product-database" component={() => (
+          <Suspense fallback={<LoadingSpinner />}>
+            <ProductDatabase />
+          </Suspense>
+        )} />
         <Route path="/livestock" component={() => (
           <Suspense fallback={<LoadingSpinner />}>
             <LivestockDashboard />
