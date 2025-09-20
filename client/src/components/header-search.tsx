@@ -416,9 +416,17 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     // Hide dropdown before navigation
     setShowResults(false);
     
-    // Navigate to database with search
-    setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
-    // Don't clear search immediately - let the navigation complete
+    // Check if we're already on the product database page
+    const currentPath = window.location.pathname;
+    const searchParam = encodeURIComponent(searchQuery.trim());
+    
+    if (currentPath === '/product-database') {
+      // Force a reload of the page with new search params to ensure data updates
+      window.location.href = `/product-database?search=${searchParam}`;
+    } else {
+      // Navigate normally from other pages
+      setLocation(`/product-database?search=${searchParam}`);
+    }
   };
 
   const saveRecentSearch = (query: string) => {
@@ -615,8 +623,18 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
     saveRecentSearch(product.name);
     setShowResults(false);
-    // Navigate to database with product search - don't clear until after navigation
-    setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
+    
+    // Check if we're already on the product database page
+    const currentPath = window.location.pathname;
+    const searchParam = encodeURIComponent(product.name);
+    
+    if (currentPath === '/product-database') {
+      // Force a reload of the page with new search params to ensure data updates
+      window.location.href = `/product-database?search=${searchParam}`;
+    } else {
+      // Navigate normally from other pages
+      setLocation(`/product-database?search=${searchParam}`);
+    }
   };
 
 
