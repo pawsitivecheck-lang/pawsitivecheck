@@ -47,8 +47,8 @@ const LoadingSpinner = () => (
 function App() {
   return (
     <ErrorBoundary>
-      <CookieProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <CookieProvider>
         <Switch>
         {/* Core pages - loaded immediately */}
         <Route path="/" component={Landing} />
@@ -185,8 +185,8 @@ function App() {
         <Route component={Landing} />
         </Switch>
         <Toaster />
-        </QueryClientProvider>
-      </CookieProvider>
+        </CookieProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
