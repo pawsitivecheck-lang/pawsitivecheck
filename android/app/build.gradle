@@ -45,7 +45,7 @@ android {
             signingConfig signingConfigs.release
             debuggable false
             jniDebuggable false
-            renderscriptDebuggable false
+            // renderscriptDebuggable is obsolete and removed
             zipAlignEnabled true
         }
         debug {
