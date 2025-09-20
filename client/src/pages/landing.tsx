@@ -119,7 +119,7 @@ function LandingContent() {
       {/* Safety Alert Banner */}
       <Link 
         to="/recalls" 
-        className="block bg-red-600 text-white py-3 px-4 text-center text-sm md:text-base font-medium hover:bg-red-700 transition-colors cursor-pointer"
+        className="block bg-destructive text-destructive-foreground py-3 px-4 text-center text-sm md:text-base font-medium hover:bg-destructive/90 transition-colors cursor-pointer"
         data-testid="banner-safety-alert"
       >
         <span className="block sm:inline">🚨 ALERT: New product recalls updated</span>
@@ -140,7 +140,7 @@ function LandingContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center space-x-2 sm:space-x-3" data-testid="nav-logo">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg flex items-center justify-center">
                 <PawPrint className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <h1 className="hidden md:block text-lg sm:text-xl lg:text-2xl font-bold text-primary">PawsitiveCheck</h1>
@@ -230,7 +230,7 @@ function LandingContent() {
                   <>
                     <Link 
                       to="/profile"
-                      className="flex items-center py-3 px-3 mb-2 hover:bg-blue-900/20 rounded-lg transition-colors"
+                      className="flex items-center py-3 px-3 mb-2 hover:bg-accent rounded-lg transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="button-profile-link"
                     >
@@ -241,7 +241,7 @@ function LandingContent() {
                           className="w-8 h-8 rounded-full mr-3"
                         />
                       ) : (
-                        <UserCheck className="mr-3 h-5 w-5 text-blue-600" />
+                        <UserCheck className="mr-3 h-5 w-5 text-primary" />
                       )}
                       <div>
                         <div className="font-medium text-muted-foreground">{user?.firstName || 'User'}</div>
@@ -253,7 +253,7 @@ function LandingContent() {
                     
                     <a 
                       href="/api/logout"
-                      className="flex items-center w-full py-3 px-3 text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                      className="flex items-center w-full py-3 px-3 text-destructive hover:text-destructive/90 hover:bg-destructive/10 transition-colors font-medium rounded-lg min-h-[44px]"
                       onClick={() => setIsMobileMenuOpen(false)}
                       data-testid="mobile-nav-logout"
                     >
@@ -269,7 +269,7 @@ function LandingContent() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-primary hover:bg-accent transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-sign-in"
                           >
@@ -288,7 +288,7 @@ function LandingContent() {
                     ) : (
                       <a 
                         href="/api/login"
-                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-primary hover:bg-accent transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-sign-in"
                       >
@@ -300,7 +300,7 @@ function LandingContent() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-primary hover:bg-accent transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-register"
                           >
@@ -319,7 +319,7 @@ function LandingContent() {
                     ) : (
                       <a 
                         href="/api/register"
-                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-primary hover:bg-accent transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-register"
                       >
@@ -360,24 +360,24 @@ function LandingContent() {
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 sm:mt-12">
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-green-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
-                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-accent rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Instant Safety Analysis</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground">Get comprehensive safety scores in seconds</p>
               </div>
               
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-blue-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
-                  <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-accent rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Real-time Recall Alerts</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground">Stay updated on safety issues and recalls</p>
               </div>
               
               <div className="text-center">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-purple-900/20 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
-                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto bg-accent rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">Community Powered</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground">Learn from fellow pet owners' experiences</p>
@@ -399,7 +399,7 @@ function LandingContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Card className="p-4 sm:p-6 text-center border border-border hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-instant">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-primary rounded-lg flex items-center justify-center mb-4">
                 <Shield className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
               <div className="flex items-center justify-center gap-1 mb-2">
@@ -413,7 +413,7 @@ function LandingContent() {
             </Card>
             
             <Card className="p-4 sm:p-6 text-center border border-border hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-analysis">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-green-600 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-primary rounded-lg flex items-center justify-center mb-4">
                 <BarChart3 className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
               <div className="flex items-center justify-center gap-1 mb-2">
@@ -429,7 +429,7 @@ function LandingContent() {
             
             
             <Card className="p-4 sm:p-6 text-center border border-border hover:shadow-lg transition-all duration-300 hover:scale-105" data-testid="card-alerts">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-red-600 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto bg-destructive rounded-lg flex items-center justify-center mb-4">
                 <AlertTriangle className="text-white h-6 w-6 sm:h-7 sm:w-7" />
               </div>
               <h3 className="font-semibold text-foreground mb-2 text-sm sm:text-base">🚨 Real-time Alerts</h3>
@@ -437,7 +437,7 @@ function LandingContent() {
               <Button 
                 asChild
                 variant="outline"
-                className="border-2 border-red-400 text-red-400 hover:bg-red-900/20 text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
+                className="border-2 border-destructive text-destructive hover:bg-destructive/10 text-sm w-full min-h-[44px] transition-all transform hover:scale-105"
                 data-testid="button-view-alerts"
               >
                 <Link to="/recalls">
@@ -503,14 +503,14 @@ function LandingContent() {
       </section>
 
       {/* Recall Alerts */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-red-950/10" id="recalls">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-card" id="recalls">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-card rounded-2xl border border-red-200 p-4 sm:p-6 lg:p-8 shadow-sm">
+          <div className="bg-card rounded-2xl border border-border p-4 sm:p-6 lg:p-8 shadow-sm">
             <div className="text-center mb-6 sm:mb-8">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-red-600 rounded-full flex items-center justify-center mb-4" data-testid="icon-recall-alert">
-                <TriangleAlert className="text-xl sm:text-2xl text-white" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-destructive rounded-full flex items-center justify-center mb-4" data-testid="icon-recall-alert">
+                <TriangleAlert className="text-xl sm:text-2xl text-destructive-foreground" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-red-600 mb-2" data-testid="text-recall-title">Safety Recall Alerts</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-destructive mb-2" data-testid="text-recall-title">Safety Recall Alerts</h2>
               <p className="text-muted-foreground text-sm sm:text-base" data-testid="text-recall-description">Stay informed about important product safety alerts</p>
             </div>
             
@@ -533,7 +533,7 @@ function LandingContent() {
                 <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                   <DialogTrigger asChild>
                     <Button 
-                      className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                      className="bg-destructive hover:bg-destructive/90 text-destructive-foreground px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
                       data-testid="button-view-warnings"
                     >
                       <Shield className="mr-2 h-4 w-4" />
@@ -551,7 +551,7 @@ function LandingContent() {
               ) : (
                 <Button 
                   asChild
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
                   data-testid="button-view-warnings"
                 >
                   <a href="/api/login">
@@ -588,9 +588,9 @@ function LandingContent() {
             ) : reviewsError ? (
               // Error state
               <div className="col-span-full text-center py-8">
-                <AlertTriangle className="h-12 w-12 text-red-300 mx-auto mb-3" />
-                <p className="text-red-500 text-sm sm:text-base">Unable to load community reviews</p>
-                <p className="text-red-400 text-xs sm:text-sm mt-1">Please try again later</p>
+                <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-3" />
+                <p className="text-destructive text-sm sm:text-base">Unable to load community reviews</p>
+                <p className="text-muted-foreground text-xs sm:text-sm mt-1">Please try again later</p>
               </div>
             ) : (Array.isArray(communityReviews) && communityReviews.length > 0) ? (
               // Real reviews data
@@ -620,7 +620,7 @@ function LandingContent() {
               <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                 <DialogTrigger asChild>
                   <Button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
                     data-testid="button-join-community"
                   >
                     <Users className="mr-2 h-4 w-4" />
@@ -638,7 +638,7 @@ function LandingContent() {
             ) : (
               <Button 
                 asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-3 text-base min-h-[48px] transition-all transform hover:scale-105"
                 data-testid="button-join-community"
               >
                 <a href="/api/login">
@@ -652,10 +652,10 @@ function LandingContent() {
       </section>
 
       {/* Safety Resources Section */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-blue-50" id="resources">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-card" id="resources">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-4 sm:mb-6" data-testid="icon-resources">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-primary rounded-full flex items-center justify-center mb-4 sm:mb-6" data-testid="icon-resources">
               <Shield className="text-xl sm:text-2xl text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3 sm:mb-4" data-testid="text-resources-title">Safety Resources</h2>
@@ -664,7 +664,7 @@ function LandingContent() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-6 text-center border border-border hover:shadow-lg transition-all duration-300">
-              <Heart className="h-12 w-12 mx-auto text-red-500 mb-4" />
+              <Heart className="h-12 w-12 mx-auto text-destructive mb-4" />
               <h3 className="text-lg font-bold text-foreground mb-2">Emergency Contacts</h3>
               <p className="text-muted-foreground text-sm mb-4">24/7 pet poison control and emergency veterinary services</p>
               <Button asChild variant="outline" className="w-full">
@@ -673,7 +673,7 @@ function LandingContent() {
             </Card>
             
             <Card className="p-6 text-center border border-border hover:shadow-lg transition-all duration-300">
-              <Search className="h-12 w-12 mx-auto text-blue-500 mb-4" />
+              <Search className="h-12 w-12 mx-auto text-primary mb-4" />
               <h3 className="text-lg font-bold text-foreground mb-2">Safety Guides</h3>
               <p className="text-muted-foreground text-sm mb-4">Learn about ingredient safety and product evaluation</p>
               <Button asChild variant="outline" className="w-full">
@@ -682,7 +682,7 @@ function LandingContent() {
             </Card>
             
             <Card className="p-6 text-center border border-border hover:shadow-lg transition-all duration-300">
-              <AlertTriangle className="h-12 w-12 mx-auto text-orange-500 mb-4" />
+              <AlertTriangle className="h-12 w-12 mx-auto text-destructive mb-4" />
               <h3 className="text-lg font-bold text-foreground mb-2">Recall Alerts</h3>
               <p className="text-muted-foreground text-sm mb-4">Stay updated on the latest product recalls and safety warnings</p>
               <Button asChild variant="outline" className="w-full">
