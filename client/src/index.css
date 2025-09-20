@@ -61,40 +61,107 @@
   }
   
   /* Mobile-specific fixes and improvements */
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     body {
       font-size: 16px; /* Prevent iOS zoom on focus */
       line-height: 1.6; /* Improve readability */
     }
     
     input, textarea, select {
-      font-size: 16px; /* Prevent iOS zoom on focus */
+      font-size: 16px !important; /* Prevent iOS zoom on focus */
       min-height: 44px; /* iOS recommended touch target */
     }
     
-    /* Ensure minimum touch target sizes */
+    /* Ensure minimum touch target sizes for better mobile UX */
     button, a, [role="button"] {
       min-height: 44px;
       min-width: 44px;
-      padding: 12px 16px;
+      padding: 10px 16px;
     }
     
-    /* Improve text readability on mobile */
-    h1 { font-size: 2rem; line-height: 1.2; }
-    h2 { font-size: 1.75rem; line-height: 1.3; }
-    h3 { font-size: 1.5rem; line-height: 1.4; }
-    h4 { font-size: 1.25rem; line-height: 1.4; }
+    /* Small buttons need special handling */
+    button[data-size="sm"] {
+      min-height: 36px;
+      padding: 8px 12px;
+    }
+    
+    
+    /* Improve form elements for mobile */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select {
+      padding: 12px;
+      border-radius: 8px;
+    }
+    
+    /* Better modal and dialog handling on mobile */
+    [role="dialog"] {
+      max-height: calc(100vh - 2rem);
+      margin: 1rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Improve text readability on mobile - responsive typography */
+    h1 { 
+      font-size: clamp(1.75rem, 5vw, 2.5rem); 
+      line-height: 1.2; 
+      word-wrap: break-word;
+    }
+    h2 { 
+      font-size: clamp(1.5rem, 4vw, 2rem); 
+      line-height: 1.3;
+      word-wrap: break-word;
+    }
+    h3 { 
+      font-size: clamp(1.25rem, 3vw, 1.75rem); 
+      line-height: 1.4;
+      word-wrap: break-word; 
+    }
+    h4 { 
+      font-size: clamp(1.125rem, 2.5vw, 1.5rem); 
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
     
     /* Better paragraph spacing */
     p { 
-      font-size: 1rem; 
+      font-size: clamp(0.875rem, 2vw, 1rem); 
       line-height: 1.6; 
-      margin-bottom: 1rem; 
+      margin-bottom: 1rem;
+      word-wrap: break-word; 
     }
     
     /* Improve card padding on mobile */
     .card-content-mobile {
-      padding: 1.5rem !important;
+      padding: 1rem !important;
+    }
+    
+    
+    /* Better image handling on mobile */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Improve table scrolling on mobile */
+    table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  
+  /* Extra small devices (phones under 480px) */
+  @media (max-width: 480px) {
+    /* Reduce font sizes slightly for very small screens */
+    body {
+      font-size: 14px;
     }
   }
   

@@ -71,21 +71,21 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
   return (
     <Card className="cosmic-card hover:border-starlight-500/40 transition-all group cursor-pointer" onClick={onClick} data-testid={`product-card-${product.id}`}>
-      <CardContent className="p-6">
+      <CardContent className="p-3 sm:p-4 md:p-6">
         {/* Product Image */}
-        <div className="relative mb-4">
+        <div className="relative mb-3 sm:mb-4">
           {product.imageUrl ? (
             <img 
               src={product.imageUrl} 
               alt={product.name}
-              className="w-full h-48 object-cover rounded-lg group-hover:scale-105 transition-transform"
+              className="w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg group-hover:scale-105 transition-transform"
               data-testid="img-product"
               loading="lazy" // Performance optimization: lazy load images
               decoding="async" // Optimize image decoding
             />
           ) : (
-            <div className="w-full h-48 bg-cosmic-700 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform" data-testid="placeholder-product-image">
-              <Package className="text-cosmic-500 text-4xl" />
+            <div className="w-full h-32 sm:h-40 md:h-48 bg-cosmic-700 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform" data-testid="placeholder-product-image">
+              <Package className="text-cosmic-500 text-2xl sm:text-3xl md:text-4xl" />
             </div>
           )}
           
@@ -98,18 +98,18 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         </div>
 
         {/* Product Info */}
-        <div className="space-y-3">
-          <div className="flex items-start justify-between">
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <div className="flex-1">
-              <h3 className="font-semibold text-xl text-cosmic-100 mb-1" data-testid="text-product-name">
+              <h3 className="font-semibold text-base sm:text-lg md:text-xl text-cosmic-100 mb-1 line-clamp-2" data-testid="text-product-name">
                 {product.name}
               </h3>
-              <p className="text-cosmic-300 text-sm" data-testid="text-product-brand">
+              <p className="text-cosmic-300 text-xs sm:text-sm" data-testid="text-product-brand">
                 by {product.brand}
               </p>
               {product.barcode && (
                 <div className="flex items-center gap-1 mt-1">
-                  <p className="text-cosmic-400 text-xs font-mono" data-testid="text-product-barcode">
+                  <p className="text-cosmic-400 text-[10px] sm:text-xs font-mono line-clamp-1" data-testid="text-product-barcode">
                     UPC: {product.barcode}
                   </p>
                   <HelpTooltip 

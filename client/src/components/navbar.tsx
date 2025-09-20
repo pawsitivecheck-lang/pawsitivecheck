@@ -36,28 +36,28 @@ export default function Navbar() {
       "fixed top-0 w-full z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm",
       TRANSITION_CLASSES.stateChange
     )}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center gap-2 sm:gap-4">
           {/* Left Section - Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-3" data-testid="nav-logo">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <PawPrint className="w-6 h-6 text-white" />
+          <div className="flex items-center flex-shrink-0">
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3" data-testid="nav-logo">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                <PawPrint className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h1 className="hidden md:block text-2xl font-bold text-foreground">PawsitiveCheck</h1>
+              <h1 className="hidden sm:block text-lg md:text-2xl font-bold text-foreground">PawsitiveCheck</h1>
             </Link>
           </div>
           
           {/* Center Section - Search */}
-          <div className="flex-1 flex items-center justify-center px-2 sm:px-4">
+          <div className="flex-1 flex items-center justify-center px-1 sm:px-4">
             {/* Header Search - Now visible on all devices */}
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-xs sm:max-w-md">
               <HeaderSearch />
             </div>
           </div>
           
           {/* Right Section - User Menu */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex items-center space-x-1 sm:space-x-4 flex-shrink-0">
             {/* Do Not Track Indicator */}
             <DNTIndicator />
             

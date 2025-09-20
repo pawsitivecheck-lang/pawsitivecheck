@@ -651,14 +651,14 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
   return (
     <>
-      <div className={`relative ${isMobile ? 'w-full' : 'flex-1 max-w-md mx-4'}`}>
+      <div className={`relative ${isMobile ? 'w-full' : 'flex-1 max-w-md mx-2 sm:mx-4'}`}>
         <form onSubmit={handleSearch} className="relative">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search products or scan... (Press Tab to autofill)"
+              placeholder={isMobile ? "Search..." : "Search products or scan... (Press Tab to autofill)"}
               value={searchQuery}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
@@ -688,7 +688,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   }
                 }, 200);
               }}
-              className="w-full bg-background border border-border rounded-full px-10 pr-24 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
+              className="w-full bg-background border border-border rounded-full px-8 sm:px-10 pr-16 sm:pr-24 text-sm sm:text-base text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-9 sm:h-10"
               data-testid="input-header-search"
               autoComplete="off"
             />
