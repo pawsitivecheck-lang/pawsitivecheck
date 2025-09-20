@@ -400,8 +400,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
         }
       }
       
-      // Clear previous results and search
-      setSearchResults([]);
+      // DON'T clear previous results - keep them visible during search
+      // This prevents the dropdown from disappearing while typing
       debouncedSearch(value);
     }
   };
@@ -646,17 +646,23 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
               onKeyDown={handleKeyDown}
               onFocus={() => {
                 console.log('🎯 SEARCH INPUT FOCUSED!');
-                setShowResults(true);
+                // Only show results if we have something to show
+                if (searchQuery.length > 0 || recentSearches.length > 0) {
+                  setShowResults(true);
+                }
               }}
-              onBlur={(e) => {
-                // Delay hiding results to allow clicks
+              onBlur={() => {
+                // Delay hiding results to allow clicks on dropdown items
                 setTimeout(() => {
+                  // Check if the click target is within the dropdown
+                  const dropdown = document.querySelector('[data-search-dropdown]');
                   const activeElement = document.activeElement;
-                  const currentTarget = e.currentTarget;
-                  if (!activeElement || !currentTarget || !currentTarget.contains(activeElement)) {
+                  
+                  // Don't hide if clicking within dropdown or if the input is still focused
+                  if (!dropdown?.contains(activeElement) && activeElement !== inputRef.current) {
                     setShowResults(false);
                   }
-                }, 200);
+                }, 250);
               }}
               className="w-full bg-background border border-border rounded-full px-10 pr-24 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
@@ -738,7 +744,14 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
         {/* Search Results Dropdown */}
         {showResults && (
-          <div className="absolute top-12 left-0 right-0 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg p-1 z-[9999] shadow-2xl max-h-80 overflow-y-auto">
+          <div 
+            className="absolute top-12 left-0 right-0 bg-background border-2 border-blue-500 rounded-lg p-1 z-[9999] shadow-2xl max-h-80 overflow-y-auto"
+            data-search-dropdown
+            onMouseDown={(e) => {
+              // Prevent blur when clicking inside dropdown
+              e.preventDefault();
+            }}
+          >
             
             {/* Autofill Hint */}
             {searchQuery.length >= 1 && getAutofillSuggestion() && getAutofillSuggestion() !== searchQuery && (
@@ -773,6 +786,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   {recentSearches.map((search, index) => (
                     <div
                       key={search}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
                       onClick={() => {
                         setSearchQuery(search);
                         saveRecentSearch(search);
@@ -795,8 +812,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             {/* Search Results */}
             {searchResults.length > 0 && (
               <div className="p-2">
-                {recentSearches.length > 0 && searchQuery.length === 0 && (
-                  <p className="text-xs text-muted-foreground mb-2 px-2 border-t border-border pt-2">Products</p>
+                {searchQuery.length > 0 && (
+                  <p className="text-xs text-muted-foreground mb-2 px-2">Search Results</p>
                 )}
                 <div className="space-y-1">
                   {searchResults.map((product, index) => {
@@ -804,6 +821,10 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                     return (
                       <div
                         key={product.id}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
                         onClick={() => selectProduct(product)}
                         className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
                           selectedIndex === adjustedIndex ? 'bg-accent' : 'hover:bg-accent/50'
