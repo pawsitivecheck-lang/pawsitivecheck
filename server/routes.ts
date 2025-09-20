@@ -4690,6 +4690,160 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Server-side geocoding endpoint (secure) with fallback support
+  app.post('/api/geocode', async (req, res) => {
+    try {
+      const { address } = req.body;
+      
+      if (!address || typeof address !== 'string') {
+        return res.status(400).json({ error: 'Address is required' });
+      }
+
+      // Try Google Maps API first, then Places API as fallback
+      const apiKey = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY;
+      
+      if (!apiKey) {
+        // Fallback to a basic location mapping for common US cities
+        const commonLocations: { [key: string]: { lat: number; lng: number } } = {
+          'new york': { lat: 40.7128, lng: -74.0060 },
+          'los angeles': { lat: 34.0522, lng: -118.2437 },
+          'chicago': { lat: 41.8781, lng: -87.6298 },
+          'houston': { lat: 29.7604, lng: -95.3698 },
+          'phoenix': { lat: 33.4484, lng: -112.0740 },
+          'philadelphia': { lat: 39.9526, lng: -75.1652 },
+          'san antonio': { lat: 29.4241, lng: -98.4936 },
+          'san diego': { lat: 32.7157, lng: -117.1611 },
+          'dallas': { lat: 32.7767, lng: -96.7970 },
+          'san jose': { lat: 37.3382, lng: -121.8863 },
+          'lansing': { lat: 42.7325, lng: -84.5555 },
+          'detroit': { lat: 42.3314, lng: -83.0458 },
+          'miami': { lat: 25.7617, lng: -80.1918 },
+          'boston': { lat: 42.3601, lng: -71.0589 },
+          'seattle': { lat: 47.6062, lng: -122.3321 },
+          'denver': { lat: 39.7392, lng: -104.9903 },
+          'atlanta': { lat: 33.7490, lng: -84.3880 },
+          'austin': { lat: 30.2672, lng: -97.7431 },
+          'portland': { lat: 45.5152, lng: -122.6784 },
+          'las vegas': { lat: 36.1699, lng: -115.1398 }
+        };
+
+        const lowerAddress = address.toLowerCase();
+        for (const [city, coords] of Object.entries(commonLocations)) {
+          if (lowerAddress.includes(city)) {
+            logger.info('api', 'Using fallback location for common city', { 
+              address, 
+              city,
+              lat: coords.lat, 
+              lng: coords.lng 
+            });
+            
+            return res.json({
+              success: true,
+              location: coords,
+              formattedAddress: address,
+              fallback: true
+            });
+          }
+        }
+
+        logger.error('api', 'No API keys configured and no fallback match');
+        return res.json({
+          success: false,
+          error: 'Geocoding service not available. Try entering a major US city name.'
+        });
+      }
+
+      // Call Google Maps Geocoding API
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+      
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+
+      if (data.status === 'OK' && data.results && data.results.length > 0) {
+        const location = data.results[0].geometry.location;
+        const formattedAddress = data.results[0].formatted_address;
+        
+        logger.info('api', 'Successfully geocoded address', { 
+          address, 
+          lat: location.lat, 
+          lng: location.lng 
+        });
+        
+        res.json({
+          success: true,
+          location: {
+            lat: location.lat,
+            lng: location.lng
+          },
+          formattedAddress
+        });
+      } else if (data.status === 'ZERO_RESULTS') {
+        logger.warn('api', 'No results found for address', { address });
+        res.json({
+          success: false,
+          error: 'Location not found. Please try a different address.'
+        });
+      } else if (data.status === 'REQUEST_DENIED' || data.status === 'INVALID_REQUEST') {
+        // API key issue - fall back to common locations
+        logger.warn('api', 'Google API request denied, using fallback', { status: data.status });
+        
+        const commonLocations: { [key: string]: { lat: number; lng: number } } = {
+          'new york': { lat: 40.7128, lng: -74.0060 },
+          'los angeles': { lat: 34.0522, lng: -118.2437 },
+          'chicago': { lat: 41.8781, lng: -87.6298 },
+          'houston': { lat: 29.7604, lng: -95.3698 },
+          'phoenix': { lat: 33.4484, lng: -112.0740 },
+          'philadelphia': { lat: 39.9526, lng: -75.1652 },
+          'san antonio': { lat: 29.4241, lng: -98.4936 },
+          'san diego': { lat: 32.7157, lng: -117.1611 },
+          'dallas': { lat: 32.7767, lng: -96.7970 },
+          'san jose': { lat: 37.3382, lng: -121.8863 },
+          'lansing': { lat: 42.7325, lng: -84.5555 },
+          'detroit': { lat: 42.3314, lng: -83.0458 },
+          'miami': { lat: 25.7617, lng: -80.1918 },
+          'boston': { lat: 42.3601, lng: -71.0589 },
+          'seattle': { lat: 47.6062, lng: -122.3321 },
+          'denver': { lat: 39.7392, lng: -104.9903 },
+          'atlanta': { lat: 33.7490, lng: -84.3880 },
+          'austin': { lat: 30.2672, lng: -97.7431 },
+          'portland': { lat: 45.5152, lng: -122.6784 },
+          'las vegas': { lat: 36.1699, lng: -115.1398 }
+        };
+
+        const lowerAddress = address.toLowerCase();
+        for (const [city, coords] of Object.entries(commonLocations)) {
+          if (lowerAddress.includes(city)) {
+            return res.json({
+              success: true,
+              location: coords,
+              formattedAddress: `${city.charAt(0).toUpperCase() + city.slice(1)} (approximate location)`,
+              fallback: true
+            });
+          }
+        }
+
+        res.json({
+          success: false,
+          error: 'Unable to determine exact location. Try entering a major US city or use GPS location.'
+        });
+      } else {
+        logger.error('api', 'Geocoding API error', { status: data.status, address });
+        res.json({
+          success: false,
+          error: 'Unable to geocode location. Please try again or use GPS location.'
+        });
+      }
+    } catch (error) {
+      logger.error('api', 'Geocoding error', { 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      });
+      res.status(500).json({
+        success: false,
+        error: 'Geocoding service error. Please try again.'
+      });
+    }
+  });
+
   // Get Google Maps API key for frontend (secure for public use)
   app.get('/api/google-maps-key', (req, res) => {
     // This endpoint provides the public Google Maps API key which is safe to expose

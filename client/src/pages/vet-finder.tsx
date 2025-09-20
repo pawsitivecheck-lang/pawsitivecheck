@@ -99,32 +99,37 @@ export default function VetFinder() {
     );
   };
 
-  // Geocode manually entered location
+  // Geocode manually entered location using server-side endpoint
   const geocodeLocation = async (locationString: string): Promise<{lat: number, lng: number} | null> => {
     if (!locationString.trim()) return null;
     
     try {
       setIsGeocodingLocation(true);
       
-      // Use Google Maps Geocoding API
-      const response = await fetch('/api/google-maps-key');
-      const { key } = await response.json();
+      // Use server-side geocoding endpoint
+      const response = await fetch('/api/geocode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: locationString }),
+      });
       
-      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(locationString)}&key=${key}`;
-      const geocodeResponse = await fetch(geocodeUrl);
-      const geocodeData = await geocodeResponse.json();
+      const data = await response.json();
       
-      if (geocodeData.status === 'OK' && geocodeData.results.length > 0) {
-        const location = geocodeData.results[0].geometry.location;
-        return { lat: location.lat, lng: location.lng };
+      if (data.success && data.location) {
+        return { 
+          lat: data.location.lat, 
+          lng: data.location.lng 
+        };
       } else {
-        throw new Error('Location not found');
+        throw new Error(data.error || 'Location not found');
       }
     } catch (error) {
       console.error('Geocoding error:', error);
       toast({
         title: "Location Error",
-        description: "Could not find the specified location. Please try a different address.",
+        description: error instanceof Error ? error.message : "Could not find the specified location. Please try a different address.",
         variant: "destructive",
       });
       return null;
