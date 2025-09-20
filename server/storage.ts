@@ -97,7 +97,7 @@ import {
   type InsertConversionFunnel,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, ilike, and, or } from "drizzle-orm";
+import { eq, desc, asc, sql, ilike, and, or, gte, lte } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
 export interface IStorage {
@@ -111,7 +111,13 @@ export interface IStorage {
   createUserWithPassword(userData: Omit<UpsertUser, 'passwordHash'>, password: string): Promise<User>;
 
   // Product operations
-  getProducts(limit?: number, offset?: number, search?: string): Promise<Product[]>;
+  getProducts(limit?: number, offset?: number, search?: string, sort?: string, filters?: {
+    category?: string;
+    brand?: string;
+    cosmicClarity?: string;
+    minScore?: number;
+    maxScore?: number;
+  }): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   getProductByBarcode(barcode: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
@@ -400,43 +406,103 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Product operations
-  async getProducts(limit = 50, offset = 0, search?: string): Promise<Product[]> {
-    if (!search) {
-      // No search term provided - return products ordered by creation date
-      return await db.select().from(products)
-        .orderBy(desc(products.createdAt))
-        .limit(limit)
-        .offset(offset);
-    }
-
-    // Normalize search term for exact matching
-    const normalizedSearch = search.trim().toLowerCase();
-
-    // Single ranked query with proper pagination
-    return await db.select().from(products)
-      .where(
+  async getProducts(limit = 50, offset = 0, search?: string, sort?: string, filters?: {
+    category?: string;
+    brand?: string;
+    cosmicClarity?: string;
+    minScore?: number;
+    maxScore?: number;
+  }): Promise<Product[]> {
+    // Build where conditions
+    const whereConditions = [];
+    
+    // Search conditions
+    if (search) {
+      const normalizedSearch = search.trim().toLowerCase();
+      whereConditions.push(
         or(
-          sql`LOWER(TRIM(${products.brand})) = ${normalizedSearch}`, // Exact brand match
-          ilike(products.brand, `%${normalizedSearch}%`), // Partial brand match - use normalized search
-          ilike(products.name, `%${normalizedSearch}%`), // Name match - use normalized search
-          ilike(products.ingredients, `%${normalizedSearch}%`) // Ingredient match - use normalized search
+          sql`LOWER(TRIM(${products.brand})) = ${normalizedSearch}`,
+          ilike(products.brand, `%${normalizedSearch}%`),
+          ilike(products.name, `%${normalizedSearch}%`),
+          ilike(products.ingredients, `%${normalizedSearch}%`)
         )
-      )
-      .orderBy(
-        sql`CASE 
-          WHEN LOWER(TRIM(${products.brand})) = ${normalizedSearch} THEN 0
-          WHEN LOWER(TRIM(${products.brand})) LIKE ${`${normalizedSearch}%`} THEN 1
-          WHEN LOWER(${products.brand}) LIKE ${`%${normalizedSearch}%`} THEN 2
-          WHEN LOWER(${products.name}) LIKE ${`${normalizedSearch}%`} THEN 3
-          WHEN LOWER(${products.name}) LIKE ${`%${normalizedSearch}%`} THEN 4
-          WHEN LOWER(${products.ingredients}) LIKE ${`%${normalizedSearch}%`} THEN 5
-          ELSE 6
-        END`,
-        desc(products.cosmicScore),
-        desc(products.createdAt)
-      )
-      .limit(limit)
-      .offset(offset);
+      );
+    }
+    
+    // Filter conditions
+    if (filters) {
+      if (filters.category && filters.category !== 'all') {
+        whereConditions.push(eq(products.category, filters.category));
+      }
+      if (filters.brand && filters.brand !== 'all') {
+        whereConditions.push(eq(products.brand, filters.brand));
+      }
+      if (filters.cosmicClarity && filters.cosmicClarity !== 'all') {
+        whereConditions.push(eq(products.cosmicClarity, filters.cosmicClarity));
+      }
+      if (filters.minScore !== undefined) {
+        whereConditions.push(gte(products.cosmicScore, filters.minScore));
+      }
+      if (filters.maxScore !== undefined) {
+        whereConditions.push(lte(products.cosmicScore, filters.maxScore));
+      }
+    }
+    
+    // Build the base query
+    const baseQuery = db.select().from(products);
+    
+    // Apply where conditions if any
+    const queryWithWhere = whereConditions.length > 0 
+      ? baseQuery.where(and(...whereConditions))
+      : baseQuery;
+    
+    // Apply sorting based on sort parameter
+    let queryWithSort;
+    switch (sort) {
+      case 'name-asc':
+        queryWithSort = queryWithWhere.orderBy(asc(products.name));
+        break;
+      case 'name-desc':
+        queryWithSort = queryWithWhere.orderBy(desc(products.name));
+        break;
+      case 'score-high':
+        queryWithSort = queryWithWhere.orderBy(desc(products.cosmicScore));
+        break;
+      case 'score-low':
+        queryWithSort = queryWithWhere.orderBy(asc(products.cosmicScore));
+        break;
+      case 'newest':
+        queryWithSort = queryWithWhere.orderBy(desc(products.createdAt));
+        break;
+      case 'oldest':
+        queryWithSort = queryWithWhere.orderBy(asc(products.createdAt));
+        break;
+      default:
+        // Default sort: if searching, use relevance ranking; otherwise newest first
+        if (search) {
+          const normalizedSearch = search.trim().toLowerCase();
+          queryWithSort = queryWithWhere.orderBy(
+            sql`CASE 
+              WHEN LOWER(TRIM(${products.brand})) = ${normalizedSearch} THEN 0
+              WHEN LOWER(TRIM(${products.brand})) LIKE ${`${normalizedSearch}%`} THEN 1
+              WHEN LOWER(${products.brand}) LIKE ${`%${normalizedSearch}%`} THEN 2
+              WHEN LOWER(${products.name}) LIKE ${`${normalizedSearch}%`} THEN 3
+              WHEN LOWER(${products.name}) LIKE ${`%${normalizedSearch}%`} THEN 4
+              WHEN LOWER(${products.ingredients}) LIKE ${`%${normalizedSearch}%`} THEN 5
+              ELSE 6
+            END`,
+            desc(products.cosmicScore),
+            desc(products.createdAt)
+          );
+        } else {
+          queryWithSort = queryWithWhere.orderBy(desc(products.createdAt));
+        }
+    }
+    
+    // Apply pagination and execute
+    const result = await queryWithSort.limit(limit).offset(offset);
+    
+    return result;
   }
 
   async getProduct(id: number): Promise<Product | undefined> {

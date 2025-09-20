@@ -40,56 +40,66 @@ export default function ProductDatabase() {
   const limit = 12;
 
   const { data: products, isLoading } = useQuery({
-    queryKey: ['/api/products', { search: searchTerm, limit, offset: page * limit }],
+    queryKey: [
+      '/api/products', 
+      { 
+        search: searchTerm, 
+        limit, 
+        offset: page * limit,
+        sort: sortBy,
+        category: filterCategory,
+        brand: filterBrand,
+        clarity: filterClarity,
+        minScore: minCosmicScore,
+        maxScore: maxCosmicScore
+      }
+    ],
     queryFn: async () => {
       const params = new URLSearchParams({
         limit: limit.toString(),
         offset: (page * limit).toString(),
       });
       if (searchTerm) params.append('search', searchTerm);
+      if (sortBy) params.append('sort', sortBy);
+      if (filterCategory && filterCategory !== 'all') params.append('category', filterCategory);
+      if (filterBrand && filterBrand !== 'all') params.append('brand', filterBrand);
+      if (filterClarity && filterClarity !== 'all') params.append('clarity', filterClarity);
+      if (minCosmicScore > 0) params.append('minScore', minCosmicScore.toString());
+      if (maxCosmicScore < 100) params.append('maxScore', maxCosmicScore.toString());
       
       const res = await fetch(`/api/products?${params}`);
       return await res.json();
     },
   });
 
-  // Get unique brands and categories for filter options
+  // Get unique brands and categories for filter options from ALL products (need separate query)
+  // For now, we'll use the products we have, but ideally this should be a separate API call
   const uniqueBrands: string[] = Array.from(new Set(products?.map((p: any) => p.brand).filter(Boolean) || []));
   const uniqueCategories: string[] = Array.from(new Set(products?.map((p: any) => p.category).filter(Boolean) || []));
   
-  const filteredProducts = products?.filter((product: any) => {
-    // Clarity filter
-    if (filterClarity !== 'all' && product.cosmicClarity !== filterClarity) return false;
-    
-    // Category filter
-    if (filterCategory !== 'all' && product.category !== filterCategory) return false;
-    
-    // Brand filter
-    if (filterBrand !== 'all' && product.brand !== filterBrand) return false;
-    
-    // Cosmic score range filter
-    const score = product.cosmicScore || 0;
-    if (score < minCosmicScore || score > maxCosmicScore) return false;
-    
-    return true;
-  }).sort((a: any, b: any) => {
-    switch (sortBy) {
-      case 'name-asc':
-        return a.name.localeCompare(b.name);
-      case 'name-desc':
-        return b.name.localeCompare(a.name);
-      case 'score-high':
-        return (b.cosmicScore || 0) - (a.cosmicScore || 0);
-      case 'score-low':
-        return (a.cosmicScore || 0) - (b.cosmicScore || 0);
-      case 'newest':
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      case 'oldest':
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      default:
-        return 0;
-    }
-  }) || [];
+  // Fetch all brands and categories for filters (without pagination)
+  const { data: filterOptions } = useQuery({
+    queryKey: ['/api/products/filter-options'],
+    queryFn: async () => {
+      try {
+        const res = await fetch('/api/products/filter-options');
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch (error) {
+        console.error('Failed to fetch filter options:', error);
+      }
+      // Fallback to empty arrays if the endpoint doesn't exist yet
+      return { brands: [], categories: [] };
+    },
+  });
+  
+  // Use the filter options if available, otherwise fall back to what we have from the products
+  const allBrands = filterOptions?.brands?.length > 0 ? filterOptions.brands : uniqueBrands;
+  const allCategories = filterOptions?.categories?.length > 0 ? filterOptions.categories : uniqueCategories;
+  
+  // Products are now filtered and sorted on the backend, no need for frontend filtering
+  const filteredProducts = products || [];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -273,7 +283,7 @@ export default function ProductDatabase() {
                           </SelectTrigger>
                           <SelectContent className="bg-cosmic-800 border-cosmic-600">
                             <SelectItem value="all">All Categories</SelectItem>
-                            {uniqueCategories.map((category: string) => (
+                            {allCategories.map((category: string) => (
                               <SelectItem key={category} value={category}>
                                 {category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                               </SelectItem>
@@ -290,7 +300,7 @@ export default function ProductDatabase() {
                           </SelectTrigger>
                           <SelectContent className="bg-cosmic-800 border-cosmic-600">
                             <SelectItem value="all">All Brands</SelectItem>
-                            {uniqueBrands.map((brand: string) => (
+                            {allBrands.map((brand: string) => (
                               <SelectItem key={brand} value={brand}>
                                 {brand}
                               </SelectItem>

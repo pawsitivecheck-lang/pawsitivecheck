@@ -353,14 +353,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/products', async (req, res) => {
     try {
       // Performance optimization: reduce default limit and add caching
-      const { limit = '20', offset = '0', search } = req.query; // Reduced from 50 to 20
+      const { 
+        limit = '20', 
+        offset = '0', 
+        search,
+        sort,
+        category,
+        brand,
+        clarity,
+        minScore,
+        maxScore 
+      } = req.query; // Reduced from 50 to 20
       
       // Add cache headers for better performance
       res.set('Cache-Control', 'public, max-age=300'); // 5 minutes cache
+      
+      // Build filters object
+      const filters = {
+        category: category as string,
+        brand: brand as string,
+        cosmicClarity: clarity as string,
+        minScore: minScore ? parseInt(minScore as string) : undefined,
+        maxScore: maxScore ? parseInt(maxScore as string) : undefined
+      };
+      
       let products = await storage.getProducts(
         parseInt(limit as string), 
         parseInt(offset as string),
-        search as string
+        search as string,
+        sort as string,
+        filters
       );
 
       // Normalize search parameter with proper null-guard
