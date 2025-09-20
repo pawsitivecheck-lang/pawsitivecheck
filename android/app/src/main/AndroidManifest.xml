@@ -10,12 +10,14 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density|screenOrientation"
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="unspecified"
+            android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,4 +46,70 @@
     <!-- Camera feature -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    
+    <!-- Screen size support for all devices -->
+    <supports-screens 
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true"
+        android:resizeable="true" />
+    
+    <!-- Compatible screens declaration for optimization -->
+    <compatible-screens>
+        <!-- Small screens -->
+        <screen android:screenSize="small" android:screenDensity="ldpi" />
+        <screen android:screenSize="small" android:screenDensity="mdpi" />
+        <screen android:screenSize="small" android:screenDensity="hdpi" />
+        <screen android:screenSize="small" android:screenDensity="xhdpi" />
+        <screen android:screenSize="small" android:screenDensity="280" />
+        <screen android:screenSize="small" android:screenDensity="360" />
+        <screen android:screenSize="small" android:screenDensity="420" />
+        <screen android:screenSize="small" android:screenDensity="480" />
+        <screen android:screenSize="small" android:screenDensity="560" />
+        <screen android:screenSize="small" android:screenDensity="640" />
+        
+        <!-- Normal screens (most phones) -->
+        <screen android:screenSize="normal" android:screenDensity="ldpi" />
+        <screen android:screenSize="normal" android:screenDensity="mdpi" />
+        <screen android:screenSize="normal" android:screenDensity="hdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xxhdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xxxhdpi" />
+        <screen android:screenSize="normal" android:screenDensity="280" />
+        <screen android:screenSize="normal" android:screenDensity="360" />
+        <screen android:screenSize="normal" android:screenDensity="420" />
+        <screen android:screenSize="normal" android:screenDensity="480" />
+        <screen android:screenSize="normal" android:screenDensity="560" />
+        <screen android:screenSize="normal" android:screenDensity="640" />
+        
+        <!-- Large screens (7" tablets) -->
+        <screen android:screenSize="large" android:screenDensity="ldpi" />
+        <screen android:screenSize="large" android:screenDensity="mdpi" />
+        <screen android:screenSize="large" android:screenDensity="hdpi" />
+        <screen android:screenSize="large" android:screenDensity="xhdpi" />
+        <screen android:screenSize="large" android:screenDensity="xxhdpi" />
+        <screen android:screenSize="large" android:screenDensity="xxxhdpi" />
+        <screen android:screenSize="large" android:screenDensity="280" />
+        <screen android:screenSize="large" android:screenDensity="360" />
+        <screen android:screenSize="large" android:screenDensity="420" />
+        <screen android:screenSize="large" android:screenDensity="480" />
+        <screen android:screenSize="large" android:screenDensity="560" />
+        <screen android:screenSize="large" android:screenDensity="640" />
+        
+        <!-- XLarge screens (10"+ tablets) -->
+        <screen android:screenSize="xlarge" android:screenDensity="ldpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="mdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="hdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="xhdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="xxhdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="xxxhdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="280" />
+        <screen android:screenSize="xlarge" android:screenDensity="360" />
+        <screen android:screenSize="xlarge" android:screenDensity="420" />
+        <screen android:screenSize="xlarge" android:screenDensity="480" />
+        <screen android:screenSize="xlarge" android:screenDensity="560" />
+        <screen android:screenSize="xlarge" android:screenDensity="640" />
+    </compatible-screens>
 </manifest>
