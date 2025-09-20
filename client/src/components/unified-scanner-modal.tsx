@@ -746,7 +746,7 @@ export function UnifiedScannerModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-full max-w-[95vw] sm:max-w-md h-[90vh] sm:h-auto p-3 sm:p-6 mx-auto">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-md h-[75vh] sm:h-auto p-3 sm:p-6 mx-auto my-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5 text-blue-600" />
