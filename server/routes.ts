@@ -818,7 +818,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Validate request structure with Zod
       const requestSchema = z.object({
-        type: z.enum(['image', 'barcode']),
+        type: z.enum(['image', 'barcode', 'text']),
         query: z.string().min(1)
       });
 
