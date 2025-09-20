@@ -413,9 +413,12 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
     // Save to recent searches
     saveRecentSearch(searchQuery.trim());
     
+    // Hide dropdown before navigation
+    setShowResults(false);
+    
     // Navigate to database with search
     setLocation(`/product-database?search=${encodeURIComponent(searchQuery.trim())}`);
-    clearSearch();
+    // Don't clear search immediately - let the navigation complete
   };
 
   const saveRecentSearch = (query: string) => {
@@ -507,8 +510,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
             // Recent search selected
             setSearchQuery(selectedOption);
             saveRecentSearch(selectedOption);
+            setShowResults(false);
             setLocation(`/product-database?search=${encodeURIComponent(selectedOption)}`);
-            clearSearch();
           } else {
             // Product selected
             const productIndex = selectedIndex - recentSearches.length;
@@ -612,8 +615,7 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
 
     saveRecentSearch(product.name);
     setShowResults(false);
-    clearSearch();
-    // Navigate to database with product search
+    // Navigate to database with product search - don't clear until after navigation
     setLocation(`/product-database?search=${encodeURIComponent(product.name)}`);
   };
 
@@ -751,8 +753,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       if (suggestion) {
                         setSearchQuery(suggestion);
                         saveRecentSearch(suggestion);
+                        setShowResults(false);
                         setLocation(`/product-database?search=${encodeURIComponent(suggestion)}`);
-                        clearSearch();
                       }
                     }}
                     data-testid="autofill-suggestion-click"
@@ -774,8 +776,8 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                       onClick={() => {
                         setSearchQuery(search);
                         saveRecentSearch(search);
+                        setShowResults(false);
                         setLocation(`/product-database?search=${encodeURIComponent(search)}`);
-                        clearSearch();
                       }}
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
                         selectedIndex === index ? 'bg-accent' : 'hover:bg-accent/50'
