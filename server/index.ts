@@ -46,17 +46,18 @@ app.use(cors({
     if (!origin) return callback(null, true);
     
     // Strict CORS - only specific domains allowed
-    const allowedOrigins = [
+    const allowedOrigins: (string | RegExp)[] = [
       'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.app',
       'https://059083a2-a2a5-4ec8-a102-d74ccfb64f20.replit.dev', 
       'https://pawsitivecheck.com'
-      // Removed regex patterns for stricter CSRF protection
     ];
     
-    // Development mode - allow localhost
+    // Development mode - allow localhost and Replit dev domains
     if (process.env.NODE_ENV === 'development') {
       allowedOrigins.push(/^http:\/\/localhost:\d+$/);
       allowedOrigins.push(/^http:\/\/127\.0\.0\.1:\d+$/);
+      allowedOrigins.push(/^https:\/\/059083a2-a2a5-4ec8-a102-d74ccfb64f20.*\.replit\.dev$/);
+      allowedOrigins.push(/^https:\/\/.*\.picard\.replit\.dev$/);
     }
     
     const isAllowed = allowedOrigins.some(pattern => {
