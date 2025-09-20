@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,6 +7,7 @@ import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
 import HelpTooltip from "@/components/help-tooltip";
 import AnimalTags from "@/components/animal-tags";
+import { ReviewFormModal } from "@/components/review-form-modal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +19,7 @@ import { useSEO, generateProductStructuredData, generateWebPageStructuredData } 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['/api/products', id],
@@ -1319,13 +1322,26 @@ export default function ProductDetail() {
               {/* Reviews Section */}
               <Card className="cosmic-card" data-testid="card-reviews">
                 <CardHeader>
-                  <CardTitle className="text-starlight-400 flex items-center gap-2">
-                    <Star className="h-5 w-5" />
-                    Community Reviews
-                    {reviews && reviews.length > 0 && (
-                      <Badge variant="secondary" className="bg-starlight-500/20 text-starlight-300">
-                        {reviews.length}
-                      </Badge>
+                  <CardTitle className="text-starlight-400 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Star className="h-5 w-5" />
+                      Community Reviews
+                      {reviews && reviews.length > 0 && (
+                        <Badge variant="secondary" className="bg-starlight-500/20 text-starlight-300">
+                          {reviews.length}
+                        </Badge>
+                      )}
+                    </div>
+                    {user && reviews && reviews.length > 0 && (
+                      <Button 
+                        size="sm"
+                        variant="outline" 
+                        className="border-starlight-500/30 text-starlight-400"
+                        onClick={() => setIsReviewModalOpen(true)}
+                        data-testid="button-write-review-header"
+                      >
+                        Write a Review
+                      </Button>
                     )}
                   </CardTitle>
                 </CardHeader>
@@ -1366,11 +1382,22 @@ export default function ProductDetail() {
                     <div className="text-center py-8">
                       <Heart className="h-12 w-12 text-cosmic-600 mx-auto mb-4" />
                       <p className="text-cosmic-400 mb-4">No reviews yet. Be the first to share your experience!</p>
-                      <Link href="/community">
-                        <Button variant="outline" className="border-starlight-500/30 text-starlight-400">
+                      {user ? (
+                        <Button 
+                          variant="outline" 
+                          className="border-starlight-500/30 text-starlight-400"
+                          onClick={() => setIsReviewModalOpen(true)}
+                          data-testid="button-write-review-empty"
+                        >
                           Write a Review
                         </Button>
-                      </Link>
+                      ) : (
+                        <Link href="/login">
+                          <Button variant="outline" className="border-starlight-500/30 text-starlight-400">
+                            Login to Write a Review
+                          </Button>
+                        </Link>
+                      )}
                     </div>
                   )}
                 </CardContent>
@@ -1529,6 +1556,16 @@ export default function ProductDetail() {
       </div>
       
       <Footer />
+      
+      {/* Review Form Modal */}
+      {user && (
+        <ReviewFormModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          productId={id}
+          productName={product ? `${product.name} - ${product.brand}` : undefined}
+        />
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdBanner from "@/components/ad-banner";
+import { ReviewFormModal } from "@/components/review-form-modal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ export default function CommunityReviewsInfo() {
   const { user } = useAuth();
   const [reviewFilter, setReviewFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const { data: userReviews } = useQuery<any[]>({
     queryKey: ['/api/user/reviews'],
@@ -765,7 +767,11 @@ export default function CommunityReviewsInfo() {
                     <p className="text-muted-foreground mb-6" data-testid="text-cta-description">
                       Help other pet owners by sharing your product experiences
                     </p>
-                    <Button className="bg-purple-600 hover:bg-purple-700" data-testid="button-share-review">
+                    <Button 
+                      className="bg-purple-600 hover:bg-purple-700" 
+                      data-testid="button-share-review"
+                      onClick={() => setIsReviewModalOpen(true)}
+                    >
                       <MessageCircle className="mr-2 h-4 w-4" />
                       Write a Review
                     </Button>
@@ -812,6 +818,14 @@ export default function CommunityReviewsInfo() {
       </div>
 
       <Footer />
+      
+      {/* Review Form Modal */}
+      {user && (
+        <ReviewFormModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
