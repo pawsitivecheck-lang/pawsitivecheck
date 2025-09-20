@@ -1,68 +1,256 @@
-# DISABLED - This workflow was redundant and causing multiple builds
-# name: Build Android APK
+name: Build Android APKs (Debug & Release)
 
-# on:
-#   push:
-#     branches: [ main, master ]
-#   pull_request:
-#     branches: [ main, master ]
-#   workflow_dispatch: # Allow manual triggering
+# Concurrency control to cancel old builds when new ones start
+concurrency:
+  group: android-build-${{ github.ref }}
+  cancel-in-progress: true
 
-# jobs:
-#   build-android:
-#     runs-on: ubuntu-latest
-#     
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v4
-#       
-#     - name: Setup Node.js
-#       uses: actions/setup-node@v4
-#       with:
-#         node-version: '20'
-#         cache: 'npm'
-#         
-#     - name: Setup Java JDK
-#       uses: actions/setup-java@v4
-#       with:
-#         distribution: 'temurin'
-#         java-version: '21'
-#         
-#     - name: Setup Android SDK
-#       uses: android-actions/setup-android@v3
-#       with:
-#         api-level: 35
-#         build-tools: 35.0.0
-#       
-#     - name: Install dependencies
-#       run: npm ci
-#       
-#     - name: Build web application
-#       run: npm run build
-#       
-#     - name: Setup Capacitor
-#       run: |
-#         npx cap sync android
-#         
-#     - name: Build Android APK
-#       working-directory: ./android
-#       run: |
-#         chmod +x ./gradlew
-#         ./gradlew assembleDebug
-#         
-#     - name: Upload APK artifact
-#       uses: actions/upload-artifact@v4
-#       with:
-#         name: android-apk
-#         path: android/app/build/outputs/apk/debug/app-debug.apk
-#         retention-days: 30
-#         
-#     - name: Upload Build Info
-#       uses: actions/upload-artifact@v4
-#       with:
-#         name: build-info
-#         path: |
-#           android/app/build/outputs/logs/
-#           package.json
-#         retention-days: 7
-#         if-no-files-found: ignore
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*' # Also trigger on version tags
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      build_type:
+        description: 'Build type to generate'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - debug
+          - release
+
+jobs:
+  build-android:
+    name: Build Android APKs
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checkout repository with full history for tags
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    # Cache Node modules for faster builds
+    - name: 📦 Cache Node Modules
+      uses: actions/cache@v4
+      id: npm-cache
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+          
+    # Setup Node.js 18 for Capacitor
+    - name: 🟢 Setup Node.js 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    # Install npm dependencies
+    - name: 📦 Install NPM Dependencies
+      run: |
+        echo "Installing npm dependencies..."
+        npm ci --prefer-offline --no-audit
+        
+    # Build the web application
+    - name: 🏗️ Build Web Application
+      run: |
+        echo "Building web application..."
+        npm run build
+        
+    # Setup Java 17 environment
+    - name: ☕ Setup Java JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+        
+    # Setup Android SDK with necessary components
+    - name: 📱 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        cmdline-tools-version: 11076708
+        accept-android-sdk-licenses: true
+        log-accepted-android-sdk-licenses: false
+        
+    # Cache Gradle wrapper for faster builds
+    - name: 📦 Cache Gradle Wrapper
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/wrapper
+          ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    # Sync Capacitor Android project
+    - name: 🔄 Sync Capacitor Android
+      run: |
+        echo "Syncing Capacitor Android project..."
+        npx cap sync android
+        
+    # Grant execute permissions to gradlew
+    - name: 🔧 Setup Gradle Permissions
+      run: |
+        echo "Setting up Gradle permissions..."
+        chmod +x android/gradlew
+        
+    # Setup keystore for release builds
+    - name: 🔐 Setup Keystore for Release Build
+      working-directory: ./android/app
+      run: |
+        echo "Setting up keystore for release builds..."
+        # The keystore file (pawsitivecheck-release.jks) is already in the repository
+        # Verify it exists
+        if [ -f "pawsitivecheck-release.jks" ]; then
+          echo "✅ Keystore file found: pawsitivecheck-release.jks"
+          ls -la pawsitivecheck-release.jks
+        else
+          echo "❌ Keystore file not found!"
+          exit 1
+        fi
+        
+    # Clean previous builds
+    - name: 🧹 Clean Previous Builds
+      working-directory: ./android
+      run: |
+        echo "Cleaning previous builds..."
+        ./gradlew clean --no-daemon
+        
+    # Build Debug APK
+    - name: 🔨 Build Debug APK
+      if: github.event.inputs.build_type != 'release'
+      working-directory: ./android
+      run: |
+        echo "Building Debug APK..."
+        ./gradlew assembleDebug --no-daemon --stacktrace
+        echo "✅ Debug APK built successfully"
+        echo "Debug APK location:"
+        ls -la app/build/outputs/apk/debug/
+        
+    # Build Release APK (signed)
+    - name: 🚀 Build Release APK (Signed)
+      if: github.event.inputs.build_type != 'debug'
+      working-directory: ./android
+      run: |
+        echo "Building Release APK with signing..."
+        ./gradlew assembleRelease --no-daemon --stacktrace
+        echo "✅ Release APK built successfully"
+        echo "Release APK location:"
+        ls -la app/build/outputs/apk/release/
+        
+    # Rename APKs with version and build number
+    - name: 📝 Rename APKs with Version Info
+      run: |
+        TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+        BUILD_NUM=${{ github.run_number }}
+        
+        # Rename debug APK if it exists
+        if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+          cp android/app/build/outputs/apk/debug/app-debug.apk android/app/build/outputs/apk/debug/PawsitiveCheck-debug-${BUILD_NUM}-${TIMESTAMP}.apk
+          echo "Debug APK renamed to: PawsitiveCheck-debug-${BUILD_NUM}-${TIMESTAMP}.apk"
+        fi
+        
+        # Rename release APK if it exists
+        if [ -f "android/app/build/outputs/apk/release/app-release.apk" ]; then
+          cp android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/PawsitiveCheck-release-${BUILD_NUM}-${TIMESTAMP}.apk
+          echo "Release APK renamed to: PawsitiveCheck-release-${BUILD_NUM}-${TIMESTAMP}.apk"
+        fi
+        
+    # Upload Debug APK as artifact
+    - name: 📤 Upload Debug APK Artifact
+      if: github.event.inputs.build_type != 'release'
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk-build-${{ github.run_number }}
+        path: android/app/build/outputs/apk/debug/*.apk
+        retention-days: 30
+        if-no-files-found: warn
+        
+    # Upload Release APK as artifact
+    - name: 📤 Upload Release APK Artifact
+      if: github.event.inputs.build_type != 'debug'
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk-build-${{ github.run_number }}
+        path: android/app/build/outputs/apk/release/*.apk
+        retention-days: 90
+        if-no-files-found: warn
+        
+    # Upload build logs for debugging
+    - name: 📋 Upload Build Logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs-${{ github.run_number }}
+        path: |
+          android/app/build/outputs/logs/
+          android/build/outputs/logs/
+        retention-days: 7
+        if-no-files-found: ignore
+        
+    # Create GitHub Release for tags
+    - name: 🎉 Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        files: |
+          android/app/build/outputs/apk/debug/PawsitiveCheck-debug-*.apk
+          android/app/build/outputs/apk/release/PawsitiveCheck-release-*.apk
+        body: |
+          ## 📱 PawsitiveCheck Android Release ${{ github.ref_name }}
+          
+          ### 📦 APK Downloads
+          - **Release APK** (Signed, Production-ready): For distribution via Play Store or direct installation
+          - **Debug APK**: For testing and development purposes
+          
+          ### 🔐 Build Information
+          - Build Number: ${{ github.run_number }}
+          - Commit: ${{ github.sha }}
+          - Built with: Java 17, Android SDK 35
+          
+          ### ✅ Features
+          - Fully signed with production keystore
+          - Optimized with ProGuard/R8
+          - Multi-architecture support (armeabi-v7a, arm64-v8a, x86, x86_64)
+          
+          ---
+          **Note:** The release APK is signed and ready for production use.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    # Print build summary
+    - name: 📊 Build Summary
+      if: always()
+      run: |
+        echo "====================================="
+        echo "         BUILD SUMMARY"
+        echo "====================================="
+        echo "Build Number: ${{ github.run_number }}"
+        echo "Commit SHA: ${{ github.sha }}"
+        echo "Branch/Tag: ${{ github.ref }}"
+        echo "Triggered by: ${{ github.event_name }}"
+        echo ""
+        echo "APKs Built:"
+        echo "-----------"
+        if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+          echo "✅ Debug APK: $(du -h android/app/build/outputs/apk/debug/app-debug.apk | cut -f1)"
+        fi
+        if [ -f "android/app/build/outputs/apk/release/app-release.apk" ]; then
+          echo "✅ Release APK: $(du -h android/app/build/outputs/apk/release/app-release.apk | cut -f1)"
+        fi
+        echo "====================================="
