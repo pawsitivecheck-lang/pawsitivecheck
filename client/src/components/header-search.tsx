@@ -651,18 +651,24 @@ export default function HeaderSearch({ isMobile = false }: HeaderSearchProps) {
                   setShowResults(true);
                 }
               }}
-              onBlur={() => {
+              onBlur={(e) => {
+                // Store reference to search container before timeout (e.currentTarget becomes null)
+                const searchContainer = e.currentTarget.closest('.relative');
+                
                 // Delay hiding results to allow clicks on dropdown items
                 setTimeout(() => {
-                  // Check if the click target is within the dropdown
                   const dropdown = document.querySelector('[data-search-dropdown]');
                   const activeElement = document.activeElement;
                   
-                  // Don't hide if clicking within dropdown or if the input is still focused
-                  if (!dropdown?.contains(activeElement) && activeElement !== inputRef.current) {
+                  // Check if click/focus is still within the search container or dropdown
+                  const isWithinSearch = searchContainer?.contains(activeElement) || 
+                                        dropdown?.contains(activeElement);
+                  
+                  // Only hide if focus has truly left the search area
+                  if (!isWithinSearch) {
                     setShowResults(false);
                   }
-                }, 250);
+                }, 200);
               }}
               className="w-full bg-background border border-border rounded-full px-10 pr-24 text-foreground placeholder-muted-foreground focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-10"
               data-testid="input-header-search"
