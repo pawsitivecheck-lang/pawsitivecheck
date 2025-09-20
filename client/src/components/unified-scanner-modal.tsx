@@ -752,7 +752,7 @@ export function UnifiedScannerModal({
             <Camera className="h-5 w-5 text-blue-600" />
             {getModeTitle()}
           </DialogTitle>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {getModeDescription()}
           </p>
         </DialogHeader>
@@ -764,11 +764,11 @@ export function UnifiedScannerModal({
                 <AlertCircle className="h-8 w-8 text-red-600" />
               </div>
               <div className="space-y-2">
-                <p className="text-gray-700 font-medium">Camera Access Needed</p>
-                <p className="text-sm text-gray-600" data-testid="text-camera-error">
+                <p className="text-foreground font-medium">Camera Access Needed</p>
+                <p className="text-sm text-muted-foreground" data-testid="text-camera-error">
                   {cameraError}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Please allow camera access to scan product barcodes
                 </p>
               </div>
@@ -815,8 +815,8 @@ export function UnifiedScannerModal({
                 <Camera className="h-8 w-8 text-blue-600" />
               </div>
               <div className="space-y-2">
-                <p className="text-gray-700 font-medium">Ready to Scan</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-foreground font-medium">Ready to Scan</p>
+                <p className="text-sm text-muted-foreground">
                   Use your camera or upload a product image (with or without barcode)
                 </p>
               </div>
@@ -868,7 +868,7 @@ export function UnifiedScannerModal({
             <div className="space-y-4">
               <div className="text-center">
                 <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-muted-foreground mb-2">
                   🔮 Point your camera at a product barcode
                 </p>
               </div>
@@ -928,7 +928,7 @@ export function UnifiedScannerModal({
           {scanProductMutation.isPending && (
             <div className="text-center py-4">
               <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
-              <p className="text-gray-600">Analyzing barcode...</p>
+              <p className="text-muted-foreground">Analyzing barcode...</p>
             </div>
           )}
         </div>

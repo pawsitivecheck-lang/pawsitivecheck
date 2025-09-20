@@ -244,8 +244,8 @@ function LandingContent() {
                         <UserCheck className="mr-3 h-5 w-5 text-blue-600" />
                       )}
                       <div>
-                        <div className="font-medium text-gray-200">{user?.firstName || 'User'}</div>
-                        <div className="text-xs text-gray-400">{user?.email}</div>
+                        <div className="font-medium text-muted-foreground">{user?.firstName || 'User'}</div>
+                        <div className="text-xs text-muted-foreground">{user?.email}</div>
                       </div>
                     </Link>
                     
@@ -269,7 +269,7 @@ function LandingContent() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-sign-in"
                           >
@@ -288,7 +288,7 @@ function LandingContent() {
                     ) : (
                       <a 
                         href="/api/login"
-                        className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-sign-in"
                       >
@@ -300,7 +300,7 @@ function LandingContent() {
                       <Dialog open={showMobileAuth} onOpenChange={setShowMobileAuth}>
                         <DialogTrigger asChild>
                           <button
-                            className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                            className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                             onClick={() => setIsMobileMenuOpen(false)}
                             data-testid="mobile-nav-register"
                           >
@@ -319,7 +319,7 @@ function LandingContent() {
                     ) : (
                       <a 
                         href="/api/register"
-                        className="flex items-center w-full py-3 px-3 text-gray-300 hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
+                        className="flex items-center w-full py-3 px-3 text-muted-foreground hover:text-blue-400 hover:bg-blue-900/20 transition-colors font-medium rounded-lg min-h-[44px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="mobile-nav-register"
                       >
@@ -486,7 +486,7 @@ function LandingContent() {
                   <CardContent className="p-4 sm:p-6">
                     <div className="h-40 sm:h-48 bg-muted rounded-lg mb-4 flex items-center justify-center">
                       <div className="text-center">
-                        <Search className="h-8 w-8 sm:h-12 sm:w-12 text-gray-500 mx-auto mb-2" />
+                        <Search className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground mx-auto mb-2" />
                         <p className="text-muted-foreground text-sm" data-testid="text-no-products">No products analyzed yet...</p>
                       </div>
                     </div>
@@ -521,7 +521,7 @@ function LandingContent() {
                 ))
               ) : (
                 <div className="col-span-full text-center py-6 sm:py-8">
-                  <Shield className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                   <p className="text-muted-foreground text-sm sm:text-base" data-testid="text-no-recalls">No active safety alerts at this time</p>
                   <p className="text-muted-foreground text-xs sm:text-sm mt-1">We'll notify you immediately if any issues arise</p>
                 </div>
@@ -608,7 +608,7 @@ function LandingContent() {
             ) : (
               // Empty state
               <div className="col-span-full text-center py-8">
-                <Users className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
                 <p className="text-muted-foreground text-sm sm:text-base">Community reviews will appear here</p>
                 <p className="text-muted-foreground text-xs sm:text-sm mt-1">Join our community to share your safety experiences</p>
               </div>

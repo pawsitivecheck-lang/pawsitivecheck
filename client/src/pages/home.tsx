@@ -150,7 +150,7 @@ function Home() {
                     <Shield className="text-lg text-white" />
                   </div>
                   <p className="text-green-700 dark:text-green-300 text-sm font-medium">Real-time safety monitoring active</p>
-                  <p className="text-gray-500 text-xs mt-1">Protection System</p>
+                  <p className="text-muted-foreground text-xs mt-1">Protection System</p>
                 </div>
               </div>
             </div>
@@ -249,13 +249,13 @@ function Home() {
                 {[...Array(3)].map((_, i) => (
                   <Card key={i} className="cosmic-card animate-pulse" data-testid={`skeleton-dashboard-${i}`}>
                     <CardHeader>
-                      <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-6 bg-accent rounded mb-2"></div>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        <div className="h-4 bg-gray-200 rounded"></div>
-                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-4 bg-accent rounded"></div>
+                        <div className="h-4 bg-accent rounded w-3/4"></div>
+                        <div className="h-4 bg-accent rounded w-1/2"></div>
                       </div>
                     </CardContent>
                   </Card>

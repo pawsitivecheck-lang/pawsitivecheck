@@ -66,7 +66,7 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
           {getSeverityIcon(recall.severity)}
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <h3 className="text-lg font-semibold text-gray-900" data-testid="text-recall-reason">
+              <h3 className="text-lg font-semibold text-foreground" data-testid="text-recall-reason">
                 {recall.reason}
               </h3>
               <Badge className={getSeverityColor(recall.severity)} data-testid="badge-recall-severity">
@@ -74,7 +74,7 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
               </Badge>
             </div>
             
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <span data-testid="text-recall-date">
@@ -82,12 +82,12 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
                 </span>
               </div>
               {recall.recallNumber && (
-                <span className="text-gray-500" data-testid="text-recall-number">
+                <span className="text-muted-foreground" data-testid="text-recall-number">
                   #{recall.recallNumber}
                 </span>
               )}
               {recall.source && (
-                <span className="text-gray-500" data-testid="text-recall-source">
+                <span className="text-muted-foreground" data-testid="text-recall-source">
                   Source: {recall.source}
                 </span>
               )}
@@ -95,7 +95,7 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
 
             {recall.affectedBatches && recall.affectedBatches.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-gray-700 font-medium mb-2 flex items-center gap-2">
+                <h4 className="text-muted-foreground font-medium mb-2 flex items-center gap-2">
                   <Package className="h-4 w-4" />
                   Affected Batches:
                 </h4>
@@ -104,7 +104,7 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
                     <Badge 
                       key={index}
                       variant="outline"
-                      className="bg-gray-100 text-gray-700 border-gray-300"
+                      className="bg-accent text-muted-foreground border-border"
                       data-testid={`badge-batch-${index}`}
                     >
                       {batch}
@@ -116,7 +116,7 @@ export default function RecallAlert({ recall }: RecallAlertProps) {
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h4 className="text-blue-700 font-medium mb-2">Safety Guidance:</h4>
-              <p className="text-gray-700 text-sm" data-testid="text-safety-guidance">
+              <p className="text-muted-foreground text-sm" data-testid="text-safety-guidance">
                 {getSafetyGuidance(recall.severity)}
               </p>
             </div>

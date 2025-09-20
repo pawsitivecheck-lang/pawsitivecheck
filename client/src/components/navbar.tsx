@@ -308,7 +308,7 @@ export default function Navbar() {
                         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
                           isActivePage('/profile') 
                             ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
-                            : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                            : 'text-muted-foreground hover:text-blue-600 hover:bg-accent dark:hover:text-blue-400 dark:hover:bg-accent'
                         }`}
                         onClick={() => setIsMobileMenuOpen(false)}
                         data-testid="nav-mobile-profile"
@@ -324,7 +324,7 @@ export default function Navbar() {
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mx-0 ${
                             isActivePage('/admin') 
                               ? 'text-blue-600 bg-blue-50 dark:bg-blue-950' 
-                              : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+                              : 'text-muted-foreground hover:text-blue-600 hover:bg-accent dark:hover:text-blue-400 dark:hover:bg-accent'
                           }`}
                           onClick={() => setIsMobileMenuOpen(false)}
                           data-testid="nav-mobile-admin"
@@ -350,7 +350,7 @@ export default function Navbar() {
                 ) : (
                   <>
                     <div 
-                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-600 hover:text-blue-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800 cursor-pointer mx-0"
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-muted-foreground hover:text-blue-600 hover:bg-accent dark:hover:text-blue-400 dark:hover:bg-accent cursor-pointer mx-0"
                       onClick={() => {
                         setIsMobileMenuOpen(false);
                         window.location.href = '/api/login';
