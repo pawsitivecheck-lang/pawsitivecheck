@@ -80,14 +80,15 @@ export function ReviewFormModal({
 
   const submitReviewMutation = useMutation({
     mutationFn: async (data: ReviewFormData) => {
-      return apiRequest(`/api/products/${data.productId}/reviews`, {
-        method: 'POST',
-        body: JSON.stringify({
+      return apiRequest(
+        'POST',
+        `/api/products/${data.productId}/reviews`,
+        {
           rating: data.rating,
           title: data.title || "",
           content: data.content,
-        }),
-      });
+        }
+      );
     },
     onSuccess: (_, variables) => {
       toast({
