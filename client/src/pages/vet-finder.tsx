@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import { requestLocationPermission } from "@/utils/location-utils";
 import { 
   MapPin, 
   Phone, 
@@ -68,35 +69,30 @@ export default function VetFinder() {
   const [visibleResults, setVisibleResults] = useState(6); // Show 6 results initially
   const [isGeocodingLocation, setIsGeocodingLocation] = useState(false);
 
-  // Get user's current location
-  const getCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      setLocationError("Geolocation is not supported by this browser");
-      return;
+  // Get user's current location with proper permission handling
+  const getCurrentLocation = async () => {
+    // Use the new permission utility that handles Android permissions properly
+    const result = await requestLocationPermission();
+    
+    if (result.granted && result.location) {
+      setUserLocation({
+        lat: result.location.lat,
+        lng: result.location.lng
+      });
+      setManualLocation(null); // Clear manual location when GPS is used
+      setLocationError("");
+      toast({
+        title: "Location Found",
+        description: "Found your location for veterinarian search",
+      });
+    } else {
+      setLocationError(result.message || "Unable to retrieve your location");
+      toast({
+        title: "Location Error",
+        description: result.message || "Please enter your location manually",
+        variant: "destructive",
+      });
     }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        });
-        setManualLocation(null); // Clear manual location when GPS is used
-        setLocationError("");
-        toast({
-          title: "Location Found",
-          description: "Found your location for veterinarian search",
-        });
-      },
-      (error) => {
-        setLocationError("Unable to retrieve your location");
-        toast({
-          title: "Location Error",
-          description: "Please enter your location manually",
-          variant: "destructive",
-        });
-      }
-    );
   };
 
   // Geocode manually entered location using server-side endpoint
