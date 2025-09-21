@@ -1,0 +1,1133 @@
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck> cd android
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> .\gradlew.bat assembleRelease
+Configuration on demand is an incubating feature.
+
+> Configure project :app
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Configure project :capacitor-cordova-android-plugins
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Task :capacitor-android:compileReleaseJavaWithJavac
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :app:processReleaseResources FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processReleaseResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+   > Unable to make AAPT link command
+     ERROR: AAPT:
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2m 2s
+183 actionable tasks: 147 executed, 13 from cache, 23 up-to-date
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> # Run with detailed output to see what's failing
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> .\gradlew.bat assembleRelease --info | Select-String -Pattern "ERROR" -Context 5,5
+
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+MergeInstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+MergeInstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+MergeInstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+MergeInstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming txw2-2.3.2.jar (org.glassfish.jaxb:txw2:2.3.2) with
+InstrumentationAnalysisTransform
+  Transforming istack-commons-runtime-3.0.8.jar
+(com.sun.istack:istack-commons-runtime:3.0.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+InstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming j2objc-annotations-2.8.jar
+(com.google.j2objc:j2objc-annotations:2.8) with
+InstrumentationAnalysisTransform
+  Transforming FastInfoset-1.2.16.jar
+(com.sun.xml.fastinfoset:FastInfoset:1.2.16) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+MergeInstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+MergeInstrumentationAnalysisTransform
+  Transforming jakarta.activation-api-1.2.1.jar
+(jakarta.activation:jakarta.activation-api:1.2.1) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+InstrumentationAnalysisTransform
+  Transforming auto-value-annotations-1.6.2.jar
+(com.google.auto.value:auto-value-annotations:1.6.2) with
+ExternalDependencyInstrumentingArtifactTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+MergeInstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+InstrumentationAnalysisTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+MergeInstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+InstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+MergeInstrumentationAnalysisTransform
+> Transforming error_prone_annotations-2.18.0.jar
+(com.google.errorprone:error_prone_annotations:2.18.0) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with InstrumentationAnalysisTransform
+  Transforming slf4j-api-1.7.30.jar (org.slf4j:slf4j-api:1.7.30) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jose4j-0.9.5.jar (org.bitbucket.b_c:jose4j:0.9.5) with
+ExternalDependencyInstrumentingArtifactTransform
+  Transforming jsr305-3.0.2.jar (com.google.code.findbugs:jsr305:3.0.2)
+with MergeInstrumentationAnalysisTransform
+  Transforming jdom2-2.0.6.jar (org.jdom:jdom2:2.0.6) with
+ExternalDependencyInstrumentingArtifactTransform
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\camera\android\libs', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\android\capacitor-cordova-android-plugins\src\main\libs', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\libs', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\haptics\android\libs', not found
+  All projects evaluated.
+> Tasks to be executed: [task ':app:preBuild', task
+':app:preReleaseBuild', task ':app:javaPreCompileRelease', task
+':capacitor-android:preBuild', task ':capacitor-android:preReleaseBuild',
+task ':capacitor-android:writeReleaseAarMetadata', task
+':capacitor-app:preBuild', task ':capacitor-app:preReleaseBuild', task
+':capacitor-app:writeReleaseAarMetadata', task
+':capacitor-browser:preBuild', task ':capacitor-browser:preReleaseBuild',
+task ':capacitor-browser:writeReleaseAarMetadata', task
+':capacitor-camera:preBuild', task ':capacitor-camera:preReleaseBuild',
+task ':capacitor-camera:writeReleaseAarMetadata', task
+':capacitor-cordova-android-plugins:preBuild', task
+':capacitor-cordova-android-plugins:preReleaseBuild', task
+':capacitor-cordova-android-plugins:writeReleaseAarMetadata', task
+':capacitor-geolocation:preBuild', task
+':capacitor-geolocation:preReleaseBuild', task
+':capacitor-geolocation:writeReleaseAarMetadata', task
+':capacitor-haptics:preBuild', task ':capacitor-haptics:preReleaseBuild',
+task ':capacitor-haptics:writeReleaseAarMetadata', task
+':app:checkReleaseAarMetadata', task ':app:generateReleaseResValues', task
+':capacitor-android:generateReleaseResValues', task
+':capacitor-android:generateReleaseResources', task
+':capacitor-android:packageReleaseResources', task
+':capacitor-app:generateReleaseResValues', task
+':capacitor-app:generateReleaseResources', task
+':capacitor-app:packageReleaseResources', task
+':capacitor-browser:generateReleaseResValues', task
+':capacitor-browser:generateReleaseResources', task
+':capacitor-browser:packageReleaseResources', task
+':capacitor-camera:generateReleaseResValues', task
+':capacitor-camera:generateReleaseResources', task
+':capacitor-camera:packageReleaseResources', task
+':capacitor-cordova-android-plugins:generateReleaseResValues', task
+':capacitor-cordova-android-plugins:generateReleaseResources', task
+':capacitor-cordova-android-plugins:packageReleaseResources', task
+':capacitor-geolocation:generateReleaseResValues', task
+':capacitor-geolocation:generateReleaseResources', task
+':capacitor-geolocation:packageReleaseResources', task
+':capacitor-haptics:generateReleaseResValues', task
+':capacitor-haptics:generateReleaseResources', task
+':capacitor-haptics:packageReleaseResources', task
+':app:mapReleaseSourceSetPaths', task ':app:generateReleaseResources',
+task ':app:mergeReleaseResources', task ':app:packageReleaseResources',
+task ':app:parseReleaseLocalResources', task
+':app:createReleaseCompatibleScreenManifests', task
+':app:extractDeepLinksRelease', task
+':capacitor-android:extractDeepLinksRelease', task
+':capacitor-android:processReleaseManifest', task
+':capacitor-app:extractDeepLinksRelease', task
+':capacitor-app:processReleaseManifest', task
+':capacitor-browser:extractDeepLinksRelease', task
+':capacitor-browser:processReleaseManifest', task
+':capacitor-camera:extractDeepLinksRelease', task
+':capacitor-camera:processReleaseManifest', task
+':capacitor-cordova-android-plugins:extractDeepLinksRelease', task
+':capacitor-cordova-android-plugins:processReleaseManifest', task
+':capacitor-geolocation:extractDeepLinksRelease', task
+':capacitor-geolocation:processReleaseManifest', task
+':capacitor-haptics:extractDeepLinksRelease', task
+':capacitor-haptics:processReleaseManifest', task
+':app:processReleaseMainManifest', task ':app:processReleaseManifest',
+task ':app:processReleaseManifestForPackage', task
+':capacitor-android:parseReleaseLocalResources', task
+':capacitor-android:generateReleaseRFile', task
+':capacitor-app:parseReleaseLocalResources', task
+':capacitor-app:generateReleaseRFile', task
+':capacitor-browser:parseReleaseLocalResources', task
+':capacitor-browser:generateReleaseRFile', task
+':capacitor-camera:parseReleaseLocalResources', task
+':capacitor-camera:generateReleaseRFile', task
+':capacitor-cordova-android-plugins:parseReleaseLocalResources', task
+':capacitor-cordova-android-plugins:generateReleaseRFile', task
+':capacitor-geolocation:parseReleaseLocalResources', task
+':capacitor-geolocation:generateReleaseRFile', task
+':capacitor-haptics:parseReleaseLocalResources', task
+':capacitor-haptics:generateReleaseRFile', task
+':app:processReleaseResources', task
+':capacitor-android:javaPreCompileRelease', task
+':capacitor-android:compileReleaseJavaWithJavac', task
+':capacitor-android:bundleLibCompileToJarRelease', task
+':capacitor-app:javaPreCompileRelease', task
+':capacitor-app:compileReleaseJavaWithJavac', task
+':capacitor-app:bundleLibCompileToJarRelease', task
+':capacitor-browser:javaPreCompileRelease', task
+':capacitor-browser:compileReleaseJavaWithJavac', task
+':capacitor-browser:bundleLibCompileToJarRelease', task
+':capacitor-camera:javaPreCompileRelease', task
+':capacitor-camera:compileReleaseJavaWithJavac', task
+':capacitor-camera:bundleLibCompileToJarRelease', task
+':capacitor-cordova-android-plugins:javaPreCompileRelease', task
+':capacitor-cordova-android-plugins:compileReleaseJavaWithJavac', task
+':capacitor-cordova-android-plugins:bundleLibCompileToJarRelease', task
+':capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors', task
+':capacitor-geolocation:compileReleaseKotlin', task
+':capacitor-geolocation:javaPreCompileRelease', task
+':capacitor-geolocation:compileReleaseJavaWithJavac', task
+':capacitor-geolocation:bundleLibCompileToJarRelease', task
+':capacitor-haptics:javaPreCompileRelease', task
+':capacitor-haptics:compileReleaseJavaWithJavac', task
+':capacitor-haptics:bundleLibCompileToJarRelease', task
+':app:compileReleaseJavaWithJavac', task ':app:extractProguardFiles', task
+':capacitor-android:bundleLibRuntimeToJarRelease', task
+':capacitor-android:processReleaseJavaRes', task
+':capacitor-android:createFullJarRelease', task
+':capacitor-android:extractProguardFiles', task
+':capacitor-android:generateReleaseLintModel', task
+':capacitor-android:prepareLintJarForPublish', task
+':capacitor-app:bundleLibRuntimeToJarRelease', task
+':capacitor-app:processReleaseJavaRes', task
+':capacitor-app:createFullJarRelease', task
+':capacitor-app:extractProguardFiles', task
+':capacitor-app:generateReleaseLintModel', task
+':capacitor-app:prepareLintJarForPublish', task
+':capacitor-browser:bundleLibRuntimeToJarRelease', task
+':capacitor-browser:processReleaseJavaRes', task
+':capacitor-browser:createFullJarRelease', task
+':capacitor-browser:extractProguardFiles', task
+':capacitor-browser:generateReleaseLintModel', task
+':capacitor-browser:prepareLintJarForPublish', task
+':capacitor-camera:bundleLibRuntimeToJarRelease', task
+':capacitor-camera:processReleaseJavaRes', task
+':capacitor-camera:createFullJarRelease', task
+':capacitor-camera:extractProguardFiles', task
+':capacitor-camera:generateReleaseLintModel', task
+':capacitor-camera:prepareLintJarForPublish', task
+':capacitor-cordova-android-plugins:bundleLibRuntimeToJarRelease', task
+':capacitor-cordova-android-plugins:processReleaseJavaRes', task
+':capacitor-cordova-android-plugins:createFullJarRelease', task
+':capacitor-cordova-android-plugins:extractProguardFiles', task
+':capacitor-cordova-android-plugins:generateReleaseLintModel', task
+':capacitor-cordova-android-plugins:prepareLintJarForPublish', task
+':capacitor-geolocation:bundleLibRuntimeToJarRelease', task
+':capacitor-geolocation:processReleaseJavaRes', task
+':capacitor-geolocation:createFullJarRelease', task
+':capacitor-geolocation:extractProguardFiles', task
+':capacitor-geolocation:generateReleaseLintModel', task
+':capacitor-geolocation:prepareLintJarForPublish', task
+':capacitor-haptics:bundleLibRuntimeToJarRelease', task
+':capacitor-haptics:processReleaseJavaRes', task
+':capacitor-haptics:createFullJarRelease', task
+':capacitor-haptics:extractProguardFiles', task
+':capacitor-haptics:generateReleaseLintModel', task
+':capacitor-haptics:prepareLintJarForPublish', task
+':app:generateReleaseLintVitalReportModel', task
+':capacitor-app:mergeReleaseJniLibFolders', task
+':capacitor-app:mergeReleaseNativeLibs', task
+':capacitor-app:stripReleaseDebugSymbols', task
+':capacitor-app:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-app:extractDeepLinksForAarRelease', task
+':capacitor-app:extractReleaseAnnotations', task
+':capacitor-app:mergeReleaseGeneratedProguardFiles', task
+':capacitor-app:mergeReleaseConsumerProguardFiles', task
+':capacitor-app:mergeReleaseShaders', task
+':capacitor-app:compileReleaseShaders', task
+':capacitor-app:generateReleaseAssets', task
+':capacitor-app:packageReleaseAssets', task
+':capacitor-app:prepareReleaseArtProfile', task
+':capacitor-app:mergeReleaseJavaResource', task
+':capacitor-app:syncReleaseLibJars', task
+':capacitor-app:bundleReleaseLocalLintAar', task
+':capacitor-browser:mergeReleaseJniLibFolders', task
+':capacitor-browser:mergeReleaseNativeLibs', task
+':capacitor-browser:stripReleaseDebugSymbols', task
+':capacitor-browser:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-browser:extractDeepLinksForAarRelease', task
+':capacitor-browser:extractReleaseAnnotations', task
+':capacitor-browser:mergeReleaseGeneratedProguardFiles', task
+':capacitor-browser:mergeReleaseConsumerProguardFiles', task
+':capacitor-browser:mergeReleaseShaders', task
+':capacitor-browser:compileReleaseShaders', task
+':capacitor-browser:generateReleaseAssets', task
+':capacitor-browser:packageReleaseAssets', task
+':capacitor-browser:prepareReleaseArtProfile', task
+':capacitor-browser:mergeReleaseJavaResource', task
+':capacitor-browser:syncReleaseLibJars', task
+':capacitor-browser:bundleReleaseLocalLintAar', task
+':capacitor-camera:mergeReleaseJniLibFolders', task
+':capacitor-camera:mergeReleaseNativeLibs', task
+':capacitor-camera:stripReleaseDebugSymbols', task
+':capacitor-camera:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-camera:extractDeepLinksForAarRelease', task
+':capacitor-camera:extractReleaseAnnotations', task
+':capacitor-camera:mergeReleaseGeneratedProguardFiles', task
+':capacitor-camera:mergeReleaseConsumerProguardFiles', task
+':capacitor-camera:mergeReleaseShaders', task
+':capacitor-camera:compileReleaseShaders', task
+':capacitor-camera:generateReleaseAssets', task
+':capacitor-camera:packageReleaseAssets', task
+':capacitor-camera:prepareReleaseArtProfile', task
+':capacitor-camera:mergeReleaseJavaResource', task
+':capacitor-camera:syncReleaseLibJars', task
+':capacitor-camera:bundleReleaseLocalLintAar', task
+':capacitor-geolocation:mergeReleaseJniLibFolders', task
+':capacitor-geolocation:mergeReleaseNativeLibs', task
+':capacitor-geolocation:stripReleaseDebugSymbols', task
+':capacitor-geolocation:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-geolocation:extractDeepLinksForAarRelease', task
+':capacitor-geolocation:extractReleaseAnnotations', task
+':capacitor-geolocation:mergeReleaseGeneratedProguardFiles', task
+':capacitor-geolocation:mergeReleaseConsumerProguardFiles', task
+':capacitor-geolocation:mergeReleaseShaders', task
+':capacitor-geolocation:compileReleaseShaders', task
+':capacitor-geolocation:generateReleaseAssets', task
+':capacitor-geolocation:packageReleaseAssets', task
+':capacitor-geolocation:prepareReleaseArtProfile', task
+':capacitor-geolocation:mergeReleaseJavaResource', task
+':capacitor-geolocation:syncReleaseLibJars', task
+':capacitor-geolocation:bundleReleaseLocalLintAar', task
+':capacitor-haptics:mergeReleaseJniLibFolders', task
+':capacitor-haptics:mergeReleaseNativeLibs', task
+':capacitor-haptics:stripReleaseDebugSymbols', task
+':capacitor-haptics:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-haptics:extractDeepLinksForAarRelease', task
+':capacitor-haptics:extractReleaseAnnotations', task
+':capacitor-haptics:mergeReleaseGeneratedProguardFiles', task
+':capacitor-haptics:mergeReleaseConsumerProguardFiles', task
+':capacitor-haptics:mergeReleaseShaders', task
+':capacitor-haptics:compileReleaseShaders', task
+':capacitor-haptics:generateReleaseAssets', task
+':capacitor-haptics:packageReleaseAssets', task
+':capacitor-haptics:prepareReleaseArtProfile', task
+':capacitor-haptics:mergeReleaseJavaResource', task
+':capacitor-haptics:syncReleaseLibJars', task
+':capacitor-haptics:bundleReleaseLocalLintAar', task
+':capacitor-android:mergeReleaseJniLibFolders', task
+':capacitor-android:mergeReleaseNativeLibs', task
+':capacitor-android:stripReleaseDebugSymbols', task
+':capacitor-android:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-android:extractDeepLinksForAarRelease', task
+':capacitor-android:extractReleaseAnnotations', task
+':capacitor-android:mergeReleaseGeneratedProguardFiles', task
+':capacitor-android:mergeReleaseConsumerProguardFiles', task
+':capacitor-android:mergeReleaseShaders', task
+':capacitor-android:compileReleaseShaders', task
+':capacitor-android:generateReleaseAssets', task
+':capacitor-android:packageReleaseAssets', task
+':capacitor-android:prepareReleaseArtProfile', task
+':capacitor-android:mergeReleaseJavaResource', task
+':capacitor-android:syncReleaseLibJars', task
+':capacitor-android:bundleReleaseLocalLintAar', task
+':capacitor-cordova-android-plugins:mergeReleaseJniLibFolders', task
+':capacitor-cordova-android-plugins:mergeReleaseNativeLibs', task
+':capacitor-cordova-android-plugins:stripReleaseDebugSymbols', task ':capac
+itor-cordova-android-plugins:copyReleaseJniLibsProjectAndLocalJars', task
+':capacitor-cordova-android-plugins:extractDeepLinksForAarRelease', task
+':capacitor-cordova-android-plugins:extractReleaseAnnotations', task
+':capacitor-cordova-android-plugins:mergeReleaseGeneratedProguardFiles',
+task
+':capacitor-cordova-android-plugins:mergeReleaseConsumerProguardFiles',
+task ':capacitor-cordova-android-plugins:mergeReleaseShaders', task
+':capacitor-cordova-android-plugins:compileReleaseShaders', task
+':capacitor-cordova-android-plugins:generateReleaseAssets', task
+':capacitor-cordova-android-plugins:packageReleaseAssets', task
+':capacitor-cordova-android-plugins:prepareReleaseArtProfile', task
+':capacitor-cordova-android-plugins:mergeReleaseJavaResource', task
+':capacitor-cordova-android-plugins:syncReleaseLibJars', task
+':capacitor-cordova-android-plugins:bundleReleaseLocalLintAar', task
+':capacitor-android:lintVitalAnalyzeRelease', task
+':capacitor-android:writeReleaseLintModelMetadata', task
+':capacitor-app:lintVitalAnalyzeRelease', task
+':capacitor-app:writeReleaseLintModelMetadata', task
+':capacitor-browser:lintVitalAnalyzeRelease', task
+':capacitor-browser:writeReleaseLintModelMetadata', task
+':capacitor-camera:lintVitalAnalyzeRelease', task
+':capacitor-camera:writeReleaseLintModelMetadata', task
+':capacitor-cordova-android-plugins:lintVitalAnalyzeRelease', task
+':capacitor-cordova-android-plugins:writeReleaseLintModelMetadata', task
+':capacitor-geolocation:lintVitalAnalyzeRelease', task
+':capacitor-geolocation:writeReleaseLintModelMetadata', task
+':capacitor-haptics:lintVitalAnalyzeRelease', task
+':capacitor-haptics:writeReleaseLintModelMetadata', task
+':app:lintVitalAnalyzeRelease', task
+':capacitor-android:generateReleaseLintVitalModel', task
+':capacitor-app:generateReleaseLintVitalModel', task
+':capacitor-browser:generateReleaseLintVitalModel', task
+':capacitor-camera:generateReleaseLintVitalModel', task
+':capacitor-cordova-android-plugins:generateReleaseLintVitalModel', task
+':capacitor-geolocation:generateReleaseLintVitalModel', task
+':capacitor-haptics:generateReleaseLintVitalModel', task
+':app:lintVitalReportRelease', task ':app:lintVitalRelease', task
+':app:mergeReleaseJniLibFolders', task
+':capacitor-android:copyReleaseJniLibsProjectOnly', task
+':capacitor-app:copyReleaseJniLibsProjectOnly', task
+':capacitor-browser:copyReleaseJniLibsProjectOnly', task
+':capacitor-camera:copyReleaseJniLibsProjectOnly', task
+':capacitor-cordova-android-plugins:copyReleaseJniLibsProjectOnly', task
+':capacitor-geolocation:copyReleaseJniLibsProjectOnly', task
+':capacitor-haptics:copyReleaseJniLibsProjectOnly', task
+':app:mergeReleaseNativeLibs', task ':app:stripReleaseDebugSymbols', task
+':app:extractReleaseNativeSymbolTables', task
+':app:mergeReleaseNativeDebugMetadata', task
+':capacitor-app:exportReleaseConsumerProguardFiles', task
+':capacitor-browser:exportReleaseConsumerProguardFiles', task
+':capacitor-camera:exportReleaseConsumerProguardFiles', task
+':capacitor-geolocation:exportReleaseConsumerProguardFiles', task
+':capacitor-haptics:exportReleaseConsumerProguardFiles', task
+':capacitor-android:exportReleaseConsumerProguardFiles', task
+':capacitor-cordova-android-plugins:exportReleaseConsumerProguardFiles',
+task ':app:checkReleaseDuplicateClasses', task
+':app:mergeReleaseArtProfile', task
+':app:expandReleaseArtProfileWildcards', task
+':app:mergeReleaseGeneratedProguardFiles', task
+':app:processReleaseJavaRes', task ':app:mergeReleaseJavaResource', task
+':app:mergeReleaseStartupProfile', task ':app:minifyReleaseWithR8', task
+':app:compileReleaseArtProfile', task ':app:mergeReleaseShaders', task
+':app:compileReleaseShaders', task ':app:generateReleaseAssets', task
+':app:mergeReleaseAssets', task ':app:compressReleaseAssets', task
+':app:extractReleaseVersionControlInfo', task
+':app:convertLinkedResourcesToProtoRelease', task ':app:shrinkReleaseRes',
+task ':app:convertShrunkResourcesToBinaryRelease', task
+':app:optimizeReleaseResources', task ':app:collectReleaseDependencies',
+task ':app:sdkReleaseDependencyData', task ':app:validateSigningRelease',
+task ':app:writeReleaseAppMetadata', task
+':app:writeReleaseSigningConfigVersions', task ':app:packageRelease', task
+':app:createReleaseApkListingFileRedirect', task ':app:assembleRelease',
+task ':capacitor-android:bundleReleaseAar', task
+':capacitor-android:mapReleaseSourceSetPaths', task
+':capacitor-android:mergeReleaseResources', task
+':capacitor-android:verifyReleaseResources', task
+':capacitor-android:assembleRelease', task
+':capacitor-app:bundleReleaseAar', task
+':capacitor-android:compileReleaseLibraryResources', task
+':capacitor-app:mapReleaseSourceSetPaths', task
+':capacitor-app:mergeReleaseResources', task
+':capacitor-app:verifyReleaseResources', task
+':capacitor-app:assembleRelease', task
+':capacitor-browser:bundleReleaseAar', task
+':capacitor-browser:mapReleaseSourceSetPaths', task
+':capacitor-browser:mergeReleaseResources', task
+':capacitor-browser:verifyReleaseResources', task
+':capacitor-browser:assembleRelease', task
+':capacitor-camera:bundleReleaseAar', task
+':capacitor-camera:mapReleaseSourceSetPaths', task
+':capacitor-camera:mergeReleaseResources', task
+':capacitor-camera:verifyReleaseResources', task
+':capacitor-camera:assembleRelease', task
+':capacitor-cordova-android-plugins:bundleReleaseAar', task
+':capacitor-cordova-android-plugins:mapReleaseSourceSetPaths', task
+':capacitor-cordova-android-plugins:mergeReleaseResources', task
+':capacitor-cordova-android-plugins:verifyReleaseResources', task
+':capacitor-cordova-android-plugins:assembleRelease', task
+':capacitor-geolocation:bundleReleaseAar', task
+':capacitor-geolocation:mapReleaseSourceSetPaths', task
+':capacitor-geolocation:mergeReleaseResources', task
+':capacitor-geolocation:verifyReleaseResources', task
+':capacitor-geolocation:assembleRelease', task
+':capacitor-haptics:bundleReleaseAar', task
+':capacitor-haptics:mapReleaseSourceSetPaths', task
+':capacitor-haptics:mergeReleaseResources', task
+':capacitor-haptics:verifyReleaseResources', task
+':capacitor-haptics:assembleRelease']
+  Tasks that were excluded: []
+  work action Parameters of ExtractAarTransform (Thread[#1138,Execution
+worker Thread 2,5,main]) started.
+  work action Parameters of ExtractAarTransform (Thread[#1139,Execution
+worker Thread 3,5,main]) started.
+  work action Parameters of ExtractAarTransform (Thread[#1137,Execution
+worker,5,main]) started.
+  work action Parameters of ExtractAarTransform (Thread[#1140,Execution
+worker Thread 4,5,main]) started.
+  > Task :capacitor-android:parseReleaseLocalResources UP-TO-DATE
+  Transforming android.jar with PlatformAttrTransform
+  Transforming android.jar with PlatformAttrTransform
+  Build cache key for task ':capacitor-android:parseReleaseLocalResources'
+is c4adf3252b6d768d6bfc134f8820d284
+  Skipping task ':capacitor-android:parseReleaseLocalResources' as it is
+up-to-date.
+> Resolve mutations for
+:capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors
+(Thread[#1137,Execution worker,5,main]) started.
+  Resolve mutations for :capacitor-android:generateReleaseRFile
+(Thread[#1146,Execution worker Thread 10,5,main]) started.
+  :capacitor-browser:prepareLintJarForPublish (Thread[#1145,Execution
+worker Thread 9,5,main]) started.
+  :capacitor-camera:generateReleaseRFile (Thread[#1144,Execution worker
+Thread 8,5,main]) started.
+  :capacitor-android:generateReleaseRFile (Thread[#1146,Execution worker
+Thread 10,5,main]) started.
+> :capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors
+(Thread[#1137,Execution worker,5,main]) started.
+  :capacitor-cordova-android-plugins:javaPreCompileRelease
+(Thread[#1138,Execution worker Thread 2,5,main]) started.
+
+  > Task :capacitor-app:parseReleaseLocalResources UP-TO-DATE
+  Transforming android.jar with PlatformAttrTransform
+  Transforming android.jar with PlatformAttrTransform
+  Transforming android.jar with PlatformAttrTransform
+  Transforming android.jar with PlatformAttrTransform
+  Build cache key for task ':capacitor-haptics:parseReleaseLocalResources'
+is 9f22b23785cf9a42c36af57a5e239706
+  Skipping task ':capacitor-haptics:parseReleaseLocalResources' as it is
+up-to-date.
+
+> > Task :capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors
+> Caching disabled for task
+':capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors'
+because:
+    This task renders reported diagnostics; caching this task will hide
+diagnostics and obscure issues in the build
+> Task ':capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors'
+is not up-to-date because:
+    Task has not declared any outputs despite executing actions.
+  Resolve mutations for :capacitor-geolocation:javaPreCompileRelease
+(Thread[#1137,Execution worker,5,main]) started.
+  Resolve mutations for :capacitor-haptics:generateReleaseRFile
+(Thread[#1140,Execution worker Thread 4,5,main]) started.
+  :capacitor-geolocation:javaPreCompileRelease (Thread[#1147,Execution
+worker Thread 11,5,main]) started.
+  :capacitor-haptics:generateReleaseRFile (Thread[#1140,Execution worker
+Thread 4,5,main]) started.
+  Transforming listenablefuture-1.0.jar
+(com.google.guava:listenablefuture:1.0) with IdentityTransform
+  Transforming listenablefuture-1.0.jar
+(com.google.guava:listenablefuture:1.0) with EnumerateClassesTransform
+  Transforming annotations-23.0.0.jar (org.jetbrains:annotations:23.0.0)
+with JetifyTransform
+  Transforming annotations-23.0.0.jar (org.jetbrains:annotations:23.0.0)
+with IdentityTransform
+  Transforming annotations-23.0.0.jar (org.jetbrains:annotations:23.0.0)
+with EnumerateClassesTransform
+> Transforming error_prone_annotations-2.15.0.jar
+(com.google.errorprone:error_prone_annotations:2.15.0) with JetifyTransform
+> Transforming error_prone_annotations-2.15.0.jar
+(com.google.errorprone:error_prone_annotations:2.15.0) with
+IdentityTransform
+> Transforming error_prone_annotations-2.15.0.jar
+(com.google.errorprone:error_prone_annotations:2.15.0) with
+EnumerateClassesTransform
+  Transforming constraintlayout-solver-2.0.1.jar
+(androidx.constraintlayout:constraintlayout-solver:2.0.1) with
+JetifyTransform
+  Transforming constraintlayout-solver-2.0.1.jar
+(androidx.constraintlayout:constraintlayout-solver:2.0.1) with
+IdentityTransform
+  Transforming constraintlayout-solver-2.0.1.jar
+(androidx.constraintlayout:constraintlayout-solver:2.0.1) with
+EnumerateClassesTransform
+  file or directory
+'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android\app\libs',
+not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\app\android\libs', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\src\release\java', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\src\main\java', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\src\main\java', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\src\main\java', not found
+  file or directory 'C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+\node_modules\@capacitor\geolocation\android\src\release\java', not found
+> Kotlin source files: C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveChe
+ck\node_modules\@capacitor\geolocation\android\src\main\kotlin\com\capacito
+rjs\plugins\geolocation\GeolocationErrors.kt, C:\Users\Leirs\Downloads\Paws
+itiveCheck\PawsitiveCheck\node_modules\@capacitor\geolocation\android\src\m
+ain\kotlin\com\capacitorjs\plugins\geolocation\GeolocationPlugin.kt
+  Java source files:
+  Script source files:
+  Script file extensions:
+  Using Kotlin/JVM incremental compilation
+  [KOTLIN] Kotlin compilation 'jdkHome' argument: null
+Note: C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\node_modules\@capacitor\camera\android\src\main\java\com\capacitorjs\plugins\camera\CameraBottomSheetDialogFragment.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processReleaseResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+   > Unable to make AAPT link command
+     ERROR: AAPT:
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 34s
+
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android>     npx cap sync android
+[error] android platform has not been added yet.
+        See the docs for adding the android platform: https://capacitorjs.com/docs/android#adding-the-android-platform
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> cd C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck>     npx cap sync android
+√ Copying web assets from public to android\app\src\main\assets\public in 126.87ms
+√ Creating capacitor.config.json in android\app\src\main\assets in 3.78ms
+√ copy android in 270.03ms
+√ Updating Android plugins in 38.24ms
+[info] Found 5 Capacitor plugins for android:
+       @capacitor/app@7.1.0
+       @capacitor/browser@7.0.2
+       @capacitor/camera@7.0.2
+       @capacitor/geolocation@7.1.5
+       @capacitor/haptics@7.0.2
+√ update android in 507.68ms
+[info] Sync finished in 0.965s
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck> cd C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> # Build signed APK
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> .\gradlew assembleRelease
+Configuration on demand is an incubating feature.
+
+> Configure project :app
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Configure project :capacitor-cordova-android-plugins
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Task :app:processReleaseResources FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processReleaseResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+   > Unable to make AAPT link command
+     ERROR: AAPT:
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 33s
+274 actionable tasks: 133 executed, 100 from cache, 41 up-to-date
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android>
