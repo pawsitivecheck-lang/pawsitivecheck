@@ -1,0 +1,55 @@
+
+
+    Directory: C:\Program Files\Android
+
+
+Mode                 LastWriteTime         Length Name                             
+----                 -------------         ------ ----
+d-----         8/31/2025  07:06 PM                Android Studio
+
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> dir "C:\Program Files (x86)\Android"
+dir : Cannot find path 'C:\Program Files (x86)\Android' because it does not exist.
+At line:1 char:1
++ dir "C:\Program Files (x86)\Android"
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Program Files (x86)\Android:Stri  
+   ng) [Get-ChildItem], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetChildI  
+   temCommand
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> dir "${env:ProgramFiles}\Android"                                                                    
+
+
+    Directory: C:\Program Files\Android
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----                             
+d-----         8/31/2025  07:06 PM                Android Studio
+
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> dir "${env:ProgramFiles(x86)}\Android"                                                               
+dir : Cannot find path 'C:\Program Files (x86)\Android' because it does not exist.
+At line:1 char:1
++ dir "${env:ProgramFiles(x86)}\Android"
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Program Files (x86)\Android:Stri  
+   ng) [Get-ChildItem], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetChildI  
+   temCommand
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android>
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> # Check if Android Studio is in user directory
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> dir "${env:USERPROFILE}\AppData\Local\Android"                                                       
+
+
+    Directory: C:\Users\Leirs\AppData\Local\Android
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+da----         9/20/2025  06:23 PM                Sdk
+
+
+PS C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android> dir "${env:USERPROFILE}\AppData\Local\Programs"         
