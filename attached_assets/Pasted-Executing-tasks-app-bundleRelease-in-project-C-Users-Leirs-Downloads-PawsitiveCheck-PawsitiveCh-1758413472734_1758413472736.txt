@@ -1,0 +1,244 @@
+Executing tasks: [:app:bundleRelease] in project C:\Users\Leirs\Downloads\PawsitiveCheck\PawsitiveCheck\android
+
+Configuration on demand is an incubating feature.
+
+> Configure project :app
+AGPBI: {"kind":"warning","text":"Using flatDir should be avoided because it doesn't support any meta-data formats.","sources":[{}]}
+
+> Configure project :capacitor-cordova-android-plugins
+AGPBI: {"kind":"warning","text":"Using flatDir should be avoided because it doesn't support any meta-data formats.","sources":[{}]}
+
+> Task :capacitor-cordova-android-plugins:preBuild UP-TO-DATE
+> Task :capacitor-haptics:preBuild UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:preReleaseBuild UP-TO-DATE
+> Task :capacitor-geolocation:checkKotlinGradlePluginConfigurationErrors
+> Task :capacitor-geolocation:preBuild UP-TO-DATE
+> Task :capacitor-geolocation:preReleaseBuild UP-TO-DATE
+> Task :capacitor-camera:preBuild UP-TO-DATE
+> Task :capacitor-camera:preReleaseBuild UP-TO-DATE
+> Task :capacitor-haptics:preReleaseBuild UP-TO-DATE
+> Task :capacitor-browser:preBuild UP-TO-DATE
+> Task :capacitor-browser:preReleaseBuild UP-TO-DATE
+> Task :capacitor-app:preBuild UP-TO-DATE
+> Task :capacitor-app:preReleaseBuild UP-TO-DATE
+> Task :capacitor-android:preBuild UP-TO-DATE
+> Task :capacitor-android:preReleaseBuild UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :capacitor-haptics:generateReleaseResValues FROM-CACHE
+> Task :capacitor-geolocation:generateReleaseResValues FROM-CACHE
+> Task :capacitor-app:generateReleaseResValues FROM-CACHE
+> Task :capacitor-cordova-android-plugins:generateReleaseResValues FROM-CACHE
+> Task :capacitor-android:generateReleaseResValues FROM-CACHE
+> Task :capacitor-browser:generateReleaseResValues FROM-CACHE
+> Task :capacitor-camera:generateReleaseResValues FROM-CACHE
+> Task :app:generateReleaseFeatureMetadata FROM-CACHE
+> Task :capacitor-browser:generateReleaseResources FROM-CACHE
+> Task :capacitor-haptics:generateReleaseResources FROM-CACHE
+> Task :capacitor-cordova-android-plugins:generateReleaseResources FROM-CACHE
+> Task :capacitor-android:generateReleaseResources FROM-CACHE
+> Task :capacitor-geolocation:generateReleaseResources FROM-CACHE
+> Task :capacitor-app:generateReleaseResources FROM-CACHE
+> Task :capacitor-camera:generateReleaseResources FROM-CACHE
+> Task :capacitor-geolocation:packageReleaseResources FROM-CACHE
+> Task :capacitor-geolocation:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-browser:packageReleaseResources FROM-CACHE
+> Task :capacitor-haptics:packageReleaseResources FROM-CACHE
+> Task :capacitor-camera:packageReleaseResources FROM-CACHE
+> Task :capacitor-app:packageReleaseResources FROM-CACHE
+> Task :capacitor-cordova-android-plugins:packageReleaseResources FROM-CACHE
+> Task :capacitor-geolocation:generateReleaseRFile FROM-CACHE
+> Task :capacitor-browser:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-haptics:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-app:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-geolocation:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-camera:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-android:packageReleaseResources FROM-CACHE
+> Task :capacitor-browser:generateReleaseRFile FROM-CACHE
+> Task :capacitor-cordova-android-plugins:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-geolocation:writeReleaseAarMetadata
+> Task :capacitor-haptics:generateReleaseRFile FROM-CACHE
+> Task :capacitor-app:generateReleaseRFile FROM-CACHE
+> Task :capacitor-geolocation:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-browser:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-camera:generateReleaseRFile FROM-CACHE
+> Task :capacitor-android:parseReleaseLocalResources FROM-CACHE
+> Task :capacitor-browser:writeReleaseAarMetadata
+> Task :capacitor-app:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-haptics:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-cordova-android-plugins:generateReleaseRFile FROM-CACHE
+> Task :capacitor-haptics:writeReleaseAarMetadata
+> Task :capacitor-cordova-android-plugins:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-browser:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-camera:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-geolocation:processReleaseManifest FROM-CACHE
+> Task :capacitor-app:writeReleaseAarMetadata
+> Task :capacitor-app:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-haptics:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-android:generateReleaseRFile FROM-CACHE
+> Task :capacitor-geolocation:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:compileReleaseJavaWithJavac NO-SOURCE
+> Task :capacitor-cordova-android-plugins:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-camera:writeReleaseAarMetadata
+> Task :app:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-android:javaPreCompileRelease FROM-CACHE
+> Task :capacitor-cordova-android-plugins:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-geolocation:mergeReleaseShaders
+> Task :capacitor-geolocation:compileReleaseShaders NO-SOURCE
+> Task :capacitor-geolocation:generateReleaseAssets UP-TO-DATE
+> Task :app:generateReleaseResValues FROM-CACHE
+> Task :capacitor-cordova-android-plugins:writeReleaseAarMetadata
+> Task :capacitor-camera:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-app:processReleaseManifest FROM-CACHE
+> Task :capacitor-haptics:processReleaseManifest FROM-CACHE
+> Task :capacitor-browser:processReleaseManifest FROM-CACHE
+> Task :capacitor-geolocation:packageReleaseAssets
+> Task :capacitor-cordova-android-plugins:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-app:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-browser:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-haptics:prepareReleaseArtProfile UP-TO-DATE
+> Task :app:checkReleaseDuplicateClasses
+> Task :capacitor-haptics:processReleaseJavaRes NO-SOURCE
+> Task :capacitor-app:processReleaseJavaRes NO-SOURCE
+> Task :capacitor-browser:processReleaseJavaRes NO-SOURCE
+> Task :app:mapReleaseSourceSetPaths
+> Task :capacitor-geolocation:mergeReleaseJniLibFolders
+> Task :capacitor-haptics:mergeReleaseShaders
+> Task :capacitor-app:mergeReleaseShaders
+> Task :capacitor-geolocation:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-haptics:compileReleaseShaders NO-SOURCE
+> Task :capacitor-haptics:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-app:compileReleaseShaders NO-SOURCE
+> Task :capacitor-app:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-browser:mergeReleaseShaders
+> Task :capacitor-cordova-android-plugins:processReleaseManifest FROM-CACHE
+> Task :capacitor-browser:compileReleaseShaders NO-SOURCE
+> Task :capacitor-browser:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-cordova-android-plugins:bundleLibCompileToJarRelease
+> Task :capacitor-cordova-android-plugins:processReleaseJavaRes NO-SOURCE
+> Task :capacitor-geolocation:copyReleaseJniLibsProjectOnly
+> Task :capacitor-cordova-android-plugins:bundleLibRuntimeToJarRelease
+> Task :capacitor-haptics:packageReleaseAssets
+> Task :capacitor-camera:processReleaseManifest FROM-CACHE
+> Task :capacitor-app:packageReleaseAssets
+> Task :capacitor-browser:packageReleaseAssets
+> Task :app:generateReleaseResources
+> Task :capacitor-camera:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-camera:processReleaseJavaRes NO-SOURCE
+> Task :capacitor-app:mergeReleaseJniLibFolders
+> Task :capacitor-cordova-android-plugins:mergeReleaseShaders
+> Task :capacitor-haptics:mergeReleaseJniLibFolders
+> Task :capacitor-cordova-android-plugins:compileReleaseShaders NO-SOURCE
+> Task :capacitor-haptics:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-app:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-cordova-android-plugins:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-browser:mergeReleaseJniLibFolders
+> Task :capacitor-browser:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-camera:mergeReleaseShaders
+> Task :capacitor-camera:compileReleaseShaders NO-SOURCE
+> Task :capacitor-camera:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-haptics:copyReleaseJniLibsProjectOnly
+> Task :capacitor-app:copyReleaseJniLibsProjectOnly
+> Task :capacitor-browser:copyReleaseJniLibsProjectOnly
+> Task :capacitor-cordova-android-plugins:packageReleaseAssets
+> Task :capacitor-camera:packageReleaseAssets
+> Task :capacitor-cordova-android-plugins:mergeReleaseJniLibFolders
+> Task :capacitor-camera:mergeReleaseJniLibFolders
+> Task :capacitor-camera:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-cordova-android-plugins:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-cordova-android-plugins:copyReleaseJniLibsProjectOnly
+> Task :capacitor-camera:copyReleaseJniLibsProjectOnly
+> Task :capacitor-android:compileReleaseJavaWithJavac FROM-CACHE
+> Task :capacitor-android:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-android:exportReleaseConsumerProguardFiles
+> Task :capacitor-android:writeReleaseAarMetadata
+> Task :capacitor-android:extractDeepLinksRelease FROM-CACHE
+> Task :capacitor-android:processReleaseManifest FROM-CACHE
+> Task :capacitor-android:prepareReleaseArtProfile UP-TO-DATE
+> Task :capacitor-android:processReleaseJavaRes NO-SOURCE
+> Task :capacitor-android:mergeReleaseShaders
+> Task :capacitor-android:compileReleaseShaders NO-SOURCE
+> Task :capacitor-android:generateReleaseAssets UP-TO-DATE
+> Task :capacitor-android:packageReleaseAssets
+> Task :capacitor-android:mergeReleaseJniLibFolders
+> Task :capacitor-android:mergeReleaseNativeLibs NO-SOURCE
+> Task :capacitor-android:copyReleaseJniLibsProjectOnly
+> Task :capacitor-android:bundleLibRuntimeToJarRelease
+> Task :capacitor-android:bundleLibCompileToJarRelease
+> Task :capacitor-app:compileReleaseJavaWithJavac FROM-CACHE
+> Task :capacitor-app:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-app:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-haptics:compileReleaseJavaWithJavac FROM-CACHE
+> Task :capacitor-haptics:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-browser:compileReleaseJavaWithJavac FROM-CACHE
+> Task :capacitor-haptics:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-browser:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-browser:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-camera:compileReleaseJavaWithJavac FROM-CACHE
+> Task :capacitor-app:bundleLibRuntimeToJarRelease
+> Task :capacitor-app:bundleLibCompileToJarRelease
+> Task :capacitor-camera:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-camera:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-haptics:bundleLibRuntimeToJarRelease
+> Task :capacitor-haptics:bundleLibCompileToJarRelease
+> Task :capacitor-browser:bundleLibRuntimeToJarRelease
+> Task :capacitor-browser:bundleLibCompileToJarRelease
+> Task :capacitor-camera:bundleLibRuntimeToJarRelease
+> Task :capacitor-camera:bundleLibCompileToJarRelease
+> Task :capacitor-geolocation:compileReleaseKotlin FROM-CACHE
+> Task :capacitor-geolocation:compileReleaseJavaWithJavac NO-SOURCE
+> Task :capacitor-geolocation:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :capacitor-geolocation:exportReleaseConsumerProguardFiles UP-TO-DATE
+> Task :capacitor-geolocation:bundleLibRuntimeToJarRelease
+> Task :capacitor-geolocation:bundleLibCompileToJarRelease
+> Task :capacitor-geolocation:processReleaseJavaRes
+> Task :app:checkReleaseAarMetadata
+> Task :app:packageReleaseResources
+> Task :app:parseReleaseLocalResources FROM-CACHE
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease FROM-CACHE
+> Task :app:processReleaseMainManifest FROM-CACHE
+> Task :app:processReleaseManifest FROM-CACHE
+> Task :app:processReleaseManifestForPackage FROM-CACHE
+> Task :app:mergeReleaseArtProfile
+> Task :app:extractProguardFiles
+> Task :app:processReleaseJavaRes NO-SOURCE
+> Task :app:mergeReleaseResources
+> Task :app:mergeReleaseStartupProfile UP-TO-DATE
+> Task :app:processApplicationManifestReleaseForBundle
+> Task :app:extractReleaseVersionControlInfo
+> Task :app:mergeReleaseShaders
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:mergeReleaseJniLibFolders
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:writeReleaseAppMetadata
+> Task :app:collectReleaseDependencies
+> Task :app:configureReleaseDependencies
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+> Task :app:parseReleaseIntegrityConfig FROM-CACHE
+> Task :app:validateSigningRelease
+> Task :app:mergeReleaseJavaResource
+
+> Task :app:processReleaseResources FAILED
+AGPBI: {"kind":"error","text":"Unable to make AAPT link command","sources":[{}],"original":"ERROR: AAPT: ","tool":"AAPT"}
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processReleaseResources'.
+> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+   > Unable to make AAPT link command
+     ERROR: AAPT: 
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 48s
+164 actionable tasks: 72 executed, 71 from cache, 21 up-to-date
