@@ -77,6 +77,7 @@
 }
 
 # Keep BuildConfig
+-keep class com.pawsitivecheck.BuildConfig { *; }
 -keep class com.pawsitivecheck.app.BuildConfig { *; }
 
 # Keep R resources
