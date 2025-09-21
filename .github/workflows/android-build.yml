@@ -141,6 +141,10 @@ jobs:
     - name: 🚀 Build Release APK (Signed)
       if: github.event.inputs.build_type != 'debug'
       working-directory: ./android
+      env:
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         echo "Building Release APK with signing..."
         ./gradlew assembleRelease --no-daemon --stacktrace

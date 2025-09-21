@@ -4,12 +4,17 @@ android {
     namespace "com.pawsitivecheck.app"
     compileSdk rootProject.ext.compileSdkVersion
     
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
     signingConfigs {
         release {
             storeFile file('pawsitivecheck-release.jks')
-            storePassword 'pawsitive123'
-            keyAlias 'pawsitivecheck'
-            keyPassword 'pawsitive123'
+            storePassword System.getenv('KEYSTORE_PASSWORD') ?: project.findProperty('KEYSTORE_PASSWORD') ?: 'pawsitive123'
+            keyAlias System.getenv('KEY_ALIAS') ?: project.findProperty('KEY_ALIAS') ?: 'pawsitivecheck'
+            keyPassword System.getenv('KEY_PASSWORD') ?: project.findProperty('KEY_PASSWORD') ?: 'pawsitive123'
         }
     }
     
@@ -82,6 +87,12 @@ repositories {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.android.gms:play-services-location:21.3.0'
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -92,6 +103,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 }
 
 apply from: 'capacitor.build.gradle'
