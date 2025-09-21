@@ -29,7 +29,7 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 -keep class com.google.gson.** { *; }
--keep class sun.misc.Unsafe { *; }
+-dontwarn sun.misc.Unsafe
 
 # Keep Cordova/Capacitor plugins
 -keep class org.apache.cordova.** { *; }
